@@ -1,0 +1,125 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bcb1e150496776e4bb4c3fa2860360c5, type: 3}
+  m_Name: EnvironmentData
+  m_EditorClassIdentifier: 
+  LevelParamsData:
+  - ID: 1
+    BPM: 65
+    BuildParams:
+      OverrideSeed: 1
+      LevelSeed: 10
+      CellSize: 1
+      ObstacleFillPercent: 25
+      LevelProgressionConfig: {fileID: 11400000, guid: 76c179608f3ef470081cec6d7117edbc,
+        type: 2}
+    EnviromentParams:
+      CellOffset: 1
+      ElevationOffset: 0.2
+      ObstaclesHolesPercent: 25
+      EnviromentDecortionPercent: 0
+      EnviromentElevatedPercent: 30
+      EnviromentLightPercent: 20
+      EnviromentDarkPercent: 10
+    ContentParams:
+      ItemProgressionConfig: {fileID: 11400000, guid: 154454362928b40f99adb9b5e00ecd70,
+        type: 2}
+      EnemyViewProgressionConfig: {fileID: 11400000, guid: 7aab295b495c04f6a8cc3226c0cf079d,
+        type: 2}
+      EnemyDataProgressionConfig: {fileID: 11400000, guid: 282e38483b3104fbdba8a4de9f067a2b,
+        type: 2}
+      BossDataProgressionConfig: {fileID: 11400000, guid: 2abd2422caf5f46d6bf79163a7e0fcfe,
+        type: 2}
+  - ID: 2
+    BPM: 65
+    BuildParams:
+      OverrideSeed: 1
+      LevelSeed: 10
+      CellSize: 1
+      ObstacleFillPercent: 25
+      LevelProgressionConfig: {fileID: 0}
+    EnviromentParams:
+      CellOffset: 1
+      ElevationOffset: 0.2
+      ObstaclesHolesPercent: 25
+      EnviromentDecortionPercent: 0
+      EnviromentElevatedPercent: 30
+      EnviromentLightPercent: 20
+      EnviromentDarkPercent: 10
+    ContentParams:
+      ItemProgressionConfig: {fileID: 0}
+      EnemyViewProgressionConfig: {fileID: 0}
+      EnemyDataProgressionConfig: {fileID: 0}
+      BossDataProgressionConfig: {fileID: 0}
+  - ID: 3
+    BPM: 65
+    BuildParams:
+      OverrideSeed: 1
+      LevelSeed: 10
+      CellSize: 1
+      ObstacleFillPercent: 25
+      LevelProgressionConfig: {fileID: 0}
+    EnviromentParams:
+      CellOffset: 1
+      ElevationOffset: 0.2
+      ObstaclesHolesPercent: 25
+      EnviromentDecortionPercent: 0
+      EnviromentElevatedPercent: 30
+      EnviromentLightPercent: 20
+      EnviromentDarkPercent: 10
+    ContentParams:
+      ItemProgressionConfig: {fileID: 0}
+      EnemyViewProgressionConfig: {fileID: 0}
+      EnemyDataProgressionConfig: {fileID: 0}
+      BossDataProgressionConfig: {fileID: 0}
+  - ID: 4
+    BPM: 65
+    BuildParams:
+      OverrideSeed: 1
+      LevelSeed: 10
+      CellSize: 1
+      ObstacleFillPercent: 25
+      LevelProgressionConfig: {fileID: 0}
+    EnviromentParams:
+      CellOffset: 1
+      ElevationOffset: 0.2
+      ObstaclesHolesPercent: 25
+      EnviromentDecortionPercent: 0
+      EnviromentElevatedPercent: 30
+      EnviromentLightPercent: 20
+      EnviromentDarkPercent: 10
+    ContentParams:
+      ItemProgressionConfig: {fileID: 0}
+      EnemyViewProgressionConfig: {fileID: 0}
+      EnemyDataProgressionConfig: {fileID: 0}
+      BossDataProgressionConfig: {fileID: 0}
+  - ID: 5
+    BPM: 65
+    BuildParams:
+      OverrideSeed: 1
+      LevelSeed: 10
+      CellSize: 1
+      ObstacleFillPercent: 25
+      LevelProgressionConfig: {fileID: 0}
+    EnviromentParams:
+      CellOffset: 1
+      ElevationOffset: 0.2
+      ObstaclesHolesPercent: 25
+      EnviromentDecortionPercent: 0
+      EnviromentElevatedPercent: 30
+      EnviromentLightPercent: 20
+      EnviromentDarkPercent: 10
+    ContentParams:
+      ItemProgressionConfig: {fileID: 0}
+      EnemyViewProgressionConfig: {fileID: 0}
+      EnemyDataProgressionConfig: {fileID: 0}
+      BossDataProgressionConfig: {fileID: 0}
