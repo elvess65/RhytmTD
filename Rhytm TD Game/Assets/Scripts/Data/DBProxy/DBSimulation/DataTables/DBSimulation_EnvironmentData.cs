@@ -19,9 +19,6 @@ namespace RhytmTD.Data.DataBase.Simulation
 
             [Header("BuildParams")]
             public BuildData BuildParams;
-
-            [Header("ContentParams")]
-            public ContentData ContentParams;
         }
 
         [System.Serializable]
@@ -30,14 +27,6 @@ namespace RhytmTD.Data.DataBase.Simulation
             [Header("Seed")]
             public bool OverrideSeed = true;
             public int LevelSeed = 10;
-        }
-
-        [System.Serializable]
-        public class ContentData
-        {
-            [Header("Enemy Data")]
-            public NPCProgressionConfig EnemyDataProgressionConfig;
-            public NPCProgressionConfig BossDataProgressionConfig;
         }
     }
 }

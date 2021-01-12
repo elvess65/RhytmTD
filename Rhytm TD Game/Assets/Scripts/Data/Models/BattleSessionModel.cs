@@ -7,13 +7,8 @@ namespace RhytmTD.Data.Models
     /// </summary>
     public class BattleSessionModel 
     {
-        public int SelectedCharactedID;         //ID выбранного героя
-        public int CurrentLevelID;              //Текущий уровень
-        public List<int> CompletedLevelsIDs;    //Пройденные уровни
-
         public BattleSessionModel()
         {
-            CompletedLevelsIDs = new List<int>();
         }
     }
 }

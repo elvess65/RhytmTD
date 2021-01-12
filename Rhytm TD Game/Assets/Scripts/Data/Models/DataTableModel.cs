@@ -8,12 +8,12 @@ namespace RhytmTD.Data.Models
     public class DataTableModel 
     {
         public EnvironmentDataModel EnvironmentDataModel { get; }
-        public LevelingDataModel LevelingDataModel { get; }
+        public AccountLevelingDataModel LevelingDataModel { get; }
 
         public DataTableModel(string serializedEnviromentData, string serializedLevelingData)
         {
             EnvironmentDataModel = EnvironmentDataModel.DeserializeData(serializedEnviromentData);
-            LevelingDataModel = LevelingDataModel.DeserializeData(serializedLevelingData);
+            LevelingDataModel = AccountLevelingDataModel.DeserializeData(serializedLevelingData);
         }
 
         public void ReorganizeData()

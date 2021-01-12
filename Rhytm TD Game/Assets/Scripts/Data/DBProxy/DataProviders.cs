@@ -56,7 +56,7 @@ namespace RhytmTD.Data.DataBase
 
             OnConnectionSuccess?.Invoke(JsonUtility.ToJson(m_DataObject.AccountData),
                                         JsonUtility.ToJson(m_DataObject.EnvironmentData),
-                                        JsonUtility.ToJson(m_DataObject.LevelingData));
+                                        JsonUtility.ToJson(m_DataObject.AccountLevelingData));
         }
 
         IEnumerator SimulateErrorConnectionDelay(int errorCode)

@@ -76,7 +76,6 @@ namespace RhytmTD.Data.Models.DataTableModels
             public int BPM = 130;
 
             public BuildData BuildParams;
-            public ContentData ContentParams;
         }
 
         [Serializable]
@@ -86,13 +85,6 @@ namespace RhytmTD.Data.Models.DataTableModels
 
             public bool OverrideSeed;
             public int LevelSeed;
-        }
-
-        [Serializable]
-        public class ContentData
-        {
-            public NPCProgressionConfig EnemyDataProgressionConfig;
-            public NPCProgressionConfig BossDataProgressionConfig;
         }
     }
 }

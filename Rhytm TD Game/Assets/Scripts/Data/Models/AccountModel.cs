@@ -5,16 +5,18 @@
     /// </summary>
     public class AccountModel : DeserializableDataModel<AccountModel>
     {
+        public int AccountExperiance;
         public int WeaponExperiance;
         public int HPExperiance;
         public int ManaExperiance;
 
-        /// <summary>
-        /// Используется только для парсинга данных
-        /// </summary>
         public override void ReorganizeData()
         {
             
         }
     }
 }
+
+//Account
+//DBSimulation_AccountData -> (is parsing to) AccountModel
+//DBSimulation_AccountLevelingData -> (is parsing to) AccountLevelingDataModel
