@@ -1,5 +1,5 @@
 ﻿using RhytmTD.Persistant;
-using static RhytmTD.Data.Models.AccountModel;
+using static RhytmTD.Data.Models.AccountDataModel;
 
 namespace RhytmTD.Data
 {

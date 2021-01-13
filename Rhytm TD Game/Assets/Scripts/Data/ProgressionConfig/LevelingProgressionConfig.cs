@@ -6,16 +6,10 @@ namespace RhytmTD.Data
     /// Рассчитывает прогрессию необходимого опыта для получения уровня
     /// </summary>
     [System.Serializable]
-    [CreateAssetMenu(fileName = "NewLeveling ProgressionConfig", menuName = "DBSimulation/Progressions/Leveling Progression Config", order = 101)]
-    public class LevelingProgressionConfig : ScriptableObject
+    public class LevelingProgressionConfig 
     {
-        [Header("Прогрессия необходимого опыта для получения уровня")]
-
         [Tooltip("Кривая прогресии опыта")]
-        public AnimationCurve Config;
-
-        [Tooltip("Обратная кривая прогресии опыта")]
-        public AnimationCurve InvertedConfig;
+        public AnimationCurve Curve;
 
         [Tooltip("Общее количество уровней")]
         public int TotalLevels = 10;
@@ -24,13 +18,19 @@ namespace RhytmTD.Data
         public int TotalExp = 100;
 
 
+        private AnimationCurve m_InvertedCurve;
+
+
+        /// <summary>
+        /// Уровень по количеству опыта
+        /// </summary>
         public int EvaluateLevel(int expAmount)
         {
             //Прогресс опыта относительно общего количества (expAmount = 15, Exp Range: [0:100], progress = 0.15)
             float expProgress = expAmount / (float)TotalExp;
 
             //Текущее положение на кривой
-            float curveValue = Config.Evaluate(expProgress);
+            float curveValue = Curve.Evaluate(expProgress);
 
             //Шаг уровня на кривой (TotalLevels = 20, levelCurveStep = 0.05)
             float levelCurveStep = 1f / TotalLevels;
@@ -42,41 +42,58 @@ namespace RhytmTD.Data
             return level;
         }
 
+        /// <summary>
+        /// Количество опыта необходимое для уровня
+        /// </summary>
         public int EvaluateExpForLevel(int level)
         {
+            if (m_InvertedCurve == null)
+                m_InvertedCurve = CreateInvertedCurve();
+
             float levelCurveStep = 1f / TotalLevels;            //Шаг уровня на кривой
             float curveValue = levelCurveStep * level;          //Положение на кривой
 
-            float requExpRaw = InvertedConfig.Evaluate(curveValue) * TotalExp;
+            float requExpRaw = m_InvertedCurve.Evaluate(curveValue) * TotalExp;
             int reqExpInt = Mathf.CeilToInt(requExpRaw);
 
             return reqExpInt;
         }
 
-
-        public void CreateInvertedCurve()
+        /// <summary>
+        /// Прогресс достижения уровней (от 0 до 1)
+        /// </summary>
+        /// <param name="level">Текущий уровень</param>
+        public float EvaluateProgress01(int level)
         {
-            InvertedConfig = new AnimationCurve();
+            return (float)level / TotalLevels;
+        }
 
-            float totalTime = Config.keys[Config.length - 1].time;
+
+        private AnimationCurve CreateInvertedCurve()
+        {
+            AnimationCurve invertedConfig = new AnimationCurve();
+
+            float totalTime = Curve.keys[Curve.length - 1].time;
             float sampleX = 0; //The "sample-point"
             float deltaX = 0.01f; //The "sample-delta"
-            float lastY = Config.Evaluate(sampleX);
+            float lastY = Curve.Evaluate(sampleX);
             while (sampleX < totalTime)
             {
-                float y = Config.Evaluate(sampleX); //The "value"
+                float y = Curve.Evaluate(sampleX); //The "value"
                 float deltaY = y - lastY; //The "value-delta"
                 float tangent = deltaX / deltaY;
                 Keyframe invertedKey = new Keyframe(y, sampleX, tangent, tangent);
-                InvertedConfig.AddKey(invertedKey);
+                invertedConfig.AddKey(invertedKey);
 
                 sampleX += deltaX;
                 lastY = y;
             }
-            for (int i = 0; i < InvertedConfig.length; i++)
+            for (int i = 0; i < invertedConfig.length; i++)
             {
-                InvertedConfig.SmoothTangents(i, 0.1f);
+                invertedConfig.SmoothTangents(i, 0.1f);
             }
+
+            return invertedConfig;
         }
     }
 }

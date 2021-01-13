@@ -12,7 +12,7 @@ namespace RhytmTD.Data
         public DBProxy DBProxy;
 
         public DataTableModel DataTableModel;
-        public AccountModel AccountModel;
+        public AccountDataModel AccountModel;
         public BattleSessionModel BattleSessionModel;
 
         public ModelsHolder()

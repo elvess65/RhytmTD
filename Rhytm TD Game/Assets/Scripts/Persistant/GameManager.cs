@@ -37,7 +37,7 @@ namespace RhytmTD.Persistant
         private void ConnectionResultSuccess(string serializedAccountData, string serializedEnviromentData, string serializedLevelingData)
         {
             //Set data
-            ModelsHolder.AccountModel = AccountModel.DeserializeData(serializedAccountData);
+            ModelsHolder.AccountModel = AccountDataModel.DeserializeData(serializedAccountData);
             ModelsHolder.AccountModel.ReorganizeData();
 
             ModelsHolder.DataTableModel = new DataTableModel(serializedEnviromentData, serializedLevelingData);

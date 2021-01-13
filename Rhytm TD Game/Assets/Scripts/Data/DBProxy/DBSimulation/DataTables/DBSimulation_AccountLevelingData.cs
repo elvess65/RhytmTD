@@ -13,6 +13,9 @@ namespace RhytmTD.Data.DataBase.Simulation
         public int HP;
         public int Mana;
 
-        public LevelingProgressionConfig TestProgression;
+        public LevelingProgressionConfig TestLevelProgression;
+        public ProgressionConfig TestPriceProgression;
+        public ProgressionConfig TestValueProgression;
+        public MinMaxProgressionConfig TestMinMaxProgression;
     }
 }
