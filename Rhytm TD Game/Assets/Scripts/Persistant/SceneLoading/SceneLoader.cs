@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using RhytmTD.Battle.Core;
+using RhytmTD.OtherScenes.MenuScene;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace RhytmTD.Persistant.SceneLoading
@@ -13,7 +15,6 @@ namespace RhytmTD.Persistant.SceneLoading
 
         public const string BATTLE_SCENE_NAME = "BattleScene";
         public const string MENU_SCENE_NAME = "MenuScene";
-        public const string FORGE_SCENE_NAME = "ForgeScene";
 
         private const string m_TRANSITION_SCENE_NAME = "TransitionScene";
         private const string m_BOOT_SCENE_NAME = "BootScene";
@@ -67,18 +68,15 @@ namespace RhytmTD.Persistant.SceneLoading
                 case MENU_SCENE_NAME:
                     SceneManager.SetActiveScene(SceneManager.GetSceneByName(MENU_SCENE_NAME));
                     SceneLoadingManager.Instance.FadeOut();
-                    //MenuSceneManager.Instance.Initialize();
+                    MenuSceneManager.Instance.Initialize();
                     break;
+
                 case BATTLE_SCENE_NAME:
                     SceneManager.SetActiveScene(SceneManager.GetSceneByName(BATTLE_SCENE_NAME));
                     SceneLoadingManager.Instance.FadeOut();
-                    //BattleManager.Instance.Initialize();
+                    BattleManager.Instance.Initialize();
                     break;
-                case FORGE_SCENE_NAME:
-                    SceneManager.SetActiveScene(SceneManager.GetSceneByName(FORGE_SCENE_NAME));
-                    SceneLoadingManager.Instance.FadeOut();
-                    //ForgeSceneManager.Instance.Initialize();
-                    break;
+
                 case m_TRANSITION_SCENE_NAME:
                     GameManager.Instance.InitializeConnection();
                     break;

@@ -16,6 +16,7 @@
 
         public override void ReorganizeData()
         {
+            return;
             UnityEngine.Debug.Log($"Damage {Damage}. HP {HP}. Mana {Mana}.");
             
             for (int i = 0; i <= TestLevelProgression.TotalLevels; i++)
