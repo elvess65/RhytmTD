@@ -8,6 +8,7 @@ namespace RhytmTD.Battle.Core
     public class ControllersHolder
     {
         public RhytmController RhytmController { get; private set; }
+        public InputController InputController { get; private set; }
 
         public ControllersHolder()
         {
