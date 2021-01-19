@@ -1,5 +1,5 @@
 ﻿using System.Collections;
-using RhytmTD.Persistant.Abstract;
+using CoreFramework.Abstract;
 using RhytmTD.UI.Components;
 using UnityEngine;
 using UnityEngine.UI;

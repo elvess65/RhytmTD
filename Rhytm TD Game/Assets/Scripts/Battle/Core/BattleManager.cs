@@ -1,4 +1,7 @@
-﻿using RhytmTD.Persistant.Abstract;
+﻿using CoreFramework.Abstract;
+using CoreFramework.Utils;
+using RhytmTD.Battle.StateMachine;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,11 +10,13 @@ namespace RhytmTD.Battle.Core
     public class BattleManager : Singleton<BattleManager>
     {
         public ManagersHolder ManagersHolder;
-        public FrameworkPackage.Utils.Metronome Metronome;
+        public Metronome Metronome;
         public AudioSource Music;
 
+        private BattleStateMachine m_StateMachine;
         private ControllersHolder m_ControllersHolder;
         private List<iUpdatable> m_Updateables;
+        private Dictionary<Type, BattleState_Abstract> m_InitializedStates;
 
         private void Update()
         {
@@ -23,6 +28,7 @@ namespace RhytmTD.Battle.Core
         }
 
         #region Initialization
+
         public void Initialize()
         {
             InitializeCore();
@@ -42,6 +48,11 @@ namespace RhytmTD.Battle.Core
 
         private void InitializeStateMachine()
         {
+            m_StateMachine = new BattleStateMachine();
+            m_InitializedStates = new Dictionary<Type, BattleState_Abstract>();
+
+            m_InitializedStates.Add(typeof(BattleState_LockInput), new BattleState_LockInput(null));
+            m_StateMachine.Initialize(m_InitializedStates[typeof(BattleState_LockInput)]);
         }
 
         private void InitializeDataDependends()
@@ -61,12 +72,17 @@ namespace RhytmTD.Battle.Core
         {
             m_Updateables = new List<iUpdatable>
             {
-                m_ControllersHolder.RhytmController
+                m_ControllersHolder.RhytmController,
+                m_ControllersHolder.InputController,
+                m_StateMachine
             };
         }
 
         private void InitializeEvents()
         {
+            //Input
+            m_ControllersHolder.InputController.OnTouch += m_StateMachine.HandleTouch;
+
             //Rhytm
             m_ControllersHolder.RhytmController.OnEventProcessingTick += EventProcessingTickHandler;
             m_ControllersHolder.RhytmController.OnStarted += TickingStartedHandler;
@@ -75,6 +91,9 @@ namespace RhytmTD.Battle.Core
 
         private void DisposeEvents()
         {
+            //Input
+            m_ControllersHolder.InputController.OnTouch -= m_StateMachine.HandleTouch;
+
             //Rhytm
             m_ControllersHolder.RhytmController.OnEventProcessingTick = null;
             m_ControllersHolder.RhytmController.OnStarted = null;
@@ -90,28 +109,38 @@ namespace RhytmTD.Battle.Core
             //Start beat
             m_ControllersHolder.RhytmController.StartTicking();
         }
+       
         #endregion
+
+        #region Runtime
 
         #region Rhytm
         private void TickingStartedHandler()
         {
-            Debug.Log("Tick started");
-            Metronome.StartMetronome();
+            //Debug.Log("Tick started");
+            //Metronome.StartMetronome();
         }
 
         private void TickHandler(int ticksSinceStart)
         {
-            Debug.Log("TickHandler: " + ticksSinceStart);
+            //Debug.Log("TickHandler: " + ticksSinceStart);
             if (ticksSinceStart % 8 == 0)
             {
-                Music.Play();
+                //Music.Play();
             }
         }
 
         private void EventProcessingTickHandler(int ticksSinceStart)
         {
-            Debug.Log("EventProcessingTickHandler: " + ticksSinceStart);
+            //Debug.Log("EventProcessingTickHandler: " + ticksSinceStart);
         }
+        #endregion
+
+        public void ChangeState<T>() where T : BattleState_Abstract
+        {
+            m_StateMachine.ChangeState(m_InitializedStates[typeof(T)]);
+        }
+
         #endregion
     }
 }

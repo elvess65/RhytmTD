@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using FrameworkPackage.Utils;
-using RhytmTD.Persistant.Abstract;
+﻿using CoreFramework.Abstract;
+using CoreFramework.Utils;
 using UnityEngine;
 
 namespace RhytmTD.OtherScenes.MenuScene

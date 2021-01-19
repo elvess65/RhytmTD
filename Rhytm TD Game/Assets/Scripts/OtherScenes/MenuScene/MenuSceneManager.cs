@@ -1,7 +1,7 @@
 ﻿//using RhytmFighter.Animation;
-using RhytmTD.Persistant;
-using RhytmTD.Persistant.Abstract;
-using RhytmTD.Persistant.SceneLoading;
+using CoreFramework.Abstract;
+using CoreFramework.SceneLoading;
+using RhytmTD.Core;
 using RhytmTD.UI.View;
 //using RhytmFighter.UI.View;
 using UnityEngine;

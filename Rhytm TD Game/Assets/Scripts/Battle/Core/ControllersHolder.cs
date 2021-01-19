@@ -1,4 +1,5 @@
-﻿using RhytmTD.Rhytm;
+﻿using CoreFramework.Input;
+using CoreFramework.Rhytm;
 
 namespace RhytmTD.Battle.Core
 {
@@ -13,6 +14,7 @@ namespace RhytmTD.Battle.Core
         public ControllersHolder()
         {
             RhytmController = new RhytmController();
+            InputController = new InputController();
         }
     }
 }
