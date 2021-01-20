@@ -13,10 +13,9 @@ namespace RhytmTD.Battle.Core
         public Metronome Metronome;
         public AudioSource Music;
 
-        private BattleStateMachine m_StateMachine;
+        private BattleStateMachine<BattleState_Abstract> m_StateMachine;
         private ControllersHolder m_ControllersHolder;
         private List<iUpdatable> m_Updateables;
-        private Dictionary<Type, BattleState_Abstract> m_InitializedStates;
 
         private void Update()
         {
@@ -48,11 +47,10 @@ namespace RhytmTD.Battle.Core
 
         private void InitializeStateMachine()
         {
-            m_StateMachine = new BattleStateMachine();
-            m_InitializedStates = new Dictionary<Type, BattleState_Abstract>();
-
-            m_InitializedStates.Add(typeof(BattleState_LockInput), new BattleState_LockInput(null));
-            m_StateMachine.Initialize(m_InitializedStates[typeof(BattleState_LockInput)]);
+            m_StateMachine = new BattleStateMachine<BattleState_Abstract>();
+            m_StateMachine.AddState(new BattleState_LockInput(m_ControllersHolder.RhytmInputProxy));
+            m_StateMachine.AddState(new BattleState_Normal(m_ControllersHolder.RhytmInputProxy));
+            m_StateMachine.Initialize<BattleState_LockInput>();
         }
 
         private void InitializeDataDependends()
@@ -62,7 +60,7 @@ namespace RhytmTD.Battle.Core
 
             //Rhytm data
             m_ControllersHolder.RhytmController.SetBPM(65);
-            //m_ControllersHolder.RhytmInputProxy.SetInputPrecious(ManagersHolder.SettingsManager.GeneralSettings.InputPrecious);
+            m_ControllersHolder.RhytmInputProxy.SetInputPrecious(0.25f);//ManagersHolder.SettingsManager.GeneralSettings.InputPrecious);
 
             //Initialize managers (May require data)
             ManagersHolder.Initialize();
@@ -109,7 +107,7 @@ namespace RhytmTD.Battle.Core
             //Start beat
             m_ControllersHolder.RhytmController.StartTicking();
         }
-       
+
         #endregion
 
         #region Runtime
@@ -118,7 +116,7 @@ namespace RhytmTD.Battle.Core
         private void TickingStartedHandler()
         {
             //Debug.Log("Tick started");
-            //Metronome.StartMetronome();
+            Metronome.StartMetronome();
         }
 
         private void TickHandler(int ticksSinceStart)
@@ -135,11 +133,6 @@ namespace RhytmTD.Battle.Core
             //Debug.Log("EventProcessingTickHandler: " + ticksSinceStart);
         }
         #endregion
-
-        public void ChangeState<T>() where T : BattleState_Abstract
-        {
-            m_StateMachine.ChangeState(m_InitializedStates[typeof(T)]);
-        }
 
         #endregion
     }

@@ -9,11 +9,13 @@ namespace RhytmTD.Battle.Core
     public class ControllersHolder
     {
         public RhytmController RhytmController { get; private set; }
+        public RhytmInputProxy RhytmInputProxy { get; private set; }
         public InputController InputController { get; private set; }
 
         public ControllersHolder()
         {
             RhytmController = new RhytmController();
+            RhytmInputProxy = new RhytmInputProxy();
             InputController = new InputController();
         }
     }

@@ -4,13 +4,15 @@
     {
         private static RhytmInputProxy m_Instance;
 
-        private double m_InputPrecious;
+        private double m_InputPrecious01;
         private float m_LastInputTime;
         private const float m_TICK_DURATION_REDUCE = 0.4f;
 
-
-        public static bool IsInUseRange => 1 - RhytmController.GetInstance().ProgressToNextTickAnalog < m_Instance.m_InputPrecious ||
-                                               RhytmController.GetInstance().ProgressToNextTickAnalog < m_Instance.m_InputPrecious;
+        /// <summary>
+        /// Находиться ли текущее состояние времени в окне ввода
+        /// </summary>
+        public static bool IsInUseRange => 1 - RhytmController.GetInstance().ProgressToNextTickAnalog < m_Instance.m_InputPrecious01 ||
+                                               RhytmController.GetInstance().ProgressToNextTickAnalog < m_Instance.m_InputPrecious01;
 
 
         public RhytmInputProxy()
@@ -19,25 +21,37 @@
                 m_Instance = this;
         }
 
-        public void SetInputPrecious(double inputPrecious)
+        /// <summary>
+        /// Задать точность окна ввода
+        /// </summary>
+        /// <param name="inputPrecious01">Значение от 0 до 1</param>
+        public void SetInputPrecious(double inputPrecious01)
         {
-            m_Instance = this;
-
-            m_InputPrecious = inputPrecious;
+            m_InputPrecious01 = inputPrecious01;
         }
 
+        /// <summary>
+        /// Зарегистрировать время последнего ввода
+        /// </summary>
         public void RegisterInput()
         {
             m_LastInputTime = UnityEngine.Time.time;
         }
 
+        /// <summary>
+        /// Разрешен ли ввод на этом тике 
+        /// </summary>
         public bool IsInputAllowed()
         {
-            float deltaInput = UnityEngine.Time.time - m_LastInputTime;
+            //Время с предыдущего тика сравнивается с временем тика уменьшеным на константу
 
-            return deltaInput > RhytmController.GetInstance().TickDurationSeconds * m_TICK_DURATION_REDUCE;
+            return UnityEngine.Time.time - m_LastInputTime > RhytmController.GetInstance().TickDurationSeconds * m_TICK_DURATION_REDUCE;
         }
 
+        /// <summary>
+        /// Находится ли ввод в окне ввода и кеширование результатов в контроллер
+        /// </summary>
+        /// <returns></returns>
         public bool IsInputTickValid()
         {
             double progressToNextTickAnalog = RhytmController.GetInstance().ProgressToNextTickAnalog;
@@ -50,7 +64,7 @@
 
                 //UnityEngine.Debug.Log("RhytmInputProxy: Pre Tick: " + RhytmController.GetInstance().DeltaInput);
 
-                return 1 - progressToNextTickAnalog <= m_InputPrecious;
+                return 1 - progressToNextTickAnalog <= m_InputPrecious01;
             }
             //Post tick
             else
@@ -60,7 +74,7 @@
 
                 //UnityEngine.Debug.Log("RhytmInputProxy: Post Tick: " + RhytmController.GetInstance().DeltaInput);
 
-                return progressToNextTickAnalog <= m_InputPrecious;
+                return progressToNextTickAnalog <= m_InputPrecious01;
             }
         }
     }
