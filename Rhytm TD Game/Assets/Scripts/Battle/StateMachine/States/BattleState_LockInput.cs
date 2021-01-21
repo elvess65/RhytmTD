@@ -11,9 +11,6 @@ namespace RhytmTD.Battle.StateMachine
 
         public override void HandleTouch(Vector3 mouseScreenPos)
         {
-            Debug.Log(m_RhytmInputProxy.IsInputAllowed() + " " + m_RhytmInputProxy.IsInputTickValid());
-
-            base.HandleTouch(mouseScreenPos);
         }
     }
 }

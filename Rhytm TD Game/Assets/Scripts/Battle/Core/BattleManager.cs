@@ -1,7 +1,6 @@
 ﻿using CoreFramework.Abstract;
 using CoreFramework.Utils;
 using RhytmTD.Battle.StateMachine;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,6 +9,8 @@ namespace RhytmTD.Battle.Core
     public class BattleManager : Singleton<BattleManager>
     {
         public ManagersHolder ManagersHolder;
+
+        [Header("Temp")]
         public Metronome Metronome;
         public AudioSource Music;
 
@@ -59,8 +60,10 @@ namespace RhytmTD.Battle.Core
             //float completionProgress = GameManager.Instance.ModelsHolder.DataTableModel.EnvironmentDataModel.GetCompletionForProgression(GameManager.Instance.ModelsHolder.BattleSessionModel.CompletedLevelsIDs.ToArray());
 
             //Rhytm data
-            m_ControllersHolder.RhytmController.SetBPM(65);
+            int bpm = 130;
+            m_ControllersHolder.RhytmController.SetBPM(bpm);
             m_ControllersHolder.RhytmInputProxy.SetInputPrecious(0.25f);//ManagersHolder.SettingsManager.GeneralSettings.InputPrecious);
+            Metronome.bpm = bpm; //Debug
 
             //Initialize managers (May require data)
             ManagersHolder.Initialize();
@@ -72,6 +75,7 @@ namespace RhytmTD.Battle.Core
             {
                 m_ControllersHolder.RhytmController,
                 m_ControllersHolder.InputController,
+                
                 m_StateMachine
             };
         }
@@ -104,6 +108,17 @@ namespace RhytmTD.Battle.Core
 
         private void InitializationFinished()
         {
+            StartCoroutine(TempStartCoroutine());
+        }
+
+        System.Collections.IEnumerator TempStartCoroutine()
+        {
+            yield return new WaitForSeconds(1);
+
+            //TODO: Move to InitializationFinished and remove this
+
+            m_StateMachine.ChangeState<BattleState_Normal>();
+
             //Start beat
             m_ControllersHolder.RhytmController.StartTicking();
         }

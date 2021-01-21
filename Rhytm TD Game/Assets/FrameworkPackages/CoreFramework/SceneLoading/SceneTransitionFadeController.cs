@@ -8,7 +8,8 @@ namespace CoreFramework.SceneLoading
     {
         public System.Action OnFadeIn;
         public System.Action OnFadeOut;
-       
+
+        [SerializeField] private float m_TransitionDuration = 1;
         private CanvasGroup m_CanvasGroup;
         private InterpolationData<float> m_LerpData;
         private System.Action m_OnTransitionFinished;
@@ -17,7 +18,7 @@ namespace CoreFramework.SceneLoading
         public void Initialize()
         {
             m_CanvasGroup = GetComponent<CanvasGroup>();
-            m_LerpData = new InterpolationData<float>(1);
+            m_LerpData = new InterpolationData<float>(m_TransitionDuration);
         }
 
         public void FadeIn()
