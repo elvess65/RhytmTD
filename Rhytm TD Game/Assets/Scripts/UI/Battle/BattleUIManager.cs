@@ -8,7 +8,7 @@ namespace RhytmTD.UI.Battle
 {
     public class BattleUIManager : MonoBehaviour, iUpdatable
     {
-        public UIView_BattleHUD UIView_BattleHUD;
+        [SerializeField] private UIView_BattleHUD m_UIView_BattleHUD;
 
         private UIBattleStateMachine<UIBattleState_Abstract> m_StateMachine;
         private UpdatablesManager m_UpdatablesManager;
@@ -29,7 +29,7 @@ namespace RhytmTD.UI.Battle
 
         private void InitializeViews()
         {
-            UIView_BattleHUD.Initialize();
+            m_UIView_BattleHUD.Initialize();
         }
 
         private void InitializeStateMachine()
@@ -42,7 +42,7 @@ namespace RhytmTD.UI.Battle
         private void InitializeUpdatables()
         {
             m_UpdatablesManager = new UpdatablesManager();
-            m_UpdatablesManager.Add(UIView_BattleHUD);
+            m_UpdatablesManager.Add(m_UIView_BattleHUD);
         }
     }
 }

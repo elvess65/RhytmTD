@@ -129,7 +129,7 @@ namespace RhytmTD.Battle.Core
         private void TickingStartedHandler()
         {
             //Debug.Log("Tick started");
-            Metronome.StartMetronome();
+            //Metronome.StartMetronome();
         }
 
         private void TickHandler(int ticksSinceStart)
@@ -137,7 +137,7 @@ namespace RhytmTD.Battle.Core
             Debug.Log("TickHandler: " + ticksSinceStart);
             if (ticksSinceStart % 8 == 0)
             {
-                Music.Play();
+                //Music.Play();
             }
         }
 

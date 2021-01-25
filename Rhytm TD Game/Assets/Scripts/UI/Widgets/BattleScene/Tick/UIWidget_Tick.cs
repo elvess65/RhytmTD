@@ -15,11 +15,15 @@ namespace RhytmTD.UI.Widget
         [SerializeField] UIComponent_TickWidget_Arrow[] m_TickArrows;
    
         private InterpolationData<float> m_LerpData;
-        private bool m_IsInBattleState = false;
+        private float m_ArrowAnimationDuration;
 
 
-        public void Initialize(float tickDuration)
+        public void Initialize(float tickDuration, float arrowAnimationDuration)
         {
+            Debug.Log("Initialize UIWidget Tick: " + tickDuration);
+
+            m_ArrowAnimationDuration = arrowAnimationDuration;
+
             //Lerp
             m_LerpData = new InterpolationData<float>();
 
@@ -56,46 +60,6 @@ namespace RhytmTD.UI.Widget
         }
 
 
-        #region States
-
-        public void ToNormalState()
-        {
-            m_IsInBattleState = false;
-
-            //Tick
-            m_Tick.ToNormalState();
-
-            //Arrows
-            m_LerpData.Stop();
-            for (int i = 0; i < m_TickArrows.Length; i++)
-                m_TickArrows[i].FinishInterpolation();
-        }
-
-        public void ToPrepareState()
-        {
-            m_IsInBattleState = false;
-
-            //Tick
-            m_Tick.ToPrepareState();
-
-            //Arrows
-            m_LerpData.Stop();
-            for (int i = 0; i < m_TickArrows.Length; i++)
-                m_TickArrows[i].FinishInterpolation();
-        }
-
-        public void ToBattleState()
-        {
-            m_IsInBattleState = true;
-
-            //Tick
-            m_Tick.ToBattleState();
-        }
-
-        #endregion
-
-        #region Animations
-
         public void PlayTickAnimation()
         {
             m_Tick.PlayTickAnimation();
@@ -103,18 +67,13 @@ namespace RhytmTD.UI.Widget
 
         public void PlayArrowsAnimation()
         {
-            if (m_IsInBattleState)
-            {
-                //Arrows
-                for (int i = 0; i < m_TickArrows.Length; i++)
-                    m_TickArrows[i].PrepareForInterpolation();
+            //Arrows
+            for (int i = 0; i < m_TickArrows.Length; i++)
+                m_TickArrows[i].PrepareForInterpolation();
 
-                //Lerp
-                m_LerpData.TotalTime = 0;//(float)Rhytm.RhytmController.GetInstance().TimeToNextTick + (float)Rhytm.RhytmController.GetInstance().ProcessTickDelta;
-                m_LerpData.Start();
-            }
+            //Lerp
+            m_LerpData.TotalTime = m_ArrowAnimationDuration;
+            m_LerpData.Start();
         }
-
-        #endregion
     }
 }

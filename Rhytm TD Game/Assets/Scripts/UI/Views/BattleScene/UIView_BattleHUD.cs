@@ -1,4 +1,7 @@
-﻿using RhytmTD.UI.View;
+﻿using CoreFramework.Rhytm;
+using RhytmTD.UI.View;
+using RhytmTD.UI.Widget;
+using UnityEngine;
 
 namespace RhytmTD.UI.Battle.View
 {
@@ -7,9 +10,23 @@ namespace RhytmTD.UI.Battle.View
     /// </summary>
     public class UIView_BattleHUD : UIView_Abstract
     {
+        [Space]
+        [SerializeField] private UIWidget_Tick m_UIWidget_Tick;
+
         public override void Initialize()
         {
-            UnityEngine.Debug.Log("UIView BattleHUD - Initialize");
+            m_UIWidget_Tick.Initialize((float)RhytmController.GetInstance().TickDurationSeconds / 8,
+                                       (float)RhytmController.GetInstance().TimeToNextTick + (float)RhytmController.GetInstance().ProcessTickDelta);
+
+            RegisterWidget(m_UIWidget_Tick);
+            RegisterUpdatable(m_UIWidget_Tick);
+        }
+
+        public override void PerformUpdate(float deltaTime)
+        {
+            base.PerformUpdate(deltaTime);
+
+            m_UIWidget_Tick.PerformUpdate(deltaTime);
         }
     }
 }
