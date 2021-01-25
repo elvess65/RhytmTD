@@ -19,21 +19,6 @@ namespace RhytmTD.UI.Components
             m_WaitBeatIndicatorDelay = new WaitForSeconds(tickDuration);
         }
 
-        public void ToNormalState()
-        {
-            m_ControlledImage.color = Color.green;
-        }
-
-        public void ToPrepareState()
-        {
-            m_ControlledImage.color = Color.yellow;
-        }
-
-        public void ToBattleState()
-        {
-            m_ControlledImage.color = Color.red;
-        }
-
         public void PlayTickAnimation()
         {
             BattleManager.Instance.StartCoroutine(TickAnimationCoroutine());

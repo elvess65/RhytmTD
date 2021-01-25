@@ -47,7 +47,6 @@ namespace RhytmTD.UI.Widget
                 //Overtime
                 if (m_LerpData.Overtime())
                 {
-                    Debug.Log("Overtime " + m_LerpData.TotalTime);
                     m_LerpData.Stop();
 
                     for (int i = 0; i < m_TickArrows.Length; i++)
@@ -69,7 +68,7 @@ namespace RhytmTD.UI.Widget
                 m_TickArrows[i].PrepareForInterpolation();
 
             //Lerp
-            m_LerpData.TotalTime = (float)RhytmController.GetInstance().TimeToNextTick + (float)RhytmController.GetInstance().ProcessTickDelta;
+            m_LerpData.TotalTime = (float)RhytmController.GetInstance().TimeToNextTick * 2 + (float)RhytmController.GetInstance().ProcessTickDelta;
             m_LerpData.Start();
         }
     }

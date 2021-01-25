@@ -39,7 +39,6 @@ namespace RhytmTD.UI.Battle.StateMachine
 
         private void ProcessTickHandler(int ticksSinceStart)
         {
-            UnityEngine.Debug.Log(ticksSinceStart);
             m_UIView_BattleHUD.UIWidget_Tick.PlayArrowsAnimation();
         }
     }
