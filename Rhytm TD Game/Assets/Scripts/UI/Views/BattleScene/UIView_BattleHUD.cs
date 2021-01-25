@@ -1,4 +1,6 @@
-﻿namespace RhytmTD.UI.View
+﻿using RhytmTD.UI.View;
+
+namespace RhytmTD.UI.Battle.View
 {
     /// <summary>
     /// Отображение виджетов боя в HUD
@@ -7,6 +9,7 @@
     {
         public override void Initialize()
         {
+            UnityEngine.Debug.Log("UIView BattleHUD - Initialize");
         }
     }
 }

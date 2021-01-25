@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using RhytmTD.UI.Battle;
 using UnityEngine;
 
 namespace RhytmTD.Battle.Core
@@ -9,8 +8,11 @@ namespace RhytmTD.Battle.Core
     /// </summary>
     public class ManagersHolder : MonoBehaviour
     {
+        public BattleUIManager UIManager;
+
         public void Initialize()
         {
+            UIManager.Initialize();
         }
     }
 }

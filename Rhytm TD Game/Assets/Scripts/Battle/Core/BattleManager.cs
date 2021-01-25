@@ -1,4 +1,5 @@
-﻿using CoreFramework.Abstract;
+﻿using CoreFramework;
+using CoreFramework.Abstract;
 using CoreFramework.Utils;
 using RhytmTD.Battle.StateMachine;
 using System.Collections.Generic;
@@ -16,15 +17,11 @@ namespace RhytmTD.Battle.Core
 
         private BattleStateMachine<BattleState_Abstract> m_StateMachine;
         private ControllersHolder m_ControllersHolder;
-        private List<iUpdatable> m_Updateables;
+        private UpdatablesManager m_UpdatablesManager;
 
         private void Update()
         {
-            if (m_Updateables != null)
-            {
-                for (int i = 0; i < m_Updateables.Count; i++)
-                    m_Updateables[i].PerformUpdate(Time.deltaTime);
-            }
+            m_UpdatablesManager?.PerformUpdate(Time.deltaTime);
         }
 
         #region Initialization
@@ -71,13 +68,11 @@ namespace RhytmTD.Battle.Core
 
         private void InitializeUpdatables()
         {
-            m_Updateables = new List<iUpdatable>
-            {
-                m_ControllersHolder.RhytmController,
-                m_ControllersHolder.InputController,
-                
-                m_StateMachine
-            };
+            m_UpdatablesManager = new UpdatablesManager();
+            m_UpdatablesManager.Add(m_ControllersHolder.RhytmController);
+            m_UpdatablesManager.Add(m_ControllersHolder.InputController);
+            m_UpdatablesManager.Add(ManagersHolder.UIManager);
+            m_UpdatablesManager.Add(m_StateMachine);
         }
 
         private void InitializeEvents()
@@ -116,8 +111,11 @@ namespace RhytmTD.Battle.Core
             yield return new WaitForSeconds(1);
 
             //TODO: Move to InitializationFinished and remove this
-
+            //Enable input
             m_StateMachine.ChangeState<BattleState_Normal>();
+
+            //Show UI
+            //ManagersHolder.UIManager.ShowUI
 
             //Start beat
             m_ControllersHolder.RhytmController.StartTicking();
@@ -136,10 +134,10 @@ namespace RhytmTD.Battle.Core
 
         private void TickHandler(int ticksSinceStart)
         {
-            //Debug.Log("TickHandler: " + ticksSinceStart);
+            Debug.Log("TickHandler: " + ticksSinceStart);
             if (ticksSinceStart % 8 == 0)
             {
-                //Music.Play();
+                Music.Play();
             }
         }
 
