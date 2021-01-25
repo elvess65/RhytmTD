@@ -1,4 +1,5 @@
 ﻿using CoreFramework.Abstract;
+using CoreFramework.Rhytm;
 using CoreFramework.Utils;
 using RhytmTD.UI.Components;
 using UnityEngine;
@@ -15,15 +16,10 @@ namespace RhytmTD.UI.Widget
         [SerializeField] UIComponent_TickWidget_Arrow[] m_TickArrows;
    
         private InterpolationData<float> m_LerpData;
-        private float m_ArrowAnimationDuration;
 
 
-        public void Initialize(float tickDuration, float arrowAnimationDuration)
+        public void Initialize(float tickDuration)
         {
-            Debug.Log("Initialize UIWidget Tick: " + tickDuration);
-
-            m_ArrowAnimationDuration = arrowAnimationDuration;
-
             //Lerp
             m_LerpData = new InterpolationData<float>();
 
@@ -51,6 +47,7 @@ namespace RhytmTD.UI.Widget
                 //Overtime
                 if (m_LerpData.Overtime())
                 {
+                    Debug.Log("Overtime " + m_LerpData.TotalTime);
                     m_LerpData.Stop();
 
                     for (int i = 0; i < m_TickArrows.Length; i++)
@@ -72,7 +69,7 @@ namespace RhytmTD.UI.Widget
                 m_TickArrows[i].PrepareForInterpolation();
 
             //Lerp
-            m_LerpData.TotalTime = m_ArrowAnimationDuration;
+            m_LerpData.TotalTime = (float)RhytmController.GetInstance().TimeToNextTick + (float)RhytmController.GetInstance().ProcessTickDelta;
             m_LerpData.Start();
         }
     }

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using CoreFramework.Rhytm;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace RhytmTD.UI.Components
@@ -36,7 +37,7 @@ namespace RhytmTD.UI.Components
             m_ControlledTransform.anchoredPosition = Vector3.Lerp(m_InitPos, Vector3.zero, progress);
             m_ControlledTransform.localScale = m_InitScale * Mathf.Lerp(0, 1, progress);
 
-            m_ArrowImage.color = Color.red;//Rhytm.RhytmInputProxy.IsInUseRange ? Color.green : Color.white;
+            m_ArrowImage.color = RhytmInputProxy.IsInUseRange ? Color.green : Color.white;
         }
     }
 }

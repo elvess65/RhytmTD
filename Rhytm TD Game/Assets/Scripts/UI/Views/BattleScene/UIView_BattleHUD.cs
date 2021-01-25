@@ -11,22 +11,21 @@ namespace RhytmTD.UI.Battle.View
     public class UIView_BattleHUD : UIView_Abstract
     {
         [Space]
-        [SerializeField] private UIWidget_Tick m_UIWidget_Tick;
+        public UIWidget_Tick UIWidget_Tick;
 
         public override void Initialize()
         {
-            m_UIWidget_Tick.Initialize((float)RhytmController.GetInstance().TickDurationSeconds / 8,
-                                       (float)RhytmController.GetInstance().TimeToNextTick + (float)RhytmController.GetInstance().ProcessTickDelta);
+            UIWidget_Tick.Initialize((float)RhytmController.GetInstance().TickDurationSeconds / 8);
 
-            RegisterWidget(m_UIWidget_Tick);
-            RegisterUpdatable(m_UIWidget_Tick);
+            RegisterWidget(UIWidget_Tick);
+            RegisterUpdatable(UIWidget_Tick);
         }
 
         public override void PerformUpdate(float deltaTime)
         {
             base.PerformUpdate(deltaTime);
 
-            m_UIWidget_Tick.PerformUpdate(deltaTime);
+            UIWidget_Tick.PerformUpdate(deltaTime);
         }
     }
 }

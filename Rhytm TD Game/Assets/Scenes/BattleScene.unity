@@ -721,7 +721,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Root: {fileID: 782814927}
-  m_UIWidget_Tick: {fileID: 107328195}
+  UIWidget_Tick: {fileID: 107328195}
 --- !u!114 &782814929
 MonoBehaviour:
   m_ObjectHideFlags: 0

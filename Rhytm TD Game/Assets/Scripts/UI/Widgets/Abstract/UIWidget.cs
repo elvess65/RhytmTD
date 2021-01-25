@@ -10,6 +10,10 @@ namespace RhytmTD.UI.Widget
         public Transform Root;
 
         private bool m_IsEnabled = true;
+        private bool m_IsActive = false;
+        private float m_TotalTime = 1;
+        private float m_CurrentTime;
+        private Vector2 m_FromToData = Vector2.zero;
 
         public void SetWidgetActive(bool isEnabled, bool isAnimated)
         {
@@ -32,11 +36,6 @@ namespace RhytmTD.UI.Widget
         protected virtual void InternalInitialize()
         {
         }
-
-        private bool m_IsActive = false;
-        private float m_TotalTime = 1;
-        private float m_CurrentTime;
-        private Vector2 m_FromToData = Vector2.zero;
 
         private void Update()
         {

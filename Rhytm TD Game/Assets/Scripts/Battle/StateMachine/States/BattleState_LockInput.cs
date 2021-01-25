@@ -9,14 +9,6 @@ namespace RhytmTD.Battle.StateMachine
         {
         }
 
-        public override void EnterState()
-        {
-            base.EnterState();
-
-            //UI
-            //UIView_PlayerHUD.SetWidgetsActive(false, IsUIHidedWithAnimation());
-        }
-
         public override void HandleTouch(Vector3 mouseScreenPos)
         {
         }

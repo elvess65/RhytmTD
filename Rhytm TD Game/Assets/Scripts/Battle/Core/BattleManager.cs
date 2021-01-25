@@ -2,7 +2,7 @@
 using CoreFramework.Abstract;
 using CoreFramework.Utils;
 using RhytmTD.Battle.StateMachine;
-using System.Collections.Generic;
+using RhytmTD.UI.Battle.StateMachine;
 using UnityEngine;
 
 namespace RhytmTD.Battle.Core
@@ -111,11 +111,13 @@ namespace RhytmTD.Battle.Core
             yield return new WaitForSeconds(1);
 
             //TODO: Move to InitializationFinished and remove this
+
             //Enable input
             m_StateMachine.ChangeState<BattleState_Normal>();
 
+
             //Show UI
-            //ManagersHolder.UIManager.ShowUI
+            ManagersHolder.UIManager.ChangeState<UIBattleState_Normal>();
 
             //Start beat
             m_ControllersHolder.RhytmController.StartTicking();
@@ -129,12 +131,12 @@ namespace RhytmTD.Battle.Core
         private void TickingStartedHandler()
         {
             //Debug.Log("Tick started");
-            //Metronome.StartMetronome();
+            Metronome.StartMetronome();
         }
 
         private void TickHandler(int ticksSinceStart)
         {
-            Debug.Log("TickHandler: " + ticksSinceStart);
+            //Debug.Log("TickHandler: " + ticksSinceStart);
             if (ticksSinceStart % 8 == 0)
             {
                 //Music.Play();
