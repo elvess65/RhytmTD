@@ -121,7 +121,13 @@ namespace RhytmTD.Battle.Core
 
             //Start beat
             m_ControllersHolder.RhytmController.StartTicking();
+
+            Level level = new Level(Enemies, AttackTicks, RestTicks, 5);
         }
+
+        public Data.ProgressionConfig Enemies;
+        public Data.ProgressionConfig AttackTicks;
+        public Data.ProgressionConfig RestTicks;
 
         #endregion
 
