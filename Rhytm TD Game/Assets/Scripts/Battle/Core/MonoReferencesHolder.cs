@@ -5,12 +5,13 @@ using UnityEngine;
 namespace RhytmTD.Battle.Core
 {
     /// <summary>
-    /// Holder for managers
+    /// Holder for required MonoBehaviours
     /// </summary>
-    public class ManagersHolder : MonoBehaviour
+    public class MonoReferencesHolder : MonoBehaviour
     {
         public BattleUIManager UIManager;
         public BattleAssetsManager AssetsManager;
+        public WorldSpawner EnemySpawner;
 
         public void Initialize()
         {

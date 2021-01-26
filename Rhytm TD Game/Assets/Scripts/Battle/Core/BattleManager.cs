@@ -9,7 +9,7 @@ namespace RhytmTD.Battle.Core
 {
     public class BattleManager : Singleton<BattleManager>
     {
-        public ManagersHolder ManagersHolder;
+        public MonoReferencesHolder MonoReferencesHolder;
 
         [Header("Temp")]
         public Metronome Metronome;
@@ -63,7 +63,7 @@ namespace RhytmTD.Battle.Core
             Metronome.bpm = bpm; //Debug
 
             //Initialize managers (May require data)
-            ManagersHolder.Initialize();
+            MonoReferencesHolder.Initialize();
         }
 
         private void InitializeUpdatables()
@@ -71,7 +71,7 @@ namespace RhytmTD.Battle.Core
             m_UpdatablesManager = new UpdatablesManager();
             m_UpdatablesManager.Add(m_ControllersHolder.RhytmController);
             m_UpdatablesManager.Add(m_ControllersHolder.InputController);
-            m_UpdatablesManager.Add(ManagersHolder.UIManager);
+            m_UpdatablesManager.Add(MonoReferencesHolder.UIManager);
             m_UpdatablesManager.Add(m_StateMachine);
         }
 
@@ -117,12 +117,13 @@ namespace RhytmTD.Battle.Core
 
 
             //Show UI
-            ManagersHolder.UIManager.ChangeState<UIBattleState_Normal>();
+            MonoReferencesHolder.UIManager.ChangeState<UIBattleState_Normal>();
 
             //Start beat
             m_ControllersHolder.RhytmController.StartTicking();
 
             Level level = new Level(Enemies, AttackTicks, RestTicks, 5);
+            MonoReferencesHolder.EnemySpawner.Spawn(level.GetWave().m_EnemiesAmount);
         }
 
         public Data.ProgressionConfig Enemies;

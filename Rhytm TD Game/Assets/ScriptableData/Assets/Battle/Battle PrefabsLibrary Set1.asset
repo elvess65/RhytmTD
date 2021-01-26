@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67950a67092acc641bc4491ce895b0c0, type: 3}
   m_Name: Battle PrefabsLibrary Set1
   m_EditorClassIdentifier: 
-  Prefab: {fileID: 0}
+  ExamplePrefab: {fileID: 1520075242414890920, guid: 81393d4e6c934f44496e7c8f501a2fb1,
+    type: 3}
