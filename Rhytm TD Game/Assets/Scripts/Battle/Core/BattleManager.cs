@@ -57,7 +57,7 @@ namespace RhytmTD.Battle.Core
             //float completionProgress = GameManager.Instance.ModelsHolder.DataTableModel.EnvironmentDataModel.GetCompletionForProgression(GameManager.Instance.ModelsHolder.BattleSessionModel.CompletedLevelsIDs.ToArray());
 
             //Rhytm data
-            int bpm = 130;
+            int bpm = 30;
             m_ControllersHolder.RhytmController.SetBPM(bpm);
             m_ControllersHolder.RhytmInputProxy.SetInputPrecious(0.25f);//ManagersHolder.SettingsManager.GeneralSettings.InputPrecious);
             Metronome.bpm = bpm; //Debug

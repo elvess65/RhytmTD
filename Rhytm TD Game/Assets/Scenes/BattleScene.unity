@@ -238,6 +238,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UIManager: {fileID: 1483325746}
+  AssetsManager: {fileID: 1107474652}
 --- !u!4 &88609301
 Transform:
   m_ObjectHideFlags: 0
@@ -1258,9 +1259,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1107474650}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e4ee5a428171f4a4d8bd6005aa4c92c2, type: 3}
+  m_Script: {fileID: 11500000, guid: 8652ae038677a244f929cb5a9054be71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_PrefabAssets: {fileID: 11400000, guid: f81ebea77171de04194ff00577f94c6a, type: 2}
 --- !u!1 &1114952265
 GameObject:
   m_ObjectHideFlags: 0
