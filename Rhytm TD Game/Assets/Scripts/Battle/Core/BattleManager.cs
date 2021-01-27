@@ -64,6 +64,9 @@ namespace RhytmTD.Battle.Core
 
             //Initialize managers (May require data)
             MonoReferencesHolder.Initialize();
+
+            //Build level data
+            m_ControllersHolder.SpawnController.BuildLevel(MonoReferencesHolder.EnemySpawner, l);
         }
 
         private void InitializeUpdatables()
@@ -121,14 +124,19 @@ namespace RhytmTD.Battle.Core
 
             //Start beat
             m_ControllersHolder.RhytmController.StartTicking();
-
-            Level level = new Level(Enemies, AttackTicks, RestTicks, 5);
-            MonoReferencesHolder.EnemySpawner.Spawn(level.GetWave().m_EnemiesAmount);
         }
 
-        public Data.ProgressionConfig Enemies;
-        public Data.ProgressionConfig AttackTicks;
-        public Data.ProgressionConfig RestTicks;
+        public LevelData l;
+
+        [System.Serializable]
+        public class LevelData
+        {
+            //Level data
+            public Data.ProgressionConfig Enemies;
+            public Data.ProgressionConfig AttackTicks;
+            public Data.ProgressionConfig RestTicks;
+            public int WavesAmount = 5;
+        }
 
         #endregion
 
@@ -148,6 +156,8 @@ namespace RhytmTD.Battle.Core
             {
                 //Music.Play();
             }
+
+            m_ControllersHolder.SpawnController.HandleTick(ticksSinceStart);
         }
 
         private void EventProcessingTickHandler(int ticksSinceStart)
