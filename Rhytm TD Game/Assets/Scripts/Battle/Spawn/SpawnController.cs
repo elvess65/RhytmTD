@@ -1,50 +1,58 @@
-﻿using UnityEngine;
-using static RhytmTD.Battle.Core.BattleManager;
+﻿using RhytmTD.Battle.Spawn.Data;
 
 namespace RhytmTD.Battle.Spawn
 {
     public class SpawnController
     {
         private WorldSpawner m_WorldSpawner;
-        private Level m_Level;
-        private Wave m_CurrentWave;
+        private LevelData m_Level;
+        private WaveData m_CurrentWave;
         private int m_ActionTargetTick;
-        private int m_ProcessedWaveTicks;
+        private int m_ProcessedChunksAmount;
 
-        public void BuildLevel(WorldSpawner worldSpawner, LevelData l)
+        public void BuildLevel(WorldSpawner worldSpawner, Core.BattleManager.LevelData levelData)
         {
             m_WorldSpawner = worldSpawner;
 
-            m_Level = new Level(l.Enemies, l.AttackTicks, l.RestTicks, l.WavesAmount);
+            m_Level = new LevelData(levelData.Enemies, levelData.AttackTicks, levelData.RestTicks, levelData.WavesAmount);
+            m_ActionTargetTick = m_Level.DelayBeforeStartTicks;
             m_CurrentWave = m_Level.GetNextWave();
-
-            m_ActionTargetTick = 1; //TODO: level - delay before start
         }
 
         public void HandleTick(int ticksSinceStart)
         {
-            Debug.Log(ticksSinceStart + " " + m_ActionTargetTick);
             if (m_ActionTargetTick == ticksSinceStart)
             {
-                //Spawn wave
-                Debug.Log("Spawn wave " + m_CurrentWave.ID);
-                m_ProcessedWaveTicks++;
+                m_WorldSpawner.Spawn(m_CurrentWave.EnemiesAmount);
 
-                if (m_ProcessedWaveTicks > m_CurrentWave.DurationAttackTicks)
+                m_ProcessedChunksAmount++;
+
+                //If all chunks from wave spawned
+                if (m_ProcessedChunksAmount > m_CurrentWave.ChunksAmount)
                 {
-                    Debug.Log("Finish wave");
-                    m_ActionTargetTick += m_CurrentWave.DurationRestTicks;
-                    m_CurrentWave = m_Level.GetNextWave();
-                    m_ProcessedWaveTicks = 0;
+                    //If level still has waves to spawn
+                    if (m_Level.HasWaves)
+                    {
+                        //Schedule rest delay
+                        m_ActionTargetTick += m_CurrentWave.DurationRestTicks;
+
+                        //Get next wave
+                        m_CurrentWave = m_Level.GetNextWave();
+
+                        //Reset processed chunks amount
+                        m_ProcessedChunksAmount = 0;
+                    }
+                    else
+                    {
+                        //Stop scheduling tasks
+                        m_ActionTargetTick = -1;
+                    }
                 }
                 else
                 {
-                    //Start idle after spawn
-                    m_ActionTargetTick += 2; //TODO: wave - idle after spawn
-                    Debug.Log("Wait delay until " + m_ActionTargetTick + ". Remains: " + (m_CurrentWave.DurationAttackTicks - m_ProcessedWaveTicks));
+                    //Schedule delay between chunks
+                    m_ActionTargetTick += m_CurrentWave.DelayBetweenChunksTicks;
                 }
-
-                //m_State = ProcessingStates.IdleBetweenWaves;
             }
         }
     }
