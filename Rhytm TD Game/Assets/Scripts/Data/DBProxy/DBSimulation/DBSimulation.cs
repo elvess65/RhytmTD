@@ -11,5 +11,6 @@ namespace RhytmTD.Data.DataBase.Simulation
         public DBSimulation_AccountData AccountData;
         public DBSimulation_AccountLevelingData AccountLevelingData;
         public DBSimulation_EnvironmentData EnvironmentData;
+        public DBSimulation_WorldData WorldData;
     }
 }

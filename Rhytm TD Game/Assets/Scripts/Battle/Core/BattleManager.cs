@@ -2,6 +2,8 @@
 using CoreFramework.Abstract;
 using CoreFramework.Utils;
 using RhytmTD.Battle.StateMachine;
+using RhytmTD.Core;
+using RhytmTD.Data.Models.DataTableModels;
 using RhytmTD.UI.Battle.StateMachine;
 using UnityEngine;
 
@@ -66,7 +68,9 @@ namespace RhytmTD.Battle.Core
             MonoReferencesHolder.Initialize();
 
             //Build level data
-            m_ControllersHolder.SpawnController.BuildLevel(MonoReferencesHolder.EnemySpawner, l);
+            //Get current area id from account
+            WorldDataModel.AreaData areaData = GameManager.Instance.ModelsHolder.DataTableModel.WorldDataModel.GetAreaDataByID(0);
+            m_ControllersHolder.SpawnController.BuildLevel(MonoReferencesHolder.EnemySpawner, areaData);
         }
 
         private void InitializeUpdatables()
@@ -124,18 +128,6 @@ namespace RhytmTD.Battle.Core
 
             //Start beat
             m_ControllersHolder.RhytmController.StartTicking();
-        }
-
-        public LevelData l;
-
-        [System.Serializable]
-        public class LevelData
-        {
-            //Level data
-            public Data.ProgressionConfig Enemies;
-            public Data.ProgressionConfig AttackTicks;
-            public Data.ProgressionConfig RestTicks;
-            public int WavesAmount = 5;
         }
 
         #endregion

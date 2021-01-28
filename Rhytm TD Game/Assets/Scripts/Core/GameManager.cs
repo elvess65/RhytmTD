@@ -34,13 +34,13 @@ namespace RhytmTD.Core
         }
  
 
-        private void ConnectionResultSuccess(string serializedAccountData, string serializedEnviromentData, string serializedLevelingData)
+        private void ConnectionResultSuccess(string serializedAccountData, string serializedEnviromentData, string serializedLevelingData, string serializedWorldData)
         {
             //Set data
             ModelsHolder.AccountModel = AccountDataModel.DeserializeData(serializedAccountData);
             ModelsHolder.AccountModel.ReorganizeData();
 
-            ModelsHolder.DataTableModel = new DataTableModel(serializedEnviromentData, serializedLevelingData);
+            ModelsHolder.DataTableModel = new DataTableModel(serializedEnviromentData, serializedLevelingData, serializedWorldData);
             ModelsHolder.DataTableModel.ReorganizeData();
 
             SceneLoader.LoadLevel(SceneLoader.MENU_SCENE_NAME);

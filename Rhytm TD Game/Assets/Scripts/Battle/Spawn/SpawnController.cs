@@ -1,4 +1,5 @@
 ﻿using RhytmTD.Battle.Spawn.Data;
+using RhytmTD.Data.Models.DataTableModels;
 
 namespace RhytmTD.Battle.Spawn
 {
@@ -10,11 +11,11 @@ namespace RhytmTD.Battle.Spawn
         private int m_ActionTargetTick;
         private int m_ProcessedChunksAmount;
 
-        public void BuildLevel(WorldSpawner worldSpawner, Core.BattleManager.LevelData levelData)
+        public void BuildLevel(WorldSpawner worldSpawner, WorldDataModel.AreaData areaData)
         {
             m_WorldSpawner = worldSpawner;
 
-            m_Level = new LevelData(levelData.Enemies, levelData.AttackTicks, levelData.RestTicks, levelData.WavesAmount);
+            m_Level = new LevelData(areaData.Enemies, areaData.AttackTicks, areaData.RestTicks, areaData.WavesAmount);
             m_ActionTargetTick = m_Level.DelayBeforeStartTicks;
             m_CurrentWave = m_Level.GetNextWave();
         }

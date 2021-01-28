@@ -18,5 +18,11 @@ namespace RhytmTD.Data.DataBase.Simulation
 
         [Tooltip("Опыт маны")]
         public int ManaExperiance;
+
+        [Tooltip("Количество пройденных уровней в последней зоне")]
+        public int CompletedLevels;
+
+        [Tooltip("ID открытых зон")]
+        public int[] CompletedAreas;
     }
 }
