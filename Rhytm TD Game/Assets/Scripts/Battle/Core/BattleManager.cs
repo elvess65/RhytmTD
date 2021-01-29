@@ -55,9 +55,6 @@ namespace RhytmTD.Battle.Core
 
         private void InitializeDataDependends()
         {
-            //EnvironmentDataModel.LevelParams levelParams = GameManager.Instance.ModelsHolder.DataTableModel.EnvironmentDataModel.GetLevelParams(GameManager.Instance.ModelsHolder.BattleSessionModel.CurrentLevelID);
-            //float completionProgress = GameManager.Instance.ModelsHolder.DataTableModel.EnvironmentDataModel.GetCompletionForProgression(GameManager.Instance.ModelsHolder.BattleSessionModel.CompletedLevelsIDs.ToArray());
-
             //Rhytm data
             int bpm = 30;
             m_ControllersHolder.RhytmController.SetBPM(bpm);
@@ -69,8 +66,9 @@ namespace RhytmTD.Battle.Core
 
             //Build level data
             //Get current area id from account
-            WorldDataModel.AreaData areaData = GameManager.Instance.ModelsHolder.DataTableModel.WorldDataModel.GetAreaDataByID(0);
-            m_ControllersHolder.SpawnController.BuildLevel(MonoReferencesHolder.EnemySpawner, areaData);
+            int currentArea = GameManager.Instance.ModelsHolder.BattleSessionModel.CurrentArea;
+            WorldDataModel.AreaData areaData = GameManager.Instance.ModelsHolder.DataTableModel.WorldDataModel.Areas[currentArea];
+            m_ControllersHolder.SpawnController.BuildLevel(MonoReferencesHolder.EnemySpawner, areaData, m_ControllersHolder.RhytmController.CurrentTick);
         }
 
         private void InitializeUpdatables()

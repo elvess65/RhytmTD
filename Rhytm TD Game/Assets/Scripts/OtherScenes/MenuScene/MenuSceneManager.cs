@@ -27,6 +27,14 @@ namespace RhytmTD.OtherScenes.MenuScene
             CameraContoller.OnCameraPushKeyFrameReached += CameraPushingFinishedHandler;
             CameraContoller.Initialize();
 
+
+            //Opened ares and completed levels are used to show player's best progress
+            Debug.Log("Completed areas: " + GameManager.Instance.ModelsHolder.AccountModel.CompletedAreas);
+            Debug.Log("Completed levels: " + GameManager.Instance.ModelsHolder.AccountModel.CompletedLevels);
+
+            //Here its possible to choose from amount of opened areas
+            GameManager.Instance.ModelsHolder.BattleSessionModel.CurrentArea = GameManager.Instance.ModelsHolder.AccountModel.CompletedAreas;
+
             //m_SelectedCharacterAnimationEventsListener = CharacterController.SelectedCharacterAnimationController.Controller.GetComponent<AnimationEventsListener>();
 
             //GameManager.Instance.DataHolder.BattleSessionModel.CurrentLevelID = 1;

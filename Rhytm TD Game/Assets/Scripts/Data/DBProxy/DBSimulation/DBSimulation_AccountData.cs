@@ -22,7 +22,7 @@ namespace RhytmTD.Data.DataBase.Simulation
         [Tooltip("Количество пройденных уровней в последней зоне")]
         public int CompletedLevels;
 
-        [Tooltip("ID открытых зон")]
-        public int[] CompletedAreas;
+        [Tooltip("Количество открытых зон")]
+        public int CompletedAreas;
     }
 }

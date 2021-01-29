@@ -7,36 +7,41 @@ namespace RhytmTD.Battle.Spawn.Data
 {
     public class LevelData
     {
-        public int DelayBeforeStartTicks => 1; //Задержка перед началом уровня (в тиках)
+        public int DelayBeforeStart { get; private set; } //Задержка перед началом уровня (в тиках)
 
         //Кривые распределения
         private ProgressionConfig m_ProgressionEnemies;
         private ProgressionConfig m_ProgressionChunksAmount;
         private ProgressionConfig m_ProgressionRestTicks;
+        private ProgressionConfig m_ProgressionDelayBetweenChunks;
 
-        //Количество волн в уровне
+
         private int m_WavesAmount;
 
         //Очерель волн для создания
         private Queue<WaveData> m_Waves;
 
-        //Прогресс прохождения уровня в диапазоне 0-1
-        private float m_LevelProgress01 => m_CompletedWavesAmount / (float)m_WavesAmount;
-
-        //Количество пройденных волн (все враги волны уничтожены)
-        private int m_CompletedWavesAmount { get; set; }
-
         //Если ли волны в очереди для создания
         public bool HasWaves => m_Waves != null && m_Waves.Count > 0;
 
+        //Количество волн в созданном уровне
+        public int WavesAmount => m_Waves.Count;
 
-        public LevelData(ProgressionConfig progressionEnemies, ProgressionConfig progressionChunksAmount, ProgressionConfig progressionRestTicks, int wavesAmount)
+
+        public LevelData(ProgressionConfig progressionEnemies,
+                         ProgressionConfig progressionChunksAmount,
+                         ProgressionConfig progressionRestTicks,
+                         ProgressionConfig progressionDelayBetweenChunks,
+                         int wavesAmount,
+                         int delayBeforeStartLevel)
         {
             m_ProgressionEnemies = progressionEnemies;
             m_ProgressionChunksAmount = progressionChunksAmount;
             m_ProgressionRestTicks = progressionRestTicks;
+            m_ProgressionDelayBetweenChunks = progressionDelayBetweenChunks;
 
             m_WavesAmount = wavesAmount;
+            DelayBeforeStart = delayBeforeStartLevel;
 
             Build();
         }
@@ -58,7 +63,7 @@ namespace RhytmTD.Battle.Spawn.Data
                 float waveProgress01 = (float)i / (m_WavesAmount - 1);
 
                 //ИД волны
-                int id = i + m_CompletedWavesAmount * 100;
+                int id = i * 100;
 
                 //Количество врагов
                 int enemiesAmount = EvaluateFromProgression(m_ProgressionEnemies, waveProgress01);
@@ -69,7 +74,10 @@ namespace RhytmTD.Battle.Spawn.Data
                 //Длительность отдыха после создания всех врагов до начала следующей волны(в тиках)
                 int durationRestTicks = EvaluateFromProgression(m_ProgressionRestTicks, waveProgress01);
 
-                WaveData wave = new WaveData(id, enemiesAmount, chunksAmount, durationRestTicks);
+                //Длительность отдыха между волнами
+                int delayBetweenChunks = EvaluateFromProgression(m_ProgressionDelayBetweenChunks, waveProgress01);
+
+                WaveData wave = new WaveData(id, enemiesAmount, chunksAmount, durationRestTicks, delayBetweenChunks);
                 m_Waves.Enqueue(wave);
 
                 stringBuilder.AppendLine(wave.ToString());

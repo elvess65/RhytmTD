@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: World
   m_EditorClassIdentifier: 
   Areas:
-  - Enemies:
+  - ProgressionEnemies:
       BaseValue: 5
       Curve:
         serializedVersion: 2
@@ -38,8 +38,8 @@ MonoBehaviour:
           outWeight: 0.33333334
         m_PreInfinity: 2
         m_PostInfinity: 2
-        m_RotationOrder: 0
-    AttackTicks:
+        m_RotationOrder: 4
+    ProgressionChunksAmount:
       BaseValue: 2
       Curve:
         serializedVersion: 2
@@ -54,8 +54,8 @@ MonoBehaviour:
           inWeight: 0.33333334
           outWeight: 0.33333334
         - serializedVersion: 3
-          time: 1.0021973
-          value: 0.49898148
+          time: 1
+          value: 0.5010185
           inSlope: 1
           outSlope: 1
           tangentMode: 0
@@ -64,8 +64,8 @@ MonoBehaviour:
           outWeight: 0.33333334
         m_PreInfinity: 2
         m_PostInfinity: 2
-        m_RotationOrder: 0
-    RestTicks:
+        m_RotationOrder: 4
+    ProgressionRestTicks:
       BaseValue: 3
       Curve:
         serializedVersion: 2
@@ -90,7 +90,34 @@ MonoBehaviour:
           outWeight: 0.33333334
         m_PreInfinity: 2
         m_PostInfinity: 2
-        m_RotationOrder: 0
+        m_RotationOrder: 4
+    ProgressionDelayBetweenChunks:
+      BaseValue: 2
+      Curve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 1
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
     ID: 0
     WavesAmount: 5
     TotalLevels: 10
+    DelayBeforeStartLevel: 2
