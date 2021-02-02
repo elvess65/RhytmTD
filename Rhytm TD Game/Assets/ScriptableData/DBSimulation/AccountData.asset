@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bc185674da583f40a0f4bd0812766e5, type: 3}
   m_Name: AccountData
   m_EditorClassIdentifier: 
+  AccountExperiance: 0
   WeaponExperiance: 1
   HPExperiance: 2
   ManaExperiance: 3
+  CompletedLevels: 10
+  CompletedAreas: 0

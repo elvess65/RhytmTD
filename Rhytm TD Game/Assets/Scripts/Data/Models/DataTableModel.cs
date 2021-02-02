@@ -9,17 +9,20 @@ namespace RhytmTD.Data.Models
     {
         public EnvironmentDataModel EnvironmentDataModel { get; }
         public AccountLevelingDataModel LevelingDataModel { get; }
+        public WorldDataModel WorldDataModel { get; }
 
-        public DataTableModel(string serializedEnviromentData, string serializedLevelingData)
+        public DataTableModel(string serializedEnviromentData, string serializedLevelingData, string serializedWorldData)
         {
             EnvironmentDataModel = EnvironmentDataModel.DeserializeData(serializedEnviromentData);
             LevelingDataModel = AccountLevelingDataModel.DeserializeData(serializedLevelingData);
+            WorldDataModel = WorldDataModel.DeserializeData(serializedWorldData);
         }
 
         public void ReorganizeData()
         {
             EnvironmentDataModel.ReorganizeData();
             LevelingDataModel.ReorganizeData();
+            WorldDataModel.ReorganizeData();
         }
     }
 }

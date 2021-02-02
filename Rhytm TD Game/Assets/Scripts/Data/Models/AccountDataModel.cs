@@ -10,6 +10,9 @@
         public int HPExperiance;
         public int ManaExperiance;
 
+        public int CompletedLevels;
+        public int CompletedAreas;
+
         public override void ReorganizeData()
         {
             

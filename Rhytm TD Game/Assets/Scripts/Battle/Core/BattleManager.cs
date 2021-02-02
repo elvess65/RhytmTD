@@ -2,6 +2,8 @@
 using CoreFramework.Abstract;
 using CoreFramework.Utils;
 using RhytmTD.Battle.StateMachine;
+using RhytmTD.Core;
+using RhytmTD.Data.Models.DataTableModels;
 using RhytmTD.UI.Battle.StateMachine;
 using UnityEngine;
 
@@ -53,9 +55,6 @@ namespace RhytmTD.Battle.Core
 
         private void InitializeDataDependends()
         {
-            //EnvironmentDataModel.LevelParams levelParams = GameManager.Instance.ModelsHolder.DataTableModel.EnvironmentDataModel.GetLevelParams(GameManager.Instance.ModelsHolder.BattleSessionModel.CurrentLevelID);
-            //float completionProgress = GameManager.Instance.ModelsHolder.DataTableModel.EnvironmentDataModel.GetCompletionForProgression(GameManager.Instance.ModelsHolder.BattleSessionModel.CompletedLevelsIDs.ToArray());
-
             //Rhytm data
             int bpm = 30;
             m_ControllersHolder.RhytmController.SetBPM(bpm);
@@ -66,7 +65,10 @@ namespace RhytmTD.Battle.Core
             MonoReferencesHolder.Initialize();
 
             //Build level data
-            m_ControllersHolder.SpawnController.BuildLevel(MonoReferencesHolder.EnemySpawner, l);
+            //Get current area id from account
+            int currentArea = GameManager.Instance.ModelsHolder.BattleSessionModel.CurrentArea;
+            WorldDataModel.AreaData areaData = GameManager.Instance.ModelsHolder.DataTableModel.WorldDataModel.Areas[currentArea];
+            m_ControllersHolder.SpawnController.BuildLevel(MonoReferencesHolder.EnemySpawner, areaData, m_ControllersHolder.RhytmController.CurrentTick);
         }
 
         private void InitializeUpdatables()
@@ -124,18 +126,6 @@ namespace RhytmTD.Battle.Core
 
             //Start beat
             m_ControllersHolder.RhytmController.StartTicking();
-        }
-
-        public LevelData l;
-
-        [System.Serializable]
-        public class LevelData
-        {
-            //Level data
-            public Data.ProgressionConfig Enemies;
-            public Data.ProgressionConfig AttackTicks;
-            public Data.ProgressionConfig RestTicks;
-            public int WavesAmount = 5;
         }
 
         #endregion
