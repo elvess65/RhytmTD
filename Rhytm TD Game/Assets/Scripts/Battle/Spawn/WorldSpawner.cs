@@ -1,4 +1,5 @@
 ﻿using RhytmTD.Battle.Core;
+using RhytmTD.Battle.Entities.Views;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,47 +7,63 @@ namespace RhytmTD.Battle.Spawn
 {
     public class WorldSpawner : MonoBehaviour
     {
-        [SerializeField] private Transform[] SpawnAreas;
+        [SerializeField] private Transform PlayerSpawnArea;
+        [SerializeField] private Transform[] EnemySpawnAreas;
 
-        private Vector3 m_AreaUsedOffset = new Vector3(0, 0, 2);
+        private Vector3 m_AREA_USED_OFFSET = new Vector3(0, 0, 2);
         private int[] m_SpanwAreaUsedAmount;
-        private List<GameObject> m_SpawnedEntitiesContainer = new List<GameObject>();
+        private List<BaseBattleEntityView> m_SpawnedEntitiesContainer = new List<BaseBattleEntityView>();
 
-        public List<GameObject> Spawn(int amount)
+        public BaseBattleEntityView[] SpawnEnemyViews(int amount)
         {
             m_SpawnedEntitiesContainer.Clear();
 
             int spawnedEnemies = 0;
-            m_SpanwAreaUsedAmount = new int[SpawnAreas.Length];
+            m_SpanwAreaUsedAmount = new int[EnemySpawnAreas.Length];
 
             while (spawnedEnemies++ < amount)
             {
-                int randomSpawnAreaIndex = Random.Range(0, SpawnAreas.Length);
+                int randomSpawnAreaIndex = Random.Range(0, EnemySpawnAreas.Length);
                 int spawnAreaUsedAmount = m_SpanwAreaUsedAmount[randomSpawnAreaIndex]++;
 
-                m_SpawnedEntitiesContainer.Add(SpawnEnemy(randomSpawnAreaIndex, spawnAreaUsedAmount));
+                Vector3 spawnPosition = EnemySpawnAreas[randomSpawnAreaIndex].position + m_AREA_USED_OFFSET * spawnAreaUsedAmount;
+                m_SpawnedEntitiesContainer.Add(SpawnSingleView(spawnPosition));
             }
 
-            return m_SpawnedEntitiesContainer;
+            return m_SpawnedEntitiesContainer.ToArray();
         }
 
-        private GameObject SpawnEnemy(int spawnAreaIndex, int usedAmount)
+        public BaseBattleEntityView SpawnPlayerView()
+        {
+            Vector3 spawnPosition = PlayerSpawnArea.position;
+            return SpawnSingleView(spawnPosition);
+        }
+
+        private BaseBattleEntityView SpawnSingleView(Vector3 pos)
         {
             GameObject enemy = BattleManager.Instance.MonoReferencesHolder.AssetsManager.GetAssets().InstantiateGameObject(BattleManager.Instance.MonoReferencesHolder.AssetsManager.GetAssets().ExamplePrefab);
-            enemy.transform.position = SpawnAreas[spawnAreaIndex].position + m_AreaUsedOffset * usedAmount;
+            enemy.transform.position = pos;
 
-            return enemy;
+            BaseBattleEntityView entityView = enemy.AddComponent<BaseBattleEntityView>();
+
+            return entityView;
         }
 
         private void OnDrawGizmos()
         {
-            if (SpawnAreas == null)
+            if (EnemySpawnAreas == null)
                 return;
 
-            for (int i = 0; i < SpawnAreas.Length; i++)
+            Color initColor = Gizmos.color;
+            Gizmos.color = Color.red;
+            for (int i = 0; i < EnemySpawnAreas.Length; i++)
             {
-                Gizmos.DrawWireSphere(SpawnAreas[i].position, 1);
+                Gizmos.DrawWireSphere(EnemySpawnAreas[i].position, 1);
             }
+
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(PlayerSpawnArea.position, 1);
+            Gizmos.color = initColor;
         }
     }
 }
