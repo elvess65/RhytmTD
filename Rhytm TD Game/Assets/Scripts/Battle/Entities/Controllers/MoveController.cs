@@ -5,15 +5,20 @@ namespace RhytmTD.Battle.Entities.Controllers
 {
     public class MoveController : BaseController
     {
+        BattleModel m_BattleModel;
+
         public MoveController(Dispatcher dispatcher) : base(dispatcher)
         {
         }
 
+        public override void InitializeComplete()
+        {
+            m_BattleModel = Dispatcher.GetModel<BattleModel>();
+        }
+
         public void MoveAll(float deltaTime)
         {
-            BattleModel battleModel = Dispatcher.GetModel<BattleModel>();
-
-            foreach (BattleEntity entity in battleModel.BattleEntities)
+            foreach (BattleEntity entity in m_BattleModel.BattleEntities)
             {
                 if (entity.HasModule<MoveModule>())
                 {

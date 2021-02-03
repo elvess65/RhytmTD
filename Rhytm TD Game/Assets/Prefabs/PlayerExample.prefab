@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 6178493285409468155}
   - component: {fileID: 2673721495371645084}
   - component: {fileID: 1241821007043703050}
-  - component: {fileID: -5503216524494792304}
+  - component: {fileID: 4521003341774739162}
   m_Layer: 0
-  m_Name: EnemyExample
+  m_Name: PlayerExample
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -59,7 +59,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 9a2b688e03f3c2b469631410bafcd470, type: 2}
+  - {fileID: 2100000, guid: efdc690308f06154ebeb507ba8d70132, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -80,7 +80,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &-5503216524494792304
+--- !u!114 &4521003341774739162
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -89,6 +89,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 1520075242414890920}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75bdaf9720973b7449703220b99c94eb, type: 3}
+  m_Script: {fileID: 11500000, guid: a9d838b918f9b42d5adea31e90c728d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

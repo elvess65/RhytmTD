@@ -1,11 +1,8 @@
 ﻿//#define LOG_SPAWN
 
-using System.Collections.Generic;
 using CoreFramework;
 using RhytmTD.Battle.Entities;
-using RhytmTD.Battle.Entities.EntitiesFactory;
 using RhytmTD.Battle.Entities.Models;
-using RhytmTD.Battle.Entities.Views;
 using RhytmTD.Battle.Spawn.Data;
 using RhytmTD.Data.Models.DataTableModels;
 
@@ -20,7 +17,6 @@ namespace RhytmTD.Battle.Spawn
         private LevelData m_Level;
         private WaveData m_CurrentWave;
         private BattleModel m_BattleModel;
-        private IBattleEntityFactory m_EntityFactory;
         private int m_ActionTargetTick;
         private int m_ProcessedChunksAmount;
 
@@ -28,12 +24,16 @@ namespace RhytmTD.Battle.Spawn
         {  
         }
 
-        public void BuildLevel(WorldSpawner worldSpawner, WorldDataModel.AreaData areaData, int currentTick)
+        public override void InitializeComplete()
         {
             m_BattleModel = Dispatcher.GetModel<BattleModel>();
+        }
 
+        public void BuildLevel(WorldSpawner worldSpawner, WorldDataModel.AreaData areaData, int currentTick)
+        {
             m_WorldSpawner = worldSpawner;
-            m_EntityFactory = new DefaultBattleEntityFactory();
+
+            SpawnPlayer();
 
             m_Level = new LevelData(areaData.ProgressionEnemies,
                                     areaData.ProgressionChunksAmount,
@@ -54,7 +54,7 @@ namespace RhytmTD.Battle.Spawn
             Log($"Current tick: {ticksSinceStart}. Action at tick {m_ActionTargetTick}");
             if (m_ActionTargetTick == ticksSinceStart)
             {
-                SpawnEnemyEntities(m_WorldSpawner.SpawnEnemyViews(m_CurrentWave.EnemiesAmount));
+                SpawnEnemies(m_CurrentWave.EnemiesAmount);
                 Log($"Current tick: {ticksSinceStart}. Spawn wave: ID {m_CurrentWave.ID}. Enemies: {m_CurrentWave.EnemiesAmount}", true);
 
                 m_ProcessedChunksAmount++;
@@ -94,29 +94,19 @@ namespace RhytmTD.Battle.Spawn
             }
         }
 
-        private BattleEntity[] SpawnEnemyEntities(BaseBattleEntityView[] enemyViews)
+        private void SpawnEnemies(int amount)
         {
-            BattleEntity[] entities = new BattleEntity[enemyViews.Length];
-
-            for (int i = 0; i < enemyViews.Length; i++)
+            for (int i = 0; i < amount; i++)
             {
-                BaseBattleEntityView view = enemyViews[i];
-                BattleEntity entity = m_EntityFactory.CreateEnemy(view.transform);
-
-                view.Initialize(entity);
-                m_BattleModel.AddBattleEntity(entity);
+                BattleEntity enemy = m_WorldSpawner.SpawnEnemy();
+                m_BattleModel.AddBattleEntity(enemy);
             }
-
-            return entities;
         }
 
-        private BattleEntity SpawnPlayerEntity(BaseBattleEntityView playerView)
+        private void SpawnPlayer()
         {
-            BattleEntity entity = m_EntityFactory.CreatePlayer(playerView.transform);
-            playerView.Initialize(entity);
+            BattleEntity entity = m_WorldSpawner.SpawnPlayer();
             m_BattleModel.AddBattleEntity(entity);
-
-            return entity;
         }
 
         private void Log(string message, bool isImportant = false)

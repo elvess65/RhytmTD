@@ -72,5 +72,13 @@ namespace CoreFramework
 
             return (T)model;
         }
+
+        public void InitializeComplete()
+        {
+            foreach (BaseController controller in m_Controllers.Values)
+            {
+                controller.InitializeComplete();
+            }
+        }
     }
 }

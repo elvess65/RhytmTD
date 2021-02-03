@@ -1,6 +1,7 @@
 ﻿using RhytmTD.Battle.Core;
+using RhytmTD.Battle.Entities;
+using RhytmTD.Battle.Entities.EntitiesFactory;
 using RhytmTD.Battle.Entities.Views;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace RhytmTD.Battle.Spawn
@@ -9,61 +10,46 @@ namespace RhytmTD.Battle.Spawn
     {
         [SerializeField] private Transform PlayerSpawnArea;
         [SerializeField] private Transform[] EnemySpawnAreas;
+        [SerializeField] private BaseBattleEntityFactory PlayerFactory;
+        [SerializeField] private BaseBattleEntityFactory EnemyFactory;
+
+        // Add here references for player\enemy prefabs?
 
         private Vector3 m_AREA_USED_OFFSET = new Vector3(0, 0, 2);
         private int[] m_SpanwAreaUsedAmount;
-        private List<BaseBattleEntityView> m_SpawnedEntitiesContainer = new List<BaseBattleEntityView>();
 
-        public BaseBattleEntityView[] SpawnEnemyViews(int amount)
+        void Awake()
         {
-            m_SpawnedEntitiesContainer.Clear();
-
-            int spawnedEnemies = 0;
             m_SpanwAreaUsedAmount = new int[EnemySpawnAreas.Length];
-
-            while (spawnedEnemies++ < amount)
-            {
-                int randomSpawnAreaIndex = Random.Range(0, EnemySpawnAreas.Length);
-                int spawnAreaUsedAmount = m_SpanwAreaUsedAmount[randomSpawnAreaIndex]++;
-
-                Vector3 spawnPosition = EnemySpawnAreas[randomSpawnAreaIndex].position + m_AREA_USED_OFFSET * spawnAreaUsedAmount;
-                m_SpawnedEntitiesContainer.Add(SpawnSingleView(spawnPosition));
-            }
-
-            return m_SpawnedEntitiesContainer.ToArray();
         }
 
-        public BaseBattleEntityView SpawnPlayerView()
+        public BattleEntity SpawnPlayer()
         {
-            Vector3 spawnPosition = PlayerSpawnArea.position;
-            return SpawnSingleView(spawnPosition);
+            GameObject player = BattleManager.Instance.MonoReferencesHolder.AssetsManager.GetAssets().InstantiateGameObject(BattleManager.Instance.MonoReferencesHolder.AssetsManager.GetAssets().PlayerPrefab);
+            player.transform.position = PlayerSpawnArea.position;
+
+            BattleEntity battleEntity = PlayerFactory.CreateEntity(player.transform);
+            BattleEntityView playerView = player.GetComponent<BattleEntityView>();
+
+            playerView.Initialize(battleEntity);
+
+            return battleEntity;
         }
 
-        private BaseBattleEntityView SpawnSingleView(Vector3 pos)
+        public BattleEntity SpawnEnemy()
         {
-            GameObject enemy = BattleManager.Instance.MonoReferencesHolder.AssetsManager.GetAssets().InstantiateGameObject(BattleManager.Instance.MonoReferencesHolder.AssetsManager.GetAssets().ExamplePrefab);
-            enemy.transform.position = pos;
+            int randomSpawnAreaIndex = Random.Range(0, EnemySpawnAreas.Length);
+            int spawnAreaUsedAmount = m_SpanwAreaUsedAmount[randomSpawnAreaIndex]++;
 
-            BaseBattleEntityView entityView = enemy.AddComponent<BaseBattleEntityView>();
+            GameObject enemy = BattleManager.Instance.MonoReferencesHolder.AssetsManager.GetAssets().InstantiateGameObject(BattleManager.Instance.MonoReferencesHolder.AssetsManager.GetAssets().EnemyPrefab);
+            enemy.transform.position = EnemySpawnAreas[randomSpawnAreaIndex].position + m_AREA_USED_OFFSET * spawnAreaUsedAmount;
 
-            return entityView;
-        }
+            BattleEntity battleEntity = EnemyFactory.CreateEntity(enemy.transform);
+            BattleEntityView enemyView = enemy.GetComponent<BattleEntityView>();
 
-        private void OnDrawGizmos()
-        {
-            if (EnemySpawnAreas == null)
-                return;
+            enemyView.Initialize(battleEntity);
 
-            Color initColor = Gizmos.color;
-            Gizmos.color = Color.red;
-            for (int i = 0; i < EnemySpawnAreas.Length; i++)
-            {
-                Gizmos.DrawWireSphere(EnemySpawnAreas[i].position, 1);
-            }
-
-            Gizmos.color = Color.green;
-            Gizmos.DrawWireSphere(PlayerSpawnArea.position, 1);
-            Gizmos.color = initColor;
+            return battleEntity;
         }
     }
 }

@@ -6,7 +6,8 @@ namespace RhytmTD.Assets.Battle
     [CreateAssetMenu(fileName = "New Battle PrefabsLibrary", menuName = "Assets/Battle Prefabs Library", order = 101)]
     public class BattlePrefabAssets : PrefabAssets
     {
-        public GameObject ExamplePrefab;
+        public GameObject EnemyPrefab;
+        public GameObject PlayerPrefab;
 
         public override void Initialize()
         {

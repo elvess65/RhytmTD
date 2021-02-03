@@ -11,10 +11,6 @@ namespace RhytmTD.Battle.Entities.Models
 
         private Dictionary<int, BattleEntity> m_BattleEntities = new Dictionary<int, BattleEntity>();
 
-        public BattleModel() : base()
-        {
-        }
-
         public void AddBattleEntity(BattleEntity battleEntity)
         {
             m_BattleEntities.Add(battleEntity.ID, battleEntity);

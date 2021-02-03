@@ -25,6 +25,8 @@ namespace RhytmTD.Battle.Core
 
             // Models
             dispatcher.CreateModel<BattleModel>();
+
+            dispatcher.InitializeComplete();
         }
     }
 }

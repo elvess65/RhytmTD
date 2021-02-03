@@ -6,5 +6,10 @@ namespace CoreFramework
         protected BaseController(Dispatcher dispatcher) : base(dispatcher)
         {
         }
+
+        public virtual void InitializeComplete()
+        {
+
+        }
     }
 }

@@ -4,9 +4,14 @@ namespace RhytmTD.Battle.Entities
 {
     public class BattleEntity
     {
-        public int ID { get; private set; }
+        public int ID { get; }
 
         private Dictionary<System.Type, IBattleModule> m_BattleModules = new Dictionary<System.Type, IBattleModule>();
+
+        public BattleEntity(int id)
+        {
+            ID = id;
+        }
 
         public void AddNodule(IBattleModule module)
         {

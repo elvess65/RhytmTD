@@ -9,6 +9,9 @@ namespace RhytmTD.Battle.Entities
         public int CurrentHealth { get; private set; }
         public bool IsAlive => CurrentHealth > 0;
 
+        public delegate void HealthRemovedEventHanlder(int amount, int senderID);
+        public event HealthRemovedEventHanlder OnHealthRemoved;
+
         public HealthModule(int health)
         {
             Health = CurrentHealth = health;
@@ -19,9 +22,11 @@ namespace RhytmTD.Battle.Entities
             CurrentHealth += health;
         }
 
-        public void RemoveHealth(int health)
+        public void RemoveHealth(int health, int senderID)
         {
             CurrentHealth = Mathf.Max(CurrentHealth - health, 0);
+
+            OnHealthRemoved?.Invoke(health, senderID);
         }
     }
 }
