@@ -3,7 +3,7 @@
     /// <summary>
     /// Модель содержащая данные об аккаунте
     /// </summary>
-    public class AccountDataModel : DeserializableDataModel<AccountDataModel>
+    public class AccountDataModel : BaseModel
     {
         public int AccountExperiance;
         public int WeaponExperiance;
@@ -12,11 +12,6 @@
 
         public int CompletedLevels;
         public int CompletedAreas;
-
-        public override void ReorganizeData()
-        {
-            
-        }
     }
 }
 //Fill

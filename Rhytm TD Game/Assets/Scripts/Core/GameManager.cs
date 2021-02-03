@@ -1,28 +1,28 @@
 ﻿using CoreFramework.Abstract;
 using CoreFramework.SceneLoading;
-using RhytmTD.Data;
-using RhytmTD.Data.Models;
+using RhytmTD.Data.DataBase;
 using UnityEngine;
 
 namespace RhytmTD.Core
 {
     public class GameManager : Singleton<GameManager>
     {
-        public ModelsHolder ModelsHolder { get; private set; }
         public SceneLoader SceneLoader { get; private set; }
+
+        private DBProxy m_DBProxy;
 
 
         public void InitializeConnection()
         {
-            ModelsHolder.DBProxy.OnConnectionSuccess += ConnectionResultSuccess;
-            ModelsHolder.DBProxy.OnConnectionError += ConnectionResultError;
-            ModelsHolder.DBProxy.Initialize();
+            m_DBProxy = new DBProxy();
+            m_DBProxy.OnConnectionSuccess += ConnectionResultSuccess;
+            m_DBProxy.OnConnectionError += ConnectionResultError;
+            m_DBProxy.Initialize();
         }
 
 
         private void InitializeCore()
         {
-            ModelsHolder = new ModelsHolder();
             SceneLoader = new SceneLoader();
         }
 
@@ -36,13 +36,11 @@ namespace RhytmTD.Core
 
         private void ConnectionResultSuccess(string serializedAccountData, string serializedEnviromentData, string serializedLevelingData, string serializedWorldData)
         {
-            //Set data
-            ModelsHolder.AccountModel = AccountDataModel.DeserializeData(serializedAccountData);
-            ModelsHolder.AccountModel.ReorganizeData();
+            m_DBProxy = null;
 
-            ModelsHolder.DataTableModel = new DataTableModel(serializedEnviromentData, serializedLevelingData, serializedWorldData);
-            ModelsHolder.DataTableModel.ReorganizeData();
-
+            IGameSetup gameSetup = new DataGameSetup(serializedAccountData, serializedEnviromentData, serializedLevelingData, serializedWorldData);
+            gameSetup.SetupDispatcher();
+             
             SceneLoader.LoadLevel(SceneLoader.MENU_SCENE_NAME);
         }
 

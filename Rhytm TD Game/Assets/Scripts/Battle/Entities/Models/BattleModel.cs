@@ -1,16 +1,17 @@
-﻿using RhytmTD.Core;
+﻿using RhytmTD.Data.Models;
 using System.Collections.Generic;
 
-namespace RhytmTD.Battle.Entities.Controllers
+namespace RhytmTD.Battle.Entities.Models
 {
     public class BattleModel : BaseModel
     {
         public int ID;
+        public int CurrentArea;
         public ICollection<BattleEntity> BattleEntities => m_BattleEntities.Values;
 
         private Dictionary<int, BattleEntity> m_BattleEntities = new Dictionary<int, BattleEntity>();
 
-        public BattleModel(Dispatcher dispatcher) : base(dispatcher)
+        public BattleModel() : base()
         {
         }
 

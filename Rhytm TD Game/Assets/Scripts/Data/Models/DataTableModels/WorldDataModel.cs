@@ -3,14 +3,9 @@
     /// <summary>
     /// Информация о мире, который содержит зоны, которые рассчитывают данные для уровней и волн
     /// </summary>
-    public class WorldDataModel : DeserializableDataModel<WorldDataModel>
+    public class WorldDataModel : BaseModel
     {
         public AreaData[] Areas;
-
-        public override void ReorganizeData()
-        {
-        }
-
 
         /// <summary>
         /// Данные о зоне, которая содержит данные для построения уровней

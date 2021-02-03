@@ -1,10 +1,9 @@
-﻿
-
-using RhytmTD.Battle.Entities.Controllers;
+﻿using RhytmTD.Battle.Entities.Controllers;
+using RhytmTD.Battle.Entities.Models;
 
 namespace RhytmTD.Core
 {
-    public class DefaultGameSetup : IGameSetup
+    public class BattleGameSetup : IGameSetup
     {
         public void SetupDispatcher()
         {

@@ -1,4 +1,5 @@
-﻿using RhytmTD.Core;
+﻿using RhytmTD.Battle.Entities.Models;
+using RhytmTD.Core;
 
 namespace RhytmTD.Battle.Entities.Controllers
 {

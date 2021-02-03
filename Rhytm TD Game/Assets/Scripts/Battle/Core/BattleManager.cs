@@ -1,6 +1,7 @@
 ﻿using CoreFramework;
 using CoreFramework.Abstract;
 using CoreFramework.Utils;
+using RhytmTD.Battle.Entities.Models;
 using RhytmTD.Battle.StateMachine;
 using RhytmTD.Core;
 using RhytmTD.Data.Models.DataTableModels;
@@ -66,8 +67,7 @@ namespace RhytmTD.Battle.Core
 
             //Build level data
             //Get current area id from account
-            int currentArea = GameManager.Instance.ModelsHolder.BattleSessionModel.CurrentArea;
-            WorldDataModel.AreaData areaData = GameManager.Instance.ModelsHolder.DataTableModel.WorldDataModel.Areas[currentArea];
+            WorldDataModel.AreaData areaData = Dispatcher.Instance.GetModel<WorldDataModel>().Areas[Dispatcher.Instance.GetModel<BattleModel>().CurrentArea];
             m_ControllersHolder.SpawnController.BuildLevel(MonoReferencesHolder.EnemySpawner, areaData, m_ControllersHolder.RhytmController.CurrentTick);
         }
 

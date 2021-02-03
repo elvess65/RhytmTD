@@ -8,14 +8,14 @@ namespace RhytmTD.Data.Models.DataTableModels
     /// <summary>
     /// Информация о построении уровней
     /// </summary>
-    public class EnvironmentDataModel : DeserializableDataModel<EnvironmentDataModel>
+    public class EnvironmentDataModel : BaseModel
     {
         public LevelParams[] LevelParamsData;
 
         private Dictionary<int, LevelParams> m_LevelParams;
 
         
-        public override void ReorganizeData()
+        public void ReorganizeData()
         {
             m_LevelParams = new Dictionary<int, LevelParams>();
             for (int i = 0; i < LevelParamsData.Length; i++)

@@ -3,7 +3,7 @@
     /// <summary>
     /// Информация об опыте и уровнях аккаунта
     /// </summary>
-    public class AccountLevelingDataModel : DeserializableDataModel<AccountLevelingDataModel>
+    public class AccountLevelingDataModel : BaseModel
     {
         /// Используется только для парсинга данных
         public int Damage;
@@ -14,7 +14,7 @@
         public ProgressionConfig TestValueProgression;
         public MinMaxProgressionConfig TestMinMaxProgression;
 
-        public override void ReorganizeData()
+        public void ReorganizeData()
         {
             return;
             UnityEngine.Debug.Log($"Damage {Damage}. HP {HP}. Mana {Mana}.");
