@@ -7,9 +7,13 @@ namespace CoreFramework.Input
     /// <summary>
     /// Tracking low level input
     /// </summary>
-    public class InputController : iUpdatable
+    public class InputController : BaseController, iUpdatable
     {
         public event System.Action<Vector3> OnTouch;
+
+        public InputController(Dispatcher dispatcher) : base(dispatcher)
+        {
+        }
 
         public void PerformUpdate(float deltaTime)
         {

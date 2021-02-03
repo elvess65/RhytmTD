@@ -1,5 +1,5 @@
 ﻿
-namespace RhytmTD.Core
+namespace CoreFramework
 {
     public abstract class BaseController : DispatcherProvider
     {

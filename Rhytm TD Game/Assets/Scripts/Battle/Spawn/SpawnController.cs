@@ -1,20 +1,34 @@
 ﻿//#define LOG_SPAWN
 
+using CoreFramework;
+using RhytmTD.Battle.Entities.Models;
 using RhytmTD.Battle.Spawn.Data;
 using RhytmTD.Data.Models.DataTableModels;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace RhytmTD.Battle.Spawn
 {
-    public class SpawnController
+    /// <summary>
+    /// Контроллер создания врагов
+    /// </summary>
+    public class SpawnController : BaseController
     {
         private WorldSpawner m_WorldSpawner;
         private LevelData m_Level;
         private WaveData m_CurrentWave;
+        private BattleModel m_BattleModel;
         private int m_ActionTargetTick;
         private int m_ProcessedChunksAmount;
 
+        public SpawnController(Dispatcher dispatcher) : base(dispatcher)
+        {  
+        }
+
         public void BuildLevel(WorldSpawner worldSpawner, WorldDataModel.AreaData areaData, int currentTick)
         {
+            m_BattleModel = Dispatcher.GetModel<BattleModel>();
+
             m_WorldSpawner = worldSpawner;
 
             m_Level = new LevelData(areaData.ProgressionEnemies,
@@ -24,7 +38,10 @@ namespace RhytmTD.Battle.Spawn
                                     areaData.WavesAmount,
                                     areaData.DelayBeforeStartLevel);
 
+            //Запланировать тик действия
             m_ActionTargetTick = currentTick + m_Level.DelayBeforeStart;
+
+            //Кешировать следующую волну
             m_CurrentWave = m_Level.GetNextWave();
         }
 
@@ -33,7 +50,7 @@ namespace RhytmTD.Battle.Spawn
             Log($"Current tick: {ticksSinceStart}. Action at tick {m_ActionTargetTick}");
             if (m_ActionTargetTick == ticksSinceStart)
             {
-                m_WorldSpawner.Spawn(m_CurrentWave.EnemiesAmount);
+                List<GameObject> spawnedEnemies = m_WorldSpawner.Spawn(m_CurrentWave.EnemiesAmount);
                 Log($"Current tick: {ticksSinceStart}. Spawn wave: ID {m_CurrentWave.ID}. Enemies: {m_CurrentWave.EnemiesAmount}", true);
 
                 m_ProcessedChunksAmount++;

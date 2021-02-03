@@ -1,9 +1,10 @@
-﻿//using RhytmFighter.Animation;
+﻿using CoreFramework;
 using CoreFramework.Abstract;
 using CoreFramework.SceneLoading;
+using RhytmTD.Battle.Entities.Models;
 using RhytmTD.Core;
+using RhytmTD.Data.Models;
 using RhytmTD.UI.View;
-//using RhytmFighter.UI.View;
 using UnityEngine;
 
 namespace RhytmTD.OtherScenes.MenuScene
@@ -29,16 +30,14 @@ namespace RhytmTD.OtherScenes.MenuScene
 
 
             //Opened ares and completed levels are used to show player's best progress
-            Debug.Log("Completed areas: " + GameManager.Instance.ModelsHolder.AccountModel.CompletedAreas);
-            Debug.Log("Completed levels: " + GameManager.Instance.ModelsHolder.AccountModel.CompletedLevels);
+            AccountDataModel accountDataModel = Dispatcher.Instance.GetModel<AccountDataModel>();
+            Debug.Log("Completed areas: " + accountDataModel.CompletedAreas);
+            Debug.Log("Completed levels: " + accountDataModel.CompletedLevels);
 
             //Here its possible to choose from amount of opened areas
-            GameManager.Instance.ModelsHolder.BattleSessionModel.CurrentArea = GameManager.Instance.ModelsHolder.AccountModel.CompletedAreas;
+            Dispatcher.Instance.GetModel<BattleModel>().CurrentArea = accountDataModel.CompletedAreas;
 
             //m_SelectedCharacterAnimationEventsListener = CharacterController.SelectedCharacterAnimationController.Controller.GetComponent<AnimationEventsListener>();
-
-            //GameManager.Instance.DataHolder.BattleSessionModel.CurrentLevelID = 1;
-            //GameManager.Instance.DataHolder.BattleSessionModel.SelectedCharactedID = 1;
         }
 
 

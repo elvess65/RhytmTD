@@ -1,8 +1,12 @@
-﻿using RhytmTD.Data.Models;
+﻿using CoreFramework;
+using RhytmTD.Data.Models;
 using RhytmTD.Data.Models.DataTableModels;
 
 namespace RhytmTD.Core
 {
+    /// <summary>
+    /// Setup требующий заполнения из БД
+    /// </summary>
     public class DataGameSetup : IGameSetup
     {
         private string m_SerializedAccountData;
@@ -18,7 +22,7 @@ namespace RhytmTD.Core
             m_SerializedWorldData = serializedWorldData;
         }
 
-        public void SetupDispatcher()
+        public void Setup()
         {
             Dispatcher dispatcher = Dispatcher.Instance;
 

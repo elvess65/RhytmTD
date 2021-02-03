@@ -1,9 +1,13 @@
 ﻿using CoreFramework;
 using CoreFramework.Abstract;
+using CoreFramework.Input;
+using CoreFramework.Rhytm;
 using CoreFramework.Utils;
 using RhytmTD.Battle.Entities.Models;
+using RhytmTD.Battle.Spawn;
 using RhytmTD.Battle.StateMachine;
 using RhytmTD.Core;
+using RhytmTD.Data.Models;
 using RhytmTD.Data.Models.DataTableModels;
 using RhytmTD.UI.Battle.StateMachine;
 using UnityEngine;
@@ -19,8 +23,17 @@ namespace RhytmTD.Battle.Core
         public AudioSource Music;
 
         private BattleStateMachine<BattleState_Abstract> m_StateMachine;
-        private ControllersHolder m_ControllersHolder;
         private UpdatablesManager m_UpdatablesManager;
+
+        private Dispatcher m_Dispatcher;
+        private RhytmInputProxy m_RhytmInputProxy;
+        private RhytmController m_RhytmController;
+        private InputController m_InputController;
+        private SpawnController m_SpawnController;
+
+        private BattleModel m_BattleModel;
+        private WorldDataModel m_WorldDataModel;
+        private AccountDataModel m_AccountDataModel;
 
         private void Update()
         {
@@ -43,14 +56,22 @@ namespace RhytmTD.Battle.Core
 
         private void InitializeCore()
         {
-            m_ControllersHolder = new ControllersHolder();
+            m_Dispatcher = Dispatcher.Instance;
+            m_RhytmController = m_Dispatcher.GetController<RhytmController>();
+            m_RhytmInputProxy = m_Dispatcher.GetController<RhytmInputProxy>();
+            m_InputController = m_Dispatcher.GetController<InputController>();
+            m_SpawnController = m_Dispatcher.GetController<SpawnController>();
+
+            m_BattleModel = m_Dispatcher.GetModel<BattleModel>();
+            m_WorldDataModel = m_Dispatcher.GetModel<WorldDataModel>();
+            m_AccountDataModel = m_Dispatcher.GetModel<AccountDataModel>();
         }
 
         private void InitializeStateMachine()
         {
             m_StateMachine = new BattleStateMachine<BattleState_Abstract>();
-            m_StateMachine.AddState(new BattleState_LockInput(m_ControllersHolder.RhytmInputProxy));
-            m_StateMachine.AddState(new BattleState_Normal(m_ControllersHolder.RhytmInputProxy));
+            m_StateMachine.AddState(new BattleState_LockInput(m_RhytmInputProxy));
+            m_StateMachine.AddState(new BattleState_Normal(m_RhytmInputProxy));
             m_StateMachine.Initialize<BattleState_LockInput>();
         }
 
@@ -58,24 +79,22 @@ namespace RhytmTD.Battle.Core
         {
             //Rhytm data
             int bpm = 30;
-            m_ControllersHolder.RhytmController.SetBPM(bpm);
-            m_ControllersHolder.RhytmInputProxy.SetInputPrecious(0.25f);//ManagersHolder.SettingsManager.GeneralSettings.InputPrecious);
+            m_RhytmController.SetBPM(bpm);
+            m_RhytmInputProxy.SetInputPrecious(0.25f);//ManagersHolder.SettingsManager.GeneralSettings.InputPrecious);
             Metronome.bpm = bpm; //Debug
 
             //Initialize managers (May require data)
             MonoReferencesHolder.Initialize();
 
             //Build level data
-            //Get current area id from account
-            WorldDataModel.AreaData areaData = Dispatcher.Instance.GetModel<WorldDataModel>().Areas[Dispatcher.Instance.GetModel<BattleModel>().CurrentArea];
-            m_ControllersHolder.SpawnController.BuildLevel(MonoReferencesHolder.EnemySpawner, areaData, m_ControllersHolder.RhytmController.CurrentTick);
+            m_SpawnController.BuildLevel(MonoReferencesHolder.EnemySpawner, m_WorldDataModel.Areas[m_BattleModel.CurrentArea], m_RhytmController.CurrentTick);
         }
 
         private void InitializeUpdatables()
         {
             m_UpdatablesManager = new UpdatablesManager();
-            m_UpdatablesManager.Add(m_ControllersHolder.RhytmController);
-            m_UpdatablesManager.Add(m_ControllersHolder.InputController);
+            m_UpdatablesManager.Add(m_RhytmController);
+            m_UpdatablesManager.Add(m_InputController);
             m_UpdatablesManager.Add(MonoReferencesHolder.UIManager);
             m_UpdatablesManager.Add(m_StateMachine);
         }
@@ -83,23 +102,23 @@ namespace RhytmTD.Battle.Core
         private void InitializeEvents()
         {
             //Input
-            m_ControllersHolder.InputController.OnTouch += m_StateMachine.HandleTouch;
+            m_InputController.OnTouch += m_StateMachine.HandleTouch;
 
             //Rhytm
-            m_ControllersHolder.RhytmController.OnEventProcessingTick += EventProcessingTickHandler;
-            m_ControllersHolder.RhytmController.OnStarted += TickingStartedHandler;
-            m_ControllersHolder.RhytmController.OnTick += TickHandler;
+            m_RhytmController.OnEventProcessingTick += EventProcessingTickHandler;
+            m_RhytmController.OnStarted += TickingStartedHandler;
+            m_RhytmController.OnTick += TickHandler;
         }
 
         private void DisposeEvents()
         {
             //Input
-            m_ControllersHolder.InputController.OnTouch -= m_StateMachine.HandleTouch;
+            m_InputController.OnTouch -= m_StateMachine.HandleTouch;
 
             //Rhytm
-            m_ControllersHolder.RhytmController.OnEventProcessingTick = null;
-            m_ControllersHolder.RhytmController.OnStarted = null;
-            m_ControllersHolder.RhytmController.OnTick = null;
+            m_RhytmController.OnEventProcessingTick = null;
+            m_RhytmController.OnStarted = null;
+            m_RhytmController.OnTick = null;
         }
 
         private void ApplySettings()
@@ -125,7 +144,7 @@ namespace RhytmTD.Battle.Core
             MonoReferencesHolder.UIManager.ChangeState<UIBattleState_Normal>();
 
             //Start beat
-            m_ControllersHolder.RhytmController.StartTicking();
+            m_RhytmController.StartTicking();
         }
 
         #endregion
@@ -147,7 +166,7 @@ namespace RhytmTD.Battle.Core
                 //Music.Play();
             }
 
-            m_ControllersHolder.SpawnController.HandleTick(ticksSinceStart);
+            m_SpawnController.HandleTick(ticksSinceStart);
         }
 
         private void EventProcessingTickHandler(int ticksSinceStart)

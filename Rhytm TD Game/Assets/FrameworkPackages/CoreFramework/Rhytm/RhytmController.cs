@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace CoreFramework.Rhytm
 {
-    public class RhytmController : iUpdatable
+    public class RhytmController : BaseController, iUpdatable
     {
         private static RhytmController m_Instance;
 
@@ -83,7 +83,7 @@ namespace CoreFramework.Rhytm
             return m_Instance;
         }
 
-        public RhytmController()
+        public RhytmController(Dispatcher dispatcher) : base(dispatcher)
         {
             m_Instance = this;
 

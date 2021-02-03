@@ -1,5 +1,7 @@
-﻿using CoreFramework.Abstract;
+﻿using CoreFramework;
+using CoreFramework.Abstract;
 using CoreFramework.SceneLoading;
+using RhytmTD.Battle.Core;
 using RhytmTD.Data.DataBase;
 using UnityEngine;
 
@@ -24,6 +26,9 @@ namespace RhytmTD.Core
         private void InitializeCore()
         {
             SceneLoader = new SceneLoader();
+
+            IGameSetup battleSetup = new BattleGameSetup();
+            battleSetup.Setup();
         }
 
         private void Start()
@@ -39,7 +44,7 @@ namespace RhytmTD.Core
             m_DBProxy = null;
 
             IGameSetup gameSetup = new DataGameSetup(serializedAccountData, serializedEnviromentData, serializedLevelingData, serializedWorldData);
-            gameSetup.SetupDispatcher();
+            gameSetup.Setup();
              
             SceneLoader.LoadLevel(SceneLoader.MENU_SCENE_NAME);
         }

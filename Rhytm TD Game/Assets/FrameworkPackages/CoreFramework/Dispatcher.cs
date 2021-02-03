@@ -1,16 +1,15 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using RhytmTD.Data.Models;
 using UnityEngine;
 
-namespace RhytmTD.Core
+namespace CoreFramework
 {
     public class Dispatcher
     {
         private static Dispatcher m_Instance;
-        private Dictionary<System.Type, BaseController> m_Controllers = new Dictionary<System.Type, BaseController>();
-        private Dictionary<System.Type, BaseModel> m_Models = new Dictionary<Type, BaseModel>();
+        private Dictionary<Type, BaseController> m_Controllers = new Dictionary<Type, BaseController>();
+        private Dictionary<Type, BaseModel> m_Models = new Dictionary<Type, BaseModel>();
 
         public static Dispatcher Instance
         {
@@ -29,7 +28,7 @@ namespace RhytmTD.Core
 
         public T CreateController<T>() where T : BaseController
         {
-            System.Type type = typeof(T);
+            Type type = typeof(T);
 
             T val = (T)Activator.CreateInstance(type, this);
             m_Controllers.Add(type, val);
@@ -39,7 +38,7 @@ namespace RhytmTD.Core
 
         public T GetController<T>() where T : BaseController
         {
-            System.Type type = typeof(T);
+            Type type = typeof(T);
             BaseController controller = m_Controllers[type];
 
             return (T)controller;
@@ -47,7 +46,7 @@ namespace RhytmTD.Core
 
         public T CreateModel<T>() where T : BaseModel
         {
-            System.Type type = typeof(T);
+            Type type = typeof(T);
 
             T val = (T)Activator.CreateInstance(type);
             m_Models.Add(type, val);
@@ -57,7 +56,7 @@ namespace RhytmTD.Core
 
         public T CreateModelFromJson<T>(string json) where T : BaseModel
         {
-            System.Type type = typeof(T);
+            Type type = typeof(T);
 
             T val = JsonUtility.FromJson<T>(json);
             m_Models.Add(type, val);
@@ -68,7 +67,7 @@ namespace RhytmTD.Core
 
         public T GetModel<T>() where T : BaseModel
         {
-            System.Type type = typeof(T);
+            Type type = typeof(T);
             BaseModel model = m_Models[type];
 
             return (T)model;

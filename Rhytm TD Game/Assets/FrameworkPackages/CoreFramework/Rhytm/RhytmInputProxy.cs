@@ -1,6 +1,6 @@
 ﻿namespace CoreFramework.Rhytm
 {
-    public class RhytmInputProxy 
+    public class RhytmInputProxy : BaseController
     {
         private static RhytmInputProxy m_Instance;
 
@@ -15,7 +15,7 @@
                                                RhytmController.GetInstance().ProgressToNextTickAnalog < m_Instance.m_InputPrecious01;
 
 
-        public RhytmInputProxy()
+        public RhytmInputProxy(Dispatcher dispatcher) : base(dispatcher)
         {
             if (m_Instance == null)
                 m_Instance = this;
