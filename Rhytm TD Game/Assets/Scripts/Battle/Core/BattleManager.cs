@@ -33,6 +33,8 @@ namespace RhytmTD.Battle.Core
         private InputController m_InputController;
         private SpawnController m_SpawnController;
         private MoveController m_MoveController;
+        private DamageController m_DamageController;
+        private BattlefieldController m_BattlefieldController;
 
         private BattleModel m_BattleModel;
         private WorldDataModel m_WorldDataModel;
@@ -40,7 +42,7 @@ namespace RhytmTD.Battle.Core
 
         private void Update()
         {
-            m_UpdatablesManager?.PerformUpdate(Time.deltaTime);
+            m_UpdatablesManager?.PerformUpdate(Time.deltaTime); 
         }
 
         #region Initialization
@@ -65,6 +67,8 @@ namespace RhytmTD.Battle.Core
             m_InputController = m_Dispatcher.GetController<InputController>();
             m_SpawnController = m_Dispatcher.GetController<SpawnController>();
             m_MoveController = m_Dispatcher.GetController<MoveController>();
+            m_DamageController = m_Dispatcher.GetController<DamageController>();
+            m_BattlefieldController = m_Dispatcher.GetController<BattlefieldController>();
 
             m_BattleModel = m_Dispatcher.GetModel<BattleModel>();
             m_WorldDataModel = m_Dispatcher.GetModel<WorldDataModel>();
@@ -75,7 +79,7 @@ namespace RhytmTD.Battle.Core
         {
             m_StateMachine = new BattleStateMachine<BattleState_Abstract>();
             m_StateMachine.AddState(new BattleState_LockInput(m_RhytmInputProxy));
-            m_StateMachine.AddState(new BattleState_Normal(m_RhytmInputProxy));
+            m_StateMachine.AddState(new BattleState_Normal(m_RhytmInputProxy, m_BattlefieldController, m_DamageController));
             m_StateMachine.Initialize<BattleState_LockInput>();
         }
 
@@ -101,7 +105,7 @@ namespace RhytmTD.Battle.Core
             m_UpdatablesManager.Add(m_InputController);
             m_UpdatablesManager.Add(MonoReferencesHolder.UIManager);
             m_UpdatablesManager.Add(m_StateMachine);
-            m_UpdatablesManager.Add(m_MoveController);
+            //m_UpdatablesManager.Add(m_MoveController);
         }
 
         private void InitializeEvents()
@@ -163,7 +167,7 @@ namespace RhytmTD.Battle.Core
         private void TickingStartedHandler()
         {
             //Debug.Log("Tick started");
-            Metronome.StartMetronome();
+            //Metronome.StartMetronome();
         }
 
         private void TickHandler(int ticksSinceStart)

@@ -22,6 +22,8 @@ namespace RhytmTD.Battle.Core
             dispatcher.CreateController<RhytmInputProxy>();
             dispatcher.CreateController<InputController>();
             dispatcher.CreateController<SpawnController>();
+            dispatcher.CreateController<DamageController>();
+            dispatcher.CreateController<BattlefieldController>();
 
             // Models
             dispatcher.CreateModel<BattleModel>();

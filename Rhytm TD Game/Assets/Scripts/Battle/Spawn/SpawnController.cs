@@ -1,4 +1,5 @@
 ﻿//#define LOG_SPAWN
+#define SINGLE_SPAWN
 
 using CoreFramework;
 using RhytmTD.Battle.Entities;
@@ -91,6 +92,10 @@ namespace RhytmTD.Battle.Spawn
 
                     Log($"Chunk spawned. Next chunk spawn at {m_ActionTargetTick}. Left {m_CurrentWave.ChunksAmount - m_ProcessedChunksAmount}/{m_CurrentWave.ChunksAmount}");
                 }
+
+#if SINGLE_SPAWN
+                m_ActionTargetTick = 0;
+#endif
             }
         }
 
@@ -101,6 +106,9 @@ namespace RhytmTD.Battle.Spawn
             {
                 BattleEntity enemy = m_WorldSpawner.SpawnEnemy();
                 m_BattleModel.AddBattleEntity(enemy);
+
+                if (enemy.HasModule<HealthModule>())
+                    enemy.GetModule<HealthModule>().OnDestroyed += EnemyEntity_OnDestroyed;
             }
 
             m_WorldSpawner.ResetSpawnAreas();
@@ -111,6 +119,22 @@ namespace RhytmTD.Battle.Spawn
             BattleEntity entity = m_WorldSpawner.SpawnPlayer();
             m_BattleModel.AddBattleEntity(entity);
             m_BattleModel.PlayerEntity = entity;
+
+            if (entity.HasModule<HealthModule>())
+                entity.GetModule<HealthModule>().OnDestroyed += PlayerEntity_OnDestroyed;
+        }
+
+        private void EnemyEntity_OnDestroyed(int entityID)
+        {
+            UnityEngine.Debug.Log("Remove enemy from model: " + entityID);
+            m_BattleModel.RemoveBattleEntity(entityID);
+        }
+
+        private void PlayerEntity_OnDestroyed(int entityID)
+        {
+            UnityEngine.Debug.Log("Player was destroyed " + entityID);
+            m_BattleModel.RemoveBattleEntity(entityID);
+            m_BattleModel.PlayerEntity = null;
         }
 
         private void Log(string message, bool isImportant = false)

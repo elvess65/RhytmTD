@@ -1,19 +1,21 @@
-﻿
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace RhytmTD.Battle.Entities
 {
     public class HealthModule : IBattleModule
     {
+        public int ID { get; private set; }
         public int Health { get; private set; }
         public int CurrentHealth { get; private set; }
         public bool IsAlive => CurrentHealth > 0;
 
         public delegate void HealthRemovedEventHanlder(int amount, int senderID);
         public event HealthRemovedEventHanlder OnHealthRemoved;
+        public event System.Action<int> OnDestroyed;
 
-        public HealthModule(int health)
+        public HealthModule(int id, int health)
         {
+            ID = id;
             Health = CurrentHealth = health;
         }
 
@@ -26,7 +28,10 @@ namespace RhytmTD.Battle.Entities
         {
             CurrentHealth = Mathf.Max(CurrentHealth - health, 0);
 
-            OnHealthRemoved?.Invoke(health, senderID);
+            if (CurrentHealth > 0)
+                OnHealthRemoved?.Invoke(health, senderID);
+            else
+                OnDestroyed?.Invoke(ID);
         }
     }
 }

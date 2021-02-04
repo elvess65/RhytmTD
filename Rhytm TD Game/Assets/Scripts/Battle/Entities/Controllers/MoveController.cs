@@ -4,6 +4,9 @@ using RhytmTD.Battle.Entities.Models;
 
 namespace RhytmTD.Battle.Entities.Controllers
 {
+    /// <summary>
+    /// Передвижение
+    /// </summary>
     public class MoveController : BaseController, iUpdatable
     {
         private BattleModel m_BattleModel;

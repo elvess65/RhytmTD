@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace RhytmTD.Battle.Entities.Controllers
 {
+    /// <summary>
+    /// Нанесение урона
+    /// </summary>
     public class DamageController : BaseController
     {
         private BattleModel m_BattleModel;

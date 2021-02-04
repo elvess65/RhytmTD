@@ -1,6 +1,4 @@
-﻿
-
-using CoreFramework;
+﻿using CoreFramework;
 using UnityEngine;
 
 namespace RhytmTD.Battle.Entities.EntitiesFactory
@@ -15,8 +13,10 @@ namespace RhytmTD.Battle.Entities.EntitiesFactory
 
         public override BattleEntity CreateEntity(Transform transform)
         {
-            BattleEntity battleEntity = new BattleEntity(IDGenerator.GenerateID());
-            battleEntity.AddModule(new HealthModule(Health));
+            int entityID = IDGenerator.GenerateID();
+            BattleEntity battleEntity = new BattleEntity(entityID);
+            battleEntity.AddModule(new TransformModule(transform));
+            battleEntity.AddModule(new HealthModule(entityID, Health));
             battleEntity.AddModule(new DamageModule(MinDamage, MaxDamage));
 
             return battleEntity;
