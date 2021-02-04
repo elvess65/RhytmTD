@@ -3,6 +3,8 @@ using CoreFramework.Abstract;
 using CoreFramework.Input;
 using CoreFramework.Rhytm;
 using CoreFramework.Utils;
+using RhytmTD.Battle.Entities;
+using RhytmTD.Battle.Entities.Controllers;
 using RhytmTD.Battle.Entities.Models;
 using RhytmTD.Battle.Spawn;
 using RhytmTD.Battle.StateMachine;
@@ -30,6 +32,7 @@ namespace RhytmTD.Battle.Core
         private RhytmController m_RhytmController;
         private InputController m_InputController;
         private SpawnController m_SpawnController;
+        private MoveController m_MoveController;
 
         private BattleModel m_BattleModel;
         private WorldDataModel m_WorldDataModel;
@@ -61,6 +64,7 @@ namespace RhytmTD.Battle.Core
             m_RhytmInputProxy = m_Dispatcher.GetController<RhytmInputProxy>();
             m_InputController = m_Dispatcher.GetController<InputController>();
             m_SpawnController = m_Dispatcher.GetController<SpawnController>();
+            m_MoveController = m_Dispatcher.GetController<MoveController>();
 
             m_BattleModel = m_Dispatcher.GetModel<BattleModel>();
             m_WorldDataModel = m_Dispatcher.GetModel<WorldDataModel>();
@@ -97,6 +101,7 @@ namespace RhytmTD.Battle.Core
             m_UpdatablesManager.Add(m_InputController);
             m_UpdatablesManager.Add(MonoReferencesHolder.UIManager);
             m_UpdatablesManager.Add(m_StateMachine);
+            m_UpdatablesManager.Add(m_MoveController);
         }
 
         private void InitializeEvents()
@@ -145,6 +150,9 @@ namespace RhytmTD.Battle.Core
 
             //Start beat
             m_RhytmController.StartTicking();
+
+            //Start player movement
+            m_BattleModel.PlayerEntity.GetModule<MoveModule>().StartMove(Vector3.forward);
         }
 
         #endregion

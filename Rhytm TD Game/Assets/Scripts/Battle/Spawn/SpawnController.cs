@@ -94,6 +94,7 @@ namespace RhytmTD.Battle.Spawn
             }
         }
 
+
         private void SpawnEnemies(int amount)
         {
             for (int i = 0; i < amount; i++)
@@ -101,12 +102,15 @@ namespace RhytmTD.Battle.Spawn
                 BattleEntity enemy = m_WorldSpawner.SpawnEnemy();
                 m_BattleModel.AddBattleEntity(enemy);
             }
+
+            m_WorldSpawner.ResetSpawnAreas();
         }
 
         private void SpawnPlayer()
         {
             BattleEntity entity = m_WorldSpawner.SpawnPlayer();
             m_BattleModel.AddBattleEntity(entity);
+            m_BattleModel.PlayerEntity = entity;
         }
 
         private void Log(string message, bool isImportant = false)

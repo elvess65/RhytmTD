@@ -7,6 +7,7 @@ namespace RhytmTD.Battle.Entities.Models
     {
         public int ID;
         public int CurrentArea;
+        public BattleEntity PlayerEntity;
         public ICollection<BattleEntity> BattleEntities => m_BattleEntities.Values;
 
         private Dictionary<int, BattleEntity> m_BattleEntities = new Dictionary<int, BattleEntity>();

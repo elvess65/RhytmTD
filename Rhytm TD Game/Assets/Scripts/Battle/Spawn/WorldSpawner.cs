@@ -51,5 +51,13 @@ namespace RhytmTD.Battle.Spawn
 
             return battleEntity;
         }
+
+        public void ResetSpawnAreas()
+        {
+            for (int i = 0; i < m_SpanwAreaUsedAmount.Length; i++)
+            {
+                m_SpanwAreaUsedAmount[i] = 0;
+            }
+        }
     }
 }
