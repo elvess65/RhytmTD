@@ -16,8 +16,8 @@ namespace RhytmTD.Battle.Entities.EntitiesFactory
         public override BattleEntity CreateEntity(Transform transform)
         {
             BattleEntity battleEntity = new BattleEntity(IDGenerator.GenerateID());
-            battleEntity.AddNodule(new HealthModule(Health));
-            battleEntity.AddNodule(new DamageModule(MinDamage, MaxDamage));
+            battleEntity.AddModule(new HealthModule(Health));
+            battleEntity.AddModule(new DamageModule(MinDamage, MaxDamage));
 
             return battleEntity;
         }

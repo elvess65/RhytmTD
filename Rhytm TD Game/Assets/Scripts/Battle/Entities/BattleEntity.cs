@@ -13,7 +13,7 @@ namespace RhytmTD.Battle.Entities
             ID = id;
         }
 
-        public void AddNodule(IBattleModule module)
+        public void AddModule(IBattleModule module)
         {
             m_BattleModules.Add(module.GetType(), module);
         }
