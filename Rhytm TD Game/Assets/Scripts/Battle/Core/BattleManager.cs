@@ -8,7 +8,6 @@ using RhytmTD.Battle.Entities.Controllers;
 using RhytmTD.Battle.Entities.Models;
 using RhytmTD.Battle.Spawn;
 using RhytmTD.Battle.StateMachine;
-using RhytmTD.Core;
 using RhytmTD.Data.Models;
 using RhytmTD.Data.Models.DataTableModels;
 using RhytmTD.UI.Battle.StateMachine;
@@ -97,7 +96,7 @@ namespace RhytmTD.Battle.Core
             MonoReferencesHolder.Initialize();
 
             //Build level data
-            m_SpawnController.BuildLevel(MonoReferencesHolder.EnemySpawner, m_WorldDataModel.Areas[m_BattleModel.CurrentArea], m_RhytmController.CurrentTick);
+            m_SpawnController.BuildLevel(MonoReferencesHolder.EntityViewSpawner, m_WorldDataModel.Areas[m_BattleModel.CurrentArea], m_RhytmController.CurrentTick);
         }
 
         private void InitializeUpdatables()
@@ -117,6 +116,10 @@ namespace RhytmTD.Battle.Core
             //Input
             m_InputController.OnTouch += m_StateMachine.HandleTouch;
 
+            //Level
+            m_SpawnController.OnLevelComplete += LevelCompleteHandler;
+            m_SpawnController.OnLevelFailed += LevelFailedHandler;
+
             //Rhytm
             m_RhytmController.OnEventProcessingTick += EventProcessingTickHandler;
             m_RhytmController.OnStarted += TickingStartedHandler;
@@ -127,6 +130,10 @@ namespace RhytmTD.Battle.Core
         {
             //Input
             m_InputController.OnTouch -= m_StateMachine.HandleTouch;
+
+            //Level
+            m_SpawnController.OnLevelComplete += LevelCompleteHandler;
+            m_SpawnController.OnLevelFailed += LevelFailedHandler;
 
             //Rhytm
             m_RhytmController.OnEventProcessingTick = null;
@@ -168,6 +175,7 @@ namespace RhytmTD.Battle.Core
         #region Runtime
 
         #region Rhytm
+
         private void TickingStartedHandler()
         {
             //Debug.Log("Tick started");
@@ -189,7 +197,37 @@ namespace RhytmTD.Battle.Core
         {
             //Debug.Log("EventProcessingTickHandler: " + ticksSinceStart);
         }
+
         #endregion
+
+        #region Level
+
+        private void LevelCompleteHandler()
+        {
+            LevelFinished();
+
+            Debug.Log("Level complete");
+        }
+
+        private void LevelFailedHandler()
+        {
+            LevelFinished();
+
+            Debug.Log("Level failed");
+        }
+
+        private void LevelFinished()
+        {
+            Dispatcher.Instance.GetModel<BattleModel>().PlayerEntity?.GetModule<MoveModule>().Stop();
+
+            m_StateMachine.ChangeState<BattleState_LockInput>();
+            MonoReferencesHolder.UIManager.ChangeState<UIBattleState_NoUI>();
+
+            DisposeEvents();
+        }
+
+        #endregion
+
 
         #endregion
     }

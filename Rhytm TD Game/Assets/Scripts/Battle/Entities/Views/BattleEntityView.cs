@@ -28,12 +28,15 @@ namespace RhytmTD.Battle.Entities.Views
         private void OnHealthRemoved(int amount, int senderID)
         {
             Debug.Log($"VIEW: Take {amount} damage from ID: {senderID}. {m_HealthModule.CurrentHealth}/{m_HealthModule.Health}");
+
+            m_TransformModule.Transform.localScale = Vector3.one * 0.5f;
         }
 
         private void OnDestroyed(int id)
         {
             Debug.Log($"VIEW: {ID} was destroyed");
-            Destroy(gameObject);
+
+            transform.localScale = Vector3.one * 0.1f;
         }
 
         private void OnStartFocus()

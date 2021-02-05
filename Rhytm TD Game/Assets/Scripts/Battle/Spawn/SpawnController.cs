@@ -1,5 +1,5 @@
 ﻿//#define LOG_SPAWN
-#define SINGLE_SPAWN
+//#define SINGLE_SPAWN
 
 using CoreFramework;
 using RhytmTD.Battle.Entities;
@@ -14,7 +14,10 @@ namespace RhytmTD.Battle.Spawn
     /// </summary>
     public class SpawnController : BaseController
     {
-        private WorldSpawner m_WorldSpawner;
+        public System.Action OnLevelComplete;
+        public System.Action OnLevelFailed;
+
+        private EntityViewSpawner m_EntityViewSpawner;
         private LevelData m_Level;
         private WaveData m_CurrentWave;
         private BattleModel m_BattleModel;
@@ -30,9 +33,9 @@ namespace RhytmTD.Battle.Spawn
             m_BattleModel = Dispatcher.GetModel<BattleModel>();
         }
 
-        public void BuildLevel(WorldSpawner worldSpawner, WorldDataModel.AreaData areaData, int currentTick)
+        public void BuildLevel(EntityViewSpawner entityViewSpawner, WorldDataModel.AreaData areaData, int currentTick)
         {
-            m_WorldSpawner = worldSpawner;
+            m_EntityViewSpawner = entityViewSpawner;
 
             SpawnPlayer();
 
@@ -55,6 +58,7 @@ namespace RhytmTD.Battle.Spawn
             Log($"Current tick: {ticksSinceStart}. Action at tick {m_ActionTargetTick}");
             if (m_ActionTargetTick == ticksSinceStart)
             {
+                m_EntityViewSpawner.AdjustSpawnAreaPosition();
                 SpawnEnemies(m_CurrentWave.EnemiesAmount);
                 Log($"Current tick: {ticksSinceStart}. Spawn wave: ID {m_CurrentWave.ID}. Enemies: {m_CurrentWave.EnemiesAmount}", true);
 
@@ -104,37 +108,42 @@ namespace RhytmTD.Battle.Spawn
         {
             for (int i = 0; i < amount; i++)
             {
-                BattleEntity enemy = m_WorldSpawner.SpawnEnemy();
+                BattleEntity enemy = m_EntityViewSpawner.SpawnEnemy();
                 m_BattleModel.AddBattleEntity(enemy);
 
                 if (enemy.HasModule<HealthModule>())
                     enemy.GetModule<HealthModule>().OnDestroyed += EnemyEntity_OnDestroyed;
             }
 
-            m_WorldSpawner.ResetSpawnAreas();
+            m_EntityViewSpawner.ResetSpawnAreas();
         }
 
         private void SpawnPlayer()
         {
-            BattleEntity entity = m_WorldSpawner.SpawnPlayer();
+            BattleEntity entity = m_EntityViewSpawner.SpawnPlayer();
             m_BattleModel.AddBattleEntity(entity);
             m_BattleModel.PlayerEntity = entity;
 
-            if (entity.HasModule<HealthModule>())
-                entity.GetModule<HealthModule>().OnDestroyed += PlayerEntity_OnDestroyed;
+            m_EntityViewSpawner.CacheSpawnAreaPosition(entity.GetModule<TransformModule>().Transform);
+            entity.GetModule<HealthModule>().OnDestroyed += PlayerEntity_OnDestroyed;
         }
 
         private void EnemyEntity_OnDestroyed(int entityID)
         {
-            UnityEngine.Debug.Log("Remove enemy from model: " + entityID);
             m_BattleModel.RemoveBattleEntity(entityID);
+
+            if (m_BattleModel.BattleEntities.Count == 1 && !m_Level.HasWaves)
+            {
+                OnLevelComplete?.Invoke();
+            }
         }
 
         private void PlayerEntity_OnDestroyed(int entityID)
         {
-            UnityEngine.Debug.Log("Player was destroyed " + entityID);
             m_BattleModel.RemoveBattleEntity(entityID);
             m_BattleModel.PlayerEntity = null;
+
+            OnLevelFailed?.Invoke();
         }
 
         private void Log(string message, bool isImportant = false)

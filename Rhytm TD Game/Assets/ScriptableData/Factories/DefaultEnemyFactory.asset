@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: DefaultEnemyFactory
   m_EditorClassIdentifier: 
   FocusSpeed: 5
-  Health: 20
+  Health: 10
   MinDamage: 4
   MaxDamage: 7

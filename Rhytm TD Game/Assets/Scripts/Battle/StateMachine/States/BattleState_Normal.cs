@@ -28,7 +28,6 @@ namespace RhytmTD.Battle.StateMachine
             if (targetEntity != null)
             {
                 m_DamageController.DealDamage(m_PlayerEntity.ID, targetEntity.ID); //TODO: Should be moved on collision
-                targetEntity.GetModule<TransformModule>().Transform.localScale = Vector3.one * 0.5f;
             }
             
             //if (m_RhytmInputProxy.IsInputAllowed() && m_RhytmInputProxy.IsInputTickValid())

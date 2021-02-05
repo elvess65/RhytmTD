@@ -12,7 +12,7 @@ namespace RhytmTD.Battle.Core
     {
         public BattleUIManager UIManager;
         public BattleAssetsManager AssetsManager;
-        public WorldSpawner EnemySpawner;
+        public EntityViewSpawner EntityViewSpawner;
 
         public void Initialize()
         {

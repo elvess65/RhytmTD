@@ -1,4 +1,5 @@
-﻿using RhytmTD.Battle.Core;
+﻿using CoreFramework.Abstract;
+using RhytmTD.Battle.Core;
 using RhytmTD.Battle.Entities;
 using RhytmTD.Battle.Entities.EntitiesFactory;
 using RhytmTD.Battle.Entities.Views;
@@ -6,19 +7,23 @@ using UnityEngine;
 
 namespace RhytmTD.Battle.Spawn
 {
-    public class WorldSpawner : MonoBehaviour
+    public class EntityViewSpawner : MonoBehaviour
     {
         [SerializeField] private Transform PlayerSpawnArea;
         [SerializeField] private Transform[] EnemySpawnAreas;
         [SerializeField] private BaseBattleEntityFactory PlayerFactory;
         [SerializeField] private BaseBattleEntityFactory EnemyFactory;
 
-        private Vector3 m_AREA_USED_OFFSET = new Vector3(0, 0, 2);
+        private Transform m_PlayerTransform;
         private int[] m_SpanwAreaUsedAmount;
+        private Vector3[] m_EnemySpawnAreasOffsets;
+
+        private Vector3 m_AREA_USED_OFFSET = new Vector3(0, 0, 2);
 
         void Awake()
         {
             m_SpanwAreaUsedAmount = new int[EnemySpawnAreas.Length];
+            m_EnemySpawnAreasOffsets = new Vector3[EnemySpawnAreas.Length];
         }
 
         public BattleEntity SpawnPlayer()
@@ -58,6 +63,25 @@ namespace RhytmTD.Battle.Spawn
                 m_SpanwAreaUsedAmount[i] = 0;
             }
         }
+
+        public void CacheSpawnAreaPosition(Transform playerTransform)
+        {
+            m_PlayerTransform = playerTransform;
+
+            for (int i = 0; i < EnemySpawnAreas.Length; i++)
+            {
+                m_EnemySpawnAreasOffsets[i] = EnemySpawnAreas[i].position - m_PlayerTransform.position;
+            }
+        }
+
+        public void AdjustSpawnAreaPosition()
+        {
+            for(int i = 0; i < EnemySpawnAreas.Length; i++)
+            {
+                EnemySpawnAreas[i].transform.position = m_PlayerTransform.position + m_EnemySpawnAreasOffsets[i];
+            }
+        }
+
 
         private void OnDrawGizmos()
         {
