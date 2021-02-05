@@ -11,7 +11,6 @@ namespace RhytmTD.Battle.Entities.Controllers
     {
         private BattleModel m_BattleModel;
 
-
         public MoveController(Dispatcher dispatcher) : base(dispatcher)
         {
         }

@@ -33,6 +33,7 @@ namespace RhytmTD.Battle.Core
         private InputController m_InputController;
         private SpawnController m_SpawnController;
         private MoveController m_MoveController;
+        private FocusController m_FocusController;
         private DamageController m_DamageController;
         private BattlefieldController m_BattlefieldController;
 
@@ -62,11 +63,12 @@ namespace RhytmTD.Battle.Core
         private void InitializeCore()
         {
             m_Dispatcher = Dispatcher.Instance;
+            m_MoveController = m_Dispatcher.GetController<MoveController>();
+            m_FocusController = m_Dispatcher.GetController<FocusController>();
             m_RhytmController = m_Dispatcher.GetController<RhytmController>();
             m_RhytmInputProxy = m_Dispatcher.GetController<RhytmInputProxy>();
             m_InputController = m_Dispatcher.GetController<InputController>();
             m_SpawnController = m_Dispatcher.GetController<SpawnController>();
-            m_MoveController = m_Dispatcher.GetController<MoveController>();
             m_DamageController = m_Dispatcher.GetController<DamageController>();
             m_BattlefieldController = m_Dispatcher.GetController<BattlefieldController>();
 
@@ -101,12 +103,13 @@ namespace RhytmTD.Battle.Core
         private void InitializeUpdatables()
         {
             m_UpdatablesManager = new UpdatablesManager();
+            m_UpdatablesManager.Add(m_StateMachine);
             m_UpdatablesManager.Add(m_RhytmController);
             m_UpdatablesManager.Add(m_InputController);
-            m_UpdatablesManager.Add(MonoReferencesHolder.UIManager);
-            m_UpdatablesManager.Add(m_StateMachine);
-            //m_UpdatablesManager.Add(m_MoveController);
+            m_UpdatablesManager.Add(m_FocusController);
+            m_UpdatablesManager.Add(m_MoveController);
             m_UpdatablesManager.Add(m_BattlefieldController);
+            m_UpdatablesManager.Add(MonoReferencesHolder.UIManager);
         }
 
         private void InitializeEvents()

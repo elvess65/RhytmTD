@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35f5b10a3187e8d46a0d488b947f5f6e, type: 3}
   m_Name: DefaultPlayerFactory
   m_EditorClassIdentifier: 
-  MoveSpeed: 5
+  MoveSpeed: 0
+  FocusSpeed: 1
   Health: 100
   MinDamage: 4
   MaxDamage: 7

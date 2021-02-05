@@ -18,6 +18,7 @@ namespace RhytmTD.Battle.Core
 
             // Controllers
             dispatcher.CreateController<MoveController>();
+            dispatcher.CreateController<FocusController>();
             dispatcher.CreateController<RhytmController>();
             dispatcher.CreateController<RhytmInputProxy>();
             dispatcher.CreateController<InputController>();

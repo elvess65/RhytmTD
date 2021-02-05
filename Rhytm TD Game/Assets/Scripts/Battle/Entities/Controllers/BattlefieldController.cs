@@ -2,7 +2,6 @@
 using CoreFramework.Abstract;
 using RhytmTD.Battle.Entities.Models;
 using System.Collections.Generic;
-using System.Text;
 
 namespace RhytmTD.Battle.Entities.Controllers
 {
@@ -15,6 +14,7 @@ namespace RhytmTD.Battle.Entities.Controllers
         private DamageController m_DamageController;
         private List<int> m_EnemyAttackersContainer;
 
+        private const float m_ENEMY_FOCUS_Z_DISTANCE = 5;
         private const float m_ENEMY_ATTACK_Z_DISTANCE = 0;
 
         public BattlefieldController(Dispatcher dispatcher) : base(dispatcher)
@@ -60,6 +60,11 @@ namespace RhytmTD.Battle.Entities.Controllers
                 return;
 
             TransformModule playerTransformModule = m_BattleModel.PlayerEntity.GetModule<TransformModule>();
+
+#if UNITY_EDITOR
+            UnityEngine.Debug.DrawRay(playerTransformModule.Transform.position, playerTransformModule.Transform.forward * m_ENEMY_FOCUS_Z_DISTANCE, UnityEngine.Color.yellow);
+#endif
+
             foreach (BattleEntity entity in m_BattleModel.BattleEntities)
             {
                 if (m_BattleModel.PlayerEntity.ID == entity.ID || !entity.HasModule<TransformModule>())
@@ -67,7 +72,14 @@ namespace RhytmTD.Battle.Entities.Controllers
 
                 TransformModule entityTransformModule = entity.GetModule<TransformModule>();
                 float zDist = entityTransformModule.Transform.position.z - playerTransformModule.Transform.position.z;
-                if (zDist <= m_ENEMY_ATTACK_Z_DISTANCE)
+                if (zDist <= m_ENEMY_FOCUS_Z_DISTANCE && zDist > m_ENEMY_ATTACK_Z_DISTANCE)
+                {
+#if UNITY_EDITOR
+                    UnityEngine.Debug.DrawLine(entityTransformModule.Transform.position, playerTransformModule.Transform.position, UnityEngine.Color.red);
+#endif
+                    entityTransformModule.StartFocus(playerTransformModule);
+                }
+                else if (zDist <= m_ENEMY_ATTACK_Z_DISTANCE)
                 {
                     m_EnemyAttackersContainer.Add(entity.ID);
                 }
