@@ -106,6 +106,7 @@ namespace RhytmTD.Battle.Core
             m_UpdatablesManager.Add(MonoReferencesHolder.UIManager);
             m_UpdatablesManager.Add(m_StateMachine);
             //m_UpdatablesManager.Add(m_MoveController);
+            m_UpdatablesManager.Add(m_BattlefieldController);
         }
 
         private void InitializeEvents()
