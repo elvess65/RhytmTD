@@ -15,14 +15,15 @@ namespace RhytmTD.Battle.Entities.EntitiesFactory
         [SerializeField] private int MinDamage = 4;
         [SerializeField] private int MaxDamage = 7;
 
-        public override BattleEntity CreateEntity(Transform transform)
+        public override BattleEntity CreateEntity(Transform transform, float progression01)
         {
             int entityID = IDGenerator.GenerateID();
+
             BattleEntity battleEntity = new BattleEntity(entityID);
             battleEntity.AddModule(new TransformModule(transform, FocusSpeed));
             battleEntity.AddModule(new MoveModule(transform, MoveSpeed));
             battleEntity.AddModule(new HealthModule(entityID, Health));
-            battleEntity.AddModule(new DamageModule(MinDamage, MaxDamage));
+            battleEntity.AddModule(new DamageModule((MinDamage, MaxDamage)));
 
             return battleEntity;
         }

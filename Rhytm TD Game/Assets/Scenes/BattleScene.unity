@@ -196,7 +196,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UIManager: {fileID: 1483325746}
   AssetsManager: {fileID: 1107474652}
-  EntityViewSpawner: {fileID: 213600012}
+  EntitySpawner: {fileID: 213600012}
 --- !u!4 &88609301
 Transform:
   m_ObjectHideFlags: 0
@@ -367,7 +367,7 @@ GameObject:
   - component: {fileID: 213600011}
   - component: {fileID: 213600012}
   m_Layer: 0
-  m_Name: EntityViewSpawner
+  m_Name: EntitySpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -1,4 +1,6 @@
-﻿namespace RhytmTD.Data.Models.DataTableModels
+﻿using RhytmTD.Battle.Entities.EntitiesFactory;
+
+namespace RhytmTD.Data.Models.DataTableModels
 {
     /// <summary>
     /// Информация о мире, который содержит зоны, которые рассчитывают данные для уровней и волн
@@ -19,6 +21,7 @@
             public ProgressionConfig ProgressionChunksAmount;
             public ProgressionConfig ProgressionRestTicks;
             public ProgressionConfig ProgressionDelayBetweenChunks;
+            public BaseBattleEntityFactory EnemiesFactory;
 
             public int ID;
             public int WavesAmount;

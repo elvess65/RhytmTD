@@ -17,6 +17,7 @@ namespace RhytmTD.Battle.Spawn.Data
 
 
         private int m_WavesAmount;
+        public float LevelProgress01 { get; private set; }
 
         //Очерель волн для создания
         private Queue<WaveData> m_Waves;
@@ -33,7 +34,8 @@ namespace RhytmTD.Battle.Spawn.Data
                          ProgressionConfig progressionRestTicks,
                          ProgressionConfig progressionDelayBetweenChunks,
                          int wavesAmount,
-                         int delayBeforeStartLevel)
+                         int delayBeforeStartLevel,
+                         float levelProgress01)
         {
             m_ProgressionEnemies = progressionEnemies;
             m_ProgressionChunksAmount = progressionChunksAmount;
@@ -42,6 +44,7 @@ namespace RhytmTD.Battle.Spawn.Data
 
             m_WavesAmount = wavesAmount;
             DelayBeforeStart = delayBeforeStartLevel;
+            LevelProgress01 = levelProgress01;
 
             Build();
         }

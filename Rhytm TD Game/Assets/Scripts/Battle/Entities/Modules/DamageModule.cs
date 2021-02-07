@@ -6,10 +6,10 @@ namespace RhytmTD.Battle.Entities
         public int MinDamage;
         public int MaxDamage;
 
-        public DamageModule(int minDamage, int maxDamage)
+        public DamageModule((int minDamage, int maxDamage) damage)
         {
-            MinDamage = minDamage;
-            MaxDamage = maxDamage;
+            MinDamage = damage.minDamage;
+            MaxDamage = damage.maxDamage;
         }
     }
 }

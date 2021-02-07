@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using RhytmTD.Battle.Entities.EntitiesFactory;
+using UnityEngine;
 
 namespace RhytmTD.Data.DataBase.Simulation
 {
@@ -16,14 +17,16 @@ namespace RhytmTD.Data.DataBase.Simulation
         [System.Serializable]
         public class AreaData
         {
+            public int ID;
+            public int TotalLevels;
+
             public ProgressionConfig ProgressionEnemies;
             public ProgressionConfig ProgressionChunksAmount;
             public ProgressionConfig ProgressionRestTicks;
             public ProgressionConfig ProgressionDelayBetweenChunks;
+            public BaseBattleEntityFactory EnemiesFactory;
 
-            public int ID;
             public int WavesAmount;
-            public int TotalLevels;
             public int DelayBeforeStartLevel;
         }
     }

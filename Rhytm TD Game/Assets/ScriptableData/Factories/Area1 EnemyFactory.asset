@@ -9,14 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 114d091429e2649b99e7195cbef93644, type: 3}
-  m_Name: World
+  m_Script: {fileID: 11500000, guid: 0de0973bd518063409fab1fb24b849c5, type: 3}
+  m_Name: Area1 EnemyFactory
   m_EditorClassIdentifier: 
-  Areas:
-  - ID: 0
-    TotalLevels: 10
-    ProgressionEnemies:
-      BaseValue: 5
+  FocusSpeed: 5
+  ProgressionEnemyHP:
+    MinProgression:
+      BaseValue: 8
       Curve:
         serializedVersion: 2
         m_Curve:
@@ -41,25 +40,25 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-    ProgressionChunksAmount:
-      BaseValue: 2
+    MaxProgression:
+      BaseValue: 12
       Curve:
         serializedVersion: 2
         m_Curve:
         - serializedVersion: 3
           time: 0
           value: 0
-          inSlope: 1
-          outSlope: 1
+          inSlope: 0
+          outSlope: 0
           tangentMode: 0
           weightedMode: 0
           inWeight: 0.33333334
           outWeight: 0.33333334
         - serializedVersion: 3
           time: 1
-          value: 0.5010185
-          inSlope: 1
-          outSlope: 1
+          value: 1
+          inSlope: 2
+          outSlope: 2
           tangentMode: 0
           weightedMode: 0
           inWeight: 0.33333334
@@ -67,7 +66,8 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-    ProgressionRestTicks:
+  ProgressionEnemyDamage:
+    MinProgression:
       BaseValue: 3
       Curve:
         serializedVersion: 2
@@ -75,17 +75,17 @@ MonoBehaviour:
         - serializedVersion: 3
           time: 0
           value: 0
-          inSlope: 0
-          outSlope: 0
+          inSlope: 1
+          outSlope: 1
           tangentMode: 0
           weightedMode: 0
           inWeight: 0.33333334
           outWeight: 0.33333334
         - serializedVersion: 3
           time: 1
-          value: 0
-          inSlope: 0
-          outSlope: 0
+          value: 1
+          inSlope: 1
+          outSlope: 1
           tangentMode: 0
           weightedMode: 0
           inWeight: 0.33333334
@@ -93,25 +93,25 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-    ProgressionDelayBetweenChunks:
-      BaseValue: 2
+    MaxProgression:
+      BaseValue: 7
       Curve:
         serializedVersion: 2
         m_Curve:
         - serializedVersion: 3
           time: 0
           value: 0
-          inSlope: 0
-          outSlope: 0
+          inSlope: 1
+          outSlope: 1
           tangentMode: 0
           weightedMode: 0
           inWeight: 0.33333334
           outWeight: 0.33333334
         - serializedVersion: 3
           time: 1
-          value: 0
-          inSlope: 0
-          outSlope: 0
+          value: 1
+          inSlope: 1
+          outSlope: 1
           tangentMode: 0
           weightedMode: 0
           inWeight: 0.33333334
@@ -119,6 +119,3 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-    EnemiesFactory: {fileID: 11400000, guid: 5e050ad9707a7bd4d9a1a46d48c1dbc7, type: 2}
-    WavesAmount: 5
-    DelayBeforeStartLevel: 2

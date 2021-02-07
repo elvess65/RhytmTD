@@ -16,5 +16,5 @@ MonoBehaviour:
   WeaponExperiance: 1
   HPExperiance: 2
   ManaExperiance: 3
-  CompletedLevels: 10
+  CompletedLevels: 0
   CompletedAreas: 0

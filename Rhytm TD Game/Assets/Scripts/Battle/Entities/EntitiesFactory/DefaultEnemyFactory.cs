@@ -1,4 +1,5 @@
 ﻿using CoreFramework;
+using RhytmTD.Data;
 using UnityEngine;
 
 namespace RhytmTD.Battle.Entities.EntitiesFactory
@@ -8,19 +9,33 @@ namespace RhytmTD.Battle.Entities.EntitiesFactory
     public class DefaultEnemyFactory : BaseBattleEntityFactory
     {
         [SerializeField] private int FocusSpeed = 1;
-        [SerializeField] private int Health = 20;
-        [SerializeField] private int MinDamage = 4;
-        [SerializeField] private int MaxDamage = 7;
 
-        public override BattleEntity CreateEntity(Transform transform)
+        public MinMaxProgressionConfig ProgressionEnemyHP;
+        public MinMaxProgressionConfig ProgressionEnemyDamage;
+
+        public override BattleEntity CreateEntity(Transform transform, float progression01)
         {
             int entityID = IDGenerator.GenerateID();
+
             BattleEntity battleEntity = new BattleEntity(entityID);
             battleEntity.AddModule(new TransformModule(transform, FocusSpeed));
-            battleEntity.AddModule(new HealthModule(entityID, Health));
-            battleEntity.AddModule(new DamageModule(MinDamage, MaxDamage));
+            battleEntity.AddModule(new HealthModule(entityID, GetHealth(progression01)));
+            battleEntity.AddModule(new DamageModule(GetDamage(progression01)));
 
             return battleEntity;
+        }
+
+        private int GetHealth(float progression01)
+        {
+            (int min, int max) result = ProgressionEnemyHP.EvaluateInt(progression01);
+            int rndHealth = Random.Range(result.min, result.max + 1);
+
+            return rndHealth;
+        }
+
+        private (int min, int max) GetDamage(float progression01)
+        {
+            return ProgressionEnemyDamage.EvaluateInt(progression01);
         }
     }
 }
