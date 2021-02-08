@@ -7,10 +7,22 @@ namespace RhytmTD.Battle.Entities.Models
     {
         public int ID;
         public int CurrentArea;
-        public BattleEntity PlayerEntity;
         public ICollection<BattleEntity> BattleEntities => m_BattleEntities.Values;
 
         private Dictionary<int, BattleEntity> m_BattleEntities = new Dictionary<int, BattleEntity>();
+        private BattleEntity m_PlayerEntity;
+
+        public System.Action<BattleEntity> OnPlayerEntityInitialized;
+
+        public BattleEntity PlayerEntity
+        {
+            get { return m_PlayerEntity; }
+            set
+            {
+                m_PlayerEntity = value;
+                OnPlayerEntityInitialized?.Invoke(value);
+            }
+        }
 
         public void AddBattleEntity(BattleEntity battleEntity)
         {

@@ -8,18 +8,29 @@ namespace RhytmTD.Battle.Entities
     /// </summary>
     public class MoveModule : IBattleModule
     {
-        public Transform Transform { get; private set; }
-        public float Speed { get; private set; }
-        public float CurrentSpeed { get; private set; }
+        public float Speed { get; }
+        public float CurrentSpeed { get; }
+
         public Vector3 MoveDirection { get; private set; }
         public bool IsMoving { get; private set; }
 
-        public System.Action OnStartMove;
-        public System.Action OnStopMove;
-
-        public MoveModule(Transform transform, float speed)
+        public Vector3 Position
         {
-            Transform = transform;
+            get { return m_Position; }
+            set 
+            {
+                m_Position = value;
+                OnPositionChanged?.Invoke(value);
+            }
+        }
+
+        private Vector3 m_Position;
+
+        public System.Action<Vector3> OnPositionChanged;
+
+        public MoveModule(Vector3 position, float speed)
+        {
+            Position = position;
             Speed = CurrentSpeed = speed;
         }
 
@@ -30,8 +41,6 @@ namespace RhytmTD.Battle.Entities
 
             MoveDirection = direction;
             IsMoving = true;
-
-            OnStartMove?.Invoke();
         }
 
         public void Stop()
@@ -41,8 +50,6 @@ namespace RhytmTD.Battle.Entities
 
             IsMoving = false;
             MoveDirection = Vector3.zero;
-
-            OnStopMove?.Invoke();
         }
     }
 }

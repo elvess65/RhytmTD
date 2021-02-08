@@ -36,7 +36,7 @@ namespace RhytmTD.Battle.Entities.Controllers
 
                     if (moveModule.IsMoving)
                     {
-                        moveModule.Transform.position += moveModule.MoveDirection * moveModule.CurrentSpeed * deltaTime;
+                        moveModule.Position += moveModule.MoveDirection * moveModule.CurrentSpeed * deltaTime;
                     }
                 }
             }

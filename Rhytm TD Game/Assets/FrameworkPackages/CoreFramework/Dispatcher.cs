@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using RhytmTD.Data.Models;
-using UnityEngine;
 
 namespace CoreFramework
 {
@@ -47,23 +46,17 @@ namespace CoreFramework
         public T CreateModel<T>() where T : BaseModel
         {
             Type type = typeof(T);
-
             T val = (T)Activator.CreateInstance(type);
-            m_Models.Add(type, val);
 
-            return val;
+            return CreateModel(val);
         }
 
-        public T CreateModelFromJson<T>(string json) where T : BaseModel
+        public T CreateModel<T>(T value) where T : BaseModel
         {
-            Type type = typeof(T);
+            m_Models.Add(value.GetType(), value);
 
-            T val = JsonUtility.FromJson<T>(json);
-            m_Models.Add(type, val);
-
-            return val;
+            return value;
         }
-
 
         public T GetModel<T>() where T : BaseModel
         {

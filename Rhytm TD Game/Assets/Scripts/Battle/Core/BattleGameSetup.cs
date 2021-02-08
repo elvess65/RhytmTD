@@ -25,9 +25,12 @@ namespace RhytmTD.Battle.Core
             dispatcher.CreateController<SpawnController>();
             dispatcher.CreateController<DamageController>();
             dispatcher.CreateController<BattlefieldController>();
+            dispatcher.CreateController<CameraController>();
+            dispatcher.CreateController<CameraFollowController>();
 
             // Models
             dispatcher.CreateModel<BattleModel>();
+            dispatcher.CreateModel<CameraModel>();
 
             dispatcher.InitializeComplete();
         }

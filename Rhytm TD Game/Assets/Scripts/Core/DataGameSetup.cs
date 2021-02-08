@@ -26,11 +26,12 @@ namespace RhytmTD.Core
         {
             Dispatcher dispatcher = Dispatcher.Instance;
 
-            // Models
-            dispatcher.CreateModelFromJson<AccountDataModel>(m_SerializedAccountData);
-            dispatcher.CreateModelFromJson<EnvironmentDataModel>(m_SerializedEnviromentData);
-            dispatcher.CreateModelFromJson<AccountLevelingDataModel>(m_SerializedLevelingData);
-            dispatcher.CreateModelFromJson<WorldDataModel>(m_SerializedWorldData);
+            ICustomSerializer serializer = new JsonSerializer();
+
+            dispatcher.CreateModel(serializer.Deserialize<AccountDataModel>(m_SerializedAccountData));
+            dispatcher.CreateModel(serializer.Deserialize<EnvironmentDataModel>(m_SerializedEnviromentData));
+            dispatcher.CreateModel(serializer.Deserialize<AccountLevelingDataModel>(m_SerializedLevelingData));
+            dispatcher.CreateModel(serializer.Deserialize<WorldDataModel>(m_SerializedWorldData));
         }
     }
 }

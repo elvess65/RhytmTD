@@ -411,7 +411,6 @@ MonoBehaviour:
   - {fileID: 1338211503}
   - {fileID: 514915435}
   PlayerFactory: {fileID: 11400000, guid: 23ca8426a2c053f4cacc903ce22cfcd6, type: 2}
-  EnemyFactory: {fileID: 11400000, guid: 5e050ad9707a7bd4d9a1a46d48c1dbc7, type: 2}
 --- !u!1 &216546100
 GameObject:
   m_ObjectHideFlags: 0
@@ -1955,6 +1954,7 @@ GameObject:
   - component: {fileID: 2027747560}
   - component: {fileID: 2027747563}
   - component: {fileID: 2027747564}
+  - component: {fileID: 2027747565}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -2068,6 +2068,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 72ece51f2901e7445ab60da3685d6b5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2027747565
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2027747559}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c5e30f096c4b914284c30c0186ea7c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &2040444911

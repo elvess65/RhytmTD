@@ -11,18 +11,12 @@ namespace RhytmTD.Battle.Entities.Views
             base.Initialize(entity);
 
             m_MoveModule = entity.GetModule<MoveModule>();
-            m_MoveModule.OnStartMove += OnStartMove;
-            m_MoveModule.OnStopMove += OnStopMove;
+            m_MoveModule.OnPositionChanged += OnPositionChanged;
         }
 
-        private void OnStartMove()
+        private void OnPositionChanged(Vector3 position)
         {
-            Debug.Log($"VIEW: Start move");
-        }
-
-        private void OnStopMove()
-        {
-            Debug.Log($"VIEW: stop move");
+            transform.position = position;
         }
 
         private void OnDrawGizmos()
