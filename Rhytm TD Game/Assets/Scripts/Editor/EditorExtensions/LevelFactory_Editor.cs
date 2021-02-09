@@ -2,28 +2,100 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using static RhytmTD.Data.DataBase.Simulation.LevelFactory;
 
 namespace RhytmTD.Editor.EditorExtensions
 {
     [CustomEditor(typeof(LevelFactory))]
     public class LevelFactory_Editor : UnityEditor.Editor
     {
+        private class WaveEditorData
+        {
+            public enum OverrideTypes { None, Part, Full }
+
+            public bool IsFoldedOut = false;
+            public OverrideTypes AmountOverride = OverrideTypes.None;
+        }
+
         private bool m_IsWavesFoldedOut = false;
-        private List<bool> m_FoldedOutWaves;
+        private List<WaveEditorData> m_WavesEditorData;
 
         public override void OnInspectorGUI()
         {
             DrawLevel();
+
+            if (GUI.changed)
+                ValidateData();
         }
 
         void OnEnable()
         {
             LevelFactory castedTarget = (LevelFactory)target;
 
-            m_FoldedOutWaves = new List<bool>();
+            m_WavesEditorData = new List<WaveEditorData>();
             for (int i = 0; i < castedTarget.Waves.Count; i++)
             {
-                m_FoldedOutWaves.Add(false);
+                m_WavesEditorData.Add(new WaveEditorData());
+            }
+        }
+
+        void ValidateData()
+        {
+            LevelFactory castedTarget = (LevelFactory)target;
+
+            int waveIndex = 0;
+            foreach(Wave wave in castedTarget.Waves)
+            {
+                int overrideAmountCounter = 0;
+                int overrideDamageCounter = 0;
+                int overrideHPCounter = 0;
+                foreach(Chunk chunk in wave.Chunks)
+                {
+                    if (!chunk.OverrideAmount)
+                    {
+                        chunk.EnemiesAmount = wave.EnemiesAmount;
+                    }
+                    else
+                    {
+                        overrideAmountCounter++;
+                    }
+
+
+                    if (!chunk.OverrideDamage)
+                    {
+                        chunk.MinDamage = wave.MinDamage;
+                        chunk.MaxDamage = wave.MaxDamage;
+                    }
+                    else
+                    {
+                        overrideDamageCounter++;
+                    }
+
+                    if (!chunk.OverrideHP)
+                    {
+                        chunk.MinHP = wave.MinHP;
+                        chunk.MaxHP = wave.MaxHP;
+                    }
+                    else
+                    {
+                        overrideHPCounter++;
+                    }
+                }
+
+                if (overrideAmountCounter == wave.Chunks.Count)
+                {
+                    m_WavesEditorData[waveIndex].AmountOverride = WaveEditorData.OverrideTypes.Full;
+                }
+                else if (overrideAmountCounter > 0)
+                {
+                    m_WavesEditorData[waveIndex].AmountOverride = WaveEditorData.OverrideTypes.Part;
+                }
+                else
+                {
+                    m_WavesEditorData[waveIndex].AmountOverride = WaveEditorData.OverrideTypes.None;
+                }
+
+                waveIndex++;
             }
         }
 
@@ -120,14 +192,14 @@ namespace RhytmTD.Editor.EditorExtensions
 
                 #region Properies
 
-                DrawWaveProperties(wave);
+                DrawWaveProperties(wave, waveIndex);
 
                 #endregion
 
                 #region Chunks
 
-                      m_FoldedOutWaves[waveIndex] = EditorGUILayout.Foldout(m_FoldedOutWaves[waveIndex], "Chunk Details", true);
-                if (m_FoldedOutWaves[waveIndex])
+                m_WavesEditorData[waveIndex].IsFoldedOut = EditorGUILayout.Foldout(m_WavesEditorData[waveIndex].IsFoldedOut, "Chunk Details", true);
+                if (m_WavesEditorData[waveIndex].IsFoldedOut)
                 {
                     #region Title and AddButton
 
@@ -198,7 +270,7 @@ namespace RhytmTD.Editor.EditorExtensions
 
                 #region Properties
 
-                DrawChunkProperies(chunk, parentWave);
+                DrawChunkProperies(chunk, parentWave, chunkIndex);
 
                 #endregion
             }
@@ -207,10 +279,21 @@ namespace RhytmTD.Editor.EditorExtensions
         }
 
 
-        void DrawWaveProperties(LevelFactory.Wave wave)
+        void DrawWaveProperties(LevelFactory.Wave wave, int waveIndex)
         {
             //Enemies Amount
+
+            GUI.enabled = m_WavesEditorData[waveIndex].AmountOverride != WaveEditorData.OverrideTypes.Full;
+
+            Color initColor = EditorStyles.label.normal.textColor;
+            if (m_WavesEditorData[waveIndex].AmountOverride == WaveEditorData.OverrideTypes.Part)
+                EditorStyles.label.normal.textColor = Color.yellow;
+
             wave.EnemiesAmount = EditorGUILayout.IntField("EnemiesAmount:", wave.EnemiesAmount);
+
+            EditorStyles.label.normal.textColor = initColor;
+            GUI.enabled = true;
+
             EditorGUILayout.Space();
 
             //Damage
@@ -222,50 +305,33 @@ namespace RhytmTD.Editor.EditorExtensions
             EditorGUILayout.Space();
         }
 
-        void DrawChunkProperies(LevelFactory.Chunk chunk, LevelFactory.Wave parentWave)
+        void DrawChunkProperies(LevelFactory.Chunk chunk, LevelFactory.Wave parentWave, int chunkIndex)
         {
             //Enemies Amount
             GUI.enabled = chunk.OverrideAmount;
             chunk.EnemiesAmount = EditorGUILayout.IntField("EnemiesAmount:", chunk.EnemiesAmount);
-
             GUI.enabled = true;
-            EditorGUI.BeginChangeCheck();
 
             chunk.OverrideAmount = EditorGUILayout.Toggle("Override", chunk.OverrideAmount);
-            if (EditorGUI.EndChangeCheck() && !chunk.OverrideAmount)
-            {
-                chunk.EnemiesAmount = parentWave.EnemiesAmount;
-            }
+
             EditorGUILayout.Space();
 
             //Damage
             GUI.enabled = chunk.OverrideDamage;
             DrawMinMax("MinDamage:", ref chunk.MinDamage, "MaxDamage", ref chunk.MaxDamage);
-
             GUI.enabled = true;
-            EditorGUI.BeginChangeCheck();
 
             chunk.OverrideDamage = EditorGUILayout.Toggle("Override", chunk.OverrideDamage);
-            if (EditorGUI.EndChangeCheck() &&!chunk.OverrideDamage)
-            {
-                chunk.MinDamage = parentWave.MinDamage;
-                chunk.MaxDamage = parentWave.MaxDamage;
-            }
+
             EditorGUILayout.Space();
 
             //HP
             GUI.enabled = chunk.OverrideHP;
             DrawMinMax("MinHP:", ref chunk.MinHP, "MaxHP", ref chunk.MaxHP);
-
             GUI.enabled = true;
-            EditorGUI.BeginChangeCheck();
 
             chunk.OverrideHP = EditorGUILayout.Toggle("Override", chunk.OverrideHP);
-            if (EditorGUI.EndChangeCheck() && !chunk.OverrideHP)
-            {
-                chunk.MinHP = parentWave.MinHP;
-                chunk.MaxHP = parentWave.MaxHP;
-            }
+
             EditorGUILayout.Space();
         }
 
@@ -288,13 +354,13 @@ namespace RhytmTD.Editor.EditorExtensions
         void AddWave(LevelFactory levelFactory)
         {
             levelFactory.Waves.Add(new LevelFactory.Wave());
-            m_FoldedOutWaves.Add(true);
+            m_WavesEditorData.Add(new WaveEditorData());
         }
 
         void RemoveWave(LevelFactory levelFactory, int waveIndex)
         {
             levelFactory.Waves.RemoveAt(waveIndex);
-            m_FoldedOutWaves.RemoveAt(waveIndex);
+            m_WavesEditorData.RemoveAt(waveIndex);
         }
 
         void AddChunk(LevelFactory.Wave wave)
