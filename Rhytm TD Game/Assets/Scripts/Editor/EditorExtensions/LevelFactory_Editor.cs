@@ -41,20 +41,23 @@ namespace RhytmTD.Editor.EditorExtensions
             }
         }
 
+
         void ValidateLevel()
         {
             LevelFactory castedTarget = (LevelFactory)target;
 
-            int waveIndex = 0;
-            foreach(Wave wave in castedTarget.Waves)
-            {
-                ValidateWave(wave, waveIndex);
-                waveIndex++;
-            }
+            for (int i = 0; i < castedTarget.Waves.Count; i++)
+                ValidateWave(castedTarget.Waves[i], i);
         }
 
         void ValidateWave(Wave wave, int waveIndex)
         {
+            ValidateMinMax(ref wave.MinDamage, ref wave.MaxDamage);
+            ValidateMinMax(ref wave.MinHP, ref wave.MaxHP);
+
+            if (wave.EnemiesAmount <= 0)
+                wave.EnemiesAmount = 1;
+
             int overrideAmountCounter = 0;
             int overrideDamageCounter = 0;
             int overrideHPCounter = 0;
@@ -99,22 +102,47 @@ namespace RhytmTD.Editor.EditorExtensions
 
         void ValidateChunk(Wave parentWave, Chunk chunk)
         {
+            //Amount
             if (!chunk.OverrideAmount)
             {
                 chunk.EnemiesAmount = parentWave.EnemiesAmount;
             }
+            else
+            {
+                if (chunk.EnemiesAmount <= 0)
+                    chunk.EnemiesAmount = 1;
+            }
 
+            //Damage
             if (!chunk.OverrideDamage)
             {
                 chunk.MinDamage = parentWave.MinDamage;
                 chunk.MaxDamage = parentWave.MaxDamage;
             }
+            else
+            {
+                ValidateMinMax(ref chunk.MinDamage, ref chunk.MaxDamage);
+            }
 
+            //HP
             if (!chunk.OverrideHP)
             {
                 chunk.MinHP = parentWave.MinHP;
                 chunk.MaxHP = parentWave.MaxHP;
             }
+            else
+            {
+                ValidateMinMax(ref chunk.MinHP, ref chunk.MaxHP);
+            }
+        }
+
+        void ValidateMinMax(ref int min, ref int max)
+        {
+            if (min < 0)
+                min = 0;
+
+            if (min > max)
+                max = min;
         }
 
 
@@ -297,23 +325,6 @@ namespace RhytmTD.Editor.EditorExtensions
         }
 
 
-        void PreWavePropertyDraw(WaveEditorData.OverrideTypes propertyOverride, out Color initColor)
-        {
-            GUI.enabled = propertyOverride != WaveEditorData.OverrideTypes.Full;
-            initColor = EditorStyles.label.normal.textColor;
-
-            if (propertyOverride == WaveEditorData.OverrideTypes.Part)
-                EditorStyles.label.normal.textColor = Color.yellow;
-        }
-
-        void PostWavePropertyDraw(Color initColor)
-        {
-            EditorStyles.label.normal.textColor = initColor;
-            GUI.enabled = true;
-
-            EditorGUILayout.Space();
-        }
-
         void DrawWaveProperties(LevelFactory.Wave wave, int waveIndex)
         {
             //Enemies Amount
@@ -324,14 +335,14 @@ namespace RhytmTD.Editor.EditorExtensions
             PostWavePropertyDraw(initColor);
 
             //Damage
-            PreWavePropertyDraw(m_WavesEditorData[waveIndex].AmountOverride, out initColor);
+            PreWavePropertyDraw(m_WavesEditorData[waveIndex].DamageOverride, out initColor);
 
             DrawMinMax("MinDamage:", ref wave.MinDamage, "MaxDamage", ref wave.MaxDamage);
 
             PostWavePropertyDraw(initColor);
 
             //HP
-            PreWavePropertyDraw(m_WavesEditorData[waveIndex].AmountOverride, out initColor);
+            PreWavePropertyDraw(m_WavesEditorData[waveIndex].HPOverride, out initColor);
 
             DrawMinMax("MinHP:", ref wave.MinHP, "MaxHP", ref wave.MaxHP);
 
@@ -382,6 +393,24 @@ namespace RhytmTD.Editor.EditorExtensions
             }
             EditorGUILayout.EndHorizontal();
         }
+
+        void PreWavePropertyDraw(WaveEditorData.OverrideTypes propertyOverride, out Color initColor)
+        {
+            GUI.enabled = propertyOverride != WaveEditorData.OverrideTypes.Full;
+            initColor = EditorStyles.label.normal.textColor;
+
+            if (propertyOverride == WaveEditorData.OverrideTypes.Part)
+                EditorStyles.label.normal.textColor = Color.yellow;
+        }
+
+        void PostWavePropertyDraw(Color initColor)
+        {
+            EditorStyles.label.normal.textColor = initColor;
+            GUI.enabled = true;
+
+            EditorGUILayout.Space();
+        }
+
 
 
         void AddWave(LevelFactory levelFactory)
