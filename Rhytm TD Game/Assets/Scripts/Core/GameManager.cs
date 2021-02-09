@@ -1,8 +1,8 @@
 ﻿using CoreFramework;
 using CoreFramework.Abstract;
 using CoreFramework.SceneLoading;
-using RhytmTD.Battle.Core;
-using RhytmTD.Data.DataBase;
+using RhytmTD.Data;
+using RhytmTD.Data.Controllers;
 using UnityEngine;
 
 namespace RhytmTD.Core
@@ -11,45 +11,34 @@ namespace RhytmTD.Core
     {
         public SceneLoader SceneLoader { get; private set; }
 
-        private DBProxy m_DBProxy;
-
 
         public void InitializeConnection()
         {
-            m_DBProxy = new DBProxy();
-            m_DBProxy.OnConnectionSuccess += ConnectionResultSuccess;
-            m_DBProxy.OnConnectionError += ConnectionResultError;
-            m_DBProxy.Initialize();
+            IGameSetup connectionSetup = new ConnectionGameSetup();
+            connectionSetup.Setup();
+
+            ConnectionController connectionController = Dispatcher.Instance.GetController<ConnectionController>();
+            connectionController.OnConnectionSuccess += ConnectionResultSuccess;
+            connectionController.OnConnectionError += ConnectionResultError;
+            connectionController.Connect();
         }
 
-
-        private void InitializeCore()
-        {
-            SceneLoader = new SceneLoader();
-
-            IGameSetup battleSetup = new BattleGameSetup();
-            battleSetup.Setup();
-        }
 
         private void Start()
         {
             DontDestroyOnLoad(gameObject);
-            
-            InitializeCore();
+
+            SceneLoader = new SceneLoader();
         }
  
-
-        private void ConnectionResultSuccess(string serializedAccountData, string serializedEnviromentData, string serializedLevelingData, string serializedWorldData)
+        private void ConnectionResultSuccess()
         {
-            m_DBProxy = null;
-
-            IGameSetup gameSetup = new DataGameSetup(serializedAccountData, serializedEnviromentData, serializedLevelingData, serializedWorldData);
-            gameSetup.Setup();
-             
             SceneLoader.LoadLevel(SceneLoader.MENU_SCENE_NAME);
         }
 
-        private void ConnectionResultError(int errorCode) => Debug.LogError($"Connection error {errorCode}");
-
+        private void ConnectionResultError(int errorCode)
+        {
+            Debug.LogError($"Connection error {errorCode}");
+        }
     }
 }

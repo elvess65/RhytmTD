@@ -2,7 +2,7 @@
 using RhytmTD.Data.Models;
 using RhytmTD.Data.Models.DataTableModels;
 
-namespace RhytmTD.Core
+namespace RhytmTD.Data
 {
     /// <summary>
     /// Setup требующий заполнения из БД

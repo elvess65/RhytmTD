@@ -31,9 +31,14 @@
         }
 
 
-        private void ConnectionSuccessHandler(string serializedAccountData, string serializedEnviromentData, string serializedLevelsExpData, string serializedWorldData) =>
+        private void ConnectionSuccessHandler(string serializedAccountData, string serializedEnviromentData, string serializedLevelsExpData, string serializedWorldData)
+        {
             OnConnectionSuccess?.Invoke(serializedAccountData, serializedEnviromentData, serializedLevelsExpData, serializedWorldData);
+        }
 
-        private void OnConnectionErrorHandler(int errorCode) => OnConnectionError?.Invoke(errorCode);
+        private void OnConnectionErrorHandler(int errorCode)
+        {
+            OnConnectionError?.Invoke(errorCode);
+        }
     }
 }
