@@ -1,24 +1,24 @@
-﻿using CoreFramework.Abstract;
+﻿using RhytmTD.Data.Models;
 using System;
 using System.Collections.Generic;
 
 namespace CoreFramework.StateMachine
 {
-    public class AbstractStateMachine<T> : iUpdatable where T: AbstractState
+    public class AbstractStateMachine<T> where T: AbstractState
     {
         protected T m_CurrentState;
+        protected Dispatcher Dispatcher => Dispatcher.Instance;
 
         private Dictionary<Type, T> m_InitializedStates;
-
 
         public AbstractStateMachine()
         {
             m_InitializedStates = new Dictionary<Type, T>();
         }
 
-        public virtual void PerformUpdate(float deltaTime)
+        public virtual void Update(float deltaTime)
         {
-            m_CurrentState.PerformUpdate(deltaTime);
+            m_CurrentState.Update(deltaTime);
         }
 
         /// <summary>
@@ -26,6 +26,9 @@ namespace CoreFramework.StateMachine
         /// </summary>
         public virtual void Initialize<T>()
         {
+            UpdateModel updateModel = Dispatcher.GetModel<UpdateModel>();
+            updateModel.OnUpdate += Update;
+
             SetState(m_InitializedStates[typeof(T)]);
         }
 

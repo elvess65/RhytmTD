@@ -39,14 +39,6 @@ namespace RhytmTD.OtherScenes.MenuScene
 
             //m_SelectedCharacterAnimationEventsListener = CharacterController.SelectedCharacterAnimationController.Controller.GetComponent<AnimationEventsListener>();
         }
-
-
-        private void Update()
-        {
-            UIView.PerformUpdate(Time.deltaTime);
-            CameraContoller.PerformUpdate(Time.deltaTime);
-        }
-
  
         #region Button Play
 

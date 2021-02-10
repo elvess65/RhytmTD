@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using CoreFramework.Abstract;
 using CoreFramework.Utils;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,7 +8,7 @@ namespace RhytmTD.UI.Widget
     /// <summary>
     /// Виджет валюты
     /// </summary>
-    public class UIWidget_Currency : UIWidget, iUpdatable
+    public class UIWidget_Currency : UIWidget
     {
         [Space(10)]
         public Text Text_Amount;
@@ -46,7 +45,7 @@ namespace RhytmTD.UI.Widget
             StartCoroutine(WaitDelayBeforeAnimation());
         }
 
-        public void PerformUpdate(float deltaTime)
+        public void Update()
         {
             if (m_LerpData.IsStarted)
             {

@@ -24,26 +24,18 @@ namespace RhytmTD.Battle.Core
         public AudioSource Music;
 
         private BattleStateMachine<BattleState_Abstract> m_StateMachine;
-        private UpdatablesManager m_UpdatablesManager;
 
         private Dispatcher m_Dispatcher;
         private RhytmInputProxy m_RhytmInputProxy;
         private RhytmController m_RhytmController;
         private InputController m_InputController;
         private SpawnController m_SpawnController;
-        private MoveController m_MoveController;
-        private FocusController m_FocusController;
         private DamageController m_DamageController;
         private BattlefieldController m_BattlefieldController;
 
         private BattleModel m_BattleModel;
         private WorldDataModel m_WorldDataModel;
         private AccountDataModel m_AccountDataModel;
-
-        private void Update()
-        {
-            m_UpdatablesManager?.PerformUpdate(Time.deltaTime); 
-        }
 
         #region Initialization
 
@@ -52,7 +44,6 @@ namespace RhytmTD.Battle.Core
             InitializeCore();
             InitializeStateMachine();
             InitializeDataDependends();
-            InitializeUpdatables();
             InitializeEvents();
             ApplySettings();
 
@@ -62,8 +53,6 @@ namespace RhytmTD.Battle.Core
         private void InitializeCore()
         {
             m_Dispatcher = Dispatcher.Instance;
-            m_MoveController = m_Dispatcher.GetController<MoveController>();
-            m_FocusController = m_Dispatcher.GetController<FocusController>();
             m_RhytmController = m_Dispatcher.GetController<RhytmController>();
             m_RhytmInputProxy = m_Dispatcher.GetController<RhytmInputProxy>();
             m_InputController = m_Dispatcher.GetController<InputController>();
@@ -98,18 +87,6 @@ namespace RhytmTD.Battle.Core
             //Build level data
             m_SpawnController.BuildLevel(MonoReferencesHolder.EntitySpawner, m_WorldDataModel.Areas[m_BattleModel.CurrentArea],
                 m_RhytmController.CurrentTick, (float)m_AccountDataModel.CompletedLevels / m_WorldDataModel.Areas[m_BattleModel.CurrentArea].TotalLevels);
-        }
-
-        private void InitializeUpdatables()
-        {
-            m_UpdatablesManager = new UpdatablesManager();
-            m_UpdatablesManager.Add(m_StateMachine);
-            m_UpdatablesManager.Add(m_RhytmController);
-            m_UpdatablesManager.Add(m_InputController);
-            m_UpdatablesManager.Add(m_FocusController);
-            m_UpdatablesManager.Add(m_MoveController);
-            m_UpdatablesManager.Add(m_BattlefieldController);
-            m_UpdatablesManager.Add(MonoReferencesHolder.UIManager);
         }
 
         private void InitializeEvents()

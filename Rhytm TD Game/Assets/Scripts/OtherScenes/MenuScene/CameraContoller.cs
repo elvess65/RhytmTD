@@ -1,10 +1,9 @@
-﻿using CoreFramework.Abstract;
-using CoreFramework.Utils;
+﻿using CoreFramework.Utils;
 using UnityEngine;
 
 namespace RhytmTD.OtherScenes.MenuScene
 {
-    public class CameraContoller : MonoBehaviour, iUpdatable
+    public class CameraContoller : MonoBehaviour
     {
         public System.Action OnCameraPushKeyFrameReached;
 
@@ -29,7 +28,7 @@ namespace RhytmTD.OtherScenes.MenuScene
             m_LerpData.Start();
         }
 
-        public void PerformUpdate(float deltaTime)
+        public void Update()
         {
             if (m_LerpData.IsStarted)
             {

@@ -1,24 +1,18 @@
 ﻿using CoreFramework;
 using RhytmTD.Battle.Core;
-using RhytmTD.Core;
 using RhytmTD.Data.DataBase;
 
-namespace RhytmTD.Data.Controllers
+namespace RhytmTD.Network
 {
     /// <summary>
     /// Контроллер подключения и получения данных
     /// </summary>
-    public class ConnectionController : BaseController
+    public class ConnectionController
     {
         public System.Action OnConnectionSuccess;
         public System.Action<int> OnConnectionError;
 
         private DBProxy m_DBProxy;
-
-
-        public ConnectionController(Dispatcher dispatcher) : base(dispatcher)
-        {
-        }
 
         public void Connect()
         {
@@ -28,15 +22,12 @@ namespace RhytmTD.Data.Controllers
             m_DBProxy.Initialize();
         }
 
-
         private void ConnectionResultSuccess(string serializedAccountData, string serializedEnviromentData, string serializedLevelingData, string serializedWorldData)
         {
             m_DBProxy = null;
 
-            IGameSetup battleSetup = new BattleGameSetup();
-            battleSetup.Setup();
-
-            IGameSetup gameSetup = new DataGameSetup(serializedAccountData, serializedEnviromentData, serializedLevelingData, serializedWorldData);
+            IGameSetup gameSetup = new GameSetup(new DataGameSetup(serializedAccountData, serializedEnviromentData, serializedLevelingData, serializedWorldData),
+                                                 new BattleGameSetup());
             gameSetup.Setup();
 
             OnConnectionSuccess?.Invoke();

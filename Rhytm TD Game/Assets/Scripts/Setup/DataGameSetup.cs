@@ -2,7 +2,7 @@
 using RhytmTD.Data.Models;
 using RhytmTD.Data.Models.DataTableModels;
 
-namespace RhytmTD.Data
+namespace RhytmTD.Battle.Core
 {
     /// <summary>
     /// Setup требующий заполнения из БД
@@ -27,7 +27,6 @@ namespace RhytmTD.Data
             Dispatcher dispatcher = Dispatcher.Instance;
 
             ICustomSerializer serializer = new JsonSerializer();
-
             dispatcher.CreateModel(serializer.Deserialize<AccountDataModel>(m_SerializedAccountData));
             dispatcher.CreateModel(serializer.Deserialize<EnvironmentDataModel>(m_SerializedEnviromentData));
             dispatcher.CreateModel(serializer.Deserialize<AccountLevelingDataModel>(m_SerializedLevelingData));

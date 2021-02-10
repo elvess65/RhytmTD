@@ -1,13 +1,13 @@
 ﻿using CoreFramework;
-using CoreFramework.Abstract;
 using RhytmTD.Battle.Entities.Models;
+using RhytmTD.Data.Models;
 
 namespace RhytmTD.Battle.Entities.Controllers
 {
     /// <summary>
     /// Передвижение
     /// </summary>
-    public class MoveController : BaseController, iUpdatable
+    public class MoveController : BaseController
     {
         private BattleModel m_BattleModel;
 
@@ -18,9 +18,12 @@ namespace RhytmTD.Battle.Entities.Controllers
         public override void InitializeComplete()
         {
             m_BattleModel = Dispatcher.GetModel<BattleModel>();
+
+            UpdateModel updateModel = Dispatcher.GetModel<UpdateModel>();
+            updateModel.OnUpdate += Update;
         }
 
-        public void PerformUpdate(float deltaTime)
+        public void Update(float deltaTime)
         {
             MoveAll(deltaTime);
         }

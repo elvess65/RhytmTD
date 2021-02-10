@@ -1,10 +1,10 @@
-﻿using CoreFramework.Abstract;
+﻿using RhytmTD.Data.Models;
 using System.Text;
 using UnityEngine;
 
 namespace CoreFramework.Rhytm
 {
-    public class RhytmController : BaseController, iUpdatable
+    public class RhytmController : BaseController
     {
         private static RhytmController m_Instance;
 
@@ -91,6 +91,12 @@ namespace CoreFramework.Rhytm
             m_CompletedLoops = 0;
         }
 
+        public override void InitializeComplete()
+        {
+            UpdateModel updateModel = Dispatcher.GetModel<UpdateModel>();
+            updateModel.OnUpdate += Update;
+        }
+
         public void SetBPM(int bpm)
         {
             m_BPM = bpm;
@@ -116,7 +122,7 @@ namespace CoreFramework.Rhytm
         }
 
         
-        public void PerformUpdate(float deltaTime)
+        public void Update(float deltaTime)
         {
             if (m_IsStarted)
             {
