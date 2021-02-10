@@ -96,8 +96,7 @@ namespace RhytmTD.Battle.Core
             MonoReferencesHolder.Initialize();
 
             //Build level data
-            m_SpawnController.BuildLevel(MonoReferencesHolder.EntitySpawner, m_WorldDataModel.Areas[m_BattleModel.CurrentArea],
-                m_RhytmController.CurrentTick, 0);
+            m_SpawnController.BuildLevel(MonoReferencesHolder.EntitySpawner);
         }
 
         private void InitializeUpdatables()

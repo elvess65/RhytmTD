@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using RhytmTD.Battle.Entities.EntitiesFactory;
-using RhytmTD.Data.Factory;
-using UnityEngine;
+﻿using RhytmTD.Data.Factory;
 
 namespace RhytmTD.Data.Models.DataTableModels
 {

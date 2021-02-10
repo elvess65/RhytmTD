@@ -2,9 +2,12 @@
 //#define SINGLE_SPAWN
 
 using CoreFramework;
+using CoreFramework.Rhytm;
 using RhytmTD.Battle.Entities;
+using RhytmTD.Battle.Entities.EntitiesFactory;
 using RhytmTD.Battle.Entities.Models;
 using RhytmTD.Data.Factory;
+using RhytmTD.Data.Models;
 using RhytmTD.Data.Models.DataTableModels;
 using static RhytmTD.Data.Models.DataTableModels.WorldDataModel;
 
@@ -21,17 +24,21 @@ namespace RhytmTD.Battle.Spawn
         private EntitySpawner m_EntitySpawner;
         private BattleModel m_BattleModel;
         private WorldDataModel m_WorldDataModel;
-        private WorldDataModel.AreaData m_AreaData;
-
+        private AccountDataModel m_AccountDataModel;
+        private RhytmController m_RhytmController;
+        
         private int m_ActionTargetTick;
 
+        private int m_AreaIndex;
         private int m_LevelIndex;
         private int m_WaveIndex;
         private int m_ChunkIndex;
 
-        private LevelDataFactory m_CurrentLevel => m_AreaData.LevelsData[m_LevelIndex];
+        private AreaData m_CurrentArea => m_WorldDataModel.Areas[m_AreaIndex];
+        private LevelDataFactory m_CurrentLevel => m_CurrentArea.LevelsData[m_LevelIndex];
         private LevelDataFactory.WaveDataFactory m_CurrentWave => m_CurrentLevel.Waves[m_WaveIndex];
         private LevelDataFactory.ChunkDataFactory m_CurrentChunk => m_CurrentWave.Chunks[m_ChunkIndex];
+
 
         public SpawnController(Dispatcher dispatcher) : base(dispatcher)
         {  
@@ -41,19 +48,24 @@ namespace RhytmTD.Battle.Spawn
         {
             m_BattleModel = Dispatcher.GetModel<BattleModel>();
             m_WorldDataModel = Dispatcher.GetModel<WorldDataModel>();
+            m_AccountDataModel = Dispatcher.GetModel<AccountDataModel>();
+
+            m_RhytmController = Dispatcher.GetController<RhytmController>();
         }
 
-        public void BuildLevel(EntitySpawner entityViewSpawner, WorldDataModel.AreaData areaData, int currentTick, float levelProgress01)
+        public void BuildLevel(EntitySpawner entityViewSpawner)
         {
             m_EntitySpawner = entityViewSpawner;
-            //m_EntitySpawner.InjectEnemyFactory(areaData.EnemiesFactory);
-
-            m_AreaData = areaData;
-
-            SpawnPlayer();
+            m_AreaIndex = m_AccountDataModel.CompletedAreas;
+            m_LevelIndex = m_AccountDataModel.CompletedLevels;
+            m_WaveIndex = 0;
+            m_ChunkIndex = 0;
 
             //Запланировать тик действия
-            m_ActionTargetTick = currentTick + m_CurrentLevel.DelayBeforeStartLevel;
+            m_ActionTargetTick = m_RhytmController.CurrentTick + m_CurrentLevel.DelayBeforeStartLevel;
+
+            //Создать игрока
+            SpawnPlayer();
         }
 
         public void HandleTick(int ticksSinceStart)
@@ -61,7 +73,8 @@ namespace RhytmTD.Battle.Spawn
             if (m_ActionTargetTick == ticksSinceStart)
             {
                 m_EntitySpawner.AdjustSpawnAreaPosition();
-                //SpawnChunk(m_CurrentChunk.EnemiesAmount);
+                SpawnChunk();
+
                 Log($"Current tick: {ticksSinceStart}. Spawn wave index: {m_WaveIndex}. Enemies: {m_CurrentChunk.EnemiesAmount}", true);
 
                 m_ChunkIndex++;
@@ -84,7 +97,7 @@ namespace RhytmTD.Battle.Spawn
                         //Get next level
                         m_LevelIndex++;
 
-                        if (m_LevelIndex >= m_AreaData.LevelsData.Length)
+                        if (m_LevelIndex >= m_CurrentArea.LevelsData.Length)
                         {
                             //Stop scheduling tasks
                             m_ActionTargetTick = -1;
@@ -125,11 +138,13 @@ namespace RhytmTD.Battle.Spawn
         }
 
 
-        private void SpawnChunk(int amount)
+        private void SpawnChunk()
         {
-            for (int i = 0; i < amount; i++)
+            for (int i = 0; i < m_CurrentChunk.EnemiesAmount; i++)
             {
-                BattleEntity enemy = m_EntitySpawner.SpawnEnemy(0);
+                EnemyFactorySetup setup = new EnemyFactorySetup(2, m_CurrentChunk.MinDamage, m_CurrentChunk.MaxDamage, m_CurrentChunk.MinHP, m_CurrentChunk.MaxHP);
+
+                BattleEntity enemy = m_EntitySpawner.SpawnEnemy(setup);
                 m_BattleModel.AddBattleEntity(enemy);
 
                 if (enemy.HasModule<HealthModule>())
@@ -141,7 +156,7 @@ namespace RhytmTD.Battle.Spawn
 
         private void SpawnPlayer()
         {
-            BattleEntity entity = m_EntitySpawner.SpawnPlayer();
+            BattleEntity entity = m_EntitySpawner.SpawnPlayer(new PlayerFactorySetup(2, 3, 7, 20, 3, 5));
             m_BattleModel.AddBattleEntity(entity);
             m_BattleModel.PlayerEntity = entity;
 
