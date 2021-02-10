@@ -1,7 +1,6 @@
 ﻿using CoreFramework;
-using RhytmTD.Data.Controllers;
 
-namespace RhytmTD.Data
+namespace RhytmTD.Data.Connection
 {
     /// <summary>
     /// Setup подключения

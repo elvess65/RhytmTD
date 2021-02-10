@@ -1,7 +1,7 @@
 ﻿using RhytmTD.Battle.Entities.EntitiesFactory;
 using UnityEngine;
 
-namespace RhytmTD.Data.DataBase.Simulation
+namespace RhytmTD.Data.DataBaseLocal
 {
     /// <summary>
     /// Мир, который содержит зоны
@@ -9,8 +9,8 @@ namespace RhytmTD.Data.DataBase.Simulation
     /// Уровни строят волны
     /// </summary>
     [System.Serializable]
-    [CreateAssetMenu(fileName = "New Simulation WorldData", menuName = "DBSimulation/Levels/WorldData", order = 101)]
-    public class DBSimulation_WorldData : ScriptableObject
+    [CreateAssetMenu(fileName = "New Local WorldData", menuName = "DBLocal/Levels/WorldData", order = 101)]
+    public class DBLocal_WorldData : ScriptableObject
     {
         public AreaData[] Areas;
 
@@ -25,6 +25,7 @@ namespace RhytmTD.Data.DataBase.Simulation
             public ProgressionConfig ProgressionRestTicks;
             public ProgressionConfig ProgressionDelayBetweenChunks;
             public BaseBattleEntityFactory EnemiesFactory;
+            public LevelFactory LF;
 
             public int WavesAmount;
             public int DelayBeforeStartLevel;

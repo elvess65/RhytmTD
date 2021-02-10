@@ -120,5 +120,6 @@ MonoBehaviour:
         m_PostInfinity: 2
         m_RotationOrder: 4
     EnemiesFactory: {fileID: 11400000, guid: 5e050ad9707a7bd4d9a1a46d48c1dbc7, type: 2}
+    LF: {fileID: 11400000, guid: b130ce6464ece3844b952f536c8d703c, type: 2}
     WavesAmount: 5
     DelayBeforeStartLevel: 2

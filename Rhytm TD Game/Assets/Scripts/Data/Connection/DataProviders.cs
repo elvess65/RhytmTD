@@ -1,10 +1,10 @@
 ﻿using RhytmTD.Core;
-using RhytmTD.Data.DataBase.Simulation;
+using RhytmTD.Data.DataBaseLocal;
 using System;
 using System.Collections;
 using UnityEngine;
 
-namespace RhytmTD.Data.DataBase
+namespace RhytmTD.Data.Connection
 {
     /// <summary>
     /// Data base provider (simulation, GPServices, server)
@@ -20,21 +20,21 @@ namespace RhytmTD.Data.DataBase
     /// <summary>
     /// Local data base simulation provider
     /// </summary>
-    class SimulationDataProvider : iDataProvider
+    class LocalDataProvider : iDataProvider
     {
         public event Action<string, string, string, string> OnConnectionSuccess;
         public event Action<int> OnConnectionError;
 
         private bool m_SimulateSuccessConnection;
-        private DBSimulation m_DataObject;
+        private DBLocal m_DataObject;
         private WaitForSeconds m_WaitConnectionDelay;
 
         private const float m_CONNECTION_TIME = 1;
 
 
-        public SimulationDataProvider(bool simulateSuccessConnection)
+        public LocalDataProvider(bool simulateSuccessConnection)
         {
-            m_DataObject = UnityEngine.Object.FindObjectOfType<DBSimulation>();
+            m_DataObject = UnityEngine.Object.FindObjectOfType<DBLocal>();
             m_WaitConnectionDelay = new WaitForSeconds(m_CONNECTION_TIME);
             m_SimulateSuccessConnection = simulateSuccessConnection;
         }

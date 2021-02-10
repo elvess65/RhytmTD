@@ -1,8 +1,7 @@
 ﻿using CoreFramework;
 using CoreFramework.Abstract;
 using CoreFramework.SceneLoading;
-using RhytmTD.Data;
-using RhytmTD.Data.Controllers;
+using RhytmTD.Data.Connection;
 using UnityEngine;
 
 namespace RhytmTD.Core

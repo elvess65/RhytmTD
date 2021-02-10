@@ -1,9 +1,7 @@
 ﻿using CoreFramework;
 using RhytmTD.Battle.Core;
-using RhytmTD.Core;
-using RhytmTD.Data.DataBase;
 
-namespace RhytmTD.Data.Controllers
+namespace RhytmTD.Data.Connection
 {
     /// <summary>
     /// Контроллер подключения и получения данных
@@ -13,25 +11,25 @@ namespace RhytmTD.Data.Controllers
         public System.Action OnConnectionSuccess;
         public System.Action<int> OnConnectionError;
 
-        private DBProxy m_DBProxy;
+        private ConnectionProxy m_ConnectionProxy;
 
 
         public ConnectionController(Dispatcher dispatcher) : base(dispatcher)
         {
+            m_ConnectionProxy = new ConnectionProxy();
+            m_ConnectionProxy.OnConnectionSuccess += ConnectionResultSuccess;
+            m_ConnectionProxy.OnConnectionError += ConnectionResultError;
         }
 
         public void Connect()
         {
-            m_DBProxy = new DBProxy();
-            m_DBProxy.OnConnectionSuccess += ConnectionResultSuccess;
-            m_DBProxy.OnConnectionError += ConnectionResultError;
-            m_DBProxy.Initialize();
+            m_ConnectionProxy.Connect();
         }
 
 
         private void ConnectionResultSuccess(string serializedAccountData, string serializedEnviromentData, string serializedLevelingData, string serializedWorldData)
         {
-            m_DBProxy = null;
+            m_ConnectionProxy = null;
 
             IGameSetup battleSetup = new BattleGameSetup();
             battleSetup.Setup();

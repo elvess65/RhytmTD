@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace RhytmTD.Data.DataBase.Simulation
+namespace RhytmTD.Data.DataBaseLocal
 {
     [System.Serializable]
     [CreateAssetMenu(fileName = "New LevelFactory", menuName = "DBSimulation/Levels/LevelFactory", order = 101)]
     public class LevelFactory : ScriptableObject
     {
+        [System.NonSerialized]
         public int TestData1 = 100;
         public int TestData2 = 200;
         public int TestData3 = 300;

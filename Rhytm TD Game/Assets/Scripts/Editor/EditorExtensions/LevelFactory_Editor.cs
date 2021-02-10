@@ -1,8 +1,8 @@
-﻿using RhytmTD.Data.DataBase.Simulation;
+﻿using RhytmTD.Data.DataBaseLocal;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-using static RhytmTD.Data.DataBase.Simulation.LevelFactory;
+using static RhytmTD.Data.DataBaseLocal.LevelFactory;
 
 namespace RhytmTD.Editor.EditorExtensions
 {

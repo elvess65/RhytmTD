@@ -1,6 +1,4 @@
-﻿using RhytmTD.Battle.Core;
-using RhytmTD.OtherScenes.MenuScene;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace CoreFramework.SceneLoading

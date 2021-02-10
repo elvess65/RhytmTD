@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 
-namespace RhytmTD.Data.DataBase.Simulation
+namespace RhytmTD.Data.DataBaseLocal
 {
     [System.Serializable]
-    [CreateAssetMenu(fileName = "New Simulation EnvironmentData", menuName = "DBSimulation/EnvironmentData", order = 101)]
-    public class DBSimulation_EnvironmentData : ScriptableObject
+    [CreateAssetMenu(fileName = "New Local EnvironmentData", menuName = "DBLocal/EnvironmentData", order = 101)]
+    public class DBLocal_EnvironmentData : ScriptableObject
     {
         [Header("Данные для построения уровней")]
 

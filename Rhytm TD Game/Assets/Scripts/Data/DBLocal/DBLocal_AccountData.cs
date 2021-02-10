@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 
-namespace RhytmTD.Data.DataBase.Simulation
+namespace RhytmTD.Data.DataBaseLocal
 {
-    [CreateAssetMenu(fileName = "New Simulation AccountData", menuName = "DBSimulation/Account/AccountData", order = 101)]
-    public class DBSimulation_AccountData : ScriptableObject
+    [CreateAssetMenu(fileName = "New Local AccountData", menuName = "DBLocal/Account/AccountData", order = 101)]
+    public class DBLocal_AccountData : ScriptableObject
     {
         [Header("Данные аккаунта")]
 
