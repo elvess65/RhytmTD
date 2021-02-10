@@ -1,5 +1,6 @@
 ﻿using CoreFramework;
 using RhytmTD.Battle.Core;
+using RhytmTD.Network;
 
 namespace RhytmTD.Data.Connection
 {
