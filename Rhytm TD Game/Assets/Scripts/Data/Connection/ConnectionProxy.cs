@@ -5,7 +5,7 @@
     /// </summary>
     public class ConnectionProxy
     {
-        public System.Action<string, string, string, string> OnConnectionSuccess;
+        public System.Action<ConnectionSeccessResult> OnConnectionSuccess;
         public System.Action<int> OnConnectionError;
 
         private iDataProvider m_DataProvider;
@@ -31,9 +31,9 @@
         }
 
 
-        private void ConnectionSuccessHandler(string serializedAccountData, string serializedEnviromentData, string serializedLevelsExpData, string serializedWorldData)
+        private void ConnectionSuccessHandler(ConnectionSeccessResult connectionResult)
         {
-            OnConnectionSuccess?.Invoke(serializedAccountData, serializedEnviromentData, serializedLevelsExpData, serializedWorldData);
+            OnConnectionSuccess?.Invoke(connectionResult);
         }
 
         private void OnConnectionErrorHandler(int errorCode)

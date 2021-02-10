@@ -10,6 +10,7 @@ namespace RhytmTD.Data.DataBaseLocal
     {
         public DBLocal_AccountData AccountData;
         public DBLocal_AccountLevelingData AccountLevelingData;
+        public DBLocal_AccountBaseParamsData AccountBaseParamsData;
         public DBLocal_EnvironmentData EnvironmentData;
         public DBLocal_WorldData WorldData;
     }

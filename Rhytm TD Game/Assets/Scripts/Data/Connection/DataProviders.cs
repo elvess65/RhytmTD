@@ -11,7 +11,7 @@ namespace RhytmTD.Data.Connection
     /// </summary>
     interface iDataProvider
     {
-        event Action<string, string, string, string> OnConnectionSuccess;
+        event Action<ConnectionSeccessResult> OnConnectionSuccess;
         event Action<int> OnConnectionError;
 
         void Connect();
@@ -22,7 +22,7 @@ namespace RhytmTD.Data.Connection
     /// </summary>
     class LocalDataProvider : iDataProvider
     {
-        public event Action<string, string, string, string> OnConnectionSuccess;
+        public event Action<ConnectionSeccessResult> OnConnectionSuccess;
         public event Action<int> OnConnectionError;
 
         private bool m_SimulateSuccessConnection;
@@ -54,10 +54,11 @@ namespace RhytmTD.Data.Connection
         {
             yield return m_WaitConnectionDelay;
 
-            OnConnectionSuccess?.Invoke(JsonUtility.ToJson(m_DataObject.AccountData),
-                                        JsonUtility.ToJson(m_DataObject.EnvironmentData),
-                                        JsonUtility.ToJson(m_DataObject.AccountLevelingData),
-                                        JsonUtility.ToJson(m_DataObject.WorldData));
+            OnConnectionSuccess?.Invoke(new ConnectionSeccessResult(JsonUtility.ToJson(m_DataObject.AccountData),
+                                                                    JsonUtility.ToJson(m_DataObject.EnvironmentData),
+                                                                    JsonUtility.ToJson(m_DataObject.AccountLevelingData),
+                                                                    JsonUtility.ToJson(m_DataObject.WorldData),
+                                                                    JsonUtility.ToJson(m_DataObject.AccountBaseParamsData)));
         }
 
         IEnumerator SimulateErrorConnectionDelay(int errorCode)

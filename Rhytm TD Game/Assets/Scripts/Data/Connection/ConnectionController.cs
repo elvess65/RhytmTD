@@ -27,9 +27,12 @@ namespace RhytmTD.Data.Connection
         }
 
 
-        private void ConnectionResultSuccess(string serializedAccountData, string serializedEnviromentData, string serializedLevelingData, string serializedWorldData)
+        private void ConnectionResultSuccess(ConnectionSeccessResult connectionResult)
         {
-            IGameSetup gameSetup = new DataGameSetup(serializedAccountData, serializedEnviromentData, serializedLevelingData, serializedWorldData);
+            IGameSetup gameSetup = new DataGameSetup(connectionResult.SerializedAccountData,
+                                                     connectionResult.SerializedEnviromentData,
+                                                     connectionResult.SerializedLevelingData,
+                                                     connectionResult.SerializedWorldData);
             gameSetup.Setup();
 
             IGameSetup battleSetup = new BattleGameSetup();

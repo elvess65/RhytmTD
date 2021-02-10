@@ -223,5 +223,7 @@ MonoBehaviour:
   AccountData: {fileID: 11400000, guid: 43f862930635dc84daebbd8bf3a7ce41, type: 2}
   AccountLevelingData: {fileID: 11400000, guid: 27419dc033f8c40eeb52355d657af955,
     type: 2}
+  AccountBaseParamsData: {fileID: 11400000, guid: f70de346dcc2649dcb0c77dcc0e451c0,
+    type: 2}
   EnvironmentData: {fileID: 11400000, guid: 4d66c12bfec60f64dba45c7561e9e614, type: 2}
   WorldData: {fileID: 11400000, guid: d85c45b00687a450290a6291a5287ce1, type: 2}

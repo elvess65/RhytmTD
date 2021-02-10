@@ -7,7 +7,7 @@ namespace RhytmTD.Data.DataBaseLocal
     /// </summary>
     [System.Serializable]
     [CreateAssetMenu(fileName = "New Local AccountBaseParamsData", menuName = "DBLocal/Account/AccountBaseParamsData", order = 101)]
-    public class DBLocal_AccountBaseParamsData : MonoBehaviour
+    public class DBLocal_AccountBaseParamsData : ScriptableObject
     {
         public float FocusSpeed;
         public int MinDamage;
