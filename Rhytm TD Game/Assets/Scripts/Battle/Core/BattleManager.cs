@@ -85,7 +85,9 @@ namespace RhytmTD.Battle.Core
             MonoReferencesHolder.Initialize();
 
             //Build level data
-            m_SpawnController.BuildLevel(MonoReferencesHolder.EntitySpawner);
+<<<<<<< HEAD
+            m_SpawnController.BuildLevel(MonoReferencesHolder.EntitySpawner, m_WorldDataModel.Areas[m_BattleModel.CurrentArea],
+                m_RhytmController.CurrentTick, (float)m_AccountDataModel.CompletedLevels / m_WorldDataModel.Areas[m_BattleModel.CurrentArea].TotalLevels);
         }
 
         private void InitializeEvents()
@@ -209,3 +211,141 @@ namespace RhytmTD.Battle.Core
         #endregion
     }
 }
+=======
+            m_SpawnController.BuildLevel(MonoReferencesHolder.EntitySpawner);
+        }
+
+        private void InitializeUpdatables()
+        {
+            m_UpdatablesManager = new UpdatablesManager();
+            m_UpdatablesManager.Add(m_StateMachine);
+            m_UpdatablesManager.Add(m_RhytmController);
+            m_UpdatablesManager.Add(m_InputController);
+            m_UpdatablesManager.Add(m_FocusController);
+            m_UpdatablesManager.Add(m_MoveController);
+            m_UpdatablesManager.Add(m_BattlefieldController);
+            m_UpdatablesManager.Add(MonoReferencesHolder.UIManager);
+        }
+
+        private void InitializeEvents()
+        {
+            //Input
+            m_InputController.OnTouch += m_StateMachine.HandleTouch;
+
+            //Level
+            m_SpawnController.OnLevelComplete += LevelCompleteHandler;
+            m_SpawnController.OnLevelFailed += LevelFailedHandler;
+
+            //Rhytm
+            m_RhytmController.OnEventProcessingTick += EventProcessingTickHandler;
+            m_RhytmController.OnStarted += TickingStartedHandler;
+            m_RhytmController.OnTick += TickHandler;
+        }
+
+        private void DisposeEvents()
+        {
+            //Input
+            m_InputController.OnTouch -= m_StateMachine.HandleTouch;
+
+            //Level
+            m_SpawnController.OnLevelComplete += LevelCompleteHandler;
+            m_SpawnController.OnLevelFailed += LevelFailedHandler;
+
+            //Rhytm
+            m_RhytmController.OnEventProcessingTick = null;
+            m_RhytmController.OnStarted = null;
+            m_RhytmController.OnTick = null;
+        }
+
+        private void ApplySettings()
+        {
+        }
+
+        private void InitializationFinished()
+        {
+            StartCoroutine(TempStartCoroutine());
+        }
+
+        System.Collections.IEnumerator TempStartCoroutine()
+        {
+            yield return new WaitForSeconds(1);
+
+            //TODO: Move to InitializationFinished and remove this
+
+            //Enable input
+            m_StateMachine.ChangeState<BattleState_Normal>();
+
+
+            //Show UI
+            MonoReferencesHolder.UIManager.ChangeState<UIBattleState_Normal>();
+
+            //Start beat
+            m_RhytmController.StartTicking();
+
+            //Start player movement
+            m_BattleModel.PlayerEntity.GetModule<MoveModule>().StartMove(Vector3.forward);
+        }
+
+        #endregion
+
+        #region Runtime
+
+        #region Rhytm
+
+        private void TickingStartedHandler()
+        {
+            //Debug.Log("Tick started");
+            //Metronome.StartMetronome();
+        }
+
+        private void TickHandler(int ticksSinceStart)
+        {
+            //Debug.Log("TickHandler: " + ticksSinceStart);
+            if (ticksSinceStart % 8 == 0)
+            {
+                //Music.Play();
+            }
+
+            m_SpawnController.HandleTick(ticksSinceStart);
+        }
+
+        private void EventProcessingTickHandler(int ticksSinceStart)
+        {
+            //Debug.Log("EventProcessingTickHandler: " + ticksSinceStart);
+        }
+
+        #endregion
+
+        #region Level
+
+        private void LevelCompleteHandler()
+        {
+            LevelFinished();
+
+            Debug.Log("Level complete");
+        }
+
+        private void LevelFailedHandler()
+        {
+            LevelFinished();
+
+            Debug.Log("Level failed");
+        }
+
+        private void LevelFinished()
+        {
+            Dispatcher.Instance.GetModel<BattleModel>().PlayerEntity?.GetModule<MoveModule>().Stop();
+
+            m_StateMachine.ChangeState<BattleState_LockInput>();
+            MonoReferencesHolder.UIManager.ChangeState<UIBattleState_NoUI>();
+
+            DisposeEvents();
+        }
+
+        #endregion
+
+
+        #endregion
+    }
+}
+>>>>>>> 0bf768c11b6da08d921094585b36103d99dac912
