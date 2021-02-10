@@ -8,9 +8,9 @@ namespace RhytmTD.Battle.StateMachine
     {
         protected RhytmInputProxy m_RhytmInputProxy;
 
-        public BattleState_Abstract(RhytmInputProxy rhytmInputProxy)
+        public BattleState_Abstract()
         {
-            m_RhytmInputProxy = rhytmInputProxy;
+            m_RhytmInputProxy = Dispatcher.GetController<RhytmInputProxy>();
         }
 
         public virtual void HandleTouch(Vector3 mouseScreenPos)

@@ -62,8 +62,8 @@ namespace RhytmTD.Battle.Core
         private void InitializeStateMachine()
         {
             m_StateMachine = new BattleStateMachine<BattleState_Abstract>();
-            m_StateMachine.AddState(new BattleState_LockInput(m_RhytmInputProxy));
-            m_StateMachine.AddState(new BattleState_Normal(m_RhytmInputProxy, m_BattlefieldController, m_DamageController));
+            m_StateMachine.AddState(new BattleState_LockInput());
+            m_StateMachine.AddState(new BattleState_Normal());
             m_StateMachine.Initialize<BattleState_LockInput>();
         }
 

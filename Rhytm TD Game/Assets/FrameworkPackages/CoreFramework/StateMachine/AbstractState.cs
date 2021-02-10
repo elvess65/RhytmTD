@@ -5,6 +5,8 @@ namespace CoreFramework.StateMachine
     {
         public bool StateIsActive { get; private set; }
 
+        protected Dispatcher Dispatcher => Dispatcher.Instance;
+
 
         public virtual void EnterState()
         {

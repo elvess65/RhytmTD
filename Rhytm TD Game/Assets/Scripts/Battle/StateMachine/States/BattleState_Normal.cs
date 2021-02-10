@@ -1,5 +1,4 @@
-﻿using CoreFramework.Rhytm;
-using RhytmTD.Battle.Entities;
+﻿using RhytmTD.Battle.Entities;
 using RhytmTD.Battle.Entities.Controllers;
 using RhytmTD.Battle.Entities.Models;
 using UnityEngine;
@@ -12,10 +11,10 @@ namespace RhytmTD.Battle.StateMachine
         private DamageController m_DamageController;
         private BattleEntity m_PlayerEntity;
 
-        public BattleState_Normal(RhytmInputProxy rhytmInputProxy, BattlefieldController battlefieldController, DamageController damageController) : base(rhytmInputProxy)
+        public BattleState_Normal() : base()
         {
-            m_BattlefieldController = battlefieldController;
-            m_DamageController = damageController;
+            m_BattlefieldController = Dispatcher.GetController<BattlefieldController>();
+            m_DamageController = Dispatcher.GetController<DamageController>();
         }
 
         public override void HandleTouch(Vector3 mouseScreenPos)

@@ -90,6 +90,7 @@ namespace RhytmTD.Battle.Spawn
 
                     m_WaveIndex++;
 
+                    //If all waves from level spawned
                     if (m_WaveIndex >= m_CurrentLevel.Waves.Count)
                     {
                         //Reset processed waves amount
@@ -101,6 +102,7 @@ namespace RhytmTD.Battle.Spawn
                         //Get next level
                         m_LevelIndex++;
 
+                        //If all levels was spawned
                         if (m_LevelIndex >= m_CurrentArea.LevelsData.Length)
                         {
                             //Stop scheduling tasks
@@ -108,8 +110,10 @@ namespace RhytmTD.Battle.Spawn
 
                             Log("Area is complete");
                         }
-                        else
+                        else 
                         {
+                            //Level finished
+
                             //Запланировать тик действия
                             m_ActionTargetTick += m_CurrentLevel.DelayBeforeStartLevel;
 
@@ -187,7 +191,7 @@ namespace RhytmTD.Battle.Spawn
 
             //if (m_BattleModel.BattleEntities.Count == 1 && !m_Level.HasWaves)
             {
-                OnLevelComplete?.Invoke();
+              //  OnLevelComplete?.Invoke();
             }
         }
 
