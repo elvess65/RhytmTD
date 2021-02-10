@@ -17,7 +17,5 @@ namespace CoreFramework.StateMachine
         {
             StateIsActive = false;
         }
-
-        public abstract void Update(float deltaTime);
     }
 }

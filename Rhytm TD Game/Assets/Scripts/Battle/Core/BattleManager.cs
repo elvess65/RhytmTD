@@ -1,10 +1,8 @@
 ﻿using CoreFramework;
 using CoreFramework.Abstract;
-using CoreFramework.Input;
 using CoreFramework.Rhytm;
 using CoreFramework.Utils;
 using RhytmTD.Battle.Entities;
-using RhytmTD.Battle.Entities.Controllers;
 using RhytmTD.Battle.Entities.Models;
 using RhytmTD.Battle.Spawn;
 using RhytmTD.Battle.StateMachine;
@@ -21,17 +19,14 @@ namespace RhytmTD.Battle.Core
         public Metronome Metronome;
         public AudioSource Music;
 
-        private BattleStateMachine<BattleState_Abstract> m_StateMachine;
-
         private Dispatcher m_Dispatcher;
         private RhytmInputProxy m_RhytmInputProxy;
         private RhytmController m_RhytmController;
-        private InputController m_InputController;
         private SpawnController m_SpawnController;
-        private DamageController m_DamageController;
-        private BattlefieldController m_BattlefieldController;
 
         private BattleModel m_BattleModel;
+
+        private BattleStateMachine<BattleState_Abstract> m_StateMachine;
 
         #region Initialization
 
@@ -49,12 +44,10 @@ namespace RhytmTD.Battle.Core
         private void InitializeCore()
         {
             m_Dispatcher = Dispatcher.Instance;
+
             m_RhytmController = m_Dispatcher.GetController<RhytmController>();
             m_RhytmInputProxy = m_Dispatcher.GetController<RhytmInputProxy>();
-            m_InputController = m_Dispatcher.GetController<InputController>();
             m_SpawnController = m_Dispatcher.GetController<SpawnController>();
-            m_DamageController = m_Dispatcher.GetController<DamageController>();
-            m_BattlefieldController = m_Dispatcher.GetController<BattlefieldController>();
 
             m_BattleModel = m_Dispatcher.GetModel<BattleModel>();
         }
@@ -84,9 +77,6 @@ namespace RhytmTD.Battle.Core
 
         private void InitializeEvents()
         {
-            //Input
-            m_InputController.OnTouch += m_StateMachine.HandleTouch;
-
             //Level
             m_SpawnController.OnLevelComplete += LevelCompleteHandler;
             m_SpawnController.OnLevelFailed += LevelFailedHandler;
@@ -99,12 +89,9 @@ namespace RhytmTD.Battle.Core
 
         private void DisposeEvents()
         {
-            //Input
-            m_InputController.OnTouch -= m_StateMachine.HandleTouch;
-
             //Level
-            m_SpawnController.OnLevelComplete += LevelCompleteHandler;
-            m_SpawnController.OnLevelFailed += LevelFailedHandler;
+            m_SpawnController.OnLevelComplete -= LevelCompleteHandler;
+            m_SpawnController.OnLevelFailed -= LevelFailedHandler;
 
             //Rhytm
             m_RhytmController.OnEventProcessingTick = null;

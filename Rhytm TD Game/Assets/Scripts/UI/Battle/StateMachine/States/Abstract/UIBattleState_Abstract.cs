@@ -11,10 +11,5 @@ namespace RhytmTD.UI.Battle.StateMachine
         {
             m_UIView_BattleHUD = uiView_BattleHUD;
         }
-
-        public override void Update(float deltaTime)
-        {
-
-        }
     }
 }
