@@ -1,11 +1,9 @@
-﻿
-
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace RhytmTD.Battle.Entities.EntitiesFactory
 {
     public interface IBattleEntityFactory
     {
-        BattleEntity CreateEntity(Transform transform, float progression01);
+        BattleEntity CreateEntity(Transform transform, EntityFactorySetup setup);
     }
 }

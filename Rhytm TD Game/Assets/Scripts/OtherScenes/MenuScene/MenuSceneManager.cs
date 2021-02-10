@@ -4,6 +4,7 @@ using CoreFramework.SceneLoading;
 using RhytmTD.Battle.Entities.Models;
 using RhytmTD.Core;
 using RhytmTD.Data.Models;
+using RhytmTD.Data.Models.DataTableModels;
 using RhytmTD.UI.View;
 using UnityEngine;
 

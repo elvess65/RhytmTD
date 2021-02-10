@@ -10,9 +10,9 @@ namespace RhytmTD.Battle.Spawn
     {
         [SerializeField] private Transform PlayerSpawnArea;
         [SerializeField] private Transform[] EnemySpawnAreas;
-        [SerializeField] private BaseBattleEntityFactory PlayerFactory;
 
-        private BaseBattleEntityFactory m_EnemiesFactory;
+        private IBattleEntityFactory m_EnemiesFactory;
+        private IBattleEntityFactory m_PlayerFactory;
         private Transform m_PlayerTransform;
         private int[] m_SpanwAreaUsedAmount;
         private Vector3[] m_EnemySpawnAreasOffsets;
@@ -23,38 +23,43 @@ namespace RhytmTD.Battle.Spawn
         {
             m_SpanwAreaUsedAmount = new int[EnemySpawnAreas.Length];
             m_EnemySpawnAreasOffsets = new Vector3[EnemySpawnAreas.Length];
+            m_PlayerFactory = new DefaultPlayerFactory();
+            m_EnemiesFactory = new DefaultEnemyFactory();
         }
 
-        public void InjectEnemyFactory(BaseBattleEntityFactory enemiesFactory)
-        {
-            m_EnemiesFactory = enemiesFactory;
-        }
 
-        public BattleEntity SpawnPlayer()
+        public BattleEntity SpawnPlayer(EntityFactorySetup setup)
         {
+            //Create View
             GameObject player = BattleManager.Instance.MonoReferencesHolder.AssetsManager.GetAssets().InstantiateGameObject(BattleManager.Instance.MonoReferencesHolder.AssetsManager.GetAssets().PlayerPrefab);
             player.transform.position = PlayerSpawnArea.position;
 
-            BattleEntity battleEntity = PlayerFactory.CreateEntity(player.transform, 0);
+            //Create Entity
+            BattleEntity battleEntity = m_PlayerFactory.CreateEntity(player.transform, setup);
             BattleEntityView playerView = player.GetComponent<BattleEntityView>();
 
+            //Initialize Entity
             playerView.Initialize(battleEntity);
 
             return battleEntity;
         }
 
-        public BattleEntity SpawnEnemy(float levelProgression01)
+        public BattleEntity SpawnEnemy(EntityFactorySetup setup)
         {
+            //Span Area indexes
             int randomSpawnAreaIndex = Random.Range(0, EnemySpawnAreas.Length);
             int spawnAreaUsedAmount = m_SpanwAreaUsedAmount[randomSpawnAreaIndex]++;
 
+            //Create View
             GameObject enemy = BattleManager.Instance.MonoReferencesHolder.AssetsManager.GetAssets().InstantiateGameObject(BattleManager.Instance.MonoReferencesHolder.AssetsManager.GetAssets().EnemyPrefab);
             enemy.transform.position = EnemySpawnAreas[randomSpawnAreaIndex].position + m_AREA_USED_OFFSET * spawnAreaUsedAmount;
             enemy.transform.rotation = Quaternion.Euler(enemy.transform.rotation.eulerAngles.x, Random.rotation.eulerAngles.y, enemy.transform.rotation.eulerAngles.z);
 
-            BattleEntity battleEntity = m_EnemiesFactory.CreateEntity(enemy.transform, levelProgression01);
+            //Create Entity
+            BattleEntity battleEntity = m_EnemiesFactory.CreateEntity(enemy.transform, setup);
             BattleEntityView enemyView = enemy.GetComponent<BattleEntityView>();
 
+            //Initialize Entity
             enemyView.Initialize(battleEntity);
 
             return battleEntity;

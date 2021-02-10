@@ -1,41 +1,30 @@
 ﻿using CoreFramework;
-using RhytmTD.Data;
 using UnityEngine;
 
 namespace RhytmTD.Battle.Entities.EntitiesFactory
 {
-    [CreateAssetMenu(menuName = "BattleAssets/DefaultEnemyFactory")]
-    [System.Serializable]
     public class DefaultEnemyFactory : BaseBattleEntityFactory
     {
-        [SerializeField] private int FocusSpeed = 1;
-
-        public MinMaxProgressionConfig ProgressionEnemyHP;
-        public MinMaxProgressionConfig ProgressionEnemyDamage;
-
-        public override BattleEntity CreateEntity(Transform transform, float progression01)
+        public override BattleEntity CreateEntity(Transform transform, EntityFactorySetup setup)
         {
             int entityID = IDGenerator.GenerateID();
 
             BattleEntity battleEntity = new BattleEntity(entityID);
-            battleEntity.AddModule(new TransformModule(transform, FocusSpeed));
-            battleEntity.AddModule(new HealthModule(entityID, GetHealth(progression01)));
-            battleEntity.AddModule(new DamageModule(GetDamage(progression01)));
+            battleEntity.AddModule(new TransformModule(transform, setup.FocusSpeed));
+            battleEntity.AddModule(new HealthModule(entityID, setup.Health));
+            battleEntity.AddModule(new DamageModule(setup.MinDamage, setup.MaxDamage));
 
             return battleEntity;
         }
+    }
 
-        private int GetHealth(float progression01)
+    public class EnemyFactorySetup : EntityFactorySetup
+    {
+        public int MaxHP { get; }
+
+        public EnemyFactorySetup(float focusSpeed, int minDamage, int maxDamage, int minHP, int maxHP) : base(focusSpeed, minDamage, maxDamage, minHP)
         {
-            (int min, int max) result = ProgressionEnemyHP.EvaluateInt(progression01);
-            int rndHealth = Random.Range(result.min, result.max + 1);
-
-            return rndHealth;
-        }
-
-        private (int min, int max) GetDamage(float progression01)
-        {
-            return ProgressionEnemyDamage.EvaluateInt(progression01);
+            MaxHP = maxHP;
         }
     }
 }

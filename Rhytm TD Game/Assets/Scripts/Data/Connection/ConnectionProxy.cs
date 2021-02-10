@@ -1,9 +1,9 @@
-﻿namespace RhytmTD.Data.DataBase
+﻿namespace RhytmTD.Data.Connection
 {
     /// <summary>
     /// Data base connection proxy
     /// </summary>
-    public class DBProxy
+    public class ConnectionProxy
     {
         public System.Action<string, string, string, string> OnConnectionSuccess;
         public System.Action<int> OnConnectionError;
@@ -11,13 +11,13 @@
         private iDataProvider m_DataProvider;
 
         
-        public void Initialize()
+        public void Connect()
         {
             bool useSimulation = true;
             if (useSimulation)
             {
                 bool simulateError = false;
-                m_DataProvider = new SimulationDataProvider(!simulateError);
+                m_DataProvider = new LocalDataProvider(!simulateError);
             }
             else
             {

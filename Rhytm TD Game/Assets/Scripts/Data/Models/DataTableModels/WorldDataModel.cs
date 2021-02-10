@@ -1,4 +1,4 @@
-﻿using RhytmTD.Battle.Entities.EntitiesFactory;
+﻿using RhytmTD.Data.Factory;
 
 namespace RhytmTD.Data.Models.DataTableModels
 {
@@ -17,16 +17,8 @@ namespace RhytmTD.Data.Models.DataTableModels
         [System.Serializable]
         public class AreaData
         {
-            public ProgressionConfig ProgressionEnemies;
-            public ProgressionConfig ProgressionChunksAmount;
-            public ProgressionConfig ProgressionRestTicks;
-            public ProgressionConfig ProgressionDelayBetweenChunks;
-            public BaseBattleEntityFactory EnemiesFactory;
-
             public int ID;
-            public int WavesAmount;
-            public int TotalLevels;
-            public int DelayBeforeStartLevel;
+            public LevelDataFactory[] LevelsData;
         }
     }
 }

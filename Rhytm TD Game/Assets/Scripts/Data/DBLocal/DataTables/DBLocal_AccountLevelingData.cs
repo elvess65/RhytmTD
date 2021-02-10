@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
 
-namespace RhytmTD.Data.DataBase.Simulation
+namespace RhytmTD.Data.DataBaseLocal
 {
     /// <summary>
     /// Данные по улучшению параметров аккаунта
     /// </summary>
     [System.Serializable]
-    [CreateAssetMenu(fileName = "New Simulation AccountLevelingData", menuName = "DBSimulation/Account/AccountLevelingData", order = 101)]
-    public class DBSimulation_AccountLevelingData : ScriptableObject
+    [CreateAssetMenu(fileName = "New Local AccountLevelingData", menuName = "DBLocal/Account/AccountLevelingData", order = 101)]
+    public class DBLocal_AccountLevelingData : ScriptableObject
     {
         public int Damage;
         public int HP;

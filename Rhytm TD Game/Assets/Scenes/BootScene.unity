@@ -188,7 +188,7 @@ GameObject:
   - component: {fileID: 1782421448}
   - component: {fileID: 1782421449}
   m_Layer: 0
-  m_Name: DBSimulation
+  m_Name: DBLocal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

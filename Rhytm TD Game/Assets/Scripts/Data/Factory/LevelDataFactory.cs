@@ -1,32 +1,32 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace RhytmTD.Data.DataBase.Simulation
+namespace RhytmTD.Data.Factory
 {
     [System.Serializable]
-    [CreateAssetMenu(fileName = "New LevelFactory", menuName = "DBSimulation/Levels/LevelFactory", order = 101)]
-    public class LevelFactory : ScriptableObject
+    [CreateAssetMenu(fileName = "New LevelDataFactory", menuName = "DBLocal/Levels/LevelDataFactory", order = 101)]
+    public class LevelDataFactory : ScriptableObject
     {
-        public int TestData1 = 100;
-        public int TestData2 = 200;
-        public int TestData3 = 300;
-        public AnimationCurve Curve;
-        public List<Wave> Waves = new List<Wave>();
+        public int DelayBeforeStartLevel = 2;
+        public List<WaveDataFactory> Waves = new List<WaveDataFactory>();
 
         [System.Serializable]
-        public class Wave
+        public class WaveDataFactory
         {
+            public int DelayBetweenChunksTicks = 2;
+            public int DurationRestTicks = 3;
+
             public int EnemiesAmount = 10;
             public int MinDamage = 20;
             public int MaxDamage = 30;
             public int MinHP = 20;
             public int MaxHP = 30;
 
-            public List<Chunk> Chunks = new List<Chunk>();
+            public List<ChunkDataFactory> Chunks = new List<ChunkDataFactory>();
         }
 
         [System.Serializable]
-        public class Chunk
+        public class ChunkDataFactory
         {
             public bool OverrideAmount = false;
             public bool OverrideHP = false;
