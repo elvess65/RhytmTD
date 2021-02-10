@@ -14,14 +14,14 @@ namespace RhytmTD.Battle.Spawn
         private IBattleEntityFactory m_EnemiesFactory;
         private IBattleEntityFactory m_PlayerFactory;
         private Transform m_PlayerTransform;
-        private int[] m_SpanwAreaUsedAmount;
+        private int[] m_SpawnAreaUsedAmount;
         private Vector3[] m_EnemySpawnAreasOffsets;
 
         private Vector3 m_AREA_USED_OFFSET = new Vector3(0, 0, 2);
 
         void Awake()
         {
-            m_SpanwAreaUsedAmount = new int[EnemySpawnAreas.Length];
+            m_SpawnAreaUsedAmount = new int[EnemySpawnAreas.Length];
             m_EnemySpawnAreasOffsets = new Vector3[EnemySpawnAreas.Length];
             m_PlayerFactory = new DefaultPlayerFactory();
             m_EnemiesFactory = new DefaultEnemyFactory();
@@ -48,7 +48,7 @@ namespace RhytmTD.Battle.Spawn
         {
             //Span Area indexes
             int randomSpawnAreaIndex = Random.Range(0, EnemySpawnAreas.Length);
-            int spawnAreaUsedAmount = m_SpanwAreaUsedAmount[randomSpawnAreaIndex]++;
+            int spawnAreaUsedAmount = m_SpawnAreaUsedAmount[randomSpawnAreaIndex]++;
 
             //Create View
             GameObject enemy = BattleManager.Instance.MonoReferencesHolder.AssetsManager.GetAssets().InstantiateGameObject(BattleManager.Instance.MonoReferencesHolder.AssetsManager.GetAssets().EnemyPrefab);
@@ -65,11 +65,11 @@ namespace RhytmTD.Battle.Spawn
             return battleEntity;
         }
 
-        public void ResetSpawnAreas()
+        public void ResetSpawnAreaUsedAmount()
         {
-            for (int i = 0; i < m_SpanwAreaUsedAmount.Length; i++)
+            for (int i = 0; i < m_SpawnAreaUsedAmount.Length; i++)
             {
-                m_SpanwAreaUsedAmount[i] = 0;
+                m_SpawnAreaUsedAmount[i] = 0;
             }
         }
 

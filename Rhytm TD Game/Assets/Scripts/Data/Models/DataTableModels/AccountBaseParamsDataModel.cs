@@ -1,13 +1,9 @@
-﻿using UnityEngine;
-
-namespace RhytmTD.Data.DataBaseLocal
+﻿namespace RhytmTD.Data.Models.DataTableModels
 {
     /// <summary>
     /// Базовые параметры аккаунта (без прокачки)
     /// </summary>
-    [System.Serializable]
-    [CreateAssetMenu(fileName = "New Local AccountBaseParamsData", menuName = "DBLocal/Account/AccountBaseParamsData", order = 101)]
-    public class DBLocal_AccountBaseParamsData : ScriptableObject
+    public class AccountBaseParamsDataModel : BaseModel
     {
         public float MoveSpeed;
         public float FocusSpeed;

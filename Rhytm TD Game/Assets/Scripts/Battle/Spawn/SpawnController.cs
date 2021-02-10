@@ -22,9 +22,12 @@ namespace RhytmTD.Battle.Spawn
         public System.Action OnLevelFailed;
 
         private EntitySpawner m_EntitySpawner;
+
         private BattleModel m_BattleModel;
         private WorldDataModel m_WorldDataModel;
         private AccountDataModel m_AccountDataModel;
+        private AccountBaseParamsDataModel m_AccountBaseParamsDataModel;
+
         private RhytmController m_RhytmController;
         
         private int m_ActionTargetTick;
@@ -49,6 +52,7 @@ namespace RhytmTD.Battle.Spawn
             m_BattleModel = Dispatcher.GetModel<BattleModel>();
             m_WorldDataModel = Dispatcher.GetModel<WorldDataModel>();
             m_AccountDataModel = Dispatcher.GetModel<AccountDataModel>();
+            m_AccountBaseParamsDataModel = Dispatcher.GetModel<AccountBaseParamsDataModel>();
 
             m_RhytmController = Dispatcher.GetController<RhytmController>();
         }
@@ -140,10 +144,12 @@ namespace RhytmTD.Battle.Spawn
 
         private void SpawnChunk()
         {
+            //Setup
+            EnemyFactorySetup setup = new EnemyFactorySetup(2, m_CurrentChunk.MinDamage, m_CurrentChunk.MaxDamage, m_CurrentChunk.MinHP, m_CurrentChunk.MaxHP);
+
+            //Spawn Entities
             for (int i = 0; i < m_CurrentChunk.EnemiesAmount; i++)
             {
-                EnemyFactorySetup setup = new EnemyFactorySetup(2, m_CurrentChunk.MinDamage, m_CurrentChunk.MaxDamage, m_CurrentChunk.MinHP, m_CurrentChunk.MaxHP);
-
                 BattleEntity enemy = m_EntitySpawner.SpawnEnemy(setup);
                 m_BattleModel.AddBattleEntity(enemy);
 
@@ -151,15 +157,26 @@ namespace RhytmTD.Battle.Spawn
                     enemy.GetModule<HealthModule>().OnDestroyed += EnemyEntity_OnDestroyed;
             }
 
-            m_EntitySpawner.ResetSpawnAreas();
+            //Reset spawn area indexes
+            m_EntitySpawner.ResetSpawnAreaUsedAmount();
         }
 
         private void SpawnPlayer()
         {
-            BattleEntity entity = m_EntitySpawner.SpawnPlayer(new PlayerFactorySetup(2, 3, 7, 20, 3, 5));
+            //Setup
+            PlayerFactorySetup setup = new PlayerFactorySetup(m_AccountBaseParamsDataModel.FocusSpeed,
+                                                              m_AccountBaseParamsDataModel.MinDamage,
+                                                              m_AccountBaseParamsDataModel.MaxDamage,
+                                                              m_AccountBaseParamsDataModel.Health,
+                                                              m_AccountBaseParamsDataModel.MoveSpeed,
+                                                              m_AccountBaseParamsDataModel.Mana);
+
+            //Spawn Entity
+            BattleEntity entity = m_EntitySpawner.SpawnPlayer(setup);
             m_BattleModel.AddBattleEntity(entity);
             m_BattleModel.PlayerEntity = entity;
 
+            //Cache spawn area position
             m_EntitySpawner.CacheSpawnAreaPosition(entity.GetModule<TransformModule>().Transform);
             entity.GetModule<HealthModule>().OnDestroyed += PlayerEntity_OnDestroyed;
         }

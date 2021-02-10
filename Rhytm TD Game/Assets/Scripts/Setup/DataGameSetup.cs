@@ -13,13 +13,19 @@ namespace RhytmTD.Battle.Core
         private string m_SerializedEnviromentData;
         private string m_SerializedLevelingData;
         private string m_SerializedWorldData;
+        private string m_SerializedAccountBaseParamsData;
 
-        public DataGameSetup(string serializedAccountData, string serializedEnviromentData, string serializedLevelingData, string serializedWorldData)
+        public DataGameSetup(string serializedAccountData,
+            string serializedEnviromentData,
+            string serializedLevelingData,
+            string serializedWorldData,
+            string serializedAccountBaseParamsData)
         {
             m_SerializedAccountData = serializedAccountData;
             m_SerializedEnviromentData = serializedEnviromentData;
             m_SerializedLevelingData = serializedLevelingData;
             m_SerializedWorldData = serializedWorldData;
+            m_SerializedAccountBaseParamsData = serializedAccountBaseParamsData;
         }
 
         public void Setup()
@@ -31,6 +37,7 @@ namespace RhytmTD.Battle.Core
             dispatcher.CreateModel(serializer.Deserialize<EnvironmentDataModel>(m_SerializedEnviromentData));
             dispatcher.CreateModel(serializer.Deserialize<AccountLevelingDataModel>(m_SerializedLevelingData));
             dispatcher.CreateModel(serializer.Deserialize<WorldDataModel>(m_SerializedWorldData));
+            dispatcher.CreateModel(serializer.Deserialize<AccountBaseParamsDataModel>(m_SerializedAccountBaseParamsData));
         }
     }
 }

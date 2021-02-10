@@ -32,7 +32,8 @@ namespace RhytmTD.Network
             IGameSetup gameSetup = new GameSetup(new DataGameSetup(connectionResult.SerializedAccountData, 
                                                                    connectionResult.SerializedEnviromentData, 
                                                                    connectionResult.SerializedLevelingData, 
-                                                                   connectionResult.SerializedWorldData),
+                                                                   connectionResult.SerializedWorldData,
+                                                                   connectionResult.SerializedAccountBaseParamsData),
                                                  new BattleGameSetup());
             gameSetup.Setup();
 
