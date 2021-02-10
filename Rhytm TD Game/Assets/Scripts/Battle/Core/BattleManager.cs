@@ -97,7 +97,7 @@ namespace RhytmTD.Battle.Core
 
             //Build level data
             m_SpawnController.BuildLevel(MonoReferencesHolder.EntitySpawner, m_WorldDataModel.Areas[m_BattleModel.CurrentArea],
-                m_RhytmController.CurrentTick, (float)m_AccountDataModel.CompletedLevels / m_WorldDataModel.Areas[m_BattleModel.CurrentArea].TotalLevels);
+                m_RhytmController.CurrentTick, 0);
         }
 
         private void InitializeUpdatables()

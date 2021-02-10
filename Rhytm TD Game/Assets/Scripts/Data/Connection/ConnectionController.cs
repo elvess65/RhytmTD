@@ -29,13 +29,11 @@ namespace RhytmTD.Data.Connection
 
         private void ConnectionResultSuccess(string serializedAccountData, string serializedEnviromentData, string serializedLevelingData, string serializedWorldData)
         {
-            m_ConnectionProxy = null;
+            IGameSetup gameSetup = new DataGameSetup(serializedAccountData, serializedEnviromentData, serializedLevelingData, serializedWorldData);
+            gameSetup.Setup();
 
             IGameSetup battleSetup = new BattleGameSetup();
             battleSetup.Setup();
-
-            IGameSetup gameSetup = new DataGameSetup(serializedAccountData, serializedEnviromentData, serializedLevelingData, serializedWorldData);
-            gameSetup.Setup();
 
             OnConnectionSuccess?.Invoke();
         }

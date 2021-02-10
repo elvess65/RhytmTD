@@ -1,13 +1,12 @@
-﻿using RhytmTD.Data.DataBaseLocal;
+﻿using RhytmTD.Data.Factory;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-using static RhytmTD.Data.DataBaseLocal.LevelFactory;
 
 namespace RhytmTD.Editor.EditorExtensions
 {
-    [CustomEditor(typeof(LevelFactory))]
-    public class LevelFactory_Editor : UnityEditor.Editor
+    [CustomEditor(typeof(LevelDataFactory))]
+    public class LevelDataFactory_Editor : UnityEditor.Editor
     {
         private class WaveEditorData
         {
@@ -32,7 +31,7 @@ namespace RhytmTD.Editor.EditorExtensions
 
         void OnEnable()
         {
-            LevelFactory castedTarget = (LevelFactory)target;
+            LevelDataFactory castedTarget = (LevelDataFactory)target;
 
             m_WavesEditorData = new List<WaveEditorData>();
             for (int i = 0; i < castedTarget.Waves.Count; i++)
@@ -44,13 +43,13 @@ namespace RhytmTD.Editor.EditorExtensions
 
         void ValidateLevel()
         {
-            LevelFactory castedTarget = (LevelFactory)target;
+            LevelDataFactory castedTarget = (LevelDataFactory)target;
 
             for (int i = 0; i < castedTarget.Waves.Count; i++)
                 ValidateWave(castedTarget.Waves[i], i);
         }
 
-        void ValidateWave(Wave wave, int waveIndex)
+        void ValidateWave(LevelDataFactory.WaveDataFactory wave, int waveIndex)
         {
             ValidateMinMax(ref wave.MinDamage, ref wave.MaxDamage);
             ValidateMinMax(ref wave.MinHP, ref wave.MaxHP);
@@ -61,7 +60,7 @@ namespace RhytmTD.Editor.EditorExtensions
             int overrideAmountCounter = 0;
             int overrideDamageCounter = 0;
             int overrideHPCounter = 0;
-            foreach (Chunk chunk in wave.Chunks)
+            foreach (LevelDataFactory.ChunkDataFactory chunk in wave.Chunks)
             {
                 ValidateChunk(wave, chunk);
 
@@ -100,7 +99,7 @@ namespace RhytmTD.Editor.EditorExtensions
                 m_WavesEditorData[waveIndex].HPOverride = WaveEditorData.OverrideTypes.None;
         }
 
-        void ValidateChunk(Wave parentWave, Chunk chunk)
+        void ValidateChunk(LevelDataFactory.WaveDataFactory parentWave, LevelDataFactory.ChunkDataFactory chunk)
         {
             //Amount
             if (!chunk.OverrideAmount)
@@ -148,15 +147,11 @@ namespace RhytmTD.Editor.EditorExtensions
 
         void DrawLevel()
         {
-            LevelFactory castedTarget = (LevelFactory)target;
+            LevelDataFactory castedTarget = (LevelDataFactory)target;
 
             #region Properties
 
-            castedTarget.TestData1 = EditorGUILayout.IntField($"TestValue 1", castedTarget.TestData1);
-            castedTarget.TestData2 = EditorGUILayout.IntField($"TestValue 2", castedTarget.TestData2);
-            castedTarget.TestData3 = EditorGUILayout.IntField($"TestValue 3", castedTarget.TestData3);
-
-            castedTarget.Curve = EditorGUILayout.CurveField("TestCurve", castedTarget.Curve);
+            castedTarget.DelayBeforeStartLevel = EditorGUILayout.IntField("DelayBeforeStartLevel", castedTarget.DelayBeforeStartLevel);
 
             EditorGUILayout.Space();
 
@@ -208,7 +203,7 @@ namespace RhytmTD.Editor.EditorExtensions
             #endregion
         }
 
-        void DrawWave(LevelFactory.Wave wave, int waveIndex)
+        void DrawWave(LevelDataFactory.WaveDataFactory wave, int waveIndex)
         {
             Color initColor = GUI.backgroundColor;
             GUI.backgroundColor = Color.green;
@@ -227,7 +222,7 @@ namespace RhytmTD.Editor.EditorExtensions
                     //Remove Button
                     if (GUILayout.Button("X"))
                     {
-                        RemoveWave((LevelFactory)target, waveIndex);
+                        RemoveWave((LevelDataFactory)target, waveIndex);
                         return;
                     }
                 }
@@ -287,7 +282,7 @@ namespace RhytmTD.Editor.EditorExtensions
             EditorGUILayout.Space();
         }
 
-        void DrawChunk(LevelFactory.Chunk chunk, LevelFactory.Wave parentWave, int chunkIndex)
+        void DrawChunk(LevelDataFactory.ChunkDataFactory chunk, LevelDataFactory.WaveDataFactory parentWave, int chunkIndex)
         {
             Color initColor = GUI.backgroundColor;
             GUI.backgroundColor = Color.blue;
@@ -325,31 +320,36 @@ namespace RhytmTD.Editor.EditorExtensions
         }
 
 
-        void DrawWaveProperties(LevelFactory.Wave wave, int waveIndex)
+        void DrawWaveProperties(LevelDataFactory.WaveDataFactory wave, int waveIndex)
         {
+            wave.DelayBetweenChunksTicks = EditorGUILayout.IntField("Delay Between Chunks (Ticks)", wave.DelayBetweenChunksTicks);
+            wave.DurationRestTicks = EditorGUILayout.IntField("Duration Rest (Ticks)", wave.DurationRestTicks);
+
+            EditorGUILayout.Space();
+
             //Enemies Amount
             PreWavePropertyDraw(m_WavesEditorData[waveIndex].AmountOverride, out Color initColor);
 
-            wave.EnemiesAmount = EditorGUILayout.IntField("EnemiesAmount:", wave.EnemiesAmount);
+            wave.EnemiesAmount = EditorGUILayout.IntField("Enemies Amount:", wave.EnemiesAmount);
 
             PostWavePropertyDraw(initColor);
 
             //Damage
             PreWavePropertyDraw(m_WavesEditorData[waveIndex].DamageOverride, out initColor);
 
-            DrawMinMax("MinDamage:", ref wave.MinDamage, "MaxDamage", ref wave.MaxDamage);
+            DrawMinMax("Min Damage:", ref wave.MinDamage, "Max Damage", ref wave.MaxDamage);
 
             PostWavePropertyDraw(initColor);
 
             //HP
             PreWavePropertyDraw(m_WavesEditorData[waveIndex].HPOverride, out initColor);
 
-            DrawMinMax("MinHP:", ref wave.MinHP, "MaxHP", ref wave.MaxHP);
+            DrawMinMax("Min HP:", ref wave.MinHP, "Max HP", ref wave.MaxHP);
 
             PostWavePropertyDraw(initColor);
         }
 
-        void DrawChunkProperies(LevelFactory.Chunk chunk, LevelFactory.Wave parentWave, int chunkIndex)
+        void DrawChunkProperies(LevelDataFactory.ChunkDataFactory chunk, LevelDataFactory.WaveDataFactory parentWave, int chunkIndex)
         {
             //Enemies Amount
             GUI.enabled = chunk.OverrideAmount;
@@ -413,24 +413,24 @@ namespace RhytmTD.Editor.EditorExtensions
 
 
 
-        void AddWave(LevelFactory levelFactory)
+        void AddWave(LevelDataFactory levelFactory)
         {
-            levelFactory.Waves.Add(new LevelFactory.Wave());
+            levelFactory.Waves.Add(new LevelDataFactory.WaveDataFactory());
             m_WavesEditorData.Add(new WaveEditorData());
         }
 
-        void RemoveWave(LevelFactory levelFactory, int waveIndex)
+        void RemoveWave(LevelDataFactory levelFactory, int waveIndex)
         {
             levelFactory.Waves.RemoveAt(waveIndex);
             m_WavesEditorData.RemoveAt(waveIndex);
         }
 
-        void AddChunk(LevelFactory.Wave wave)
+        void AddChunk(LevelDataFactory.WaveDataFactory wave)
         {
-            wave.Chunks.Add(new LevelFactory.Chunk());
+            wave.Chunks.Add(new LevelDataFactory.ChunkDataFactory());
         }
 
-        void RemoveChunk(LevelFactory.Wave wave, int chunkIndex)
+        void RemoveChunk(LevelDataFactory.WaveDataFactory wave, int chunkIndex)
         {
             wave.Chunks.RemoveAt(chunkIndex);
         }

@@ -1,12 +1,12 @@
-﻿//#define LOG_SPAWN
+﻿#define LOG_SPAWN
 //#define SINGLE_SPAWN
 
 using CoreFramework;
 using RhytmTD.Battle.Entities;
-using RhytmTD.Battle.Entities.EntitiesFactory;
 using RhytmTD.Battle.Entities.Models;
-using RhytmTD.Battle.Spawn.Data;
+using RhytmTD.Data.Factory;
 using RhytmTD.Data.Models.DataTableModels;
+using static RhytmTD.Data.Models.DataTableModels.WorldDataModel;
 
 namespace RhytmTD.Battle.Spawn
 {
@@ -19,11 +19,19 @@ namespace RhytmTD.Battle.Spawn
         public System.Action OnLevelFailed;
 
         private EntitySpawner m_EntitySpawner;
-        private LevelData m_Level;
-        private WaveData m_CurrentWave;
         private BattleModel m_BattleModel;
+        private WorldDataModel m_WorldDataModel;
+        private WorldDataModel.AreaData m_AreaData;
+
         private int m_ActionTargetTick;
-        private int m_ProcessedChunksAmount;
+
+        private int m_LevelIndex;
+        private int m_WaveIndex;
+        private int m_ChunkIndex;
+
+        private LevelDataFactory m_CurrentLevel => m_AreaData.LevelsData[m_LevelIndex];
+        private LevelDataFactory.WaveDataFactory m_CurrentWave => m_CurrentLevel.Waves[m_WaveIndex];
+        private LevelDataFactory.ChunkDataFactory m_CurrentChunk => m_CurrentWave.Chunks[m_ChunkIndex];
 
         public SpawnController(Dispatcher dispatcher) : base(dispatcher)
         {  
@@ -32,64 +40,74 @@ namespace RhytmTD.Battle.Spawn
         public override void InitializeComplete()
         {
             m_BattleModel = Dispatcher.GetModel<BattleModel>();
+            m_WorldDataModel = Dispatcher.GetModel<WorldDataModel>();
         }
 
         public void BuildLevel(EntitySpawner entityViewSpawner, WorldDataModel.AreaData areaData, int currentTick, float levelProgress01)
         {
             m_EntitySpawner = entityViewSpawner;
-            m_EntitySpawner.InjectEnemyFactory(areaData.EnemiesFactory);
+            //m_EntitySpawner.InjectEnemyFactory(areaData.EnemiesFactory);
+
+            m_AreaData = areaData;
 
             SpawnPlayer();
 
-            m_Level = new LevelData(areaData.ProgressionEnemies,
-                                    areaData.ProgressionChunksAmount,
-                                    areaData.ProgressionRestTicks,
-                                    areaData.ProgressionDelayBetweenChunks,
-                                    areaData.WavesAmount,
-                                    areaData.DelayBeforeStartLevel,
-                                    levelProgress01);
-
-            //Кешировать следующую волну
-            m_CurrentWave = m_Level.GetNextWave();
-
             //Запланировать тик действия
-            m_ActionTargetTick = currentTick + m_Level.DelayBeforeStart;
+            m_ActionTargetTick = currentTick + m_CurrentLevel.DelayBeforeStartLevel;
         }
 
         public void HandleTick(int ticksSinceStart)
         {
-            Log($"Current tick: {ticksSinceStart}. Action at tick {m_ActionTargetTick}");
             if (m_ActionTargetTick == ticksSinceStart)
             {
                 m_EntitySpawner.AdjustSpawnAreaPosition();
-                SpawnChunk(m_CurrentWave.EnemiesAmount, m_Level.LevelProgress01);
-                Log($"Current tick: {ticksSinceStart}. Spawn wave: ID {m_CurrentWave.ID}. Enemies: {m_CurrentWave.EnemiesAmount}", true);
+                //SpawnChunk(m_CurrentChunk.EnemiesAmount);
+                Log($"Current tick: {ticksSinceStart}. Spawn wave index: {m_WaveIndex}. Enemies: {m_CurrentChunk.EnemiesAmount}", true);
 
-                m_ProcessedChunksAmount++;
+                m_ChunkIndex++;
 
                 //If all chunks from wave spawned
-                if (m_ProcessedChunksAmount >= m_CurrentWave.ChunksAmount)
+                if (m_ChunkIndex >= m_CurrentWave.Chunks.Count)
                 {
-                    //If level still has waves to spawn
-                    if (m_Level.HasWaves)
+                    Log($"All chunks spawned. Increment wave");
+
+                    m_WaveIndex++;
+
+                    if (m_WaveIndex >= m_CurrentLevel.Waves.Count)
+                    {
+                        //Reset processed waves amount
+                        m_WaveIndex = 0;
+
+                        //Reset processed chunks amount
+                        m_ChunkIndex = 0;
+
+                        //Get next level
+                        m_LevelIndex++;
+
+                        if (m_LevelIndex >= m_AreaData.LevelsData.Length)
+                        {
+                            //Stop scheduling tasks
+                            m_ActionTargetTick = -1;
+
+                            Log("Area is complete");
+                        }
+                        else
+                        {
+                            //Запланировать тик действия
+                            m_ActionTargetTick += m_CurrentLevel.DelayBeforeStartLevel;
+
+                            Log($"All waves spawned. Increment level {m_ActionTargetTick}");
+                        }
+                    }
+                    else
                     {
                         //Schedule rest delay
                         m_ActionTargetTick += m_CurrentWave.DurationRestTicks;
 
-                        //Get next wave
-                        m_CurrentWave = m_Level.GetNextWave();
-
                         //Reset processed chunks amount
-                        m_ProcessedChunksAmount = 0;
+                        m_ChunkIndex = 0;
 
                         Log($"Wave finished. Next wave at tick {m_ActionTargetTick}");
-                    }
-                    else
-                    {
-                        Log($"All waves spawned");
-
-                        //Stop scheduling tasks
-                        m_ActionTargetTick = -1;
                     }
                 }
                 else
@@ -97,7 +115,7 @@ namespace RhytmTD.Battle.Spawn
                     //Schedule delay between chunks
                     m_ActionTargetTick += m_CurrentWave.DelayBetweenChunksTicks;
 
-                    Log($"Chunk spawned. Next chunk spawn at {m_ActionTargetTick}. Left {m_CurrentWave.ChunksAmount - m_ProcessedChunksAmount}/{m_CurrentWave.ChunksAmount}");
+                    Log($"Chunk spawned. Next chunk spawn at {m_ActionTargetTick}. Left {m_CurrentWave.Chunks.Count - m_ChunkIndex}/{m_CurrentWave.Chunks.Count}");
                 }
 
 #if SINGLE_SPAWN
@@ -107,11 +125,11 @@ namespace RhytmTD.Battle.Spawn
         }
 
 
-        private void SpawnChunk(int amount, float levelProgression01)
+        private void SpawnChunk(int amount)
         {
             for (int i = 0; i < amount; i++)
             {
-                BattleEntity enemy = m_EntitySpawner.SpawnEnemy(levelProgression01);
+                BattleEntity enemy = m_EntitySpawner.SpawnEnemy(0);
                 m_BattleModel.AddBattleEntity(enemy);
 
                 if (enemy.HasModule<HealthModule>())
@@ -135,7 +153,7 @@ namespace RhytmTD.Battle.Spawn
         {
             m_BattleModel.RemoveBattleEntity(entityID);
 
-            if (m_BattleModel.BattleEntities.Count == 1 && !m_Level.HasWaves)
+            //if (m_BattleModel.BattleEntities.Count == 1 && !m_Level.HasWaves)
             {
                 OnLevelComplete?.Invoke();
             }

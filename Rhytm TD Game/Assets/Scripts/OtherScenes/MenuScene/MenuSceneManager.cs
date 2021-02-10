@@ -34,7 +34,6 @@ namespace RhytmTD.OtherScenes.MenuScene
             AccountDataModel accountDataModel = Dispatcher.Instance.GetModel<AccountDataModel>();
             Debug.Log("Completed areas: " + accountDataModel.CompletedAreas);
             Debug.Log("Completed levels: " + accountDataModel.CompletedLevels);
-            Debug.Log(Dispatcher.Instance.GetModel<WorldDataModel>().Areas[0].LF.TestData1);
 
             //Here its possible to choose from amount of opened areas
             Dispatcher.Instance.GetModel<BattleModel>().CurrentArea = accountDataModel.CompletedAreas;

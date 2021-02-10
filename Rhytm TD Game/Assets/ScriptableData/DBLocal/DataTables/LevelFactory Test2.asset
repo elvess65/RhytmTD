@@ -9,11 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 114d091429e2649b99e7195cbef93644, type: 3}
-  m_Name: World
+  m_Script: {fileID: 11500000, guid: b1b94d50d4fea6540b4117f79ddbf3c8, type: 3}
+  m_Name: LevelFactory Test2
   m_EditorClassIdentifier: 
-  Areas:
-  - ID: 12
-    LevelsData:
-    - {fileID: 11400000, guid: b130ce6464ece3844b952f536c8d703c, type: 2}
-    - {fileID: 11400000, guid: 01e2bee4fbafcc4429df537847199d40, type: 2}
+  DelayBeforeStartLevel: 2
+  Waves: []
