@@ -4,7 +4,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-namespace RhytmTD.Data.Connection
+namespace RhytmTD.Network
 {
     /// <summary>
     /// Data base provider (simulation, GPServices, server)

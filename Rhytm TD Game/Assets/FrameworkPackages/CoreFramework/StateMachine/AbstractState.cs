@@ -1,8 +1,7 @@
-﻿using CoreFramework.Abstract;
-
+﻿
 namespace CoreFramework.StateMachine
 {
-    public abstract class AbstractState : iUpdatable
+    public abstract class AbstractState
     {
         public bool StateIsActive { get; private set; }
 
@@ -17,6 +16,6 @@ namespace CoreFramework.StateMachine
             StateIsActive = false;
         }
 
-        public abstract void PerformUpdate(float deltaTime);
+        public abstract void Update(float deltaTime);
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace RhytmTD.Data.Connection
+﻿
+
+namespace RhytmTD.Network
 {
     /// <summary>
     /// Data base connection proxy

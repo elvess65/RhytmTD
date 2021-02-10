@@ -1,4 +1,4 @@
-﻿using CoreFramework.Abstract;
+﻿using RhytmTD.Data.Models;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -7,7 +7,7 @@ namespace CoreFramework.Input
     /// <summary>
     /// Tracking low level input
     /// </summary>
-    public class InputController : BaseController, iUpdatable
+    public class InputController : BaseController
     {
         public event System.Action<Vector3> OnTouch;
 
@@ -15,7 +15,13 @@ namespace CoreFramework.Input
         {
         }
 
-        public void PerformUpdate(float deltaTime)
+        public override void InitializeComplete()
+        {
+            UpdateModel updateModel = Dispatcher.GetModel<UpdateModel>();
+            updateModel.OnUpdate += Update;
+        }
+
+        public void Update(float deltaTime)
         {
             if (InputDetected() && !IsPointerOverUI())
                 OnTouch?.Invoke(UnityEngine.Input.mousePosition);

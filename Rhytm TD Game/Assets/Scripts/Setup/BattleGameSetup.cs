@@ -31,8 +31,6 @@ namespace RhytmTD.Battle.Core
             // Models
             dispatcher.CreateModel<BattleModel>();
             dispatcher.CreateModel<CameraModel>();
-
-            dispatcher.InitializeComplete();
         }
     }
 }

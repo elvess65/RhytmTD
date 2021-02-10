@@ -1,7 +1,7 @@
-﻿using CoreFramework;
+﻿
 using CoreFramework.Abstract;
 using CoreFramework.SceneLoading;
-using RhytmTD.Data.Connection;
+using RhytmTD.Network;
 using UnityEngine;
 
 namespace RhytmTD.Core
@@ -10,18 +10,13 @@ namespace RhytmTD.Core
     {
         public SceneLoader SceneLoader { get; private set; }
 
-
         public void InitializeConnection()
         {
-            IGameSetup connectionSetup = new ConnectionGameSetup();
-            connectionSetup.Setup();
-
-            ConnectionController connectionController = Dispatcher.Instance.GetController<ConnectionController>();
+            ConnectionController connectionController = new ConnectionController();
             connectionController.OnConnectionSuccess += ConnectionResultSuccess;
             connectionController.OnConnectionError += ConnectionResultError;
             connectionController.Connect();
         }
-
 
         private void Start()
         {

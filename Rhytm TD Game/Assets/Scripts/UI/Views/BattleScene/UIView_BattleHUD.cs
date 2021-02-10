@@ -18,14 +18,6 @@ namespace RhytmTD.UI.Battle.View
             UIWidget_Tick.Initialize((float)RhytmController.GetInstance().TickDurationSeconds / 8);
 
             RegisterWidget(UIWidget_Tick);
-            RegisterUpdatable(UIWidget_Tick);
-        }
-
-        public override void PerformUpdate(float deltaTime)
-        {
-            base.PerformUpdate(deltaTime);
-
-            UIWidget_Tick.PerformUpdate(deltaTime);
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using CoreFramework.Abstract;
 using RhytmTD.UI.Components;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,7 +8,7 @@ namespace RhytmTD.UI.Widget
     /// <summary>
     /// Виджет бара опыта
     /// </summary>
-    public class UIWidget_ExperianceBar : UIWidget, iUpdatable
+    public class UIWidget_ExperianceBar : UIWidget
     {
         [Space(10)]
         [SerializeField] private UIComponent_Bar m_Bar;
@@ -36,11 +35,6 @@ namespace RhytmTD.UI.Widget
             UpdateData(m_ExpAmount + expGained);
             ShowGainedExp(expGained);
         }
-
-        public void PerformUpdate(float deltaTime)
-        {
-        }
-
 
         private void UpdateData(int expAmount)
         {

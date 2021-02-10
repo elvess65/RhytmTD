@@ -1,6 +1,6 @@
 ﻿using CoreFramework;
-using CoreFramework.Abstract;
 using RhytmTD.Battle.Entities.Models;
+using RhytmTD.Data.Models;
 using System.Collections.Generic;
 
 namespace RhytmTD.Battle.Entities.Controllers
@@ -8,7 +8,7 @@ namespace RhytmTD.Battle.Entities.Controllers
     /// <summary>
     /// Остлеживание ситуации на поле боя
     /// </summary>
-    public class BattlefieldController : BaseController, iUpdatable
+    public class BattlefieldController : BaseController
     {
         private BattleModel m_BattleModel;
         private DamageController m_DamageController;
@@ -25,6 +25,10 @@ namespace RhytmTD.Battle.Entities.Controllers
         {
             m_BattleModel = Dispatcher.GetModel<BattleModel>();
             m_DamageController = Dispatcher.GetController<DamageController>();
+            
+            UpdateModel updateModel = Dispatcher.GetModel<UpdateModel>();
+            updateModel.OnUpdate += Update;
+
             m_EnemyAttackersContainer = new List<int>();
         }
 
@@ -54,7 +58,7 @@ namespace RhytmTD.Battle.Entities.Controllers
             return result;
         }
 
-        public void PerformUpdate(float deltaTime)
+        public void Update(float deltaTime)
         {
             if (m_BattleModel.PlayerEntity == null || !m_BattleModel.PlayerEntity.HasModule<TransformModule>())
                 return;

@@ -1,5 +1,4 @@
-﻿using CoreFramework.Abstract;
-using CoreFramework.Utils;
+﻿using CoreFramework.Utils;
 using UnityEngine;
 
 namespace RhytmTD.UI.Components
@@ -7,7 +6,7 @@ namespace RhytmTD.UI.Components
     /// <summary>
     /// Контролирует группу интерполируемых элементов 
     /// </summary>
-    public class UIComponent_InterpolatableGroup : MonoBehaviour, iUpdatable
+    public class UIComponent_InterpolatableGroup : MonoBehaviour
     {
         [SerializeField] private InterpolatableComponent[] m_ControlledObjects;
 
@@ -34,7 +33,7 @@ namespace RhytmTD.UI.Components
             m_LerpData.Start();
         }
 
-        public void PerformUpdate(float deltaTime)
+        public void Update()
         {
             if (m_LerpData.IsStarted)
             {

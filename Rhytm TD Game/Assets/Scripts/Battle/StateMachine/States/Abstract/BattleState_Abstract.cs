@@ -18,7 +18,7 @@ namespace RhytmTD.Battle.StateMachine
             m_RhytmInputProxy.RegisterInput();
         }
 
-        public override void PerformUpdate(float deltaTime)
+        public override void Update(float deltaTime)
         {
 
         }

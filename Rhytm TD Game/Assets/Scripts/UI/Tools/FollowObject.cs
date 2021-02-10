@@ -1,9 +1,8 @@
-﻿using CoreFramework.Abstract;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace RhytmTD.UI.Tools
 {
-    public class FollowObject : iUpdatable
+    public class FollowObject
     {
         private Transform m_Root;                           //Root camera object
         private Transform m_Target;                         //Target should be followed
@@ -45,7 +44,7 @@ namespace RhytmTD.UI.Tools
             m_Speed = speed;
         }
 
-        public void PerformUpdate(float deltaTime)
+        public void Update(float deltaTime)
         {
             switch (m_FollowMode)
             {

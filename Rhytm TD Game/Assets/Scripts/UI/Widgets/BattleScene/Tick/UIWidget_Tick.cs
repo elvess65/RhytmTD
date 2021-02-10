@@ -1,5 +1,4 @@
-﻿using CoreFramework.Abstract;
-using CoreFramework.Rhytm;
+﻿using CoreFramework.Rhytm;
 using CoreFramework.Utils;
 using RhytmTD.UI.Components;
 using UnityEngine;
@@ -9,7 +8,7 @@ namespace RhytmTD.UI.Widget
     /// <summary>
     /// Виджет отображения состояния тиков
     /// </summary>
-    public class UIWidget_Tick : UIWidget, iUpdatable
+    public class UIWidget_Tick : UIWidget
     {
         [Space(10)]
         [SerializeField] UIComponent_TickWidget_Tick m_Tick;
@@ -33,7 +32,7 @@ namespace RhytmTD.UI.Widget
             InternalInitialize();
         }
 
-        public void PerformUpdate(float deltaTime)
+        public void Update()
         {
             if (m_LerpData.IsStarted)
             {
