@@ -1,4 +1,5 @@
-﻿namespace RhytmTD.Data.Connection
+﻿
+namespace RhytmTD.Network
 {
     public class ConnectionSeccessResult
     {

@@ -1,13 +1,12 @@
 ﻿using CoreFramework;
 using RhytmTD.Battle.Core;
-using RhytmTD.Network;
 
-namespace RhytmTD.Data.Connection
+namespace RhytmTD.Network
 {
     /// <summary>
     /// Контроллер подключения и получения данных
     /// </summary>
-    public class ConnectionController : BaseController
+    public class ConnectionController
     {
         public System.Action OnConnectionSuccess;
         public System.Action<int> OnConnectionError;
@@ -15,7 +14,7 @@ namespace RhytmTD.Data.Connection
         private ConnectionProxy m_ConnectionProxy;
 
 
-        public ConnectionController(Dispatcher dispatcher) : base(dispatcher)
+        public ConnectionController()
         {
             m_ConnectionProxy = new ConnectionProxy();
             m_ConnectionProxy.OnConnectionSuccess += ConnectionResultSuccess;
@@ -30,14 +29,12 @@ namespace RhytmTD.Data.Connection
 
         private void ConnectionResultSuccess(ConnectionSeccessResult connectionResult)
         {
-            IGameSetup gameSetup = new DataGameSetup(connectionResult.SerializedAccountData,
-                                                     connectionResult.SerializedEnviromentData,
-                                                     connectionResult.SerializedLevelingData,
-                                                     connectionResult.SerializedWorldData);
+            IGameSetup gameSetup = new GameSetup(new DataGameSetup(connectionResult.SerializedAccountData, 
+                                                                   connectionResult.SerializedEnviromentData, 
+                                                                   connectionResult.SerializedLevelingData, 
+                                                                   connectionResult.SerializedWorldData),
+                                                 new BattleGameSetup());
             gameSetup.Setup();
-
-            IGameSetup battleSetup = new BattleGameSetup();
-            battleSetup.Setup();
 
             OnConnectionSuccess?.Invoke();
         }
