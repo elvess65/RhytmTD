@@ -1,4 +1,6 @@
-﻿namespace RhytmTD.Data.Models.DataTableModels
+﻿using CoreFramework;
+
+namespace RhytmTD.Data.Models.DataTableModels
 {
     /// <summary>
     /// Базовые параметры аккаунта (без прокачки)

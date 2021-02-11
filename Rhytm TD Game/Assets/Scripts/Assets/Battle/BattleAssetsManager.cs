@@ -7,5 +7,13 @@ namespace RhytmTD.Assets.Battle
     /// </summary>
     public class BattleAssetsManager : AssetsManager<BattlePrefabAssets>
     {
+        public static BattleAssetsManager Instance; //TEMP
+
+        protected override void Initialize()
+        {
+            base.Initialize();
+
+            Instance = this;
+        }
     }
 }

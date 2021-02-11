@@ -1,4 +1,5 @@
-﻿using RhytmTD.Data.Factory;
+﻿using CoreFramework;
+using RhytmTD.Data.Factory;
 
 namespace RhytmTD.Data.Models.DataTableModels
 {

@@ -1,5 +1,4 @@
-﻿using RhytmTD.Data.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace CoreFramework.StateMachine
@@ -16,19 +15,11 @@ namespace CoreFramework.StateMachine
             m_InitializedStates = new Dictionary<Type, T>();
         }
 
-        public virtual void Update(float deltaTime)
-        {
-            m_CurrentState.Update(deltaTime);
-        }
-
         /// <summary>
         /// Инициализация начальным состоянием
         /// </summary>
         public virtual void Initialize<T>()
         {
-            UpdateModel updateModel = Dispatcher.GetModel<UpdateModel>();
-            updateModel.OnUpdate += Update;
-
             SetState(m_InitializedStates[typeof(T)]);
         }
 

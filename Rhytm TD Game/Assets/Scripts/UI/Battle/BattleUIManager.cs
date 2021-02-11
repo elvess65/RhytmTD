@@ -10,6 +10,11 @@ namespace RhytmTD.UI.Battle
 
         private UIBattleStateMachine<UIBattleState_Abstract> m_StateMachine;
 
+        private void Start()
+        {
+            Initialize();
+        }
+
         public void Initialize()
         {
             InitializeViews();

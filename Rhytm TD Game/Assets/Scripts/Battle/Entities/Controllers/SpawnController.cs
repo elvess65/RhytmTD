@@ -21,8 +21,7 @@ namespace RhytmTD.Battle.Spawn
         public System.Action OnLevelComplete;
         public System.Action OnLevelFailed;
 
-        private EntitySpawner m_EntitySpawner;
-
+        private SpawnModel m_SpawnModel;
         private BattleModel m_BattleModel;
         private WorldDataModel m_WorldDataModel;
         private AccountDataModel m_AccountDataModel;
@@ -31,7 +30,6 @@ namespace RhytmTD.Battle.Spawn
         private RhytmController m_RhytmController;
         
         private int m_ActionTargetTick;
-
         private int m_AreaIndex;
         private int m_LevelIndex;
         private int m_WaveIndex;
@@ -49,17 +47,19 @@ namespace RhytmTD.Battle.Spawn
 
         public override void InitializeComplete()
         {
+            m_SpawnModel = Dispatcher.GetModel<SpawnModel>();
             m_BattleModel = Dispatcher.GetModel<BattleModel>();
             m_WorldDataModel = Dispatcher.GetModel<WorldDataModel>();
             m_AccountDataModel = Dispatcher.GetModel<AccountDataModel>();
             m_AccountBaseParamsDataModel = Dispatcher.GetModel<AccountBaseParamsDataModel>();
 
             m_RhytmController = Dispatcher.GetController<RhytmController>();
+
+            m_RhytmController.OnTick += HandleTick;
         }
 
-        public void BuildLevel(EntitySpawner entityViewSpawner)
+        public void BuildLevel()
         {
-            m_EntitySpawner = entityViewSpawner;
             m_AreaIndex = m_AccountDataModel.CompletedAreas;
             m_LevelIndex = m_AccountDataModel.CompletedLevels;
             m_WaveIndex = 0;
@@ -72,11 +72,13 @@ namespace RhytmTD.Battle.Spawn
             SpawnPlayer();
         }
 
-        public void HandleTick(int ticksSinceStart)
+
+        private void HandleTick(int ticksSinceStart)
         {
             if (m_ActionTargetTick == ticksSinceStart)
             {
-                m_EntitySpawner.AdjustSpawnAreaPosition();
+                m_SpawnModel.OnAdjustSpawnAreaPosition();
+                
                 SpawnChunk();
 
                 Log($"Current tick: {ticksSinceStart}. Spawn wave index: {m_WaveIndex}. Enemies: {m_CurrentChunk.EnemiesAmount}", true);
@@ -145,6 +147,10 @@ namespace RhytmTD.Battle.Spawn
             }
         }
 
+        private void LevelFinishedHandler()
+        {
+            m_RhytmController.OnTick -= HandleTick;
+        }
 
         private void SpawnChunk()
         {
@@ -154,7 +160,7 @@ namespace RhytmTD.Battle.Spawn
             //Spawn Entities
             for (int i = 0; i < m_CurrentChunk.EnemiesAmount; i++)
             {
-                BattleEntity enemy = m_EntitySpawner.SpawnEnemy(setup);
+                BattleEntity enemy = m_SpawnModel.OnSpawnEnemyEntity(setup);
                 m_BattleModel.AddBattleEntity(enemy);
 
                 if (enemy.HasModule<HealthModule>())
@@ -162,7 +168,7 @@ namespace RhytmTD.Battle.Spawn
             }
 
             //Reset spawn area indexes
-            m_EntitySpawner.ResetSpawnAreaUsedAmount();
+            m_SpawnModel.OnResetSpawnAreaUsedAmount();
         }
 
         private void SpawnPlayer()
@@ -176,12 +182,13 @@ namespace RhytmTD.Battle.Spawn
                                                               m_AccountBaseParamsDataModel.Mana);
 
             //Spawn Entity
-            BattleEntity entity = m_EntitySpawner.SpawnPlayer(setup);
+            BattleEntity entity = m_SpawnModel.OnSpawnPlayerEntity(setup); //m_EntitySpawner.SpawnPlayer(setup);
             m_BattleModel.AddBattleEntity(entity);
             m_BattleModel.PlayerEntity = entity;
 
             //Cache spawn area position
-            m_EntitySpawner.CacheSpawnAreaPosition(entity.GetModule<TransformModule>());
+            m_SpawnModel.OnCacheSpawnAreaPosition(entity.GetModule<TransformModule>());
+
             entity.GetModule<HealthModule>().OnDestroyed += PlayerEntity_OnDestroyed;
         }
 

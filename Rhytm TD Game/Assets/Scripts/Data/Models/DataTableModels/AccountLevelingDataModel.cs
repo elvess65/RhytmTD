@@ -1,4 +1,6 @@
-﻿namespace RhytmTD.Data.Models.DataTableModels
+﻿using CoreFramework;
+
+namespace RhytmTD.Data.Models.DataTableModels
 {
     /// <summary>
     /// Информация об опыте и уровнях аккаунта

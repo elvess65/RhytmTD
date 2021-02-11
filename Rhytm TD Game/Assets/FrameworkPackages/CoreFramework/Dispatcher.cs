@@ -61,9 +61,18 @@ namespace CoreFramework
         public T GetModel<T>() where T : BaseModel
         {
             Type type = typeof(T);
-            BaseModel model = m_Models[type];
 
-            return (T)model;
+            try
+            {
+                BaseModel model = m_Models[type];
+
+                return (T)model;
+            }
+            catch(KeyNotFoundException)
+            {
+                UnityEngine.Debug.LogError($"Can't find model of type {type}");
+                throw new KeyNotFoundException();
+            }
         }
 
         public void InitializeComplete()

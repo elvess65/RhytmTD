@@ -1,4 +1,4 @@
-﻿using RhytmTD.Data.Models;
+﻿using CoreFramework;
 using System.Collections.Generic;
 
 namespace RhytmTD.Battle.Entities.Models
@@ -13,6 +13,8 @@ namespace RhytmTD.Battle.Entities.Models
         private BattleEntity m_PlayerEntity;
 
         public System.Action<BattleEntity> OnPlayerEntityInitialized;
+        public System.Action OnBattleStarted;
+        public System.Action<bool> OnBattleFinished;
 
         public BattleEntity PlayerEntity
         {

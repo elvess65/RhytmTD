@@ -1,6 +1,5 @@
 ﻿using CoreFramework;
 using CoreFramework.Abstract;
-using CoreFramework.Input;
 using CoreFramework.Rhytm;
 using CoreFramework.Utils;
 using RhytmTD.Battle.Entities;
@@ -15,22 +14,15 @@ namespace RhytmTD.Battle.Core
 {
     public class BattleManager : Singleton<BattleManager>
     {
-        public MonoReferencesHolder MonoReferencesHolder;
-
-        [Header("Temp")]
-        public Metronome Metronome;
-        public AudioSource Music;
-
-        private BattleStateMachine<BattleState_Abstract> m_StateMachine;
-
         private Dispatcher m_Dispatcher;
         private RhytmInputProxy m_RhytmInputProxy;
         private RhytmController m_RhytmController;
-        private InputController m_InputController;
         private SpawnController m_SpawnController;
         private DamageController m_DamageController;
 
         private BattleModel m_BattleModel;
+
+        public BattleStateMachine<BattleState_Abstract> StateMachine { get; private set; }
 
         #region Initialization
 
@@ -48,9 +40,9 @@ namespace RhytmTD.Battle.Core
         private void InitializeCore()
         {
             m_Dispatcher = Dispatcher.Instance;
+
             m_RhytmController = m_Dispatcher.GetController<RhytmController>();
             m_RhytmInputProxy = m_Dispatcher.GetController<RhytmInputProxy>();
-            m_InputController = m_Dispatcher.GetController<InputController>();
             m_SpawnController = m_Dispatcher.GetController<SpawnController>();
             m_DamageController = m_Dispatcher.GetController<DamageController>();
 
@@ -59,55 +51,35 @@ namespace RhytmTD.Battle.Core
 
         private void InitializeStateMachine()
         {
-            m_StateMachine = new BattleStateMachine<BattleState_Abstract>();
-            m_StateMachine.AddState(new BattleState_LockInput());
-            m_StateMachine.AddState(new BattleState_Normal());
-            m_StateMachine.Initialize<BattleState_LockInput>();
+            StateMachine = new BattleStateMachine<BattleState_Abstract>();
+            StateMachine.AddState(new BattleState_LockInput());
+            StateMachine.AddState(new BattleState_Normal());
+            StateMachine.Initialize<BattleState_LockInput>();
         }
 
         private void InitializeDataDependends()
         {
             //Rhytm data
-            int bpm = 30;
-            m_RhytmController.SetBPM(bpm);
-            m_RhytmInputProxy.SetInputPrecious(0.25f);//ManagersHolder.SettingsManager.GeneralSettings.InputPrecious);
-            Metronome.bpm = bpm; //Debug
+            Dispatcher.Instance.GetModel<BattleAudioModel>().BPM = 30;
 
-            //Initialize managers (May require data)
-            MonoReferencesHolder.Initialize();
+            m_RhytmInputProxy.SetInputPrecious(0.25f);
 
             //Build level data
-            m_SpawnController.BuildLevel(MonoReferencesHolder.EntitySpawner);
+            m_SpawnController.BuildLevel();
         }
 
         private void InitializeEvents()
         {
-            //Input
-            m_InputController.OnTouch += m_StateMachine.HandleTouch;
-
             //Level
             m_SpawnController.OnLevelComplete += LevelCompleteHandler;
             m_SpawnController.OnLevelFailed += LevelFailedHandler;
-
-            //Rhytm
-            m_RhytmController.OnEventProcessingTick += EventProcessingTickHandler;
-            m_RhytmController.OnStarted += TickingStartedHandler;
-            m_RhytmController.OnTick += TickHandler;
         }
 
         private void DisposeEvents()
         {
-            //Input
-            m_InputController.OnTouch -= m_StateMachine.HandleTouch;
-
             //Level
-            m_SpawnController.OnLevelComplete += LevelCompleteHandler;
-            m_SpawnController.OnLevelFailed += LevelFailedHandler;
-
-            //Rhytm
-            m_RhytmController.OnEventProcessingTick = null;
-            m_RhytmController.OnStarted = null;
-            m_RhytmController.OnTick = null;
+            m_SpawnController.OnLevelComplete -= LevelCompleteHandler;
+            m_SpawnController.OnLevelFailed -= LevelFailedHandler;
         }
 
         private void ApplySettings()
@@ -123,17 +95,22 @@ namespace RhytmTD.Battle.Core
         {
             yield return new WaitForSeconds(1);
 
+            m_BattleModel.OnBattleStarted?.Invoke();
+
             //TODO: Move to InitializationFinished and remove this
 
             //Enable input
-            m_StateMachine.ChangeState<BattleState_Normal>();
+            StateMachine.ChangeState<BattleState_Normal>();
 
 
             //Show UI
-            MonoReferencesHolder.UIManager.ChangeState<UIBattleState_Normal>();
+            //MonoReferencesHolder.UIManager.ChangeState<UIBattleState_Normal>();
 
             //Start beat
             m_RhytmController.StartTicking();
+
+            Dispatcher.Instance.GetModel<BattleAudioModel>().OnPlayMetronome(true);
+            //Dispatcher.Instance.GetModel<BattleAudioModel>().OnPlayMusic(true);
 
             //Start player movement
             m_BattleModel.PlayerEntity.GetModule<MoveModule>().StartMove(Vector3.forward);
@@ -142,32 +119,6 @@ namespace RhytmTD.Battle.Core
         #endregion
 
         #region Runtime
-
-        #region Rhytm
-
-        private void TickingStartedHandler()
-        {
-            //Debug.Log("Tick started");
-            //Metronome.StartMetronome();
-        }
-
-        private void TickHandler(int ticksSinceStart)
-        {
-            //Debug.Log("TickHandler: " + ticksSinceStart);
-            if (ticksSinceStart % 8 == 0)
-            {
-                //Music.Play();
-            }
-
-            m_SpawnController.HandleTick(ticksSinceStart);
-        }
-
-        private void EventProcessingTickHandler(int ticksSinceStart)
-        {
-            //Debug.Log("EventProcessingTickHandler: " + ticksSinceStart);
-        }
-
-        #endregion
 
         #region Level
 
@@ -189,8 +140,8 @@ namespace RhytmTD.Battle.Core
         {
             Dispatcher.Instance.GetModel<BattleModel>().PlayerEntity?.GetModule<MoveModule>().Stop();
 
-            m_StateMachine.ChangeState<BattleState_LockInput>();
-            MonoReferencesHolder.UIManager.ChangeState<UIBattleState_NoUI>();
+            StateMachine.ChangeState<BattleState_LockInput>();
+            //MonoReferencesHolder.UIManager.ChangeState<UIBattleState_NoUI>();
 
             DisposeEvents();
         }
