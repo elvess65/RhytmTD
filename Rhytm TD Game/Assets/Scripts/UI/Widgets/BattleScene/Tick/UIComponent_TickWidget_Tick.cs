@@ -22,7 +22,7 @@ namespace RhytmTD.UI.Components
 
         public void PlayTickAnimation()
         {
-            Dispatcher.Instance.CreateController<UpdateController>().UpdaterObject.GetComponent<MonoUpdater>().StartCoroutine(TickAnimationCoroutine());
+            Dispatcher.Instance.GetController<UpdateController>().UpdaterObject.GetComponent<MonoUpdater>().StartCoroutine(TickAnimationCoroutine());
         }
 
 
