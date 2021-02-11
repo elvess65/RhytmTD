@@ -10,10 +10,10 @@ namespace RhytmTD.Battle.Entities.EntitiesFactory
             int entityID = IDGenerator.GenerateID();
 
             BattleEntity battleEntity = new BattleEntity(entityID);
-            battleEntity.AddModule(new TransformModule(transform, setup.FocusSpeed));
+            battleEntity.AddModule(new TransformModule(transform.position, transform.rotation));
+            battleEntity.AddModule(new MoveModule((setup as PlayerFactorySetup).MoveSpeed));
             battleEntity.AddModule(new HealthModule(entityID, setup.Health));
             battleEntity.AddModule(new DamageModule(setup.MinDamage, setup.MaxDamage));
-            battleEntity.AddModule(new MoveModule(transform.position, (setup as PlayerFactorySetup).MoveSpeed));
 
             return battleEntity;
         }

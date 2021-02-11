@@ -5,14 +5,11 @@ using UnityEngine;
 
 namespace RhytmTD.Battle.Entities.Controllers
 {
-    /// <summary>
-    /// Фокусировка на цели
-    /// </summary>
-    public class FocusController : BaseController
+    public class RotateController : BaseController
     {
         private BattleModel m_BattleModel;
 
-        public FocusController(Dispatcher dispatcher) : base(dispatcher)
+        public RotateController(Dispatcher dispatcher) : base(dispatcher)
         {
         }
 
@@ -26,24 +23,21 @@ namespace RhytmTD.Battle.Entities.Controllers
 
         public void Update(float deltaTime)
         {
-            FocusAll(deltaTime);
+            RotateAll(deltaTime);
         }
 
-        private void FocusAll(float deltaTime)
+        private void RotateAll(float deltaTime)
         {
             foreach (BattleEntity entity in m_BattleModel.BattleEntities)
             {
-                if (entity.HasModule<FocusModule>())
+                if (entity.HasModule<RotateModule>())
                 {
-                    FocusModule focusModule = entity.GetModule<FocusModule>();
+                    RotateModule rotateModule = entity.GetModule<RotateModule>();
                     
-                    if (focusModule.IsFocusing)
+                    if (rotateModule.IsRotating)
                     {
                         TransformModule transformModule = entity.GetModule<TransformModule>();
-                        RotateModule rotateModule = entity.GetModule<RotateModule>();
-
-                        Quaternion targetRotation = Quaternion.LookRotation(focusModule.TargetTransform.Position - transformModule.Position).normalized;
-                        rotateModule.StartRotate(targetRotation);
+                        transformModule.Rotation = Quaternion.Slerp(transformModule.Rotation, rotateModule.Destination, deltaTime * rotateModule.CurrentSpeed);
                     }
                 }
             }

@@ -15,7 +15,7 @@ namespace RhytmTD.Battle.Spawn
 
         private IBattleEntityFactory m_EnemiesFactory;
         private IBattleEntityFactory m_PlayerFactory;
-        private Transform m_PlayerTransform;
+        private TransformModule m_PlayerTransform;
         private int[] m_SpawnAreaUsedAmount;
         private Vector3[] m_EnemySpawnAreasOffsets;
         private SpawnModel m_SpawnModel;
@@ -88,13 +88,13 @@ namespace RhytmTD.Battle.Spawn
             }
         }
 
-        private void CacheSpawnAreaPosition(TransformModule transformModule)
+        public void CacheSpawnAreaPosition(TransformModule playerTransform)
         {
             m_PlayerTransform = transformModule.Transform;
 
             for (int i = 0; i < EnemySpawnAreas.Length; i++)
             {
-                m_EnemySpawnAreasOffsets[i] = EnemySpawnAreas[i].position - m_PlayerTransform.position;
+                m_EnemySpawnAreasOffsets[i] = EnemySpawnAreas[i].position - m_PlayerTransform.Position;
             }
         }
 
@@ -102,7 +102,7 @@ namespace RhytmTD.Battle.Spawn
         {
             for(int i = 0; i < EnemySpawnAreas.Length; i++)
             {
-                EnemySpawnAreas[i].transform.position = m_PlayerTransform.position + m_EnemySpawnAreasOffsets[i];
+                EnemySpawnAreas[i].transform.position = m_PlayerTransform.Position + m_EnemySpawnAreasOffsets[i];
             }
         }
 

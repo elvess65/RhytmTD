@@ -39,14 +39,11 @@ namespace RhytmTD.Battle.StateMachine
 
         private void HandleTouch(Vector3 mouseScreenPos)
         {
-            if (m_PlayerEntity == null)
-                m_PlayerEntity = m_BattlefieldController.Dispatcher.GetModel<BattleModel>().PlayerEntity;
-
-            BattleEntity targetEntity = m_BattlefieldController.FindClosestTo(m_PlayerEntity);
+            BattleEntity targetEntity = m_FindTargetController.GetNearestTarget(m_BattleModel.PlayerEntity);
 
             if (targetEntity != null)
             {
-                m_DamageController.DealDamage(m_PlayerEntity.ID, targetEntity.ID); //TODO: Should be moved on collision
+                m_ShootController.Shoot(m_BattleModel.PlayerEntity, targetEntity);
             }
 
             //if (m_RhytmInputProxy.IsInputAllowed() && m_RhytmInputProxy.IsInputTickValid())

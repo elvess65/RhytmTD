@@ -31,10 +31,10 @@ namespace RhytmTD.Battle.Entities.Controllers
             if (playerEntity == null)
                 return;
 
-            MoveModule targetMoveModule = m_BattleModel.PlayerEntity.GetModule<MoveModule>();
-            m_CameraOffet = m_CameraModel.Position - targetMoveModule.Position;
+            TransformModule targetTransformModule = m_BattleModel.PlayerEntity.GetModule<TransformModule>();
+            m_CameraOffet = m_CameraModel.Position - targetTransformModule.Position;
 
-            targetMoveModule.OnPositionChanged += OnTargetPositionChanged;
+            targetTransformModule.OnPositionChanged += OnTargetPositionChanged;
         }
 
         private void OnTargetPositionChanged(Vector3 pos)

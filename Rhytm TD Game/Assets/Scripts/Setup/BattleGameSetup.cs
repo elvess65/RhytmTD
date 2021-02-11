@@ -18,17 +18,19 @@ namespace RhytmTD.Setup
 
             // Controllers
             dispatcher.CreateController<MoveController>();
+            dispatcher.CreateController<RotateController>();
             dispatcher.CreateController<FocusController>();
             dispatcher.CreateController<RhytmController>();
             dispatcher.CreateController<RhytmInputProxy>();
             dispatcher.CreateController<InputController>();
             dispatcher.CreateController<SpawnController>();
             dispatcher.CreateController<DamageController>();
-            dispatcher.CreateController<BattlefieldController>();
+            dispatcher.CreateController<EnemyBehavoiurController>();
             dispatcher.CreateController<CameraController>();
             dispatcher.CreateController<CameraFollowController>();
             dispatcher.CreateController<BattleAudioController>();
-            dispatcher.CreateController<BattleController>();
+            dispatcher.CreateController<ShootController>();
+            dispatcher.CreateController<FindTargetController>();
 
             // Models
             dispatcher.CreateModel<BattleModel>();
