@@ -1,4 +1,4 @@
-﻿using RhytmTD.Battle.Core;
+﻿using RhytmTD.Battle.Entities.Models;
 using RhytmTD.Core;
 using RhytmTD.OtherScenes.MenuScene;
 using UnityEngine.SceneManagement;
@@ -13,6 +13,7 @@ namespace CoreFramework.SceneLoading
         private const string m_TRANSITION_SCENE_NAME = "TransitionScene";
         private const string m_BOOT_SCENE_NAME = "BootScene";
 
+        private BattleModel m_BattleModel;
 
         partial void PartialConstructorCall()
         {
@@ -30,9 +31,15 @@ namespace CoreFramework.SceneLoading
                     break;
 
                 case BATTLE_SCENE_NAME:
+
                     SceneManager.SetActiveScene(SceneManager.GetSceneByName(BATTLE_SCENE_NAME));
                     SceneLoadingManager.Instance.FadeOut();
-                    BattleManager.Instance.Initialize();
+
+                    if (m_BattleModel == null)
+                        m_BattleModel = Dispatcher.GetModel<BattleModel>();
+
+                    m_BattleModel.OnBattleInitialize();
+
                     break;
 
                 case m_TRANSITION_SCENE_NAME:

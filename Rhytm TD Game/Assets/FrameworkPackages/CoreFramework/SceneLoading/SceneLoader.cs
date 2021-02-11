@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 
 namespace CoreFramework.SceneLoading
 {
-    public partial class SceneLoader
+    public partial class SceneLoader : BaseView
     {
         public System.Action OnSceneLoadingComplete;
         public System.Action OnSceneUnloadingComplete;

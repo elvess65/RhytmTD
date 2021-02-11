@@ -1,5 +1,4 @@
-﻿using RhytmTD.Battle.Core;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace RhytmTD.UI.Tools
 {
