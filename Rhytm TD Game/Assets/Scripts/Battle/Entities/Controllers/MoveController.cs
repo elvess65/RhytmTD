@@ -11,13 +11,18 @@ namespace RhytmTD.Battle.Entities.Controllers
     {
         private BattleModel m_BattleModel;
 
+
         public MoveController(Dispatcher dispatcher) : base(dispatcher)
         {
         }
 
         public override void InitializeComplete()
         {
+            base.InitializeComplete();
+
             m_BattleModel = Dispatcher.GetModel<BattleModel>();
+            m_BattleModel.OnBattleStarted += BattleStartedHandler;
+            m_BattleModel.OnBattleFinished += BattleFinishedHandler;
 
             UpdateModel updateModel = Dispatcher.GetModel<UpdateModel>();
             updateModel.OnUpdate += Update;
@@ -43,6 +48,16 @@ namespace RhytmTD.Battle.Entities.Controllers
                     }
                 }
             }
+        }
+
+        private void BattleStartedHandler()
+        {
+            m_BattleModel.PlayerEntity.GetModule<MoveModule>().StartMove(UnityEngine.Vector3.forward);
+        }
+
+        private void BattleFinishedHandler(bool isSuccess)
+        {
+            m_BattleModel.PlayerEntity?.GetModule<MoveModule>().Stop();
         }
     }
 }

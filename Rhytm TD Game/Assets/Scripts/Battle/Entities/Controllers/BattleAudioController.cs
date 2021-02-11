@@ -44,7 +44,7 @@ namespace RhytmTD.Battle.Entities.Controllers
 
         private void BPMChangedHandler(int bpm)
         {
-            m_AudioModel.Metronome.bpm = bpm;
+            m_AudioModel.Metronome.bpm = bpm * 2;
             m_RhytmController.SetBPM(bpm);
         }
     }

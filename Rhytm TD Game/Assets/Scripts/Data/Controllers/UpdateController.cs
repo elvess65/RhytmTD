@@ -7,7 +7,8 @@ namespace RhytmTD.Data.Controllers
 {
     public class UpdateController : BaseController
     {
-        private GameObject m_GameObject;
+        public GameObject UpdaterObject { get; private set; }
+
         private UpdateModel m_UpdateModel;
 
         public UpdateController(Dispatcher dispatcher) : base(dispatcher)
@@ -18,8 +19,9 @@ namespace RhytmTD.Data.Controllers
         public override void InitializeComplete()
         {
             m_UpdateModel = Dispatcher.GetModel<UpdateModel>();
-            m_GameObject = new GameObject("Updater");
-            m_GameObject.AddComponent<MonoUpdater>();
+
+            UpdaterObject = new GameObject("Updater");
+            UpdaterObject.AddComponent<MonoUpdater>();
         }
 
         public void Update(float t)

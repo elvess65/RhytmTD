@@ -13,8 +13,9 @@ namespace RhytmTD.Battle.Entities.Models
         private BattleEntity m_PlayerEntity;
 
         public System.Action<BattleEntity> OnPlayerEntityInitialized;
-        public System.Action OnBattleStarted;
         public System.Action<bool> OnBattleFinished;
+        public System.Action OnBattleStarted;
+        public System.Action OnBattleInitialize;
 
         public BattleEntity PlayerEntity
         {

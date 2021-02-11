@@ -28,6 +28,7 @@ namespace RhytmTD.Setup
             dispatcher.CreateController<CameraController>();
             dispatcher.CreateController<CameraFollowController>();
             dispatcher.CreateController<BattleAudioController>();
+            dispatcher.CreateController<BattleController>();
 
             // Models
             dispatcher.CreateModel<BattleModel>();

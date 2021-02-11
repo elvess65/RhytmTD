@@ -1,4 +1,5 @@
-﻿using RhytmTD.Battle.Core;
+﻿using CoreFramework;
+using RhytmTD.Data.Controllers;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,7 +22,7 @@ namespace RhytmTD.UI.Components
 
         public void PlayTickAnimation()
         {
-            BattleManager.Instance.StartCoroutine(TickAnimationCoroutine());
+            Dispatcher.Instance.CreateController<UpdateController>().UpdaterObject.GetComponent<MonoUpdater>().StartCoroutine(TickAnimationCoroutine());
         }
 
 
