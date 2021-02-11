@@ -181,7 +181,7 @@ namespace RhytmTD.Battle.Spawn
             m_BattleModel.PlayerEntity = entity;
 
             //Cache spawn area position
-            m_EntitySpawner.CacheSpawnAreaPosition(entity.GetModule<TransformModule>().Transform);
+            m_EntitySpawner.CacheSpawnAreaPosition(entity.GetModule<TransformModule>());
             entity.GetModule<HealthModule>().OnDestroyed += PlayerEntity_OnDestroyed;
         }
 

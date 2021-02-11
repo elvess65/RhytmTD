@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace RhytmTD.Battle.Entities.EntitiesFactory
 {
-    public class DefaultEnemyFactory : BaseBattleEntityFactory
+    public class DefaultBulletFactory : BaseBattleEntityFactory
     {
         public override BattleEntity CreateEntity(Transform transform, EntityFactorySetup setup)
         {
@@ -18,16 +18,6 @@ namespace RhytmTD.Battle.Entities.EntitiesFactory
             battleEntity.AddModule(new EnemyBehaviourTag());
          
             return battleEntity;
-        }
-    }
-
-    public class EnemyFactorySetup : EntityFactorySetup
-    {
-        public int MaxHP { get; }
-
-        public EnemyFactorySetup(float focusSpeed, int minDamage, int maxDamage, int minHP, int maxHP) : base(focusSpeed, minDamage, maxDamage, minHP)
-        {
-            MaxHP = maxHP;
         }
     }
 }

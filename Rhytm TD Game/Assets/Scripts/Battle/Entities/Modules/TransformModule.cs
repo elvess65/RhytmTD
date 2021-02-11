@@ -2,46 +2,38 @@
 
 namespace RhytmTD.Battle.Entities
 {
-    /// <summary>
-    /// Позиция и фокусировка
-    /// </summary>
     public class TransformModule : IBattleModule
     {
-        public Transform Transform { get; private set; }
-        public Transform FocusTarget { get; private set; }
-        public float Speed { get; private set; }
-        public float CurrentSpeed { get; private set; }
-        public bool IsFocusing { get; private set; }
+        private Vector3 m_Position;
+        private Quaternion m_Rotation;
 
-        public System.Action OnStartFocus;
-        public System.Action OnStopFocus;
-
-        public TransformModule(Transform transform, float speed)
+        public Vector3 Position
         {
-            Transform = transform;
-            Speed = CurrentSpeed = speed;
+            get { return m_Position; }
+            set
+            {
+                m_Position = value;
+                OnPositionChanged?.Invoke(value);
+            }
         }
 
-        public void StartFocus(TransformModule targetTransformModule)
+        public Quaternion Rotation
         {
-            if (IsFocusing)
-                return;
-
-            FocusTarget = targetTransformModule.Transform;
-            IsFocusing = true;
-
-            OnStartFocus?.Invoke();
+            get { return m_Rotation; }
+            set
+            {
+                m_Rotation = value;
+                OnRotationChanged?.Invoke(value);
+            }
         }
 
-        public void StopFocus()
+        public System.Action<Vector3> OnPositionChanged;
+        public System.Action<Quaternion> OnRotationChanged;
+
+        public TransformModule(Vector3 position, Quaternion rotation)
         {
-            if (!IsFocusing)
-                return;
-
-            FocusTarget = null;
-            IsFocusing = false;
-
-            OnStopFocus?.Invoke();
+            m_Position = position;
+            m_Rotation = rotation;
         }
     }
 }

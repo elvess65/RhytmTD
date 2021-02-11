@@ -29,7 +29,6 @@ namespace RhytmTD.Battle.Core
         private InputController m_InputController;
         private SpawnController m_SpawnController;
         private DamageController m_DamageController;
-        private BattlefieldController m_BattlefieldController;
 
         private BattleModel m_BattleModel;
 
@@ -54,7 +53,6 @@ namespace RhytmTD.Battle.Core
             m_InputController = m_Dispatcher.GetController<InputController>();
             m_SpawnController = m_Dispatcher.GetController<SpawnController>();
             m_DamageController = m_Dispatcher.GetController<DamageController>();
-            m_BattlefieldController = m_Dispatcher.GetController<BattlefieldController>();
 
             m_BattleModel = m_Dispatcher.GetModel<BattleModel>();
         }

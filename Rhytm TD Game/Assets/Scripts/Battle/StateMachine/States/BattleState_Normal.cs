@@ -7,26 +7,24 @@ namespace RhytmTD.Battle.StateMachine
 {
     public class BattleState_Normal : BattleState_Abstract
     {
-        private BattlefieldController m_BattlefieldController;
-        private DamageController m_DamageController;
-        private BattleEntity m_PlayerEntity;
+        private BattleModel m_BattleModel;
+        private ShootController m_ShootController;
+        private FindTargetController m_FindTargetController;
 
         public BattleState_Normal() : base()
         {
-            m_BattlefieldController = Dispatcher.GetController<BattlefieldController>();
-            m_DamageController = Dispatcher.GetController<DamageController>();
+            m_BattleModel = Dispatcher.GetModel<BattleModel>();
+            m_ShootController = Dispatcher.GetController<ShootController>();
+            m_FindTargetController = Dispatcher.GetController<FindTargetController>();
         }
 
         public override void HandleTouch(Vector3 mouseScreenPos)
         {
-            if (m_PlayerEntity == null)
-                m_PlayerEntity = m_BattlefieldController.Dispatcher.GetModel<BattleModel>().PlayerEntity;
-
-            BattleEntity targetEntity = m_BattlefieldController.FindClosestTo(m_PlayerEntity);
+            BattleEntity targetEntity = m_FindTargetController.GetNearestTarget(m_BattleModel.PlayerEntity);
 
             if (targetEntity != null)
             {
-                m_DamageController.DealDamage(m_PlayerEntity.ID, targetEntity.ID); //TODO: Should be moved on collision
+                m_ShootController.Shoot(m_BattleModel.PlayerEntity, targetEntity);
             }
             
             //if (m_RhytmInputProxy.IsInputAllowed() && m_RhytmInputProxy.IsInputTickValid())

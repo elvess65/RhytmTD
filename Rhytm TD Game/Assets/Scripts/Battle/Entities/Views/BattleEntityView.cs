@@ -10,7 +10,6 @@ namespace RhytmTD.Battle.Entities.Views
         protected BattleEntity m_BattleEntity;
 
         private HealthModule m_HealthModule;
-        private TransformModule m_TransformModule;
 
         public virtual void Initialize(BattleEntity entity)
         {
@@ -19,17 +18,13 @@ namespace RhytmTD.Battle.Entities.Views
             m_HealthModule = entity.GetModule<HealthModule>();
             m_HealthModule.OnHealthRemoved += OnHealthRemoved;
             m_HealthModule.OnDestroyed += OnDestroyed;
-
-            m_TransformModule = entity.GetModule<TransformModule>();
-            m_TransformModule.OnStartFocus += OnStartFocus;
-            m_TransformModule.OnStopFocus += OnStopFocus;
         }
 
         private void OnHealthRemoved(int amount, int senderID)
         {
             Debug.Log($"VIEW: Take {amount} damage from ID: {senderID}. {m_HealthModule.CurrentHealth}/{m_HealthModule.Health}");
 
-            m_TransformModule.Transform.localScale = Vector3.one * 0.5f;
+            transform.localScale = Vector3.one * 0.5f;
         }
 
         private void OnDestroyed(int id)
@@ -37,16 +32,6 @@ namespace RhytmTD.Battle.Entities.Views
             Debug.Log($"VIEW: {ID} was destroyed");
 
             transform.localScale = Vector3.one * 0.1f;
-        }
-
-        private void OnStartFocus()
-        {
-            Debug.Log($"VIEW: Start focus");
-        }
-
-        private void OnStopFocus()
-        {
-            Debug.Log($"VIEW: Stop move");
         }
     }
 }
