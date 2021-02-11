@@ -88,9 +88,9 @@ namespace RhytmTD.Battle.Spawn
             }
         }
 
-        public void CacheSpawnAreaPosition(TransformModule playerTransform)
+        public void CacheSpawnAreaPosition(TransformModule transformModule)
         {
-            m_PlayerTransform = transformModule.Transform;
+            m_PlayerTransform = transformModule;
 
             for (int i = 0; i < EnemySpawnAreas.Length; i++)
             {

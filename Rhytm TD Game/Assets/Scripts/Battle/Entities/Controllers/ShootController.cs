@@ -1,5 +1,5 @@
 ﻿using CoreFramework;
-using RhytmTD.Battle.Core;
+using RhytmTD.Assets.Battle;
 using RhytmTD.Battle.Entities.Models;
 using RhytmTD.Data.Models;
 using System.Collections.Generic;
@@ -47,7 +47,7 @@ namespace RhytmTD.Battle.Entities.Controllers
 
         private BattleEntity CreateBullet(BattleEntity sender, float distanceToTarget)
         {
-            GameObject bulletObj = BattleManager.Instance.MonoReferencesHolder.AssetsManager.GetAssets().InstantiateGameObject(BattleManager.Instance.MonoReferencesHolder.AssetsManager.GetAssets().EnemyPrefab);
+            GameObject bulletObj = BattleAssetsManager.Instance.GetAssets().InstantiateGameObject(BattleAssetsManager.Instance.GetAssets().PlayerPrefab);
 
             BattleEntity bullet = new BattleEntity(IDGenerator.GenerateID());
             bullet.AddModule(new TransformModule(bulletObj.transform.position, bulletObj.transform.rotation));

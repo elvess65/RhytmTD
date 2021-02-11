@@ -9,16 +9,17 @@ namespace RhytmTD.Battle.StateMachine
 {
     public class BattleState_Normal : BattleState_Abstract
     {
-        private BattlefieldController m_BattlefieldController;
-        private DamageController m_DamageController;
+        private BattleModel m_BattleModel;
+        private ShootController m_ShootController;
+        private FindTargetController m_FindTargetController;
         private InputController m_InputController;
         private RhytmInputProxy m_RhytmInputProxy;
-        private BattleEntity m_PlayerEntity;
 
         public BattleState_Normal() : base()
         {
-            m_BattlefieldController = Dispatcher.GetController<BattlefieldController>();
-            m_DamageController = Dispatcher.GetController<DamageController>();
+            m_BattleModel = Dispatcher.GetModel<BattleModel>();
+            m_ShootController = Dispatcher.GetController<ShootController>();
+            m_FindTargetController = Dispatcher.GetController<FindTargetController>();
             m_InputController = Dispatcher.GetController<InputController>();
             m_RhytmInputProxy = Dispatcher.GetController<RhytmInputProxy>();
         }
