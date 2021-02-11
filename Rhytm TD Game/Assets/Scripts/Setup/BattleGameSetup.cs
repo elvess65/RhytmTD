@@ -5,7 +5,7 @@ using RhytmTD.Battle.Entities.Controllers;
 using RhytmTD.Battle.Entities.Models;
 using RhytmTD.Battle.Spawn;
 
-namespace RhytmTD.Battle.Core
+namespace RhytmTD.Setup
 {
     /// <summary>
     /// Setup для боя
@@ -27,10 +27,13 @@ namespace RhytmTD.Battle.Core
             dispatcher.CreateController<BattlefieldController>();
             dispatcher.CreateController<CameraController>();
             dispatcher.CreateController<CameraFollowController>();
+            dispatcher.CreateController<BattleAudioController>();
 
             // Models
             dispatcher.CreateModel<BattleModel>();
             dispatcher.CreateModel<CameraModel>();
+            dispatcher.CreateModel<BattleAudioModel>();
+            dispatcher.CreateModel<SpawnModel>();
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace RhytmTD.Data.Models
+﻿using CoreFramework;
+
+namespace RhytmTD.Data.Models
 {
     /// <summary>
     /// Модель содержащая данные об аккаунте

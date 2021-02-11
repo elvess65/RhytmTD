@@ -1,12 +1,14 @@
-﻿using RhytmTD.Battle.Core;
+﻿using CoreFramework;
+using RhytmTD.Assets.Battle;
 using RhytmTD.Battle.Entities;
 using RhytmTD.Battle.Entities.EntitiesFactory;
+using RhytmTD.Battle.Entities.Models;
 using RhytmTD.Battle.Entities.Views;
 using UnityEngine;
 
 namespace RhytmTD.Battle.Spawn
 {
-    public class EntitySpawner : MonoBehaviour
+    public class SpawnView : BaseView
     {
         [SerializeField] private Transform PlayerSpawnArea;
         [SerializeField] private Transform[] EnemySpawnAreas;
@@ -16,22 +18,35 @@ namespace RhytmTD.Battle.Spawn
         private Transform m_PlayerTransform;
         private int[] m_SpawnAreaUsedAmount;
         private Vector3[] m_EnemySpawnAreasOffsets;
+        private SpawnModel m_SpawnModel;
 
         private Vector3 m_AREA_USED_OFFSET = new Vector3(0, 0, 2);
 
         void Awake()
         {
+            Initialize();
+        }
+
+        private void Initialize()
+        {
             m_SpawnAreaUsedAmount = new int[EnemySpawnAreas.Length];
             m_EnemySpawnAreasOffsets = new Vector3[EnemySpawnAreas.Length];
             m_PlayerFactory = new DefaultPlayerFactory();
             m_EnemiesFactory = new DefaultEnemyFactory();
+
+            m_SpawnModel = Dispatcher.GetModel<SpawnModel>();
+            m_SpawnModel.OnSpawnPlayerEntity += SpawnPlayer;
+            m_SpawnModel.OnSpawnEnemyEntity += SpawnEnemy;
+            m_SpawnModel.OnResetSpawnAreaUsedAmount += ResetSpawnAreaUsedAmount;
+            m_SpawnModel.OnCacheSpawnAreaPosition += CacheSpawnAreaPosition;
+            m_SpawnModel.OnAdjustSpawnAreaPosition += AdjustSpawnAreaPosition;
         }
 
 
-        public BattleEntity SpawnPlayer(EntityFactorySetup setup)
+        private BattleEntity SpawnPlayer(EntityFactorySetup setup)
         {
             //Create View
-            GameObject player = BattleManager.Instance.MonoReferencesHolder.AssetsManager.GetAssets().InstantiateGameObject(BattleManager.Instance.MonoReferencesHolder.AssetsManager.GetAssets().PlayerPrefab);
+            GameObject player = BattleAssetsManager.Instance.GetAssets().InstantiateGameObject(BattleAssetsManager.Instance.GetAssets().PlayerPrefab);
             player.transform.position = PlayerSpawnArea.position;
 
             //Create Entity
@@ -44,14 +59,14 @@ namespace RhytmTD.Battle.Spawn
             return battleEntity;
         }
 
-        public BattleEntity SpawnEnemy(EntityFactorySetup setup)
+        private BattleEntity SpawnEnemy(EntityFactorySetup setup)
         {
             //Span Area indexes
             int randomSpawnAreaIndex = Random.Range(0, EnemySpawnAreas.Length);
             int spawnAreaUsedAmount = m_SpawnAreaUsedAmount[randomSpawnAreaIndex]++;
 
             //Create View
-            GameObject enemy = BattleManager.Instance.MonoReferencesHolder.AssetsManager.GetAssets().InstantiateGameObject(BattleManager.Instance.MonoReferencesHolder.AssetsManager.GetAssets().EnemyPrefab);
+            GameObject enemy = BattleAssetsManager.Instance.GetAssets().InstantiateGameObject(BattleAssetsManager.Instance.GetAssets().EnemyPrefab);
             enemy.transform.position = EnemySpawnAreas[randomSpawnAreaIndex].position + m_AREA_USED_OFFSET * spawnAreaUsedAmount;
             enemy.transform.rotation = Quaternion.Euler(enemy.transform.rotation.eulerAngles.x, Random.rotation.eulerAngles.y, enemy.transform.rotation.eulerAngles.z);
 
@@ -65,7 +80,7 @@ namespace RhytmTD.Battle.Spawn
             return battleEntity;
         }
 
-        public void ResetSpawnAreaUsedAmount()
+        private void ResetSpawnAreaUsedAmount()
         {
             for (int i = 0; i < m_SpawnAreaUsedAmount.Length; i++)
             {
@@ -73,9 +88,9 @@ namespace RhytmTD.Battle.Spawn
             }
         }
 
-        public void CacheSpawnAreaPosition(Transform playerTransform)
+        private void CacheSpawnAreaPosition(TransformModule transformModule)
         {
-            m_PlayerTransform = playerTransform;
+            m_PlayerTransform = transformModule.Transform;
 
             for (int i = 0; i < EnemySpawnAreas.Length; i++)
             {
@@ -83,7 +98,7 @@ namespace RhytmTD.Battle.Spawn
             }
         }
 
-        public void AdjustSpawnAreaPosition()
+        private void AdjustSpawnAreaPosition()
         {
             for(int i = 0; i < EnemySpawnAreas.Length; i++)
             {

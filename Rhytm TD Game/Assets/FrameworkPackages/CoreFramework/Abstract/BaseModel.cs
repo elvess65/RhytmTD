@@ -1,4 +1,4 @@
-﻿namespace RhytmTD.Data.Models
+﻿namespace CoreFramework
 {
     /// <summary>
     /// Базовый класс для всех моделей

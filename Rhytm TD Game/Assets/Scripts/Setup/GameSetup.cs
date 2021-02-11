@@ -2,7 +2,7 @@
 using RhytmTD.Data.Controllers;
 using RhytmTD.Data.Models;
 
-namespace RhytmTD.Battle.Core
+namespace RhytmTD.Setup
 {
     public class GameSetup : IGameSetup
     {

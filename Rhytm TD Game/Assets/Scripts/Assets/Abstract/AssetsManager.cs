@@ -8,7 +8,12 @@ namespace RhytmTD.Assets.Abstract
 
         public T GetAssets() => m_PrefabAssets;
 
-        public void Initialize()
+        void Awake()
+        {
+            Initialize();
+        }    
+
+        protected virtual void Initialize()
         {
             m_PrefabAssets.Initialize();
         }

@@ -1,4 +1,5 @@
-﻿using RhytmTD.Data.Models;
+﻿using CoreFramework;
+using RhytmTD.Data.Models;
 using UnityEngine;
 
 namespace RhytmTD.Battle.Entities.Models

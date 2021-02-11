@@ -28,6 +28,11 @@ namespace CoreFramework.Utils
             running = true;
         }
 
+        public void StopMetronome()
+        {
+            running = false;
+        }
+
         void OnAudioFilterRead(float[] data, int channels)
         {
             if (!running)
