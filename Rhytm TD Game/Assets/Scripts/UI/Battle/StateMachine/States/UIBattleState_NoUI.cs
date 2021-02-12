@@ -14,7 +14,7 @@ namespace RhytmTD.UI.Battle.StateMachine
         {
             base.EnterState();
 
-            m_UIView_BattleHUD.SetWidgetsActive(false, !m_IsFirstEnter);
+            //m_UIView_BattleHUD.SetWidgetsActive(false, !m_IsFirstEnter);
         }
     }
 }

@@ -67,7 +67,7 @@ namespace RhytmTD.UI.Widget
                 m_TickArrows[i].PrepareForInterpolation();
 
             //Lerp
-            m_LerpData.TotalTime = (float)RhytmController.GetInstance().TimeToNextTick * 2 + (float)RhytmController.GetInstance().ProcessTickDelta;
+            m_LerpData.TotalTime = (float)RhytmController.GetInstance().TimeToNextTick + (float)RhytmController.GetInstance().ProcessTickDelta;
             m_LerpData.Start();
         }
     }
