@@ -23,7 +23,9 @@ namespace RhytmTD.Battle.Entities.Models
             set
             {
                 m_PlayerEntity = value;
-                OnPlayerEntityInitialized?.Invoke(value);
+
+                if (value != null)
+                    OnPlayerEntityInitialized?.Invoke(value);
             }
         }
 

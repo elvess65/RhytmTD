@@ -27,14 +27,14 @@ namespace RhytmTD.Battle.Entities.Controllers
 
         public void Update(float deltaTime)
         {
-            if (m_BattleModel.PlayerEntity == null)
+            if (m_BattleModel.PlayerEntity == null || !m_BattleModel.PlayerEntity.GetModule<HealthModule>().IsAlive)
                 return;
 
             TransformModule playerTransform = m_BattleModel.PlayerEntity.GetModule<TransformModule>();
 
             foreach (BattleEntity entity in m_BattleModel.BattleEntities)
             {
-                if (!entity.HasModule<EnemyBehaviourTag>())
+                if (!m_BattleModel.PlayerEntity.GetModule<HealthModule>().IsAlive || !entity.HasModule<EnemyBehaviourTag>())
                     continue;
 
                 TransformModule entityTransformModule = entity.GetModule<TransformModule>();
