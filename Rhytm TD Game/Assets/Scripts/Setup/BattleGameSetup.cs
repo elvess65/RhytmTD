@@ -3,7 +3,6 @@ using CoreFramework.Input;
 using CoreFramework.Rhytm;
 using RhytmTD.Battle.Entities.Controllers;
 using RhytmTD.Battle.Entities.Models;
-using RhytmTD.Battle.Spawn;
 
 namespace RhytmTD.Setup
 {
@@ -32,12 +31,14 @@ namespace RhytmTD.Setup
             dispatcher.CreateController<ShootController>();
             dispatcher.CreateController<FindTargetController>();
             dispatcher.CreateController<BattleController>();
+            dispatcher.CreateController<BattleUIController>();
 
             // Models
             dispatcher.CreateModel<BattleModel>();
             dispatcher.CreateModel<CameraModel>();
             dispatcher.CreateModel<BattleAudioModel>();
             dispatcher.CreateModel<SpawnModel>();
+            dispatcher.CreateModel<BattleUIModel>();
         }
     }
 }

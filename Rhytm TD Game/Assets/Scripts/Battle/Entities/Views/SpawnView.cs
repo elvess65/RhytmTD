@@ -1,13 +1,14 @@
 ﻿using CoreFramework;
 using RhytmTD.Assets.Battle;
-using RhytmTD.Battle.Entities;
 using RhytmTD.Battle.Entities.EntitiesFactory;
 using RhytmTD.Battle.Entities.Models;
-using RhytmTD.Battle.Entities.Views;
 using UnityEngine;
 
-namespace RhytmTD.Battle.Spawn
+namespace RhytmTD.Battle.Entities.Views
 {
+    /// <summary>
+    /// Отображение содержащие точки спауна
+    /// </summary>
     public class SpawnView : BaseView
     {
         [SerializeField] private Transform PlayerSpawnArea;

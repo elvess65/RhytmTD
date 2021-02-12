@@ -1,15 +1,15 @@
 ﻿using CoreFramework.StateMachine;
-using RhytmTD.UI.Battle.View;
+using RhytmTD.Battle.Entities.Models;
 
 namespace RhytmTD.UI.Battle.StateMachine
 {
     public abstract class UIBattleState_Abstract : AbstractState
     {
-        protected UIView_BattleHUD m_UIView_BattleHUD;
+        protected BattleUIModel m_UIModel;
 
-        public UIBattleState_Abstract(UIView_BattleHUD uiView_BattleHUD)
+        public UIBattleState_Abstract()
         {
-            m_UIView_BattleHUD = uiView_BattleHUD;
+            m_UIModel = Dispatcher.GetModel<BattleUIModel>();
         }
     }
 }

@@ -1,12 +1,14 @@
 ﻿using CoreFramework.Rhytm;
-using RhytmTD.UI.Battle.View;
 
 namespace RhytmTD.UI.Battle.StateMachine
 {
     public class UIBattleState_Normal : UIBattleState_Abstract
     {
-        public UIBattleState_Normal(UIView_BattleHUD uiView_BattleHUD) : base(uiView_BattleHUD)
+        private RhytmController m_RhytmController;
+
+        public UIBattleState_Normal() : base()
         {
+            m_RhytmController = Dispatcher.GetController<RhytmController>();
         }
 
         public override void EnterState()
@@ -14,11 +16,11 @@ namespace RhytmTD.UI.Battle.StateMachine
             base.EnterState();
 
             //Events
-            RhytmController.GetInstance().OnTick += TickHandler;
-            RhytmController.GetInstance().OnEventProcessingTick += ProcessTickHandler;
+            m_RhytmController.OnTick += TickHandler;
+            m_RhytmController.OnEventProcessingTick += ProcessTickHandler;
 
             //UI
-            m_UIView_BattleHUD.SetWidgetsActive(true, true);
+            m_UIModel.UIView_BattleHUD.SetWidgetsActive(true, true);
 
         }
 
@@ -27,19 +29,19 @@ namespace RhytmTD.UI.Battle.StateMachine
             base.ExitState();
 
             //Events
-            RhytmController.GetInstance().OnTick -= TickHandler;
-            RhytmController.GetInstance().OnEventProcessingTick -= ProcessTickHandler;
+            m_RhytmController.OnTick -= TickHandler;
+            m_RhytmController.OnEventProcessingTick -= ProcessTickHandler;
         }
 
 
         private void TickHandler(int ticksSinceStart)
         {
-            m_UIView_BattleHUD.UIWidget_Tick.PlayTickAnimation();
+            //m_UIView_BattleHUD.UIWidget_Tick.PlayTickAnimation();
         }
 
         private void ProcessTickHandler(int ticksSinceStart)
         {
-            m_UIView_BattleHUD.UIWidget_Tick.PlayArrowsAnimation();
+            //m_UIView_BattleHUD.UIWidget_Tick.PlayArrowsAnimation();
         }
     }
 }
