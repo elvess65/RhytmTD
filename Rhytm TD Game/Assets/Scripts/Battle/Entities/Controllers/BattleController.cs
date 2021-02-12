@@ -78,7 +78,7 @@ namespace RhytmTD.Battle.Entities.Controllers
         {
             m_RhytmController.StartTicking();
 
-            m_AudioModel.OnPlayMetronome(true);
+            //m_AudioModel.OnPlayMetronome(true);
             //m_AudioModel.OnPlayMusic(true);
 
             m_StateMachine.ChangeState<BattleState_Normal>();

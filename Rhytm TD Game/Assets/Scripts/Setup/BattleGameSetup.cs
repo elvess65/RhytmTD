@@ -32,6 +32,7 @@ namespace RhytmTD.Setup
             dispatcher.CreateController<FindTargetController>();
             dispatcher.CreateController<BattleController>();
             dispatcher.CreateController<BattleUIController>();
+            dispatcher.CreateController<BattleProgressController>();
 
             // Models
             dispatcher.CreateModel<BattleModel>();

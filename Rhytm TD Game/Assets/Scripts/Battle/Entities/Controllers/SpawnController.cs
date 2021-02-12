@@ -60,6 +60,7 @@ namespace RhytmTD.Battle.Entities.Controllers
 
             m_BattleModel = Dispatcher.GetModel<BattleModel>();
             m_BattleModel.OnBattleStarted += StartSpawnLoop;
+            m_BattleModel.OnBattleFinished += StopSpawnLoop;
 
             m_RhytmController = Dispatcher.GetController<RhytmController>();
             m_RhytmController.OnTick += HandleTick;
@@ -138,19 +139,6 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_SpawnModel.RiseSpawnsInitialized();
         }
 
-        private void StartSpawnLoop()
-        {
-            m_AreaIndex = m_AccountDataModel.CompletedAreas;
-            m_LevelIndex = m_AccountDataModel.CompletedLevels;
-            m_WaveIndex = 0;
-            m_ChunkIndex = 0;
-
-            m_IsBattleSpawnFinished = false;
-
-            //Запланировать тик действия
-            m_ActionTargetTick = m_RhytmController.CurrentTick + m_CurrentLevel.DelayBeforeStartLevel;
-        }
-
         private void HandleTick(int ticksSinceStart)
         {
             if (m_ActionTargetTick == ticksSinceStart)
@@ -203,6 +191,7 @@ namespace RhytmTD.Battle.Entities.Controllers
             }
         }
 
+ 
         private void FinishBattle()
         {
             //Stop scheduling tasks
@@ -246,6 +235,26 @@ namespace RhytmTD.Battle.Entities.Controllers
 
             Log($"Chunk spawned. Next chunk spawn at {m_ActionTargetTick}. Left {m_CurrentWave.Chunks.Count - m_ChunkIndex}/{m_CurrentWave.Chunks.Count}");
         }
+
+
+        private void StartSpawnLoop()
+        {
+            m_AreaIndex = m_AccountDataModel.CompletedAreas;
+            m_LevelIndex = m_AccountDataModel.CompletedLevels;
+            m_WaveIndex = 0;
+            m_ChunkIndex = 0;
+
+            m_IsBattleSpawnFinished = false;
+
+            //Запланировать тик действия
+            m_ActionTargetTick = m_RhytmController.CurrentTick + m_CurrentLevel.DelayBeforeStartLevel;
+        }
+
+        private void StopSpawnLoop(bool isSuccess)
+        {
+            FinishBattle();
+        }
+
 
         private void SpawnChunk()
         {

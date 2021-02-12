@@ -25,7 +25,6 @@ namespace RhytmTD.Battle.Entities.Views
 
         private void OnFocusTargetChanged(int targetID)
         {
-            Debug.Log($"VIEW: OnFocusTargetChanged " + targetID);
         }
 
         private void OnDrawGizmos()

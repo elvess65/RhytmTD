@@ -29,10 +29,11 @@ namespace RhytmTD.Battle.Entities.Controllers
 
         private void PlayerEntity_OnDestroyed(BattleEntity entity)
         {
-            m_BattleModel.RemoveBattleEntity(entity.ID);
-            m_BattleModel.PlayerEntity = null;
+            UnityEngine.Debug.LogError("Battle finished");
+            //m_BattleModel.RemoveBattleEntity(entityID);
+            //m_BattleModel.PlayerEntity = null;
 
-            m_BattleModel.OnBattleFinished?.Invoke(false);
+            m_BattleModel.OnBattleFinished?.Invoke(true);
         }
     }
 }

@@ -14,11 +14,14 @@ namespace RhytmTD.UI.Widget
         [Space(10)]
         [SerializeField] private Text Text_BattleResult;
         [SerializeField] private Image Image_BattleResult;
+        [SerializeField] private Button Button_Replay;
 
         public void Initialze()
         {
             m_BattleModel = Dispatcher.GetModel<BattleModel>();
             m_BattleModel.OnBattleFinished += ShowBattleResult;
+
+            Button_Replay.onClick.AddListener(ButtonReplayPressHandler);
         }
 
         private void ShowBattleResult(bool isSuccess)
@@ -26,6 +29,11 @@ namespace RhytmTD.UI.Widget
             Text_BattleResult.text = isSuccess ? "Success" : "Game Over";
             Text_BattleResult.color = isSuccess ? Color.green : Color.red;
             Image_BattleResult.color = isSuccess ? Color.green : Color.red;
+        }
+
+        private void ButtonReplayPressHandler()
+        {
+            Debug.Log("1");
         }
 
         protected override void Dispose()

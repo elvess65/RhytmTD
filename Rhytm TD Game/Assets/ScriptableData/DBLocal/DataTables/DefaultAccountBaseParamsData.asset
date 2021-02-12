@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 357bd71464a454f07bdd05c28d451e30, type: 3}
   m_Name: DefaultAccountBaseParamsData
   m_EditorClassIdentifier: 
-  MoveSpeed: 0
+  MoveSpeed: 2
   FocusSpeed: 3
   MinDamage: 5
   MaxDamage: 8
