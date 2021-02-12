@@ -24,12 +24,12 @@ namespace RhytmTD.Battle.Entities.Controllers
 
         private void PlayerEntityInitializedHandler(BattleEntity playerEntity)
         {
-            playerEntity.GetModule<HealthModule>().OnDestroyed += PlayerEntity_OnDestroyed;
+            playerEntity.GetModule<DestroyModule>().OnDestroyed += PlayerEntity_OnDestroyed;
         }
 
-        private void PlayerEntity_OnDestroyed(int entityID)
+        private void PlayerEntity_OnDestroyed(BattleEntity entity)
         {
-            m_BattleModel.RemoveBattleEntity(entityID);
+            m_BattleModel.RemoveBattleEntity(entity.ID);
             m_BattleModel.PlayerEntity = null;
 
             m_BattleModel.OnBattleFinished?.Invoke(false);

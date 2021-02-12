@@ -1,12 +1,7 @@
 ﻿using UnityEngine;
 
-namespace RhytmTD.Battle.Entities.EntitiesFactory
+namespace RhytmTD.Battle.Entities.EntitiesFactory.Setups
 {
-    public abstract class BaseBattleEntityFactory : IBattleEntityFactory
-    {
-        public abstract BattleEntity CreateEntity(Transform transform, EntityFactorySetup setup);
-    }
-
     public abstract class EntityFactorySetup
     {
         public float FocusSpeed { get; }

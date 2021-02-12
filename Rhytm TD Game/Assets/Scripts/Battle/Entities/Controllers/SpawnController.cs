@@ -199,25 +199,23 @@ namespace RhytmTD.Battle.Entities.Controllers
                 BattleEntity enemy = m_SpawnModel.OnSpawnEnemyEntity(setup);
                 m_BattleModel.AddBattleEntity(enemy);
 
-                if (enemy.HasModule<HealthModule>())
-                    enemy.GetModule<HealthModule>().OnDestroyed += EnemyEntity_OnDestroyed;
+                if (enemy.HasModule<DestroyModule>())
+                    enemy.GetModule<DestroyModule>().OnDestroyed += EnemyEntity_OnDestroyed;
             }
 
             //Reset spawn area indexes
             m_SpawnModel.OnResetSpawnAreaUsedAmount();
         }
 
-        private void EnemyEntity_OnDestroyed(int entityID)
+        private void EnemyEntity_OnDestroyed(BattleEntity entity)
         {
-            m_BattleModel.RemoveBattleEntity(entityID);
+            m_BattleModel.RemoveBattleEntity(entity.ID);
 
             if (m_BattleModel.BattleEntities.Count == 1 && m_IsBattleSpawnFinished)
             {
                 m_BattleModel.OnBattleFinished?.Invoke(true);
             }
         }
-
-
 
         private void Log(string message, bool isImportant = false)
         {

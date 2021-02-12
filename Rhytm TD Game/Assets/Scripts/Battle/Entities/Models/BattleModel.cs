@@ -41,5 +41,10 @@ namespace RhytmTD.Battle.Entities.Models
         {
             return m_BattleEntities[entityID];
         }
+
+        public bool HasEntity(int entityID)
+        {
+            return m_BattleEntities.ContainsKey(entityID);
+        }
     }
 }

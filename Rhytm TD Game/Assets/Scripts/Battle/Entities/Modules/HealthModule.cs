@@ -1,21 +1,21 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace RhytmTD.Battle.Entities
 {
     public class HealthModule : IBattleModule
     {
-        public int ID { get; private set; }
         public int Health { get; private set; }
         public int CurrentHealth { get; private set; }
         public bool IsAlive => CurrentHealth > 0;
 
-        public delegate void HealthRemovedEventHanlder(int amount, int senderID);
-        public event HealthRemovedEventHanlder OnHealthRemoved;
-        public event System.Action<int> OnDestroyed;
+        private BattleEntity m_BattleEntity;
 
-        public HealthModule(int id, int health)
+        public Action<int, int> OnHealthRemoved;
+
+        public HealthModule(BattleEntity battleEntity, int health)
         {
-            ID = id;
+            m_BattleEntity = battleEntity;
             Health = CurrentHealth = health;
         }
 
@@ -26,12 +26,18 @@ namespace RhytmTD.Battle.Entities
 
         public void RemoveHealth(int health, int senderID)
         {
-            CurrentHealth = Mathf.Max(CurrentHealth - health, 0);
-
             if (CurrentHealth > 0)
+            {
+                CurrentHealth = Mathf.Max(CurrentHealth - health, 0);
+
                 OnHealthRemoved?.Invoke(health, senderID);
-            else
-                OnDestroyed?.Invoke(ID);
+
+                if (CurrentHealth <= 0 && m_BattleEntity.HasModule<DestroyModule>())
+                {
+                    DestroyModule destroyModule = m_BattleEntity.GetModule<DestroyModule>();
+                    destroyModule.SetDestroyed(true);
+                }
+            }
         }
     }
 }

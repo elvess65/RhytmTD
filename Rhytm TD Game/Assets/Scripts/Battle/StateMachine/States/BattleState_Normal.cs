@@ -52,5 +52,7 @@ namespace RhytmTD.Battle.StateMachine
 
             m_RhytmInputProxy.RegisterInput();
         }       
+
+
     }
 }

@@ -33,7 +33,6 @@ namespace RhytmTD.Battle.Entities.Controllers
             MoveAll(deltaTime);
         }
 
-
         private void MoveAll(float deltaTime)
         {
             foreach (BattleEntity entity in m_BattleModel.BattleEntities)
