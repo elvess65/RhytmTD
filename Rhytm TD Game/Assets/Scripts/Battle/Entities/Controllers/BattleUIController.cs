@@ -1,8 +1,6 @@
 ﻿using CoreFramework;
 using RhytmTD.Battle.Entities.Models;
 using RhytmTD.UI.Battle.StateMachine;
-using RhytmTD.UI.Battle.View;
-using UnityEngine;
 
 namespace RhytmTD.Battle.Entities.Controllers
 {
@@ -36,10 +34,12 @@ namespace RhytmTD.Battle.Entities.Controllers
         private void Initialize()
         {
             m_UIModel.UIView_BattleHUD.Initialize();
+            m_UIModel.UIView_BattleResultHUD.Initialize();
 
             StateMachine = new UIBattleStateMachine<UIBattleState_Abstract>();
             StateMachine.AddState(new UIBattleState_NoUI());
             StateMachine.AddState(new UIBattleState_Normal());
+            StateMachine.AddState(new UIBattleState_BattleResult());
             StateMachine.Initialize<UIBattleState_NoUI>();
         }
 
@@ -50,7 +50,7 @@ namespace RhytmTD.Battle.Entities.Controllers
 
         private void BattleFinishedHandler(bool isSuccess)
         {
-            StateMachine.ChangeState<UIBattleState_NoUI>();
+            StateMachine.ChangeState<UIBattleState_BattleResult>();
         }
     }
 }

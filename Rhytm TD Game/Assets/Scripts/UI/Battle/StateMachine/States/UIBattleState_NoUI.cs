@@ -14,6 +14,7 @@
             base.EnterState();
 
             m_UIModel.UIView_BattleHUD.SetWidgetsActive(false, !m_IsFirstEnter);
+            m_UIModel.UIView_BattleResultHUD.SetWidgetsActive(false, !m_IsFirstEnter);
             m_IsFirstEnter = false;
         }
     }

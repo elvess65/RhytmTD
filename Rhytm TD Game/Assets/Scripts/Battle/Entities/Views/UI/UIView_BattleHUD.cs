@@ -3,7 +3,7 @@ using RhytmTD.UI.View;
 using RhytmTD.UI.Widget;
 using UnityEngine;
 
-namespace RhytmTD.UI.Battle.View
+namespace RhytmTD.UI.Battle.View.UI
 {
     /// <summary>
     /// Отображение виджетов боя в HUD

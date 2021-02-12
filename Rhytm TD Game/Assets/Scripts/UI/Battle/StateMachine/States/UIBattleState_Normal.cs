@@ -1,6 +1,4 @@
-﻿using CoreFramework.Rhytm;
-
-namespace RhytmTD.UI.Battle.StateMachine
+﻿namespace RhytmTD.UI.Battle.StateMachine
 {
     public class UIBattleState_Normal : UIBattleState_Abstract
     {

@@ -50,7 +50,8 @@ namespace RhytmTD.UI.Widget
 
         protected virtual void Dispose()
         {
-            m_UpdateModel.OnUpdate -= WidgetUpdate;
+            if (m_UpdateModel != null)
+                m_UpdateModel.OnUpdate -= WidgetUpdate;
         }
 
         private void PlayActivationAnimation()
