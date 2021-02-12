@@ -1,6 +1,4 @@
-﻿using CoreFramework;
-using RhytmTD.Data.Controllers;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 namespace RhytmTD.UI.Components
@@ -22,7 +20,7 @@ namespace RhytmTD.UI.Components
 
         public void StartPlayTickAnimation()
         {
-            Dispatcher.Instance.GetController<UpdateController>().UpdaterObject.GetComponent<MonoUpdater>().StartCoroutine(TickAnimationCoroutine());
+            StartCoroutine(TickAnimationCoroutine());
         }
 
 

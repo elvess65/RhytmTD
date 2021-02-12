@@ -22,6 +22,8 @@ namespace RhytmTD.UI.Widget
         public void Initialize(float tickDuration)
         {
             m_RhytmController = Dispatcher.GetController<RhytmController>();
+            m_RhytmController.OnTick += TickHandler;
+            m_RhytmController.OnEventProcessingTick += ProcessTickHandler;
 
             //Lerp
             m_LerpData = new InterpolationData<float>();
@@ -36,12 +38,33 @@ namespace RhytmTD.UI.Widget
             InternalInitialize();
         }
 
-        public void StartPlayTickAnimation()
+        protected override void WidgetUpdate(float deltaTime)
+        {
+            base.WidgetUpdate(deltaTime);
+
+            PlayArrowsAnimation();
+        }
+
+        protected override void Dispose()
+        {
+            base.Dispose();
+
+            m_RhytmController.OnTick -= TickHandler;
+            m_RhytmController.OnEventProcessingTick -= ProcessTickHandler;
+        }
+
+
+        private void TickHandler(int ticksSinceStart)
         {
             m_Tick.StartPlayTickAnimation();
         }
 
-        public void StartPlayArrowsAnimation()
+        private void ProcessTickHandler(int ticksSinceStart)
+        {
+            StartPlayArrowsAnimation();
+        }
+
+        private void StartPlayArrowsAnimation()
         {
             //Arrows
             for (int i = 0; i < m_TickArrows.Length; i++)
@@ -50,14 +73,6 @@ namespace RhytmTD.UI.Widget
             //Lerp
             m_LerpData.TotalTime = (float)m_RhytmController.TimeToNextTick + (float)m_RhytmController.ProcessTickDelta;
             m_LerpData.Start();
-        }
-
-
-        protected override void WidgetUpdate(float deltaTime)
-        {
-            base.WidgetUpdate(deltaTime);
-
-            PlayArrowsAnimation();
         }
 
         private void PlayArrowsAnimation()

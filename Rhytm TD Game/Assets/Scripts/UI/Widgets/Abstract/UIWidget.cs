@@ -48,6 +48,11 @@ namespace RhytmTD.UI.Widget
             PlayActivationAnimation();
         }
 
+        protected virtual void Dispose()
+        {
+            m_UpdateModel.OnUpdate -= WidgetUpdate;
+        }
+
         private void PlayActivationAnimation()
         {
             if (m_IsActive)
@@ -63,6 +68,11 @@ namespace RhytmTD.UI.Widget
                     Root.localScale = new Vector3(m_FromToData.y, m_FromToData.y, Root.localScale.z);
                 }
             }
+        }
+
+        private void OnDestroy()
+        {
+            Dispose();
         }
     }
 }

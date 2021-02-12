@@ -32,6 +32,7 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_BattleModel.OnBattleFinished += BattleFinishedHandler;
         }
 
+
         private void Initialize()
         {
             m_UIModel.UIView_BattleHUD.Initialize();
