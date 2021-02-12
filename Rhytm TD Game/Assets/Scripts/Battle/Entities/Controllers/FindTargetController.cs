@@ -19,7 +19,7 @@ namespace RhytmTD.Battle.Entities.Controllers
         public BattleEntity GetNearestTarget(BattleEntity sender)
         {
             TransformModule senderTransform = sender.GetModule<TransformModule>();
-            float nearestDistance = 0;
+            float nearestDistance = float.MaxValue;
             BattleEntity retValue = null;
 
             foreach (BattleEntity entity in m_BattleModel.BattleEntities)
