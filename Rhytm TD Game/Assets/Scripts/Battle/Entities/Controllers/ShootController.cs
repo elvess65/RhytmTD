@@ -1,7 +1,6 @@
 ﻿using CoreFramework;
 using CoreFramework.Rhytm;
 using RhytmTD.Battle.Entities.Models;
-using RhytmTD.Battle.Entities.Views;
 using RhytmTD.Data.Models;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,6 +14,7 @@ namespace RhytmTD.Battle.Entities.Controllers
         private BattleModel m_BattleModel;
         private DamageController m_DamageController;
         private RhytmController m_RhytmController;
+        private SpawnController m_SpawnController;
         private Dictionary<int, BattleEntity> m_Bullets = new Dictionary<int, BattleEntity>();
         private List<int> m_BulletsToRemove = new List<int>();
 
@@ -27,6 +27,7 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_BattleModel = Dispatcher.GetModel<BattleModel>();
             m_DamageController = Dispatcher.GetController<DamageController>();
             m_RhytmController = Dispatcher.GetController<RhytmController>();
+            m_SpawnController = Dispatcher.GetController<SpawnController>();
 
             UpdateModel updateModel = Dispatcher.GetModel<UpdateModel>();
             updateModel.OnUpdate += Update;
@@ -52,27 +53,11 @@ namespace RhytmTD.Battle.Entities.Controllers
         {
             TransformModule senderTransform = sender.GetModule<TransformModule>();
 
-            GameObject bulletObj = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            bulletObj.transform.localScale = Vector3.one * 0.2f;
-            bulletObj.transform.position = senderTransform.Position;
+            float speed = distanceToTarget / (float)m_RhytmController.TimeToNextTick;
 
-            distanceToTarget / (float)m_RhytmController.TimeToNextTick
-
-            DestroyModule destroyModule = bullet.GetModule<DestroyModule>();
-            destroyModule.OnDestroyed += BulletDestroyed;
-
-            Renderer renderer = bulletObj.GetComponent<Renderer>();
-            renderer.material.color = Color.black;
-
-            BulletView view = bulletObj.AddComponent<BulletView>();
-            view.Initialize(bullet);
+            BattleEntity bullet = m_SpawnController.CreateBullet(1, senderTransform.Position, Quaternion.identity, speed, sender);
 
             return bullet;
-        }
-
-        private void BulletDestroyed(BattleEntity battleEntity)
-        {
-            m_BattleModel.RemoveBattleEntity(battleEntity.ID);
         }
 
         private void Update(float t)

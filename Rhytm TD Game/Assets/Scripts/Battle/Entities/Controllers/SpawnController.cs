@@ -8,6 +8,7 @@ using RhytmTD.Battle.Entities.Models;
 using RhytmTD.Data.Factory;
 using RhytmTD.Data.Models;
 using RhytmTD.Data.Models.DataTableModels;
+using UnityEngine;
 using static RhytmTD.Data.Models.DataTableModels.WorldDataModel;
 
 namespace RhytmTD.Battle.Entities.Controllers
@@ -15,7 +16,7 @@ namespace RhytmTD.Battle.Entities.Controllers
     /// <summary>
     /// Контроллер создания врагов
     /// </summary>
-    public class SpawnController : BaseController
+    public class SpawnController : BaseController, IBattleEntityFactory
     {
         private SpawnModel m_SpawnModel;
         private BattleModel m_BattleModel;
@@ -37,9 +38,15 @@ namespace RhytmTD.Battle.Entities.Controllers
         private LevelDataFactory.WaveDataFactory m_CurrentWave => m_CurrentLevel.Waves[m_WaveIndex];
         private LevelDataFactory.ChunkDataFactory m_CurrentChunk => m_CurrentWave.Chunks[m_ChunkIndex];
 
+        private IBattleEntityFactory m_BattleEntityFactory;
+        private int[] m_SpawnAreaUsedAmount;
+        private Vector3[] m_EnemySpawnAreasOffsets;
+        private TransformModule m_PlayerTransform;
+        private Vector3 m_AREA_USED_OFFSET = new Vector3(0, 0, 2);
 
         public SpawnController(Dispatcher dispatcher) : base(dispatcher)
-        {  
+        {
+            m_BattleEntityFactory = new DefaultBattleEntityFactory();
         }
 
         public override void InitializeComplete()
@@ -56,25 +63,79 @@ namespace RhytmTD.Battle.Entities.Controllers
 
             m_RhytmController = Dispatcher.GetController<RhytmController>();
             m_RhytmController.OnTick += HandleTick;
+
+            m_SpawnModel.SpawnsInitialized += SpawnInitializedHandler;
+        }
+
+        private void SpawnInitializedHandler()
+        {
+            m_SpawnAreaUsedAmount = new int[m_SpawnModel.EnemySpawnPosition.Length];
+            m_EnemySpawnAreasOffsets = new Vector3[m_SpawnModel.EnemySpawnPosition.Length];
+        }
+
+        public BattleEntity CreatePlayer(int typeID, Vector3 position, Quaternion rotation, float moveSpeed, int health, int minDamage, int maxDamage)
+        {
+            BattleEntity entity = m_BattleEntityFactory.CreatePlayer(typeID, position, rotation, moveSpeed, health, minDamage, maxDamage);
+            m_SpawnModel.RiseOnPlayerCreated(typeID, entity);
+
+            return entity;
+        }
+
+        public BattleEntity CreateEnemy(int typeID, Vector3 position, Quaternion rotation, float rotateSpeed, int health, int minDamage, int maxDamage)
+        {
+            BattleEntity entity = m_BattleEntityFactory.CreateEnemy(typeID, position, rotation, rotateSpeed, health, minDamage, maxDamage);
+            m_SpawnModel.RiseOnEnemyCreated(typeID, entity);
+
+            return entity;
+        }
+
+        public BattleEntity CreateBullet(int typeID, Vector3 position, Quaternion rotation, float speed, BattleEntity owner)
+        {
+            BattleEntity entity = m_BattleEntityFactory.CreateBullet(typeID, position, rotation, speed, owner);
+            m_SpawnModel.RiseOnBulletCreated(typeID, entity);
+
+            DestroyModule destroyModule = entity.GetModule<DestroyModule>();
+            destroyModule.OnDestroyed += BulletDestroyed;
+
+            return entity;
         }
 
         public void SpawnPlayer()
         {
-            //Setup
-            PlayerFactorySetup setup = new PlayerFactorySetup(m_AccountBaseParamsDataModel.FocusSpeed,
-                                                              m_AccountBaseParamsDataModel.MinDamage,
-                                                              m_AccountBaseParamsDataModel.MaxDamage,
-                                                              m_AccountBaseParamsDataModel.Health,
-                                                              m_AccountBaseParamsDataModel.MoveSpeed,
-                                                              m_AccountBaseParamsDataModel.Mana);
-
             //Spawn Entity
-            BattleEntity entity = m_SpawnModel.OnSpawnPlayerEntity(setup);
+            BattleEntity entity = CreatePlayer(1, m_SpawnModel.PlayerSpawnPosition, Quaternion.identity,
+                                               m_AccountBaseParamsDataModel.MoveSpeed,
+                                               m_AccountBaseParamsDataModel.Health,
+                                               m_AccountBaseParamsDataModel.MinDamage,
+                                               m_AccountBaseParamsDataModel.MaxDamage);
+
             m_BattleModel.AddBattleEntity(entity);
             m_BattleModel.PlayerEntity = entity;
 
             //Cache spawn area position
-            m_SpawnModel.OnCacheSpawnAreaPosition(entity.GetModule<TransformModule>());
+            CacheSpawnAreaPosition(entity.GetModule<TransformModule>());
+        }
+
+        public void SpawnEnemy()
+        {
+            //Span Area indexes
+            int randomSpawnAreaIndex = Random.Range(0, m_SpawnModel.EnemySpawnPosition.Length);
+            int spawnAreaUsedAmount = m_SpawnAreaUsedAmount[randomSpawnAreaIndex]++;
+
+            Vector3 position = m_SpawnModel.EnemySpawnPosition[randomSpawnAreaIndex] + m_AREA_USED_OFFSET * spawnAreaUsedAmount;
+            Quaternion rotation = Quaternion.Euler(Quaternion.identity.x, Random.rotation.eulerAngles.y, Quaternion.identity.z);
+
+            BattleEntity enemy = CreateEnemy(1, position, rotation, 2, m_CurrentChunk.MaxHP, m_CurrentChunk.MinDamage, m_CurrentChunk.MaxDamage);
+                
+            m_BattleModel.AddBattleEntity(enemy);
+
+            if (enemy.HasModule<DestroyModule>())
+                enemy.GetModule<DestroyModule>().OnDestroyed += EnemyEntity_OnDestroyed;
+        }
+
+        public void SpawnInitialized()
+        {
+            m_SpawnModel.RiseSpawnsInitialized();
         }
 
         private void StartSpawnLoop()
@@ -95,7 +156,7 @@ namespace RhytmTD.Battle.Entities.Controllers
             if (m_ActionTargetTick == ticksSinceStart)
             {
                 //Adjust enemy spawn areas before spawn
-                m_SpawnModel.OnAdjustSpawnAreaPosition();
+                AdjustSpawnAreaPosition();
 
                 //Spawn chunk
                 SpawnChunk();
@@ -186,25 +247,42 @@ namespace RhytmTD.Battle.Entities.Controllers
             Log($"Chunk spawned. Next chunk spawn at {m_ActionTargetTick}. Left {m_CurrentWave.Chunks.Count - m_ChunkIndex}/{m_CurrentWave.Chunks.Count}");
         }
 
-
-
         private void SpawnChunk()
         {
-            //Setup
-            EnemyFactorySetup setup = new EnemyFactorySetup(2, m_CurrentChunk.MinDamage, m_CurrentChunk.MaxDamage, m_CurrentChunk.MinHP, m_CurrentChunk.MaxHP);
-
             //Spawn Entities
             for (int i = 0; i < m_CurrentChunk.EnemiesAmount; i++)
             {
-                BattleEntity enemy = m_SpawnModel.OnSpawnEnemyEntity(setup);
-                m_BattleModel.AddBattleEntity(enemy);
-
-                if (enemy.HasModule<DestroyModule>())
-                    enemy.GetModule<DestroyModule>().OnDestroyed += EnemyEntity_OnDestroyed;
+                SpawnEnemy();
             }
 
             //Reset spawn area indexes
-            m_SpawnModel.OnResetSpawnAreaUsedAmount();
+            ResetSpawnAreaUsedAmount();
+        }
+
+        private void ResetSpawnAreaUsedAmount()
+        {
+            for (int i = 0; i < m_SpawnAreaUsedAmount.Length; i++)
+            {
+                m_SpawnAreaUsedAmount[i] = 0;
+            }
+        }
+
+        private void CacheSpawnAreaPosition(TransformModule transformModule)
+        {
+            m_PlayerTransform = transformModule;
+
+            for (int i = 0; i < m_SpawnModel.EnemySpawnPosition.Length; i++)
+            {
+                m_EnemySpawnAreasOffsets[i] = m_SpawnModel.EnemySpawnPosition[i] - m_PlayerTransform.Position;
+            }
+        }
+
+        private void AdjustSpawnAreaPosition()
+        {
+            for (int i = 0; i < m_SpawnModel.EnemySpawnPosition.Length; i++)
+            {
+                m_SpawnModel.EnemySpawnPosition[i] = m_PlayerTransform.Position + m_EnemySpawnAreasOffsets[i];
+            }
         }
 
         private void EnemyEntity_OnDestroyed(BattleEntity entity)
@@ -215,6 +293,11 @@ namespace RhytmTD.Battle.Entities.Controllers
             {
                 m_BattleModel.OnBattleFinished?.Invoke(true);
             }
+        }
+
+        private void BulletDestroyed(BattleEntity battleEntity)
+        {
+            m_BattleModel.RemoveBattleEntity(battleEntity.ID);
         }
 
         private void Log(string message, bool isImportant = false)

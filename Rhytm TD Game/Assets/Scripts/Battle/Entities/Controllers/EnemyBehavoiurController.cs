@@ -1,6 +1,7 @@
 ﻿using CoreFramework;
 using RhytmTD.Battle.Entities.Models;
 using RhytmTD.Data.Models;
+using UnityEngine;
 
 namespace RhytmTD.Battle.Entities.Controllers
 {
@@ -9,7 +10,7 @@ namespace RhytmTD.Battle.Entities.Controllers
         private BattleModel m_BattleModel;
         private DamageController m_DamageController;
 
-        private const float m_ENEMY_FOCUS_Z_DISTANCE = 5;
+        private const float m_ENEMY_FOCUS_Z_DISTANCE = 50;
         private const float m_ENEMY_ATTACK_Z_DISTANCE = 0;
 
         public EnemyBehavoiurController(Dispatcher dispatcher) : base(dispatcher)
@@ -38,7 +39,7 @@ namespace RhytmTD.Battle.Entities.Controllers
                     continue;
 
                 TransformModule entityTransformModule = entity.GetModule<TransformModule>();
-                float zDist = entityTransformModule.Position.z - playerTransform.Position.z;
+                float zDist = Mathf.Abs(entityTransformModule.Position.z - playerTransform.Position.z);
 
                 if (zDist <= m_ENEMY_FOCUS_Z_DISTANCE && zDist > m_ENEMY_ATTACK_Z_DISTANCE)
                 {

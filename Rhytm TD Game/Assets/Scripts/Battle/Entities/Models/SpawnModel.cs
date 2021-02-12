@@ -1,15 +1,18 @@
 ﻿using CoreFramework;
+using System;
+using UnityEngine;
 
 namespace RhytmTD.Battle.Entities.Models
 {
     public class SpawnModel : BaseModel
     {
-        public System.Action<int, BattleEntity> OnPlayerCreated;
-        public System.Action<int, BattleEntity> OnEnemyCreated;
-        public System.Action<int, BattleEntity> OnBulletCreated;
-        public System.Action OnResetSpawnAreaUsedAmount;
-        public System.Action OnAdjustSpawnAreaPosition;
-        public System.Action<TransformModule> OnCacheSpawnAreaPosition;
+        public Action<int, BattleEntity> OnPlayerCreated;
+        public Action<int, BattleEntity> OnEnemyCreated;
+        public Action<int, BattleEntity> OnBulletCreated;
+
+        public Vector3 PlayerSpawnPosition;
+        public Vector3[] EnemySpawnPosition;
+        public Action SpawnsInitialized;
 
         public void RiseOnPlayerCreated(int typeID, BattleEntity battleEntity)
         {
@@ -24,6 +27,11 @@ namespace RhytmTD.Battle.Entities.Models
         public void RiseOnBulletCreated(int typeID, BattleEntity battleEntity)
         {
             OnBulletCreated?.Invoke(typeID, battleEntity);
+        }
+
+        public void RiseSpawnsInitialized()
+        {
+            SpawnsInitialized?.Invoke();
         }
     }
 }

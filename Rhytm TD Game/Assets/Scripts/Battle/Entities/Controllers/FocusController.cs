@@ -42,7 +42,7 @@ namespace RhytmTD.Battle.Entities.Controllers
                         TransformModule transformModule = entity.GetModule<TransformModule>();
                         RotateModule rotateModule = entity.GetModule<RotateModule>();
 
-                        Quaternion targetRotation = Quaternion.LookRotation(focusModule.TargetTransform.Position - transformModule.Position).normalized;
+                        Quaternion targetRotation = Quaternion.LookRotation((focusModule.TargetTransform.Position - transformModule.Position).normalized);
                         rotateModule.StartRotate(targetRotation);
                     }
                 }

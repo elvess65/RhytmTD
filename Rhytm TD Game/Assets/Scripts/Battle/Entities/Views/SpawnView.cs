@@ -1,6 +1,6 @@
 ﻿using CoreFramework;
 using RhytmTD.Assets.Battle;
-using RhytmTD.Battle.Entities.EntitiesFactory;
+using RhytmTD.Battle.Entities.Controllers;
 using RhytmTD.Battle.Entities.Models;
 using UnityEngine;
 
@@ -14,14 +14,7 @@ namespace RhytmTD.Battle.Entities.Views
         [SerializeField] private Transform PlayerSpawnArea;
         [SerializeField] private Transform[] EnemySpawnAreas;
 
-        private IBattleEntityFactory m_EnemiesFactory;
-        private IBattleEntityFactory m_PlayerFactory;
-        private TransformModule m_PlayerTransform;
-        private int[] m_SpawnAreaUsedAmount;
-        private Vector3[] m_EnemySpawnAreasOffsets;
         private SpawnModel m_SpawnModel;
-
-        private Vector3 m_AREA_USED_OFFSET = new Vector3(0, 0, 2);
 
         void Awake()
         {
@@ -30,81 +23,66 @@ namespace RhytmTD.Battle.Entities.Views
 
         private void Initialize()
         {
-            m_SpawnAreaUsedAmount = new int[EnemySpawnAreas.Length];
-            m_EnemySpawnAreasOffsets = new Vector3[EnemySpawnAreas.Length];
-            m_PlayerFactory = new DefaultPlayerFactory();
-            m_EnemiesFactory = new DefaultEnemyFactory();
-
             m_SpawnModel = Dispatcher.GetModel<SpawnModel>();
-            m_SpawnModel.OnSpawnPlayerEntity += SpawnPlayer;
-            m_SpawnModel.OnSpawnEnemyEntity += SpawnEnemy;
-            m_SpawnModel.OnResetSpawnAreaUsedAmount += ResetSpawnAreaUsedAmount;
-            m_SpawnModel.OnCacheSpawnAreaPosition += CacheSpawnAreaPosition;
-            m_SpawnModel.OnAdjustSpawnAreaPosition += AdjustSpawnAreaPosition;
+
+            m_SpawnModel.PlayerSpawnPosition = PlayerSpawnArea.position;
+            m_SpawnModel.EnemySpawnPosition = new Vector3[EnemySpawnAreas.Length];
+
+            for (int i = 0; i < EnemySpawnAreas.Length; ++i)
+            {
+                m_SpawnModel.EnemySpawnPosition[i] = EnemySpawnAreas[i].transform.position;
+            }
+
+            SpawnController spawnController = Dispatcher.GetController<SpawnController>();
+            spawnController.SpawnInitialized();
+
+            m_SpawnModel.OnPlayerCreated += SpawnPlayer;
+            m_SpawnModel.OnEnemyCreated += SpawnEnemy;
+            m_SpawnModel.OnBulletCreated += SpawnBullet;
         }
 
-
-        private BattleEntity SpawnPlayer(EntityFactorySetup setup)
+        private void SpawnPlayer(int typeID, BattleEntity battleEntity)
         {
+            TransformModule transformModule = battleEntity.GetModule<TransformModule>();
+
             //Create View
             GameObject player = BattleAssetsManager.Instance.GetAssets().InstantiateGameObject(BattleAssetsManager.Instance.GetAssets().PlayerPrefab);
-            player.transform.position = PlayerSpawnArea.position;
+            player.transform.position = transformModule.Position;
+            player.transform.rotation = transformModule.Rotation;
 
-            //Create Entity
-            BattleEntity battleEntity = m_PlayerFactory.CreateEntity(player.transform, setup);
             BattleEntityView playerView = player.GetComponent<BattleEntityView>();
 
             //Initialize Entity
             playerView.Initialize(battleEntity);
-
-            return battleEntity;
         }
 
-        private BattleEntity SpawnEnemy(EntityFactorySetup setup)
+        private void SpawnEnemy(int typeID, BattleEntity battleEntity)
         {
-            //Span Area indexes
-            int randomSpawnAreaIndex = Random.Range(0, EnemySpawnAreas.Length);
-            int spawnAreaUsedAmount = m_SpawnAreaUsedAmount[randomSpawnAreaIndex]++;
+            TransformModule transformModule = battleEntity.GetModule<TransformModule>();
 
             //Create View
             GameObject enemy = BattleAssetsManager.Instance.GetAssets().InstantiateGameObject(BattleAssetsManager.Instance.GetAssets().EnemyPrefab);
-            enemy.transform.position = EnemySpawnAreas[randomSpawnAreaIndex].position + m_AREA_USED_OFFSET * spawnAreaUsedAmount;
-            enemy.transform.rotation = Quaternion.Euler(enemy.transform.rotation.eulerAngles.x, Random.rotation.eulerAngles.y, enemy.transform.rotation.eulerAngles.z);
+            enemy.transform.position = transformModule.Position;
+            enemy.transform.rotation = transformModule.Rotation;
 
-            //Create Entity
-            BattleEntity battleEntity = m_EnemiesFactory.CreateEntity(enemy.transform, setup);
             BattleEntityView enemyView = enemy.GetComponent<BattleEntityView>();
 
             //Initialize Entity
             enemyView.Initialize(battleEntity);
-
-            return battleEntity;
         }
 
-        private void ResetSpawnAreaUsedAmount()
+        private void SpawnBullet(int typeID, BattleEntity battleEntity)
         {
-            for (int i = 0; i < m_SpawnAreaUsedAmount.Length; i++)
-            {
-                m_SpawnAreaUsedAmount[i] = 0;
-            }
-        }
+            TransformModule transformModule = battleEntity.GetModule<TransformModule>();
 
-        public void CacheSpawnAreaPosition(TransformModule transformModule)
-        {
-            m_PlayerTransform = transformModule;
+            GameObject bulletObj = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            bulletObj.transform.localScale = Vector3.one * 0.2f;
+            bulletObj.transform.position = transformModule.Position;
 
-            for (int i = 0; i < EnemySpawnAreas.Length; i++)
-            {
-                m_EnemySpawnAreasOffsets[i] = EnemySpawnAreas[i].position - m_PlayerTransform.Position;
-            }
-        }
+            bulletObj.GetComponent<Renderer>().material.color = Color.black;
 
-        private void AdjustSpawnAreaPosition()
-        {
-            for(int i = 0; i < EnemySpawnAreas.Length; i++)
-            {
-                EnemySpawnAreas[i].transform.position = m_PlayerTransform.Position + m_EnemySpawnAreasOffsets[i];
-            }
+            BulletView bulletView = bulletObj.AddComponent<BulletView>();
+            bulletView.Initialize(battleEntity);
         }
 
 
@@ -112,6 +90,7 @@ namespace RhytmTD.Battle.Entities.Views
         {
             Color initColor = Gizmos.color;
             Gizmos.color = Color.red;
+
             for (int i = 0; i < EnemySpawnAreas.Length; i++)
                 Gizmos.DrawWireSphere(EnemySpawnAreas[i].position, 1);
 
