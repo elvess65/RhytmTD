@@ -77,7 +77,7 @@ namespace CoreFramework.Rhytm
         private const float m_TICKS_PER_LOOP = 4;
         private const double m_PROCESS_TICK_OFFSET = 0.25;
 
-
+        [System.Obsolete("Dont forget to remove this")]
         public static RhytmController GetInstance()
         {
             return m_Instance;

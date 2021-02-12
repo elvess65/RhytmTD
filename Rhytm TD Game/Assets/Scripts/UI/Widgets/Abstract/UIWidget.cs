@@ -1,13 +1,17 @@
-﻿using UnityEngine;
+﻿using CoreFramework;
+using RhytmTD.Data.Models;
+using UnityEngine;
 
 namespace RhytmTD.UI.Widget
 {
     /// <summary>
     /// Базовый класс виджета
     /// </summary>
-    public abstract class UIWidget : MonoBehaviour
+    public abstract class UIWidget : BaseView
     {
         public Transform Root;
+
+        protected UpdateModel m_UpdateModel;
 
         private bool m_IsEnabled = true;
         private bool m_IsActive = false;
@@ -35,9 +39,16 @@ namespace RhytmTD.UI.Widget
 
         protected virtual void InternalInitialize()
         {
+            m_UpdateModel = Dispatcher.GetModel<UpdateModel>();
+            m_UpdateModel.OnUpdate += WidgetUpdate;
         }
 
-        private void Update()
+        protected virtual void WidgetUpdate(float deltaTime)
+        {
+            PlayActivationAnimation();
+        }
+
+        private void PlayActivationAnimation()
         {
             if (m_IsActive)
             {

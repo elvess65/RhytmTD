@@ -13,14 +13,14 @@ namespace RhytmTD.Battle.Entities.Controllers
     /// </summary>
     public class BattleController : BaseController
     {
+        private BattleStateMachine<BattleState_Abstract> m_StateMachine;
+
         private RhytmInputProxy m_RhytmInputProxy;
         private RhytmController m_RhytmController;
         private SpawnController m_SpawnController;
 
         private BattleModel m_BattleModel;
         private BattleAudioModel m_AudioModel;
-
-        public BattleStateMachine<BattleState_Abstract> StateMachine { get; private set; }
 
 
         public BattleController(Dispatcher dispatcher) : base(dispatcher)
@@ -47,10 +47,10 @@ namespace RhytmTD.Battle.Entities.Controllers
         private void Initialize()
         {
             //Initialize StateMachine
-            StateMachine = new BattleStateMachine<BattleState_Abstract>();
-            StateMachine.AddState(new BattleState_LockInput());
-            StateMachine.AddState(new BattleState_Normal());
-            StateMachine.Initialize<BattleState_LockInput>();
+            m_StateMachine = new BattleStateMachine<BattleState_Abstract>();
+            m_StateMachine.AddState(new BattleState_LockInput());
+            m_StateMachine.AddState(new BattleState_Normal());
+            m_StateMachine.Initialize<BattleState_LockInput>();
 
             //Rhytm data
             m_AudioModel.BPM = 30;
@@ -74,22 +74,22 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_BattleModel.OnBattleStarted?.Invoke();
         }
 
-        void BattleStartedHandler()
+        private void BattleStartedHandler()
         {
             m_RhytmController.StartTicking();
 
             m_AudioModel.OnPlayMetronome(true);
             //m_AudioModel.OnPlayMusic(true);
 
-            StateMachine.ChangeState<BattleState_Normal>();
+            m_StateMachine.ChangeState<BattleState_Normal>();
         }
 
-        void BattleFinishedHandler(bool isSuccess)
+        private void BattleFinishedHandler(bool isSuccess)
         {
             m_AudioModel.OnPlayMetronome(false);
             m_AudioModel.OnPlayMusic(false);
 
-            StateMachine.ChangeState<BattleState_LockInput>();
+            m_StateMachine.ChangeState<BattleState_LockInput>();
         }
     }
 }

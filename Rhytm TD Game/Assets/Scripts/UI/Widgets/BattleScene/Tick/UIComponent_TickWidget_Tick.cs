@@ -20,7 +20,7 @@ namespace RhytmTD.UI.Components
             m_WaitBeatIndicatorDelay = new WaitForSeconds(tickDuration);
         }
 
-        public void PlayTickAnimation()
+        public void StartPlayTickAnimation()
         {
             Dispatcher.Instance.GetController<UpdateController>().UpdaterObject.GetComponent<MonoUpdater>().StartCoroutine(TickAnimationCoroutine());
         }

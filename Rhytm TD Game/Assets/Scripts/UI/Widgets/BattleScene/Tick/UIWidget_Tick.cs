@@ -10,6 +10,8 @@ namespace RhytmTD.UI.Widget
     /// </summary>
     public class UIWidget_Tick : UIWidget
     {
+        private RhytmController m_RhytmController;
+
         [Space(10)]
         [SerializeField] UIComponent_TickWidget_Tick m_Tick;
         [SerializeField] UIComponent_TickWidget_Arrow[] m_TickArrows;
@@ -19,6 +21,8 @@ namespace RhytmTD.UI.Widget
 
         public void Initialize(float tickDuration)
         {
+            m_RhytmController = Dispatcher.GetController<RhytmController>();
+
             //Lerp
             m_LerpData = new InterpolationData<float>();
 
@@ -32,7 +36,31 @@ namespace RhytmTD.UI.Widget
             InternalInitialize();
         }
 
-        public void Update()
+        public void StartPlayTickAnimation()
+        {
+            m_Tick.StartPlayTickAnimation();
+        }
+
+        public void StartPlayArrowsAnimation()
+        {
+            //Arrows
+            for (int i = 0; i < m_TickArrows.Length; i++)
+                m_TickArrows[i].PrepareForInterpolation();
+
+            //Lerp
+            m_LerpData.TotalTime = (float)m_RhytmController.TimeToNextTick + (float)m_RhytmController.ProcessTickDelta;
+            m_LerpData.Start();
+        }
+
+
+        protected override void WidgetUpdate(float deltaTime)
+        {
+            base.WidgetUpdate(deltaTime);
+
+            PlayArrowsAnimation();
+        }
+
+        private void PlayArrowsAnimation()
         {
             if (m_LerpData.IsStarted)
             {
@@ -52,23 +80,6 @@ namespace RhytmTD.UI.Widget
                         m_TickArrows[i].FinishInterpolation();
                 }
             }
-        }
-
-
-        public void PlayTickAnimation()
-        {
-            m_Tick.PlayTickAnimation();
-        }
-
-        public void PlayArrowsAnimation()
-        {
-            //Arrows
-            for (int i = 0; i < m_TickArrows.Length; i++)
-                m_TickArrows[i].PrepareForInterpolation();
-
-            //Lerp
-            m_LerpData.TotalTime = (float)RhytmController.GetInstance().TimeToNextTick + (float)RhytmController.GetInstance().ProcessTickDelta;
-            m_LerpData.Start();
         }
     }
 }
