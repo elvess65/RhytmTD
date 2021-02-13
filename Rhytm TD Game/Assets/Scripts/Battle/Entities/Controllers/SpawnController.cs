@@ -42,7 +42,7 @@ namespace RhytmTD.Battle.Entities.Controllers
         private int[] m_SpawnAreaUsedAmount;
         private Vector3[] m_EnemySpawnAreasOffsets;
         private TransformModule m_PlayerTransform;
-        private Vector3 m_AREA_USED_OFFSET = new Vector3(0, 0, 2);
+        private Vector3 m_AREA_USED_OFFSET = new Vector3(0, 0, 10);
 
         public SpawnController(Dispatcher dispatcher) : base(dispatcher)
         {

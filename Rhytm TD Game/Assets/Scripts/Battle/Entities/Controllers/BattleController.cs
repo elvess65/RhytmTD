@@ -77,7 +77,7 @@ namespace RhytmTD.Battle.Entities.Controllers
 
         private void BattleStartedHandler()
         {
-            //m_AudioModel.OnPlayMetronome(true);
+            m_AudioModel.OnPlayMetronome(true);
             //m_AudioModel.OnPlayMusic(true);
 
             m_StateMachine.ChangeState<BattleState_Normal>();
