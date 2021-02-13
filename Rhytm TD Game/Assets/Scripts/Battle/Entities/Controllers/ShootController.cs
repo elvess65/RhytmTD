@@ -35,18 +35,23 @@ namespace RhytmTD.Battle.Entities.Controllers
 
         public void Shoot(BattleEntity sender, BattleEntity target)
         {
-            TransformModule senderTransform = sender.GetModule<TransformModule>();
-            TransformModule targetTransform = target.GetModule<TransformModule>();
-
-            Vector3 targetDir = senderTransform.Position - targetTransform.Position;
+            Vector3 targetDir = GetTargetDir(sender, target);
             BattleEntity bullet = CreateBullet(sender, targetDir.magnitude);
 
-            bullet.GetModule<TargetModule>().SetTarget(target.ID, targetTransform);
+            bullet.GetModule<TargetModule>().SetTarget(target);
             bullet.GetModule<MoveModule>().StartMove(targetDir.normalized);
 
             m_Bullets.Add(bullet.ID, bullet);
 
             m_BattleModel.AddBattleEntity(bullet);
+        }
+
+        private Vector3 GetTargetDir(BattleEntity sender, BattleEntity target)
+        {
+            TransformModule senderTransform = sender.GetModule<TransformModule>();
+            TransformModule targetTransform = target.GetModule<TransformModule>();
+
+            return senderTransform.Position - targetTransform.Position;
         }
 
         private BattleEntity CreateBullet(BattleEntity sender, float distanceToTarget)
@@ -55,7 +60,18 @@ namespace RhytmTD.Battle.Entities.Controllers
 
             float speed = distanceToTarget / (float)m_RhytmController.TimeToNextTick;
 
+            DamageModule senderDamageModule = sender.GetModule<DamageModule>();
+
             BattleEntity bullet = m_SpawnController.CreateBullet(1, senderTransform.Position, Quaternion.identity, speed, sender);
+
+            DamageModule damageModule = bullet.GetModule<DamageModule>();
+            damageModule.MinDamage = damageModule.MaxDamage = senderDamageModule.RandomDamage();
+
+            if (sender.HasModule<DamagePredictionModule>())
+            {
+                DamagePredictionModule damagePredictionModule = sender.GetModule<DamagePredictionModule>();
+                damagePredictionModule.PotentialDamage += damageModule.MaxDamage;
+            }
 
             return bullet;
         }
@@ -75,9 +91,11 @@ namespace RhytmTD.Battle.Entities.Controllers
 
                 if (dir.sqrMagnitude <= DISTANCE_TO_HIT * DISTANCE_TO_HIT)
                 {
-                    if (m_BattleModel.HasEntity(targetModule.TargetID))
+                    if (m_BattleModel.HasEntity(targetModule.Target.ID))
                     {
-                        m_DamageController.DealDamage(ownerModule.Owner.ID, targetModule.TargetID);
+                        DamageModule damageModule = bullet.GetModule<DamageModule>();
+
+                        m_DamageController.DealDamage(ownerModule.Owner.ID, targetModule.Target.ID, damageModule.MaxDamage);
                     }
 
                     m_BulletsToRemove.Add(bullet.ID);

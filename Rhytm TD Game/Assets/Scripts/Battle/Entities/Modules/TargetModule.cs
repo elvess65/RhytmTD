@@ -5,30 +5,30 @@ namespace RhytmTD.Battle.Entities
 {
     public class TargetModule : IBattleModule
     {
-        private int m_TargetID;
+        private BattleEntity m_Target;
         private TransformModule m_TargetTransform;
 
-        public int TargetID => m_TargetID;
-        public TransformModule TargetTransform => m_TargetTransform;
-        public bool HasTarget => m_TargetTransform != null;
+        public BattleEntity Target => m_Target;
+        public TransformModule TargetTransform => m_TargetTransform  ?? (m_TargetTransform = m_Target.GetModule<TransformModule>());
+        public bool HasTarget => m_Target != null;
 
-        public Action<TransformModule> OnTargetChanged;
+        public Action<BattleEntity> OnTargetChanged;
 
         public TargetModule()
         {
         }
 
-        public void SetTarget(int targetID, TransformModule target)
+        public void SetTarget(BattleEntity battleEntity)
         {
-            m_TargetID = targetID;
-            m_TargetTransform = target;
+            m_Target = battleEntity;
 
-            OnTargetChanged?.Invoke(target);
+            OnTargetChanged?.Invoke(battleEntity);
         }
 
         public void ClearTarget()
         {
             m_TargetTransform = null;
+            OnTargetChanged?.Invoke(null);
         }
     }
 }

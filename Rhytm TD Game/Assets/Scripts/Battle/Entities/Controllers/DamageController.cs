@@ -20,17 +20,22 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_BattleModel = Dispatcher.GetModel<BattleModel>();
         }
 
+        public void DealDamage(int senderID, int receiverID, int damage)
+        {
+            BattleEntity receiver = m_BattleModel.GetEntity(receiverID);
+            HealthModule receiverHealthModule = receiver.GetModule<HealthModule>();
+
+            receiverHealthModule.RemoveHealth(damage, senderID);
+        }
+
         public void DealDamage(int senderID, int receiverID)
         {
             BattleEntity sender = m_BattleModel.GetEntity(senderID);
-            BattleEntity receiver = m_BattleModel.GetEntity(receiverID);
-
             DamageModule senderDamageModule = sender.GetModule<DamageModule>();
-            HealthModule receiverHealthModule = receiver.GetModule<HealthModule>();
 
             int damage = Random.Range(senderDamageModule.MinDamage, senderDamageModule.MaxDamage);
 
-            receiverHealthModule.RemoveHealth(damage, senderID);
+            DealDamage(senderID, receiverID, damage);
         }
     }
 }

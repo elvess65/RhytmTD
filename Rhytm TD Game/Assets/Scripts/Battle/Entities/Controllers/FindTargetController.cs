@@ -1,6 +1,5 @@
 ﻿using CoreFramework;
 using RhytmTD.Battle.Entities.Models;
-using System;
 
 namespace RhytmTD.Battle.Entities.Controllers
 {
@@ -25,10 +24,18 @@ namespace RhytmTD.Battle.Entities.Controllers
 
             foreach (BattleEntity entity in m_BattleModel.BattleEntities)
             {
-                if (entity.ID == sender.ID || !entity.HasModule<TransformModule>())
+                if (entity.ID == sender.ID || !entity.HasModule<TransformModule>() || entity.HasModule<PredictedDestroyedTag>())
+                    continue;
+
+                DestroyModule destroyModule = entity.GetModule<DestroyModule>();
+
+                if (destroyModule.IsDestroyed)
                     continue;
 
                 TransformModule transformModule = entity.GetModule<TransformModule>();
+
+                if (senderTransform.Position.z >= transformModule.Position.z)
+                    continue;
 
                 float distanceSqr = (senderTransform.Position - transformModule.Position).sqrMagnitude;
                 if (distanceSqr <= nearestDistance)

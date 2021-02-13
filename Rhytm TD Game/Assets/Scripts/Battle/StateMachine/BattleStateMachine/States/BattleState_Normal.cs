@@ -40,7 +40,22 @@ namespace RhytmTD.Battle.StateMachine
 
         private void HandleTouch(Vector3 mouseScreenPos)
         {
-            BattleEntity targetEntity = m_FindTargetController.GetNearestTarget(m_BattleModel.PlayerEntity);
+            TargetModule targetModule = m_BattleModel.PlayerEntity.GetModule<TargetModule>();
+            BattleEntity targetEntity;
+
+            if (!targetModule.HasTarget)
+            {
+                targetEntity = m_FindTargetController.GetNearestTarget(m_BattleModel.PlayerEntity);
+
+                if (targetEntity != null)
+                {
+                    targetModule.SetTarget(targetEntity);
+                }
+            }
+            else
+            {
+                targetEntity = targetModule.Target;
+            }
 
             if (targetEntity != null)
             {

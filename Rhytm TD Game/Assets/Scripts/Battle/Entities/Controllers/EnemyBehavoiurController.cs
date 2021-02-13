@@ -9,6 +9,8 @@ namespace RhytmTD.Battle.Entities.Controllers
     {
         private BattleModel m_BattleModel;
         private DamageController m_DamageController;
+        private DestroyModule m_PlayerDestroyModule;
+        private UpdateModel m_UpdateModel;
 
         private const float m_ENEMY_FOCUS_Z_DISTANCE = 50;
         private const float m_ENEMY_ATTACK_Z_DISTANCE = 0;
@@ -21,21 +23,32 @@ namespace RhytmTD.Battle.Entities.Controllers
         {
             m_BattleModel = Dispatcher.GetModel<BattleModel>();
             m_DamageController = Dispatcher.GetController<DamageController>();
-            
-            UpdateModel updateModel = Dispatcher.GetModel<UpdateModel>();
-            updateModel.OnUpdate += Update;
+
+            m_BattleModel.OnPlayerEntityInitialized += PlayerInitializedHandler;
+        }
+
+        private void PlayerInitializedHandler(BattleEntity battleEntity)
+        {
+            m_UpdateModel = Dispatcher.GetModel<UpdateModel>();
+            m_UpdateModel.OnUpdate -= Update;
+            m_UpdateModel.OnUpdate += Update;
+
+            m_PlayerDestroyModule = battleEntity.GetModule<DestroyModule>();
+            m_PlayerDestroyModule.OnDestroyed += PlayerDestryedHandler;
+        }
+
+        private void PlayerDestryedHandler(BattleEntity battleEntity)
+        {
+            m_UpdateModel.OnUpdate -= Update;
         }
 
         public void Update(float deltaTime)
         {
-            if (m_BattleModel.PlayerEntity == null || !m_BattleModel.PlayerEntity.GetModule<HealthModule>().IsAlive)
-                return;
-
             TransformModule playerTransform = m_BattleModel.PlayerEntity.GetModule<TransformModule>();
 
             foreach (BattleEntity entity in m_BattleModel.BattleEntities)
             {
-                if (!m_BattleModel.PlayerEntity.GetModule<HealthModule>().IsAlive || !entity.HasModule<EnemyBehaviourTag>())
+                if (!entity.HasModule<EnemyBehaviourTag>())
                     continue;
 
                 TransformModule entityTransformModule = entity.GetModule<TransformModule>();
