@@ -15,6 +15,8 @@ namespace RhytmTD.Battle.Entities.Controllers
         private UpdateModel m_UpdateModel;
 
         private Vector3 m_CameraOffet;
+
+        //FOV Pulse
         private bool m_IsActive = false;
 
         public CameraFollowController(Dispatcher dispatcher) : base(dispatcher)
@@ -31,18 +33,21 @@ namespace RhytmTD.Battle.Entities.Controllers
 
             m_BattleModel.OnPlayerEntityInitialized += PlayerEntityInitialized;
 
-            m_RhytmController.OnTick += TickHandler;
+            //FOV Pulse
+            //m_RhytmController.OnTick += TickHandler;
 
             m_UpdateModel = Dispatcher.GetModel<UpdateModel>();
             m_UpdateModel.OnUpdate += Update;
         }
 
+        //FOV Pulse
         private void TickHandler(int tick)
         {
             Camera.main.fieldOfView = 50;
             m_IsActive = true;
         }
 
+        //FOV Pulse
         private void Update(float t)
         {
             if (m_IsActive && Camera.main.fieldOfView < 60)

@@ -50,17 +50,22 @@ namespace RhytmTD.Battle.Entities.Controllers
                 if (!entity.HasModule<EnemyBehaviourTag>())
                     continue;
 
+                FocusModule focusModule = entity.GetModule<FocusModule>();
                 TransformModule entityTransformModule = entity.GetModule<TransformModule>();
+                
                 float zDist = entityTransformModule.Position.z - playerTransform.Position.z;
 
                 if (zDist <= m_ENEMY_FOCUS_Z_DISTANCE && zDist > m_ENEMY_ATTACK_Z_DISTANCE)
                 {
-                    FocusModule focusModule = entity.GetModule<FocusModule>();
                     focusModule.StartFocusOnTarget(m_BattleModel.PlayerEntity.ID, playerTransform);
                 }
                 else if (zDist <= m_ENEMY_ATTACK_Z_DISTANCE)
                 {
                     m_DamageController.DealDamage(entity.ID, m_BattleModel.PlayerEntity.ID);
+
+                    UnityEngine.Debug.Log("Attack player");
+                    focusModule.StopFocus();
+                    entity.RemoveModule<EnemyBehaviourTag>();
                 }
             }
         }
