@@ -4,7 +4,6 @@ using CoreFramework.SceneLoading;
 using RhytmTD.Battle.Entities.Models;
 using RhytmTD.Core;
 using RhytmTD.Data.Models;
-using RhytmTD.Data.Models.DataTableModels;
 using RhytmTD.UI.View;
 using UnityEngine;
 
@@ -32,8 +31,7 @@ namespace RhytmTD.OtherScenes.MenuScene
 
             //Opened ares and completed levels are used to show player's best progress
             AccountDataModel accountDataModel = Dispatcher.Instance.GetModel<AccountDataModel>();
-            Debug.Log("Completed areas: " + accountDataModel.CompletedAreas);
-            Debug.Log("Completed levels: " + accountDataModel.CompletedLevels);
+            Debug.Log($"Completed areas: {accountDataModel.CompletedAreas}. Completed levels: {accountDataModel.CompletedLevels}");
 
             //Here its possible to choose from amount of opened areas
             Dispatcher.Instance.GetModel<BattleModel>().CurrentArea = accountDataModel.CompletedAreas;

@@ -13,4 +13,44 @@ MonoBehaviour:
   m_Name: LevelFactory Test2
   m_EditorClassIdentifier: 
   DelayBeforeStartLevel: 2
-  Waves: []
+  Waves:
+  - DelayBetweenChunksTicks: 3
+    DurationRestTicks: 2
+    EnemiesAmount: 2
+    MinDamage: 20
+    MaxDamage: 30
+    MinHP: 20
+    MaxHP: 30
+    Chunks:
+    - OverrideAmount: 0
+      OverrideHP: 0
+      OverrideDamage: 0
+      EnemiesAmount: 2
+      MinDamage: 20
+      MaxDamage: 30
+      MinHP: 20
+      MaxHP: 30
+    - OverrideAmount: 0
+      OverrideHP: 0
+      OverrideDamage: 0
+      EnemiesAmount: 2
+      MinDamage: 20
+      MaxDamage: 30
+      MinHP: 20
+      MaxHP: 30
+  - DelayBetweenChunksTicks: 2
+    DurationRestTicks: 3
+    EnemiesAmount: 4
+    MinDamage: 11
+    MaxDamage: 15
+    MinHP: 11
+    MaxHP: 14
+    Chunks:
+    - OverrideAmount: 0
+      OverrideHP: 0
+      OverrideDamage: 0
+      EnemiesAmount: 4
+      MinDamage: 11
+      MaxDamage: 15
+      MinHP: 11
+      MaxHP: 14
