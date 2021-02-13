@@ -11,6 +11,7 @@
         /// <summary>
         /// Находиться ли текущее состояние времени в окне ввода
         /// </summary>
+        [System.Obsolete("Dont forget to remove this")]
         public static bool IsInUseRange => 1 - RhytmController.GetInstance().ProgressToNextTickAnalog < m_Instance.m_InputPrecious01 ||
                                                RhytmController.GetInstance().ProgressToNextTickAnalog < m_Instance.m_InputPrecious01;
 

@@ -109,6 +109,8 @@ namespace CoreFramework.Rhytm
             m_DSPStartTime = AudioSettings.dspTime;
             m_NextTickTime = m_DSPStartTime;
 
+            RefreshTicksSinceStart();
+
             OnStarted?.Invoke();
 
             m_IsStarted = true;
@@ -126,10 +128,7 @@ namespace CoreFramework.Rhytm
         {
             if (m_IsStarted)
             {
-                TimeSinceStart = AudioSettings.dspTime - m_DSPStartTime;
-
-                //Ticks since start
-                m_TicksSinceStart = TimeSinceStart / TickDurationSeconds;
+                RefreshTicksSinceStart();
 
                 //Loops
                 if (m_TicksSinceStart >= (m_CompletedLoops + 1) * m_TICKS_PER_LOOP)
@@ -158,6 +157,12 @@ namespace CoreFramework.Rhytm
             str.AppendFormat($"TimeToNextTickAnalog {ProgressToNextTickAnalog} (0-1)");
 
             return str.ToString();
+        }
+
+        private void RefreshTicksSinceStart()
+        {
+            TimeSinceStart = AudioSettings.dspTime - m_DSPStartTime;
+            m_TicksSinceStart = TimeSinceStart / TickDurationSeconds;
         }
 
 

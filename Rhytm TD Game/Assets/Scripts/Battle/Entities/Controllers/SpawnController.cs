@@ -26,7 +26,7 @@ namespace RhytmTD.Battle.Entities.Controllers
 
         private RhytmController m_RhytmController;
         
-        private int m_ActionTargetTick;
+        private int m_ActionTargetTick = -1;
         private int m_AreaIndex;
         private int m_LevelIndex;
         private int m_WaveIndex;
@@ -65,19 +65,14 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_RhytmController = Dispatcher.GetController<RhytmController>();
             m_RhytmController.OnTick += HandleTick;
 
-            m_SpawnModel.SpawnsInitialized += SpawnInitializedHandler;
+            m_SpawnModel.SpawnsInitialized += SpawnAreasInitializedHandler;
         }
 
-        private void SpawnInitializedHandler()
-        {
-            m_SpawnAreaUsedAmount = new int[m_SpawnModel.EnemySpawnPosition.Length];
-            m_EnemySpawnAreasOffsets = new Vector3[m_SpawnModel.EnemySpawnPosition.Length];
-        }
-
+ 
         public BattleEntity CreatePlayer(int typeID, Vector3 position, Quaternion rotation, float moveSpeed, int health, int minDamage, int maxDamage)
         {
             BattleEntity entity = m_BattleEntityFactory.CreatePlayer(typeID, position, rotation, moveSpeed, health, minDamage, maxDamage);
-            m_SpawnModel.RiseOnPlayerCreated(typeID, entity);
+            m_SpawnModel.OnPlayerCreated?.Invoke(typeID, entity);
 
             return entity;
         }
@@ -85,7 +80,7 @@ namespace RhytmTD.Battle.Entities.Controllers
         public BattleEntity CreateEnemy(int typeID, Vector3 position, Quaternion rotation, float rotateSpeed, int health, int minDamage, int maxDamage)
         {
             BattleEntity entity = m_BattleEntityFactory.CreateEnemy(typeID, position, rotation, rotateSpeed, health, minDamage, maxDamage);
-            m_SpawnModel.RiseOnEnemyCreated(typeID, entity);
+            m_SpawnModel.OnEnemyCreated?.Invoke(typeID, entity);
 
             return entity;
         }
@@ -93,13 +88,14 @@ namespace RhytmTD.Battle.Entities.Controllers
         public BattleEntity CreateBullet(int typeID, Vector3 position, Quaternion rotation, float speed, BattleEntity owner)
         {
             BattleEntity entity = m_BattleEntityFactory.CreateBullet(typeID, position, rotation, speed, owner);
-            m_SpawnModel.RiseOnBulletCreated(typeID, entity);
+            m_SpawnModel.OnBulletCreated?.Invoke(typeID, entity);
 
             DestroyModule destroyModule = entity.GetModule<DestroyModule>();
             destroyModule.OnDestroyed += BulletDestroyed;
 
             return entity;
         }
+
 
         public void SpawnPlayer()
         {
@@ -134,10 +130,6 @@ namespace RhytmTD.Battle.Entities.Controllers
                 enemy.GetModule<DestroyModule>().OnDestroyed += EnemyEntity_OnDestroyed;
         }
 
-        public void SpawnInitialized()
-        {
-            m_SpawnModel.RiseSpawnsInitialized();
-        }
 
         private void HandleTick(int ticksSinceStart)
         {
@@ -294,6 +286,13 @@ namespace RhytmTD.Battle.Entities.Controllers
             }
         }
 
+        private void SpawnAreasInitializedHandler()
+        {
+            m_SpawnAreaUsedAmount = new int[m_SpawnModel.EnemySpawnPosition.Length];
+            m_EnemySpawnAreasOffsets = new Vector3[m_SpawnModel.EnemySpawnPosition.Length];
+        }
+
+
         private void EnemyEntity_OnDestroyed(BattleEntity entity)
         {
             m_BattleModel.RemoveBattleEntity(entity.ID);
@@ -308,6 +307,7 @@ namespace RhytmTD.Battle.Entities.Controllers
         {
             m_BattleModel.RemoveBattleEntity(battleEntity.ID);
         }
+
 
         private void Log(string message, bool isImportant = false)
         {

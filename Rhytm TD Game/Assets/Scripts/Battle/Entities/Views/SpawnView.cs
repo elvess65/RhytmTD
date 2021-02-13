@@ -2,6 +2,7 @@
 using RhytmTD.Assets.Battle;
 using RhytmTD.Battle.Entities.Controllers;
 using RhytmTD.Battle.Entities.Models;
+using System;
 using UnityEngine;
 
 namespace RhytmTD.Battle.Entities.Views
@@ -9,7 +10,7 @@ namespace RhytmTD.Battle.Entities.Views
     /// <summary>
     /// Отображение содержащие точки спауна
     /// </summary>
-    public class SpawnView : BaseView
+    public class SpawnView : BaseView, IDisposable
     {
         [SerializeField] private Transform PlayerSpawnArea;
         [SerializeField] private Transform[] EnemySpawnAreas;
@@ -23,22 +24,21 @@ namespace RhytmTD.Battle.Entities.Views
 
         private void Initialize()
         {
-            m_SpawnModel = Dispatcher.GetModel<SpawnModel>();
+            Dispatcher.AddDisposable(this);
 
+            m_SpawnModel = Dispatcher.GetModel<SpawnModel>();
             m_SpawnModel.PlayerSpawnPosition = PlayerSpawnArea.position;
             m_SpawnModel.EnemySpawnPosition = new Vector3[EnemySpawnAreas.Length];
+            m_SpawnModel.OnPlayerCreated += SpawnPlayer;
+            m_SpawnModel.OnEnemyCreated += SpawnEnemy;
+            m_SpawnModel.OnBulletCreated += SpawnBullet;
 
             for (int i = 0; i < EnemySpawnAreas.Length; ++i)
             {
                 m_SpawnModel.EnemySpawnPosition[i] = EnemySpawnAreas[i].transform.position;
             }
 
-            SpawnController spawnController = Dispatcher.GetController<SpawnController>();
-            spawnController.SpawnInitialized();
-
-            m_SpawnModel.OnPlayerCreated += SpawnPlayer;
-            m_SpawnModel.OnEnemyCreated += SpawnEnemy;
-            m_SpawnModel.OnBulletCreated += SpawnBullet;
+            m_SpawnModel.SpawnsInitialized?.Invoke();
         }
 
         private void SpawnPlayer(int typeID, BattleEntity battleEntity)
@@ -85,6 +85,15 @@ namespace RhytmTD.Battle.Entities.Views
             bulletView.Initialize(battleEntity);
         }
 
+
+        public void Dispose()
+        {
+            m_SpawnModel.OnPlayerCreated -= SpawnPlayer;
+            m_SpawnModel.OnEnemyCreated -= SpawnEnemy;
+            m_SpawnModel.OnBulletCreated -= SpawnBullet;
+
+            Dispatcher.RemoveDisposable(this);
+        }
 
         private void OnDrawGizmos()
         {

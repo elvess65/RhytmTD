@@ -9,6 +9,8 @@ namespace RhytmTD.UI.Widget
     /// </summary>
     public class UIWidget_BattleResult : UIWidget
     {
+        public System.Action OnReplayButtonPressed;
+
         private BattleModel m_BattleModel;
 
         [Space(10)]
@@ -22,6 +24,8 @@ namespace RhytmTD.UI.Widget
             m_BattleModel.OnBattleFinished += ShowBattleResult;
 
             Button_Replay.onClick.AddListener(ButtonReplayPressHandler);
+
+            InternalInitialize();
         }
 
         private void ShowBattleResult(bool isSuccess)
@@ -33,10 +37,10 @@ namespace RhytmTD.UI.Widget
 
         private void ButtonReplayPressHandler()
         {
-            Debug.Log("1");
+            OnReplayButtonPressed?.Invoke();
         }
 
-        protected override void Dispose()
+        public override void Dispose()
         {
             base.Dispose();
 

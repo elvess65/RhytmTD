@@ -1,5 +1,6 @@
 ﻿using CoreFramework;
 using RhytmTD.Data.Models;
+using System;
 using UnityEngine;
 
 namespace RhytmTD.UI.Widget
@@ -7,7 +8,7 @@ namespace RhytmTD.UI.Widget
     /// <summary>
     /// Базовый класс виджета
     /// </summary>
-    public abstract class UIWidget : BaseView
+    public abstract class UIWidget : BaseView, IDisposable
     {
         public Transform Root;
 
@@ -39,6 +40,8 @@ namespace RhytmTD.UI.Widget
 
         protected virtual void InternalInitialize()
         {
+            Dispatcher.AddDisposable(this);
+
             m_UpdateModel = Dispatcher.GetModel<UpdateModel>();
             m_UpdateModel.OnUpdate += WidgetUpdate;
         }
@@ -46,12 +49,6 @@ namespace RhytmTD.UI.Widget
         protected virtual void WidgetUpdate(float deltaTime)
         {
             PlayActivationAnimation();
-        }
-
-        protected virtual void Dispose()
-        {
-            if (m_UpdateModel != null)
-                m_UpdateModel.OnUpdate -= WidgetUpdate;
         }
 
         private void PlayActivationAnimation()
@@ -71,9 +68,12 @@ namespace RhytmTD.UI.Widget
             }
         }
 
-        private void OnDestroy()
+        public virtual void Dispose()
         {
-            Dispose();
+            if (m_UpdateModel != null)
+                m_UpdateModel.OnUpdate -= WidgetUpdate;
+
+            Dispatcher.RemoveDisposable(this);
         }
     }
 }

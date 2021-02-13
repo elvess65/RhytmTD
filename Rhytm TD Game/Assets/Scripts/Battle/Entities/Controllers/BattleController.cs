@@ -71,14 +71,13 @@ namespace RhytmTD.Battle.Entities.Controllers
 
         private void InitializationFinished()
         {
+            m_RhytmController.StartTicking();
             m_BattleModel.OnBattleStarted?.Invoke();
         }
 
         private void BattleStartedHandler()
         {
-            m_RhytmController.StartTicking();
-
-            //m_AudioModel.OnPlayMetronome(true);
+            m_AudioModel.OnPlayMetronome(true);
             //m_AudioModel.OnPlayMusic(true);
 
             m_StateMachine.ChangeState<BattleState_Normal>();
@@ -86,6 +85,8 @@ namespace RhytmTD.Battle.Entities.Controllers
 
         private void BattleFinishedHandler(bool isSuccess)
         {
+            m_RhytmController.StopTicking();
+
             m_AudioModel.OnPlayMetronome(false);
             m_AudioModel.OnPlayMusic(false);
 

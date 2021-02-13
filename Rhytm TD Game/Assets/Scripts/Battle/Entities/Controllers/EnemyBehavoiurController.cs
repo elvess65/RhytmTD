@@ -1,7 +1,6 @@
 ﻿using CoreFramework;
 using RhytmTD.Battle.Entities.Models;
 using RhytmTD.Data.Models;
-using UnityEngine;
 
 namespace RhytmTD.Battle.Entities.Controllers
 {
@@ -10,7 +9,7 @@ namespace RhytmTD.Battle.Entities.Controllers
         private BattleModel m_BattleModel;
         private DamageController m_DamageController;
 
-        private const float m_ENEMY_FOCUS_Z_DISTANCE = 50;
+        private const float m_ENEMY_FOCUS_Z_DISTANCE = 10;
         private const float m_ENEMY_ATTACK_Z_DISTANCE = 0;
 
         public EnemyBehavoiurController(Dispatcher dispatcher) : base(dispatcher)
@@ -20,13 +19,14 @@ namespace RhytmTD.Battle.Entities.Controllers
         public override void InitializeComplete()
         {
             m_BattleModel = Dispatcher.GetModel<BattleModel>();
-            m_DamageController = Dispatcher.GetController<DamageController>();
-            
+
             UpdateModel updateModel = Dispatcher.GetModel<UpdateModel>();
             updateModel.OnUpdate += Update;
+
+            m_DamageController = Dispatcher.GetController<DamageController>(); 
         }
 
-        public void Update(float deltaTime)
+        private void Update(float deltaTime)
         {
             if (m_BattleModel.PlayerEntity == null || !m_BattleModel.PlayerEntity.GetModule<HealthModule>().IsAlive)
                 return;
@@ -39,7 +39,7 @@ namespace RhytmTD.Battle.Entities.Controllers
                     continue;
 
                 TransformModule entityTransformModule = entity.GetModule<TransformModule>();
-                float zDist = Mathf.Abs(entityTransformModule.Position.z - playerTransform.Position.z);
+                float zDist = entityTransformModule.Position.z - playerTransform.Position.z;
 
                 if (zDist <= m_ENEMY_FOCUS_Z_DISTANCE && zDist > m_ENEMY_ATTACK_Z_DISTANCE)
                 {
