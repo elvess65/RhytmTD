@@ -15,6 +15,15 @@ namespace RhytmTD.UI.Components
         private Vector3 m_InitPos;
         private Vector3 m_InitScale;
 
+        private Color m_ColorOutOfRange;
+        private Color m_ColorInRange;
+
+
+        public void InitializeColors(Color colorOutOfRange, Color colorInRange)
+        {
+            m_ColorOutOfRange = colorOutOfRange;
+            m_ColorInRange = colorInRange;
+        }
 
         public override void Initialize()
         {
@@ -37,7 +46,7 @@ namespace RhytmTD.UI.Components
             m_ControlledTransform.anchoredPosition = Vector3.Lerp(m_InitPos, Vector3.zero, progress);
             m_ControlledTransform.localScale = m_InitScale * Mathf.Lerp(0, 1, progress);
 
-            m_ArrowImage.color = RhytmInputProxy.IsInUseRange ? Color.green : Color.white;
+            m_ArrowImage.color = RhytmInputProxy.IsInUseRange ? m_ColorInRange : m_ColorOutOfRange;
         }
     }
 }

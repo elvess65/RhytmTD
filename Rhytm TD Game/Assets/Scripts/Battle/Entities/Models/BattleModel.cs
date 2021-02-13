@@ -1,9 +1,10 @@
 ﻿using CoreFramework;
+using System;
 using System.Collections.Generic;
 
 namespace RhytmTD.Battle.Entities.Models
 {
-    public class BattleModel : BaseModel
+    public class BattleModel : BaseModel, IDisposable
     {
         public int ID;
         public int CurrentArea;
@@ -12,10 +13,15 @@ namespace RhytmTD.Battle.Entities.Models
         private Dictionary<int, BattleEntity> m_BattleEntities = new Dictionary<int, BattleEntity>();
         private BattleEntity m_PlayerEntity;
 
-        public System.Action<BattleEntity> OnPlayerEntityInitialized;
-        public System.Action<bool> OnBattleFinished;
-        public System.Action OnBattleStarted;
-        public System.Action OnBattleInitialize;
+        public Action<BattleEntity> OnPlayerEntityInitialized;
+        public Action<bool> OnBattleFinished;
+        public Action OnBattleStarted;
+        public Action OnBattleInitialize;
+
+        public BattleModel()
+        {
+            Dispatcher.Instance.AddDisposable(this);
+        }
 
         public BattleEntity PlayerEntity
         {
@@ -47,6 +53,12 @@ namespace RhytmTD.Battle.Entities.Models
         public bool HasEntity(int entityID)
         {
             return m_BattleEntities.ContainsKey(entityID);
+        }
+
+        public void Dispose()
+        {
+            m_PlayerEntity = null;
+            m_BattleEntities.Clear();
         }
     }
 }

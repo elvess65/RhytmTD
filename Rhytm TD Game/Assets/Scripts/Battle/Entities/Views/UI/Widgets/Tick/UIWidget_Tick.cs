@@ -10,6 +10,9 @@ namespace RhytmTD.UI.Widget
     /// </summary>
     public class UIWidget_Tick : UIWidget
     {
+        public Color ColorOutOfRange;
+        public Color ColorInRange;
+
         private RhytmController m_RhytmController;
 
         [Space(10)]
@@ -33,10 +36,14 @@ namespace RhytmTD.UI.Widget
 
             //Arrows
             for (int i = 0; i < m_TickArrows.Length; i++)
+            {
+                m_TickArrows[i].InitializeColors(ColorOutOfRange, ColorInRange);
                 m_TickArrows[i].Initialize();
+            }
 
             InternalInitialize();
         }
+
 
         protected override void WidgetUpdate(float deltaTime)
         {
@@ -44,16 +51,7 @@ namespace RhytmTD.UI.Widget
 
             PlayArrowsAnimation();
         }
-
-        protected override void Dispose()
-        {
-            base.Dispose();
-
-            m_RhytmController.OnTick -= TickHandler;
-            m_RhytmController.OnEventProcessingTick -= ProcessTickHandler;
-        }
-
-
+      
         private void TickHandler(int ticksSinceStart)
         {
             m_Tick.StartPlayTickAnimation();
@@ -95,6 +93,15 @@ namespace RhytmTD.UI.Widget
                         m_TickArrows[i].FinishInterpolation();
                 }
             }
+        }
+
+
+        public override void Dispose()
+        {
+            base.Dispose();
+
+            m_RhytmController.OnTick -= TickHandler;
+            m_RhytmController.OnEventProcessingTick -= ProcessTickHandler;
         }
     }
 }

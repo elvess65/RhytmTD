@@ -16,4 +16,3 @@ MonoBehaviour:
   - ID: 12
     LevelsData:
     - {fileID: 11400000, guid: b130ce6464ece3844b952f536c8d703c, type: 2}
-    - {fileID: 11400000, guid: 01e2bee4fbafcc4429df537847199d40, type: 2}

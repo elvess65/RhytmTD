@@ -1,5 +1,4 @@
-﻿
-using CoreFramework;
+﻿using CoreFramework;
 using RhytmTD.Data.Models;
 using UnityEngine;
 

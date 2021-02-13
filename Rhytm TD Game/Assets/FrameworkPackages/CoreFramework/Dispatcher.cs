@@ -10,6 +10,9 @@ namespace CoreFramework
         private Dictionary<Type, BaseController> m_Controllers = new Dictionary<Type, BaseController>();
         private Dictionary<Type, BaseModel> m_Models = new Dictionary<Type, BaseModel>();
 
+        private List<IDisposable> m_Disposables = new List<IDisposable>();
+        private List<IDisposable> m_RemovedDisposables = new List<IDisposable>();
+
         public static Dispatcher Instance
         {
             get
@@ -81,6 +84,31 @@ namespace CoreFramework
             {
                 controller.InitializeComplete();
             }
+        }
+
+        public void AddDisposable(IDisposable disposable)
+        {
+            m_Disposables.Add(disposable);
+        }
+
+        public void RemoveDisposable(IDisposable disposable)
+        {
+            if (m_Disposables.Contains(disposable))
+                m_RemovedDisposables.Remove(disposable);
+        }
+
+        public void Dispose()
+        {
+            foreach (IDisposable disposable in m_Disposables)
+                disposable.Dispose();
+
+            for (int i = 0; i < m_RemovedDisposables.Count; i++)
+            {
+                if (m_Disposables.Contains(m_RemovedDisposables[i]))
+                    m_Disposables.Remove(m_RemovedDisposables[i]);
+            }
+
+            m_RemovedDisposables.Clear();
         }
     }
 }
