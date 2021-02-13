@@ -27,7 +27,7 @@ namespace RhytmTD.Battle.Entities
 
         public void ClearTarget()
         {
-            m_TargetTransform = null;
+            m_Target = null;
             OnTargetChanged?.Invoke(null);
         }
     }

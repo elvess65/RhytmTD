@@ -24,7 +24,7 @@ namespace RhytmTD.Battle.Entities.Controllers
 
             foreach (BattleEntity entity in m_BattleModel.BattleEntities)
             {
-                if (entity.ID == sender.ID || !entity.HasModule<TransformModule>() || entity.HasModule<PredictedDestroyedTag>())
+                if (entity.ID == sender.ID || !entity.HasModule<EnemyBehaviourTag>() || entity.HasModule<PredictedDestroyedTag>())
                     continue;
 
                 DestroyModule destroyModule = entity.GetModule<DestroyModule>();

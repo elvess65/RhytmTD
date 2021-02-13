@@ -38,15 +38,11 @@ namespace RhytmTD.Battle.Entities.Controllers
 
         private void PotentialDamageChanged(int potentialDamage)
         {
-            Debug.LogError("PotentialDamageChanged " + potentialDamage);
-            
             if (!m_TargetModule.HasTarget)
                 return;
 
             if (potentialDamage >= m_TargetHealthModule.Health)
             {
-                Debug.LogError("PredictedDestroyedTag " );
-
                 m_TargetModule.Target.AddModule(new PredictedDestroyedTag());
                 m_TargetModule.ClearTarget();
             }
@@ -54,8 +50,6 @@ namespace RhytmTD.Battle.Entities.Controllers
 
         private void TargetChanged(BattleEntity target)
         {
-            Debug.LogError("TARET CHANGED " + (target != null ? target.ID.ToString() : "null"));
-
             if (target != null)
             {
                 DestroyModule destroyModule = target.GetModule<DestroyModule>();
