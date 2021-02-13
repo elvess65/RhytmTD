@@ -1,5 +1,7 @@
 ﻿using CoreFramework;
+using CoreFramework.Rhytm;
 using RhytmTD.Battle.Entities.Models;
+using RhytmTD.Data.Models;
 using UnityEngine;
 
 namespace RhytmTD.Battle.Entities.Controllers
@@ -9,8 +11,11 @@ namespace RhytmTD.Battle.Entities.Controllers
         private CameraModel m_CameraModel;
         private BattleModel m_BattleModel;
         private CameraController m_CameraController;
+        private RhytmController m_RhytmController;
+        private UpdateModel m_UpdateModel;
 
         private Vector3 m_CameraOffet;
+        private bool m_IsActive = false;
 
         public CameraFollowController(Dispatcher dispatcher) : base(dispatcher)
         {
@@ -22,8 +27,34 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_BattleModel = Dispatcher.GetModel<BattleModel>();
 
             m_CameraController = Dispatcher.GetController<CameraController>();
+            m_RhytmController = Dispatcher.GetController<RhytmController>();
 
             m_BattleModel.OnPlayerEntityInitialized += PlayerEntityInitialized;
+
+            m_RhytmController.OnTick += TickHandler;
+
+            m_UpdateModel = Dispatcher.GetModel<UpdateModel>();
+            m_UpdateModel.OnUpdate += Update;
+        }
+
+        private void TickHandler(int tick)
+        {
+            Camera.main.fieldOfView = 50;
+            m_IsActive = true;
+        }
+
+        private void Update(float t)
+        {
+            if (m_IsActive && Camera.main.fieldOfView < 60)
+            {
+                Camera.main.fieldOfView += 5f * t;
+
+                if (Camera.main.fieldOfView >= 60)
+                {
+                    Camera.main.fieldOfView = 60;
+                    m_IsActive = false;
+                }
+            }
         }
 
         private void PlayerEntityInitialized(BattleEntity playerEntity)
