@@ -46,6 +46,7 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_BattleModel.AddBattleEntity(bullet);
         }
 
+ 
         private Vector3 GetTargetDir(BattleEntity sender, BattleEntity target)
         {
             TransformModule senderTransform = sender.GetModule<TransformModule>();
@@ -57,10 +58,9 @@ namespace RhytmTD.Battle.Entities.Controllers
         private BattleEntity CreateBullet(BattleEntity sender, float distanceToTarget)
         {
             TransformModule senderTransform = sender.GetModule<TransformModule>();
-
-            float speed = distanceToTarget / (float)m_RhytmController.TimeToNextTick;
-
             DamageModule senderDamageModule = sender.GetModule<DamageModule>();
+
+            float speed = distanceToTarget / GetTimeToNextTick();
 
             BattleEntity bullet = m_SpawnController.CreateBullet(1, senderTransform.Position, Quaternion.identity, speed, sender);
 
@@ -76,7 +76,15 @@ namespace RhytmTD.Battle.Entities.Controllers
             return bullet;
         }
 
-        private void Update(float t)
+        private float GetTimeToNextTick()
+        {
+            if (m_RhytmController.InputTickResult == EnumsCollection.InputTickResult.PreTick)
+                return (float)m_RhytmController.TickDurationSeconds + -(float)m_RhytmController.DeltaInput;
+
+            return (float)m_RhytmController.TimeToNextTick;
+        }
+
+        private void Update(float deltaTime)
         {
             foreach (BattleEntity bullet in m_Bullets.Values)
             {

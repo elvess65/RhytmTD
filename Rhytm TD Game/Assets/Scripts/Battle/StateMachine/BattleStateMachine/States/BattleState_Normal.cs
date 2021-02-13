@@ -43,6 +43,8 @@ namespace RhytmTD.Battle.StateMachine
             TargetModule targetModule = m_BattleModel.PlayerEntity.GetModule<TargetModule>();
             BattleEntity targetEntity;
 
+            m_RhytmInputProxy.IsInputTickValid();
+
             if (!targetModule.HasTarget)
             {
                 targetEntity = m_FindTargetController.GetNearestTarget(m_BattleModel.PlayerEntity);

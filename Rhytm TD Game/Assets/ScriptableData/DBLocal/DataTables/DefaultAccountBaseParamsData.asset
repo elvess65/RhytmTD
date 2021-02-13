@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MoveSpeed: 2
   FocusSpeed: 3
-  MinDamage: 10
+  MinDamage: 12
   MaxDamage: 15
-  Health: 20
+  Health: 50
   Mana: 10
