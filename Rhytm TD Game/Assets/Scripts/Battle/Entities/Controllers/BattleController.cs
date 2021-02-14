@@ -53,7 +53,7 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_StateMachine.Initialize<BattleState_LockInput>();
 
             //Rhytm data
-            m_AudioModel.BPM = 30;
+            m_AudioModel.BPM = 60;
             m_RhytmInputProxy.SetInputPrecious(0.25f);
 
             //Spawn player
@@ -72,6 +72,7 @@ namespace RhytmTD.Battle.Entities.Controllers
         private void InitializationFinished()
         {
             m_RhytmController.StartTicking();
+           
             m_BattleModel.OnBattleStarted?.Invoke();
         }
 

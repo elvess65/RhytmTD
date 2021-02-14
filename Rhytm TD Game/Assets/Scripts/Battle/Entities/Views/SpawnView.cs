@@ -101,7 +101,12 @@ namespace RhytmTD.Battle.Entities.Views
             Gizmos.color = Color.red;
 
             for (int i = 0; i < EnemySpawnAreas.Length; i++)
-                Gizmos.DrawWireSphere(EnemySpawnAreas[i].position, 1);
+            {
+                if (m_SpawnModel == null)
+                    Gizmos.DrawWireSphere(EnemySpawnAreas[i].position, 1);
+                else
+                    Gizmos.DrawWireSphere(m_SpawnModel.EnemySpawnPosition[i], 1);
+            }
 
             Gizmos.color = Color.green;
             Gizmos.DrawWireSphere(PlayerSpawnArea.position, 1);

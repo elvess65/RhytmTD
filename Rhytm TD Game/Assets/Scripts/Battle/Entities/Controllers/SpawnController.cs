@@ -39,10 +39,10 @@ namespace RhytmTD.Battle.Entities.Controllers
         private LevelDataFactory.ChunkDataFactory m_CurrentChunk => m_CurrentWave.Chunks[m_ChunkIndex];
 
         private IBattleEntityFactory m_BattleEntityFactory;
-        private int[] m_SpawnAreaUsedAmount;
-        private Vector3[] m_EnemySpawnAreasOffsets;
-        private TransformModule m_PlayerTransform;
-        private Vector3 m_AREA_USED_OFFSET = new Vector3(0, 0, 10);
+        private int[] m_SpawnAreaUsedAmount;    //Сколько раз использована точка спауна (индекс массива отвечает индексу точки спауна)
+        private int[] m_EnemySpawnAreasOffsets; //На сколько тиков вперед смещена точка спауна (индекс массива отвечает индексу точки спауна)
+        private const int m_MIN_SPAWN_AREA_OFFSET = 3;
+        private const int m_MAX_SPAWN_AREA_OFFSET = 7;
 
         public SpawnController(Dispatcher dispatcher) : base(dispatcher)
         {
@@ -99,18 +99,17 @@ namespace RhytmTD.Battle.Entities.Controllers
 
         public void SpawnPlayer()
         {
+            float moveSpeed = m_AccountBaseParamsDataModel.MoveSpeedUnitsPerTick * (1 / (float)m_RhytmController.TickDurationSeconds);
+
             //Spawn Entity
             BattleEntity entity = CreatePlayer(1, m_SpawnModel.PlayerSpawnPosition, Quaternion.identity,
-                                               m_AccountBaseParamsDataModel.MoveSpeed,
+                                               moveSpeed,
                                                m_AccountBaseParamsDataModel.Health,
                                                m_AccountBaseParamsDataModel.MinDamage,
                                                m_AccountBaseParamsDataModel.MaxDamage);
 
             m_BattleModel.AddBattleEntity(entity);
             m_BattleModel.PlayerEntity = entity;
-
-            //Cache spawn area position
-            CacheSpawnAreaPosition(entity.GetModule<TransformModule>());
         }
 
         public void SpawnEnemy()
@@ -119,7 +118,10 @@ namespace RhytmTD.Battle.Entities.Controllers
             int randomSpawnAreaIndex = Random.Range(0, m_SpawnModel.EnemySpawnPosition.Length);
             int spawnAreaUsedAmount = m_SpawnAreaUsedAmount[randomSpawnAreaIndex]++;
 
-            Vector3 position = m_SpawnModel.EnemySpawnPosition[randomSpawnAreaIndex] + m_AREA_USED_OFFSET * spawnAreaUsedAmount;
+            float playerSpeed = m_BattleModel.PlayerEntity.GetModule<MoveModule>().CurrentSpeed;
+            float worldOffset = playerSpeed * 1;
+            Vector3 areaUsedOffset = new Vector3(0, 0, worldOffset);
+            Vector3 position = m_SpawnModel.EnemySpawnPosition[randomSpawnAreaIndex] + areaUsedOffset * spawnAreaUsedAmount;
             Quaternion rotation = Quaternion.Euler(Quaternion.identity.x, Random.rotation.eulerAngles.y, Quaternion.identity.z);
 
             BattleEntity enemy = CreateEnemy(1, position, rotation, 2, m_CurrentChunk.MaxHP, m_CurrentChunk.MinDamage, m_CurrentChunk.MaxDamage);
@@ -255,41 +257,33 @@ namespace RhytmTD.Battle.Entities.Controllers
             {
                 SpawnEnemy();
             }
-
-            //Reset spawn area indexes
-            ResetSpawnAreaUsedAmount();
-        }
-
-        private void ResetSpawnAreaUsedAmount()
-        {
-            for (int i = 0; i < m_SpawnAreaUsedAmount.Length; i++)
-            {
-                m_SpawnAreaUsedAmount[i] = 0;
-            }
-        }
-
-        private void CacheSpawnAreaPosition(TransformModule transformModule)
-        {
-            m_PlayerTransform = transformModule;
-
-            for (int i = 0; i < m_SpawnModel.EnemySpawnPosition.Length; i++)
-            {
-                m_EnemySpawnAreasOffsets[i] = m_SpawnModel.EnemySpawnPosition[i] - m_PlayerTransform.Position;
-            }
         }
 
         private void AdjustSpawnAreaPosition()
         {
+            //Reset spawn area indexes
+            for (int i = 0; i < m_SpawnAreaUsedAmount.Length; i++)
+                m_SpawnAreaUsedAmount[i] = 0;
+
+            //Recalculate spawn area offsets
+            for (int i = 0; i < m_SpawnModel.EnemySpawnPosition.Length; i++)
+                m_EnemySpawnAreasOffsets[i] = Random.Range(m_MIN_SPAWN_AREA_OFFSET, m_MAX_SPAWN_AREA_OFFSET);
+
+            //Offset each spawn point by amount of ticks
+            Vector3 playerPosition = m_BattleModel.PlayerEntity.GetModule<TransformModule>().Position;
+            float playerSpeed = m_BattleModel.PlayerEntity.GetModule<MoveModule>().CurrentSpeed;
+
             for (int i = 0; i < m_SpawnModel.EnemySpawnPosition.Length; i++)
             {
-                m_SpawnModel.EnemySpawnPosition[i] = m_PlayerTransform.Position + m_EnemySpawnAreasOffsets[i];
+                float worldOffset = playerPosition.z + playerSpeed * m_EnemySpawnAreasOffsets[i];
+                m_SpawnModel.EnemySpawnPosition[i] = new Vector3(m_SpawnModel.EnemySpawnPosition[i].x, m_SpawnModel.EnemySpawnPosition[i].y, worldOffset);
             }
         }
 
         private void SpawnAreasInitializedHandler()
         {
             m_SpawnAreaUsedAmount = new int[m_SpawnModel.EnemySpawnPosition.Length];
-            m_EnemySpawnAreasOffsets = new Vector3[m_SpawnModel.EnemySpawnPosition.Length];
+            m_EnemySpawnAreasOffsets = new int[m_SpawnModel.EnemySpawnPosition.Length];
         }
 
 

@@ -7,7 +7,7 @@ namespace RhytmTD.Data.Models.DataTableModels
     /// </summary>
     public class AccountBaseParamsDataModel : BaseModel
     {
-        public float MoveSpeed;
+        public float MoveSpeedUnitsPerTick;
         public float FocusSpeed;
         public int MinDamage;
         public int MaxDamage;

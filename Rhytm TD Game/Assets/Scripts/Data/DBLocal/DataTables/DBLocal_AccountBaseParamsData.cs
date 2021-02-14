@@ -9,7 +9,7 @@ namespace RhytmTD.Data.DataBaseLocal
     [CreateAssetMenu(fileName = "New Local AccountBaseParamsData", menuName = "DBLocal/Account/AccountBaseParamsData", order = 101)]
     public class DBLocal_AccountBaseParamsData : ScriptableObject
     {
-        public float MoveSpeed;
+        public float MoveSpeedUnitsPerTick;
         public float FocusSpeed;
         public int MinDamage;
         public int MaxDamage;
