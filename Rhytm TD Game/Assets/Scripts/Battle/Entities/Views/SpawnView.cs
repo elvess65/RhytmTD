@@ -98,7 +98,7 @@ namespace RhytmTD.Battle.Entities.Views
         private void OnDrawGizmos()
         {
             Color initColor = Gizmos.color;
-            Gizmos.color = Color.red;
+            Gizmos.color = Color.yellow;
 
             for (int i = 0; i < EnemySpawnAreas.Length; i++)
             {

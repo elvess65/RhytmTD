@@ -27,9 +27,7 @@ namespace RhytmTD.Battle.Entities.Views
 
         private void OnDestroyed(BattleEntity entity)
         {
-            Debug.Log($"VIEW: {entity.ID} was destroyed");
-
-            transform.localScale = Vector3.one * 0.1f;
+            Destroy(gameObject);
         }
 
         private void RotationChanged(Quaternion rotation)

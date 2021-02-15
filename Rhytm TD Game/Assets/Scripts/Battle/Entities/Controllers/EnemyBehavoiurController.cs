@@ -61,7 +61,7 @@ namespace RhytmTD.Battle.Entities.Controllers
                 }
                 else if (zDist <= m_ENEMY_ATTACK_Z_DISTANCE)
                 {
-                    //m_DamageController.DealDamage(entity.ID, m_BattleModel.PlayerEntity.ID);
+                    m_DamageController.DealDamage(entity.ID, m_BattleModel.PlayerEntity.ID);
 
                     focusModule.StopFocus();
                     entity.RemoveModule<EnemyBehaviourTag>();

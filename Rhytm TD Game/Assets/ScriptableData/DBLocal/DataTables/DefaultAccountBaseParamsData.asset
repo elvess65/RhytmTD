@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 357bd71464a454f07bdd05c28d451e30, type: 3}
   m_Name: DefaultAccountBaseParamsData
   m_EditorClassIdentifier: 
-  MoveSpeedUnitsPerTick: 2
+  MoveSpeedUnitsPerTick: 1
   FocusSpeed: 3
   MinDamage: 12
-  MaxDamage: 15
+  MaxDamage: 17
   Health: 50
   Mana: 10

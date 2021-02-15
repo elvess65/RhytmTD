@@ -18,7 +18,7 @@ namespace RhytmTD.Editor.EditorExtensions
             public OverrideTypes HPOverride = OverrideTypes.None;
         }
 
-        private bool m_IsWavesFoldedOut = false;
+        private bool m_IsWavesFoldedOut = true;
         private List<WaveEditorData> m_WavesEditorData;
 
         public override void OnInspectorGUI()
@@ -26,7 +26,10 @@ namespace RhytmTD.Editor.EditorExtensions
             DrawLevel();
 
             if (GUI.changed)
+            {
                 ValidateLevel();
+                EditorUtility.SetDirty(target);
+            }
         }
 
         void OnEnable()
