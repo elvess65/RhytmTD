@@ -15,6 +15,7 @@ namespace RhytmTD.Data.Factory
         {
             public int DelayBetweenChunksTicks = 2;
             public int DurationRestTicks = 3;
+            public int SaveTicksBufferOffset = 3;
 
             public int EnemiesAmount = 10;
             public int MinDamage = 20;

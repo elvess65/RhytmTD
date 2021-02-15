@@ -40,32 +40,32 @@ namespace RhytmTD.Battle.StateMachine
 
         private void HandleTouch(Vector3 mouseScreenPos)
         {
-            TargetModule targetModule = m_BattleModel.PlayerEntity.GetModule<TargetModule>();
-            BattleEntity targetEntity;
-
-            m_RhytmInputProxy.IsInputTickValid();
-
-            if (!targetModule.HasTarget)
+            if (m_RhytmInputProxy.IsInputAllowed() && m_RhytmInputProxy.IsInputTickValid())
             {
-                targetEntity = m_FindTargetController.GetNearestTarget(m_BattleModel.PlayerEntity);
+                TargetModule targetModule = m_BattleModel.PlayerEntity.GetModule<TargetModule>();
+                BattleEntity targetEntity;
+
+                m_RhytmInputProxy.IsInputTickValid();
+
+                if (!targetModule.HasTarget)
+                {
+                    targetEntity = m_FindTargetController.GetNearestTarget(m_BattleModel.PlayerEntity);
+
+                    if (targetEntity != null)
+                    {
+                        targetModule.SetTarget(targetEntity);
+                    }
+                }
+                else
+                {
+                    targetEntity = targetModule.Target;
+                }
 
                 if (targetEntity != null)
                 {
-                    targetModule.SetTarget(targetEntity);
+                    m_ShootController.Shoot(m_BattleModel.PlayerEntity, targetEntity);
                 }
             }
-            else
-            {
-                targetEntity = targetModule.Target;
-            }
-
-            if (targetEntity != null)
-            {
-                m_ShootController.Shoot(m_BattleModel.PlayerEntity, targetEntity);
-            }
-
-            //if (m_RhytmInputProxy.IsInputAllowed() && m_RhytmInputProxy.IsInputTickValid())
-            //    Debug.Log("Input is valid");
 
             m_RhytmInputProxy.RegisterInput();
         }       

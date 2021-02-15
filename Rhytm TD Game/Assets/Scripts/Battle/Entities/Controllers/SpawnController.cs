@@ -52,31 +52,30 @@ namespace RhytmTD.Battle.Entities.Controllers
         /// <summary>
         /// Минимальное количество тиков, на которые будет сдвинута точка спауна при следующей оновлении позиции
         /// </summary>
-        private const int m_MIN_SPAWN_AREA_RAW_OFFSET_TICKS_ENEMY = 3;
+        private const int m_MIN_SPAWN_AREA_RAW_OFFSET_TICKS_ENEMY = 2;
         /// <summary>
         /// Минимальное количество тиков, на которые будет сдвинута точка спауна при следующей оновлении позиции
         /// </summary>
-        private const int m_MAX_SPAWN_AREA_RAW_OFFSET_TICKS_ENEMY = 5;
+        private const int m_MAX_SPAWN_AREA_RAW_OFFSET_TICKS_ENEMY = 4;
 
         /// <summary>
         /// Минимальное количество тиков, на которые будет сдвинута точка спауна при следующей оновлении позиции
         /// </summary>
-        private const int m_MIN_SPAWN_AREA_RAW_OFFSET_TICKS_PLAYER = 7;
+        private const int m_MIN_SPAWN_AREA_RAW_OFFSET_TICKS_PLAYER = 5;
         /// <summary>
         /// Минимальное количество тиков, на которые будет сдвинута точка спауна при следующей оновлении позиции
         /// </summary>
-        private const int m_MAX_SPAWN_AREA_RAW_OFFSET_TICKS_PLAYER = 10;
+        private const int m_MAX_SPAWN_AREA_RAW_OFFSET_TICKS_PLAYER = 7;
 
         /// <summary>
         /// На сколько тиков вперед смещен спаун врага в пределах одной точки спауна относительно предыдущего
         /// </summary>
-        private const int m_ENEMY_SPAWN_POINT_USED_OFFSET_TICKS = 2; 
+        private const int m_ENEMY_SPAWN_POINT_USED_OFFSET_TICKS = 3; 
 
 
         public SpawnController(Dispatcher dispatcher) : base(dispatcher)
         {
             m_BattleEntityFactory = new DefaultBattleEntityFactory();
-            Random.InitState(10);
         }
 
         public override void InitializeComplete()
@@ -302,10 +301,9 @@ namespace RhytmTD.Battle.Entities.Controllers
                 m_EnemySpawnAreasOffsetsTicks[i] = CalculateSpawnAreaOffsetTick(out farthestEnemy);
 
             //Offset each spawn point by amount of ticks
+            float playerSpeed = m_BattleModel.PlayerEntity.GetModule<MoveModule>().CurrentSpeed;
             Vector3 anchorPosition = farthestEnemy == null ? m_BattleModel.PlayerEntity.GetModule<TransformModule>().Position :
                                                              farthestEnemy.GetModule<TransformModule>().Position;
-
-            float playerSpeed = m_BattleModel.PlayerEntity.GetModule<MoveModule>().CurrentSpeed;
 
             for (int i = 0; i < m_SpawnModel.EnemySpawnPosition.Length; i++)
             {
@@ -319,10 +317,14 @@ namespace RhytmTD.Battle.Entities.Controllers
             //Approximate ticks to destroy existing enemies
             int approxTicksToDestroyEnemies = CalculateApproxTickToDestroyExistingEnemies(out farthestEnemy);
 
-            //Raw offset 
-            int rawOffsetTicks = Random.Range(m_MIN_SPAWN_AREA_RAW_OFFSET_TICKS_PLAYER, m_MAX_SPAWN_AREA_RAW_OFFSET_TICKS_PLAYER);
+            //Raw offset
+            int rawOffsetTicks = 0;
+            if (farthestEnemy == null)
+                rawOffsetTicks = Random.Range(m_MIN_SPAWN_AREA_RAW_OFFSET_TICKS_PLAYER, m_MAX_SPAWN_AREA_RAW_OFFSET_TICKS_PLAYER);
+            else
+                rawOffsetTicks = Random.Range(m_MIN_SPAWN_AREA_RAW_OFFSET_TICKS_ENEMY, m_MAX_SPAWN_AREA_RAW_OFFSET_TICKS_ENEMY);
 
-            return approxTicksToDestroyEnemies + rawOffsetTicks;
+            return approxTicksToDestroyEnemies + rawOffsetTicks + m_CurrentWave.SaveTicksBufferOffset;
 
         }
 
@@ -354,7 +356,7 @@ namespace RhytmTD.Battle.Entities.Controllers
                 }
             }
 
-            return Mathf.CeilToInt((float)enemiesComulatedCurrentHealth / playerAverageDamage); ;
+            return Mathf.CeilToInt((float)enemiesComulatedCurrentHealth / playerAverageDamage);
         }
 
         private void SpawnAreasInitializedHandler()

@@ -17,7 +17,7 @@ namespace RhytmTD.Battle.Entities.Views
 
         private SpawnModel m_SpawnModel;
 
-        void Awake()
+        private void Awake()
         {
             Initialize();
         }

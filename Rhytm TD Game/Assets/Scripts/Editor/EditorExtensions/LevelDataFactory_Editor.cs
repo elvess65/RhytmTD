@@ -327,6 +327,7 @@ namespace RhytmTD.Editor.EditorExtensions
         {
             wave.DelayBetweenChunksTicks = EditorGUILayout.IntField("Delay Between Chunks (Ticks)", wave.DelayBetweenChunksTicks);
             wave.DurationRestTicks = EditorGUILayout.IntField("Duration Rest (Ticks)", wave.DurationRestTicks);
+            wave.SaveTicksBufferOffset = EditorGUILayout.IntField("Save Buffer Offset (Ticks)", wave.SaveTicksBufferOffset);
 
             EditorGUILayout.Space();
 
