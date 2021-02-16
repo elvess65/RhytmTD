@@ -290,21 +290,19 @@ namespace RhytmTD.Battle.Entities.Controllers
 
         private void AdjustSpawnAreaPosition()
         {
-            BattleEntity farthestEnemy = null;
+            //Recalculate spawn area offsets
+            int offset = CalculateSpawnAreaOffsetTick(GetPlayerAverageDamage());
+            for (int i = 0; i < m_SpawnModel.EnemySpawnPosition.Length; i++)
+                m_EnemySpawnAreasOffsetsTicks[i] = offset;
 
             //Reset spawn area indexes
             for (int i = 0; i < m_SpawnAreaUsedAmount.Length; i++)
                 m_SpawnAreaUsedAmount[i] = 0;
 
-            //Recalculate spawn area offsets
-            for (int i = 0; i < m_SpawnModel.EnemySpawnPosition.Length; i++)
-                m_EnemySpawnAreasOffsetsTicks[i] = CalculateSpawnAreaOffsetTick(out farthestEnemy);
-
             //Offset each spawn point by amount of ticks
             float playerSpeed = m_BattleModel.PlayerEntity.GetModule<MoveModule>().CurrentSpeed;
-            Vector3 anchorPosition = farthestEnemy == null ? m_BattleModel.PlayerEntity.GetModule<TransformModule>().Position :
-                                                             farthestEnemy.GetModule<TransformModule>().Position;
-
+            Vector3 anchorPosition = m_BattleModel.PlayerEntity.GetModule<TransformModule>().Position;
+                                     
             for (int i = 0; i < m_SpawnModel.EnemySpawnPosition.Length; i++)
             {
                 float worldOffset = anchorPosition.z + playerSpeed * m_EnemySpawnAreasOffsetsTicks[i];
@@ -312,48 +310,97 @@ namespace RhytmTD.Battle.Entities.Controllers
             }
         }
 
-        private int CalculateSpawnAreaOffsetTick(out BattleEntity farthestEnemy)
+        int extraBufferPercent = 150;
+        private int CalculateSpawnAreaOffsetTick(int playerAverageDamage)
         {
-            //Approximate ticks to destroy existing enemies
-            int approxTicksToDestroyEnemies = CalculateApproxTickToDestroyExistingEnemies(out farthestEnemy);
+            int result = 0;
 
             //Raw offset
-            int rawOffsetTicks = 0;
-            if (farthestEnemy == null)
-                rawOffsetTicks = Random.Range(m_MIN_SPAWN_AREA_RAW_OFFSET_TICKS_PLAYER, m_MAX_SPAWN_AREA_RAW_OFFSET_TICKS_PLAYER);
-            else
-                rawOffsetTicks = Random.Range(m_MIN_SPAWN_AREA_RAW_OFFSET_TICKS_ENEMY, m_MAX_SPAWN_AREA_RAW_OFFSET_TICKS_ENEMY);
+            if (GetEnemiesAmount() == 0) //If no enemies
+            {
+                int approxTicks = CalculateApproxTickToDestroyNextChunk(playerAverageDamage);
+                int extraTicks = Mathf.CeilToInt((approxTicks * extraBufferPercent) / 100f);
+                int totalTicks = approxTicks + extraTicks;
 
-            return approxTicksToDestroyEnemies + rawOffsetTicks + m_CurrentWave.SaveTicksBufferOffset;
+                result = totalTicks;
+
+                Debug.Log($"No enemies. AverageDmg {playerAverageDamage} Ticks {approxTicks} " +
+                          $"ExtraTicks {extraTicks} TotalTicks {totalTicks}");
+            }
+            else
+            {
+                int approxTicksCurrent = CalculateApproxTickToDestroyExistingEnemies(playerAverageDamage);
+                int approxTicksNext = CalculateApproxTickToDestroyNextChunk(playerAverageDamage);
+                int extraTicks = Mathf.CeilToInt((approxTicksCurrent * extraBufferPercent) / 100f);
+                int totalTicksCurrent = approxTicksCurrent + extraTicks;
+                int totalTicksNext = approxTicksNext + extraTicks;
+
+                result = totalTicksCurrent + totalTicksNext;
+
+                Debug.Log($"Enemies exist. AverageDmg {playerAverageDamage} TicksCur {approxTicksCurrent} TicksNext {approxTicksNext}" +
+                     $"ExtraTicks {extraTicks} TotalTicksCur {totalTicksCurrent} TotalTicksNext {totalTicksNext}");
+
+                /*TransformModule playerTransformModule = m_BattleModel.PlayerEntity.GetModule<TransformModule>();
+
+                float distance2EnemyWorld = farthestEnemy.GetModule<TransformModule>().Position.z - playerTransformModule.Position.z;
+                int distance2EnemyTicks = Mathf.RoundToInt(distance2EnemyWorld * m_BattleModel.PlayerEntity.GetModule<MoveModule>().CurrentSpeed);
+
+                int extraBufferTicks = Mathf.CeilToInt((approxTicksToDestroyEnemies * extraBufferPercent) / 100f);
+                int bufferTicks = approxTicksToDestroyEnemies + extraBufferTicks;
+
+
+                int delta = bufferTicks - distance2EnemyTicks;
+                Debug.Log($"Is enemy. Ticks {approxTicksToDestroyEnemies} dF {extraBufferTicks} buffer {bufferTicks} d2eT {distance2EnemyTicks} Result {delta}");
+                result = delta;*/
+
+                //rawOffsetTicks = Random.Range(m_MIN_SPAWN_AREA_RAW_OFFSET_TICKS_ENEMY, m_MAX_SPAWN_AREA_RAW_OFFSET_TICKS_ENEMY);
+            }
+
+            return result;
 
         }
 
-        private int CalculateApproxTickToDestroyExistingEnemies(out BattleEntity farthestEnemy)
+        private int GetPlayerAverageDamage()
         {
             DamageModule playerDamageModule = m_BattleModel.PlayerEntity.GetModule<DamageModule>();
-            TransformModule playerTransformModule = m_BattleModel.PlayerEntity.GetModule<TransformModule>();
-            int playerAverageDamage = (playerDamageModule.MinDamage + playerDamageModule.MaxDamage) / 2;
+            return (playerDamageModule.MinDamage + playerDamageModule.MaxDamage) / 2;
+        }
+
+        private int GetEnemiesAmount()
+        {
+            int enemiesAmount = 0;
+
+            foreach (BattleEntity entity in m_BattleModel.BattleEntities)
+            {
+                if (entity.ID == m_BattleModel.ID || !entity.HasModule<EnemyBehaviourTag>() || entity.HasModule<PredictedDestroyedTag>())
+                    continue;
+
+                enemiesAmount++;
+            }
+
+            return enemiesAmount;
+        }
+        
+        private int CalculateApproxTickToDestroyNextChunk(int playerAverageDamage)
+        {
+            int maxChunkHP = m_CurrentChunk.MaxHP * m_CurrentChunk.EnemiesAmount;
+
+            return Mathf.CeilToInt((float)maxChunkHP / playerAverageDamage);
+        }
+
+        private int CalculateApproxTickToDestroyExistingEnemies(int playerAverageDamage)
+        {
             int enemiesComulatedCurrentHealth = 0;
-            float maxSqrDistanceToEnemy = 0;
-            farthestEnemy = null;
 
             //Collect current enemies health
             foreach (BattleEntity entity in m_BattleModel.BattleEntities)
             {
-                if (entity.ID == m_BattleModel.ID || entity.HasModule<PredictedDestroyedTag>() || !entity.HasModule<EnemyBehaviourTag>())
+                if (entity.ID == m_BattleModel.ID || !entity.HasModule<EnemyBehaviourTag>() || entity.HasModule<PredictedDestroyedTag>())
                     continue;
 
+                //Comulated health
                 HealthModule healthModule = entity.GetModule<HealthModule>();
-                TransformModule enemyTransformModule = entity.GetModule<TransformModule>();
-
                 enemiesComulatedCurrentHealth += healthModule.CurrentHealth;
-
-                float sqrDistanceToPlayer = (playerTransformModule.Position - enemyTransformModule.Position).sqrMagnitude;
-                if (sqrDistanceToPlayer > maxSqrDistanceToEnemy)
-                {
-                    farthestEnemy = entity;
-                    maxSqrDistanceToEnemy = sqrDistanceToPlayer;
-                }
             }
 
             return Mathf.CeilToInt((float)enemiesComulatedCurrentHealth / playerAverageDamage);
