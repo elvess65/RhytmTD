@@ -1,15 +1,20 @@
-﻿using UnityEngine;
+﻿using RhytmTD.Animation;
+using UnityEngine;
 
 namespace RhytmTD.Battle.Entities.Views
 {
     public class PlayerView : BattleEntityView
     {
+        private AbstractAnimationController m_AnimationController;
         private TransformModule m_TransformModule;
         private DestroyModule m_DestroyModule;
 
         public override void Initialize(BattleEntity entity)
         {
             base.Initialize(entity);
+
+            m_AnimationController = GetComponent<AbstractAnimationController>();
+            m_AnimationController.Initialize();
 
             m_TransformModule = entity.GetModule<TransformModule>();
             m_TransformModule.OnPositionChanged += OnPositionChanged;
@@ -33,7 +38,7 @@ namespace RhytmTD.Battle.Entities.Views
         private void OnDrawGizmos()
         {
             Gizmos.color = Color.green;
-            Gizmos.DrawWireSphere(transform.position, 1);
+            Gizmos.DrawWireSphere(transform.position + new Vector3(0, 1.5f, 0), 2);
         }
     }
 }

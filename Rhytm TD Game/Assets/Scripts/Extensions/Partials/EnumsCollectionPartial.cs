@@ -9,7 +9,6 @@
             Destroy,
             StartMove,
             StopMove,
-            Idle,
             IncreaseHP,
             Show,
             Hide,

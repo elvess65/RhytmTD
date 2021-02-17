@@ -5,14 +5,14 @@ namespace RhytmTD.Animation
 {
     public class DefaultBattleEntityAnimationController : AbstractAnimationController
     {
-        //private int m_IdleHash;
+        private int m_MoveHash;
 
         public override void Initialize()
         {
             base.Initialize();
 
-            //Hash idle animation
-            //m_IdleHash = Animator.StringToHash($"{m_BASE_LAYER}.{GetKeyByType(AnimationTypes.Idle)}");
+            //Hash move animation
+            m_MoveHash = Animator.StringToHash($"{m_BASE_LAYER}.{GetKeyByType(AnimationTypes.StartMove)}");
         }
 
         public override void PlayAnimation(AnimationTypes animationType)
@@ -25,6 +25,15 @@ namespace RhytmTD.Animation
                     SetTrigger(key);
                     break;
 
+                case AnimationTypes.TakeDamage:
+                    if (IsPlayingMove())
+                        SetTrigger(key);
+                    break;
+
+                case AnimationTypes.Destroy:
+                    SetTrigger(key);
+                    break;
+
                 case AnimationTypes.StartMove:
                     SetBool(key, true);
                     break;
@@ -34,37 +43,33 @@ namespace RhytmTD.Animation
                     SetBool(key, false);
                     break;
 
-
-
-
-                case AnimationTypes.Destroy:
-                    SetTrigger(key);
-                    break;
-
-                case AnimationTypes.TakeDamage:
-                    //if (IsPlayingBattleIdle())
-                    //    SetTrigger(key);
-                    break;
-
                 case AnimationTypes.IncreaseHP:
                     SetTrigger(key);
                     break;
 
-                case AnimationTypes.Idle:
-                    //SetBool(GetAnimationName(AnimationTypes.BattleIdle), false);
+                case AnimationTypes.Show:
+                    SetTrigger(key);
                     break;
-            
+
+                case AnimationTypes.Hide:
+                    SetTrigger(key);
+                    break;
+
                 case AnimationTypes.Victory:
+                    SetTrigger(key);
+                    break;
+
+                case AnimationTypes.MenuAction:
                     SetTrigger(key);
                     break;
             }
         }
 
 
-        /*bool IsPlayingIdle()
+        private bool IsPlayingMove()
         {
-            return Controller.GetCurrentAnimatorStateInfo(0).fullPathHash.Equals(m_IdleHash);
-        }*/
+            return Controller.GetCurrentAnimatorStateInfo(0).fullPathHash.Equals(m_MoveHash);
+        }
     }
 }
 
