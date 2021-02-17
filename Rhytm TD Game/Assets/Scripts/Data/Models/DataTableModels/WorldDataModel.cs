@@ -1,4 +1,5 @@
 ﻿using CoreFramework;
+using RhytmTD.Assets.Battle;
 using RhytmTD.Data.Factory;
 
 namespace RhytmTD.Data.Models.DataTableModels
@@ -8,6 +9,7 @@ namespace RhytmTD.Data.Models.DataTableModels
     /// </summary>
     public class WorldDataModel : BaseModel
     {
+        public BattlePrefabAssets Assets;
         public AreaData[] Areas;
 
         /// <summary>

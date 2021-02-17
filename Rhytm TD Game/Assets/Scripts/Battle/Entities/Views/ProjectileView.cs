@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace RhytmTD.Battle.Entities.Views
 {
-    public class BulletView : BaseView
+    public class ProjectileView : BaseView
     {
         private TransformModule m_TransformModule;
         private DestroyModule m_DestroyModule;

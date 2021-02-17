@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 67950a67092acc641bc4491ce895b0c0, type: 3}
-  m_Name: Battle PrefabsLibrary Set1
+  m_Name: Battle PrefabsLibrary
   m_EditorClassIdentifier: 
-  EnemyPrefab: {fileID: 1520075242414890920, guid: 81393d4e6c934f44496e7c8f501a2fb1,
+  PlayerPrefab: {fileID: -2155832804963624608, guid: 38b78716e5243fc4891b0654df0189dd,
     type: 3}
-  PlayerPrefab: {fileID: 1520075242414890920, guid: c47430468e72dc5489de8e027a8a565f,
+  SimpleAttackProjectilePrefab: {fileID: 5243094043493272542, guid: b2a7384554ba33f46a5863f9595cc029,
     type: 3}

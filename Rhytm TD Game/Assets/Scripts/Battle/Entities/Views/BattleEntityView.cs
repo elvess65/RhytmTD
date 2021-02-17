@@ -2,7 +2,7 @@
 
 namespace RhytmTD.Battle.Entities.Views
 {
-    public class BattleEntityView : BaseView
+    public abstract class BattleEntityView : BaseView
     {
         protected BattleEntity BattleEntity => m_BattleEntity;
 

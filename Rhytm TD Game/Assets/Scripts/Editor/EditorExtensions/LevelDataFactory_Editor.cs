@@ -1,4 +1,5 @@
-﻿using RhytmTD.Data.Factory;
+﻿using RhytmTD.Assets.Battle;
+using RhytmTD.Data.Factory;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -154,7 +155,7 @@ namespace RhytmTD.Editor.EditorExtensions
 
             #region Properties
 
-            castedTarget.DelayBeforeStartLevel = EditorGUILayout.IntField("DelayBeforeStartLevel", castedTarget.DelayBeforeStartLevel);
+            DrawLevelProperies(castedTarget);
 
             EditorGUILayout.Space();
 
@@ -322,6 +323,12 @@ namespace RhytmTD.Editor.EditorExtensions
             EditorGUILayout.Space();
         }
 
+
+        void DrawLevelProperies(LevelDataFactory level)
+        {
+            level.DelayBeforeStartLevel = EditorGUILayout.IntField("DelayBeforeStartLevel", level.DelayBeforeStartLevel);
+            level.Assets = (LevelPrefabAssets)EditorGUILayout.ObjectField(level.Assets, typeof(LevelPrefabAssets), false);
+        }
 
         void DrawWaveProperties(LevelDataFactory.WaveDataFactory wave, int waveIndex)
         {

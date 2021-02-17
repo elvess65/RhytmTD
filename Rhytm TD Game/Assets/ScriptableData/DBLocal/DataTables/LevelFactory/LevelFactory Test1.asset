@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: LevelFactory Test1
   m_EditorClassIdentifier: 
   DelayBeforeStartLevel: 2
+  Assets: {fileID: 11400000, guid: 80276a13456b79e48944add24b5b2df1, type: 2}
   Waves:
   - DelayBetweenChunksTicks: 3
     DurationRestTicks: 4

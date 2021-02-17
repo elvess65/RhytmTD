@@ -332,8 +332,8 @@ namespace RhytmTD.Battle.Entities.Controllers
             int totalRawTicks = ticks2DestroyExistingEnemies + ticks2DestroyNextChunk;
             int totalTicks = totalRawTicks + extraTicks;
             
-            Debug.Log($"t2DExisting {ticks2DestroyExistingEnemies} t2DNext {ticks2DestroyNextChunk} TotalRaw {totalRawTicks} " +
-                $"Extra {extraTicks} Total {totalTicks} NextAfter {totalTicks / 2}");
+            //Debug.Log($"t2DExisting {ticks2DestroyExistingEnemies} t2DNext {ticks2DestroyNextChunk} TotalRaw {totalRawTicks} " +
+            //    $"Extra {extraTicks} Total {totalTicks} NextAfter {totalTicks / 2}");
 
             return totalTicks;
 

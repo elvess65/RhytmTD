@@ -2,6 +2,8 @@
 using RhytmTD.Assets.Battle;
 using RhytmTD.Battle.Entities.Controllers;
 using RhytmTD.Battle.Entities.Models;
+using RhytmTD.Data.Models;
+using RhytmTD.Data.Models.DataTableModels;
 using System;
 using UnityEngine;
 
@@ -16,6 +18,8 @@ namespace RhytmTD.Battle.Entities.Views
         [SerializeField] private Transform[] EnemySpawnAreas;
 
         private SpawnModel m_SpawnModel;
+        private AccountDataModel m_AccountModel;
+        private WorldDataModel m_WorldModel;
 
         private void Awake()
         {
@@ -25,6 +29,9 @@ namespace RhytmTD.Battle.Entities.Views
         private void Initialize()
         {
             Dispatcher.AddDisposable(this);
+
+            m_AccountModel = Dispatcher.GetModel<AccountDataModel>();
+            m_WorldModel = Dispatcher.GetModel<WorldDataModel>();
 
             m_SpawnModel = Dispatcher.GetModel<SpawnModel>();
             m_SpawnModel.PlayerSpawnPosition = PlayerSpawnArea.position;
@@ -46,11 +53,10 @@ namespace RhytmTD.Battle.Entities.Views
             TransformModule transformModule = battleEntity.GetModule<TransformModule>();
 
             //Create View
-            GameObject player = BattleAssetsManager.Instance.GetAssets().InstantiateGameObject(BattleAssetsManager.Instance.GetAssets().PlayerPrefab);
-            player.transform.position = transformModule.Position;
-            player.transform.rotation = transformModule.Rotation;
-
-            BattleEntityView playerView = player.GetComponent<BattleEntityView>();
+            BattlePrefabAssets assets = m_WorldModel.Assets;
+            BattleEntityView playerView = assets.InstantiatePrefab(assets.PlayerPrefab);
+            playerView.transform.position = transformModule.Position;
+            playerView.transform.rotation = transformModule.Rotation;
 
             //Initialize Entity
             playerView.Initialize(battleEntity);
@@ -61,11 +67,10 @@ namespace RhytmTD.Battle.Entities.Views
             TransformModule transformModule = battleEntity.GetModule<TransformModule>();
 
             //Create View
-            GameObject enemy = BattleAssetsManager.Instance.GetAssets().InstantiateGameObject(BattleAssetsManager.Instance.GetAssets().EnemyPrefab);
-            enemy.transform.position = transformModule.Position;
-            enemy.transform.rotation = transformModule.Rotation;
-
-            BattleEntityView enemyView = enemy.GetComponent<BattleEntityView>();
+            LevelPrefabAssets assets = m_WorldModel.Areas[m_AccountModel.CompletedAreas].LevelsData[m_AccountModel.CompletedLevels].Assets;
+            BattleEntityView enemyView = assets.InstantiatePrefab(assets.GetRandomEnemyViewPrefab());
+            enemyView.transform.position = transformModule.Position;
+            enemyView.transform.rotation = transformModule.Rotation;
 
             //Initialize Entity
             enemyView.Initialize(battleEntity);
@@ -75,14 +80,14 @@ namespace RhytmTD.Battle.Entities.Views
         {
             TransformModule transformModule = battleEntity.GetModule<TransformModule>();
 
-            GameObject bulletObj = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            bulletObj.transform.localScale = Vector3.one * 0.2f;
-            bulletObj.transform.position = transformModule.Position;
+            //Create View
+            BattlePrefabAssets assets = m_WorldModel.Assets;
+            ProjectileView projectileView = assets.InstantiatePrefab(assets.SimpleAttackProjectilePrefab);
+            projectileView.transform.localScale = Vector3.one * 0.2f;
+            projectileView.transform.position = transformModule.Position;
 
-            bulletObj.GetComponent<Renderer>().material.color = Color.black;
-
-            BulletView bulletView = bulletObj.AddComponent<BulletView>();
-            bulletView.Initialize(battleEntity);
+            //Initialize Entity
+            projectileView.Initialize(battleEntity);
         }
 
 

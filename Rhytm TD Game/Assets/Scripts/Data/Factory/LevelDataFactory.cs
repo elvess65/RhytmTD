@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using RhytmTD.Assets.Battle;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace RhytmTD.Data.Factory
@@ -8,6 +9,7 @@ namespace RhytmTD.Data.Factory
     public class LevelDataFactory : ScriptableObject
     {
         public int DelayBeforeStartLevel = 2;
+        public LevelPrefabAssets Assets;
         public List<WaveDataFactory> Waves = new List<WaveDataFactory>();
 
         [System.Serializable]

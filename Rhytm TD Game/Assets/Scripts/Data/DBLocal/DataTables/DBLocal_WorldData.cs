@@ -1,4 +1,5 @@
-﻿using RhytmTD.Data.Factory;
+﻿using RhytmTD.Assets.Battle;
+using RhytmTD.Data.Factory;
 using UnityEngine;
 
 namespace RhytmTD.Data.DataBaseLocal
@@ -12,6 +13,7 @@ namespace RhytmTD.Data.DataBaseLocal
     [CreateAssetMenu(fileName = "New Local WorldData", menuName = "DBLocal/Levels/WorldData", order = 101)]
     public class DBLocal_WorldData : ScriptableObject
     {
+        public BattlePrefabAssets Assets;
         public AreaData[] Areas;
 
         [System.Serializable]
