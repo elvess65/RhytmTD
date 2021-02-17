@@ -32,12 +32,16 @@ namespace RhytmTD.Battle.Entities.Controllers
         private int m_LevelIndex;
         private int m_WaveIndex;
         private int m_ChunkIndex;
+        private int m_NextSpawnDelay;
         private bool m_IsBattleSpawnFinished = false;
 
         private AreaData m_CurrentArea => m_WorldDataModel.Areas[m_AreaIndex];
         private LevelDataFactory m_CurrentLevel => m_CurrentArea.LevelsData[m_LevelIndex];
         private LevelDataFactory.WaveDataFactory m_CurrentWave => m_CurrentLevel.Waves[m_WaveIndex];
         private LevelDataFactory.ChunkDataFactory m_CurrentChunk => m_CurrentWave.Chunks[m_ChunkIndex];
+        private bool m_AllChunksSpawned => m_ChunkIndex >= m_CurrentWave.Chunks.Count;
+        private bool m_AllWavesSpawned => m_WaveIndex >= m_CurrentLevel.Waves.Count;
+        private bool m_AllLevelsSpawned => m_LevelIndex >= m_CurrentArea.LevelsData.Length;
 
         private IBattleEntityFactory m_BattleEntityFactory;
         /// <summary>
@@ -166,8 +170,8 @@ namespace RhytmTD.Battle.Entities.Controllers
         {
             if (m_ActionTargetTick == ticksSinceStart)
             {
-                //Adjust enemy spawn areas before spawn
-                AdjustSpawnAreaPosition();
+                //Adjust enemy spawn areas before spawn and schedule next chunk
+                PrepareSpawn();
 
                 //Spawn chunk
                 SpawnChunk();
@@ -176,26 +180,26 @@ namespace RhytmTD.Battle.Entities.Controllers
 
                 m_ChunkIndex++;
 
-                //All chunks from wave spawned
-                if (m_ChunkIndex >= m_CurrentWave.Chunks.Count)
+                if (m_AllChunksSpawned)
                 {
                     Log($"All chunks spawned. Wave {m_WaveIndex} finished");
 
                     m_WaveIndex++;
 
                     //All waves from level spawned
-                    if (m_WaveIndex >= m_CurrentLevel.Waves.Count)
+                    if (m_AllWavesSpawned)
                     {
                         m_LevelIndex++;
 
                         //If all levels was spawned
-                        if (m_LevelIndex >= m_CurrentArea.LevelsData.Length)
+                        if (m_AllLevelsSpawned)
                         {
                             FinishBattle();
                         }
-                        else 
+                        else
                         {
                             ScheduleNextLevel();
+                            FinishBattle(); //TODO: DEBUG
                         }
                     }
                     else
@@ -203,11 +207,11 @@ namespace RhytmTD.Battle.Entities.Controllers
                         ScheduleNextWave();
                     }
                 }
-                else 
+                else if (m_ChunkIndex < m_CurrentWave.Chunks.Count)
                 {
                     ScheduleNextChunk();
                 }
-
+                
 #if SINGLE_SPAWN
                 m_ActionTargetTick = 0;
 #endif
@@ -243,7 +247,7 @@ namespace RhytmTD.Battle.Entities.Controllers
         private void ScheduleNextWave()
         {
             //Schedule rest delay
-            m_ActionTargetTick += m_CurrentWave.DurationRestTicks;
+            m_ActionTargetTick += m_CurrentWave.DurationRestTicks + m_NextSpawnDelay;
 
             //Reset processed chunks amount
             m_ChunkIndex = 0;
@@ -254,7 +258,7 @@ namespace RhytmTD.Battle.Entities.Controllers
         private void ScheduleNextChunk()
         {
             //Schedule delay between chunks
-            m_ActionTargetTick += m_CurrentWave.DelayBetweenChunksTicks;
+            m_ActionTargetTick = m_RhytmController.CurrentTick + m_NextSpawnDelay;
 
             Log($"Chunk spawned. Next chunk spawn at {m_ActionTargetTick}. Left {m_CurrentWave.Chunks.Count - m_ChunkIndex}/{m_CurrentWave.Chunks.Count}");
         }
@@ -288,20 +292,24 @@ namespace RhytmTD.Battle.Entities.Controllers
             }
         }
 
-        private void AdjustSpawnAreaPosition()
+        private void PrepareSpawn()
         {
             //Recalculate spawn area offsets
-            int offset = CalculateSpawnAreaOffsetTick(GetPlayerAverageDamage());
+            int offsetTicks = CalculateSpawnAreaOffsetTick();
+
+            m_NextSpawnDelay = offsetTicks / 2;
+
             for (int i = 0; i < m_SpawnModel.EnemySpawnPosition.Length; i++)
-                m_EnemySpawnAreasOffsetsTicks[i] = offset;
+                m_EnemySpawnAreasOffsetsTicks[i] = offsetTicks;
 
             //Reset spawn area indexes
             for (int i = 0; i < m_SpawnAreaUsedAmount.Length; i++)
                 m_SpawnAreaUsedAmount[i] = 0;
 
             //Offset each spawn point by amount of ticks
+            TransformModule playerTransformModule = m_BattleModel.PlayerEntity.GetModule<TransformModule>();
             float playerSpeed = m_BattleModel.PlayerEntity.GetModule<MoveModule>().CurrentSpeed;
-            Vector3 anchorPosition = m_BattleModel.PlayerEntity.GetModule<TransformModule>().Position;
+            Vector3 anchorPosition = playerTransformModule.Position;
                                      
             for (int i = 0; i < m_SpawnModel.EnemySpawnPosition.Length; i++)
             {
@@ -310,60 +318,24 @@ namespace RhytmTD.Battle.Entities.Controllers
             }
         }
 
-        int extraBufferPercent = 150;
-        private int CalculateSpawnAreaOffsetTick(int playerAverageDamage)
-        {
-            int result = 0;
-
-            //Raw offset
-            if (GetEnemiesAmount() == 0) //If no enemies
-            {
-                int approxTicks = CalculateApproxTickToDestroyNextChunk(playerAverageDamage);
-                int extraTicks = Mathf.CeilToInt((approxTicks * extraBufferPercent) / 100f);
-                int totalTicks = approxTicks + extraTicks;
-
-                result = totalTicks;
-
-                Debug.Log($"No enemies. AverageDmg {playerAverageDamage} Ticks {approxTicks} " +
-                          $"ExtraTicks {extraTicks} TotalTicks {totalTicks}");
-            }
-            else
-            {
-                int approxTicksCurrent = CalculateApproxTickToDestroyExistingEnemies(playerAverageDamage);
-                int approxTicksNext = CalculateApproxTickToDestroyNextChunk(playerAverageDamage);
-                int extraTicks = Mathf.CeilToInt((approxTicksCurrent * extraBufferPercent) / 100f);
-                int totalTicksCurrent = approxTicksCurrent + extraTicks;
-                int totalTicksNext = approxTicksNext + extraTicks;
-
-                result = totalTicksCurrent + totalTicksNext;
-
-                Debug.Log($"Enemies exist. AverageDmg {playerAverageDamage} TicksCur {approxTicksCurrent} TicksNext {approxTicksNext}" +
-                     $"ExtraTicks {extraTicks} TotalTicksCur {totalTicksCurrent} TotalTicksNext {totalTicksNext}");
-
-                /*TransformModule playerTransformModule = m_BattleModel.PlayerEntity.GetModule<TransformModule>();
-
-                float distance2EnemyWorld = farthestEnemy.GetModule<TransformModule>().Position.z - playerTransformModule.Position.z;
-                int distance2EnemyTicks = Mathf.RoundToInt(distance2EnemyWorld * m_BattleModel.PlayerEntity.GetModule<MoveModule>().CurrentSpeed);
-
-                int extraBufferTicks = Mathf.CeilToInt((approxTicksToDestroyEnemies * extraBufferPercent) / 100f);
-                int bufferTicks = approxTicksToDestroyEnemies + extraBufferTicks;
-
-
-                int delta = bufferTicks - distance2EnemyTicks;
-                Debug.Log($"Is enemy. Ticks {approxTicksToDestroyEnemies} dF {extraBufferTicks} buffer {bufferTicks} d2eT {distance2EnemyTicks} Result {delta}");
-                result = delta;*/
-
-                //rawOffsetTicks = Random.Range(m_MIN_SPAWN_AREA_RAW_OFFSET_TICKS_ENEMY, m_MAX_SPAWN_AREA_RAW_OFFSET_TICKS_ENEMY);
-            }
-
-            return result;
-
-        }
-
-        private int GetPlayerAverageDamage()
+        private int CalculateSpawnAreaOffsetTick()
         {
             DamageModule playerDamageModule = m_BattleModel.PlayerEntity.GetModule<DamageModule>();
-            return (playerDamageModule.MinDamage + playerDamageModule.MaxDamage) / 2;
+            int playerAverageDamage = (playerDamageModule.MinDamage + playerDamageModule.MaxDamage) / 2;
+
+            int extraBufferPercent = 200;
+
+            int ticks2DestroyExistingEnemies = CalculateApproxTick2DestroyExistingEnemies(playerAverageDamage);
+            int ticks2DestroyNextChunk = CalculateApproxTick2DestroyNextChunk(playerAverageDamage);
+            int extraTicks = Mathf.CeilToInt((ticks2DestroyNextChunk * extraBufferPercent) / 100f);
+            int totalRawTicks = ticks2DestroyExistingEnemies + ticks2DestroyNextChunk;
+            int totalTicks = totalRawTicks + extraTicks;
+            
+            Debug.Log($"t2DExisting {ticks2DestroyExistingEnemies} t2DNext {ticks2DestroyNextChunk} TotalRaw {totalRawTicks} " +
+                $"Extra {extraTicks} Total {totalTicks} NextAfter {totalTicks / 2}");
+
+            return totalTicks;
+
         }
 
         private int GetEnemiesAmount()
@@ -380,15 +352,36 @@ namespace RhytmTD.Battle.Entities.Controllers
 
             return enemiesAmount;
         }
-        
-        private int CalculateApproxTickToDestroyNextChunk(int playerAverageDamage)
+
+        private BattleEntity GetFarthestEnemy(TransformModule transformModule)
+        {
+            BattleEntity result = null;
+            float dist2Enemy = float.MinValue;
+
+            foreach (BattleEntity entity in m_BattleModel.BattleEntities)
+            {
+                if (entity.ID == m_BattleModel.ID || !entity.HasModule<EnemyBehaviourTag>() || entity.HasModule<PredictedDestroyedTag>())
+                    continue;
+
+                float dist = entity.GetModule<TransformModule>().Position.z - transformModule.Position.z;
+                if (dist > dist2Enemy)
+                {
+                    dist2Enemy = dist;
+                    result = entity;
+                }
+            }
+
+            return result;
+        }
+
+        private int CalculateApproxTick2DestroyNextChunk(int playerAverageDamage)
         {
             int maxChunkHP = m_CurrentChunk.MaxHP * m_CurrentChunk.EnemiesAmount;
 
             return Mathf.CeilToInt((float)maxChunkHP / playerAverageDamage);
         }
 
-        private int CalculateApproxTickToDestroyExistingEnemies(int playerAverageDamage)
+        private int CalculateApproxTick2DestroyExistingEnemies(int playerAverageDamage)
         {
             int enemiesComulatedCurrentHealth = 0;
 
@@ -417,7 +410,7 @@ namespace RhytmTD.Battle.Entities.Controllers
         {
             m_BattleModel.RemoveBattleEntity(entity.ID);
 
-            if (m_BattleModel.BattleEntities.Count == 1 && m_IsBattleSpawnFinished)
+            if (GetEnemiesAmount() == 0 && m_IsBattleSpawnFinished)
             {
                 m_BattleModel.OnBattleFinished?.Invoke(true);
             }

@@ -16,7 +16,8 @@ MonoBehaviour:
   Waves:
   - DelayBetweenChunksTicks: 3
     DurationRestTicks: 4
-    EnemiesAmount: 1
+    SaveTicksBufferOffset: 3
+    EnemiesAmount: 3
     MinDamage: 1
     MaxDamage: 5
     MinHP: 10
@@ -25,7 +26,7 @@ MonoBehaviour:
     - OverrideAmount: 0
       OverrideHP: 0
       OverrideDamage: 0
-      EnemiesAmount: 1
+      EnemiesAmount: 3
       MinDamage: 1
       MaxDamage: 5
       MinHP: 10
@@ -33,7 +34,7 @@ MonoBehaviour:
     - OverrideAmount: 0
       OverrideHP: 0
       OverrideDamage: 0
-      EnemiesAmount: 1
+      EnemiesAmount: 3
       MinDamage: 1
       MaxDamage: 5
       MinHP: 10
@@ -41,7 +42,7 @@ MonoBehaviour:
     - OverrideAmount: 0
       OverrideHP: 0
       OverrideDamage: 0
-      EnemiesAmount: 1
+      EnemiesAmount: 3
       MinDamage: 1
       MaxDamage: 5
       MinHP: 10
@@ -49,7 +50,7 @@ MonoBehaviour:
     - OverrideAmount: 0
       OverrideHP: 0
       OverrideDamage: 0
-      EnemiesAmount: 1
+      EnemiesAmount: 3
       MinDamage: 1
       MaxDamage: 5
       MinHP: 10
@@ -57,104 +58,33 @@ MonoBehaviour:
     - OverrideAmount: 0
       OverrideHP: 0
       OverrideDamage: 0
-      EnemiesAmount: 1
+      EnemiesAmount: 3
       MinDamage: 1
       MaxDamage: 5
       MinHP: 10
       MaxHP: 15
-    - OverrideAmount: 0
-      OverrideHP: 0
-      OverrideDamage: 0
-      EnemiesAmount: 1
-      MinDamage: 1
-      MaxDamage: 5
-      MinHP: 10
-      MaxHP: 15
-    - OverrideAmount: 0
-      OverrideHP: 0
-      OverrideDamage: 0
-      EnemiesAmount: 1
-      MinDamage: 1
-      MaxDamage: 5
-      MinHP: 10
-      MaxHP: 15
-    - OverrideAmount: 0
-      OverrideHP: 0
-      OverrideDamage: 0
-      EnemiesAmount: 1
-      MinDamage: 1
-      MaxDamage: 5
-      MinHP: 10
-      MaxHP: 15
-    - OverrideAmount: 0
-      OverrideHP: 0
-      OverrideDamage: 0
-      EnemiesAmount: 1
-      MinDamage: 1
-      MaxDamage: 5
-      MinHP: 10
-      MaxHP: 15
-    - OverrideAmount: 0
-      OverrideHP: 0
-      OverrideDamage: 0
-      EnemiesAmount: 1
-      MinDamage: 1
-      MaxDamage: 5
-      MinHP: 10
-      MaxHP: 15
-  - DelayBetweenChunksTicks: 5
-    DurationRestTicks: 4
-    EnemiesAmount: 2
-    MinDamage: 3
-    MaxDamage: 7
-    MinHP: 12
-    MaxHP: 15
+  - DelayBetweenChunksTicks: 2
+    DurationRestTicks: 3
+    SaveTicksBufferOffset: 3
+    EnemiesAmount: 4
+    MinDamage: 7
+    MaxDamage: 10
+    MinHP: 20
+    MaxHP: 30
     Chunks:
     - OverrideAmount: 0
       OverrideHP: 0
       OverrideDamage: 0
-      EnemiesAmount: 2
-      MinDamage: 3
-      MaxDamage: 7
-      MinHP: 12
-      MaxHP: 15
+      EnemiesAmount: 4
+      MinDamage: 7
+      MaxDamage: 10
+      MinHP: 20
+      MaxHP: 30
     - OverrideAmount: 0
       OverrideHP: 0
       OverrideDamage: 0
-      EnemiesAmount: 2
-      MinDamage: 3
-      MaxDamage: 7
-      MinHP: 12
-      MaxHP: 15
-    - OverrideAmount: 0
-      OverrideHP: 0
-      OverrideDamage: 0
-      EnemiesAmount: 2
-      MinDamage: 3
-      MaxDamage: 7
-      MinHP: 12
-      MaxHP: 15
-    - OverrideAmount: 0
-      OverrideHP: 0
-      OverrideDamage: 0
-      EnemiesAmount: 2
-      MinDamage: 3
-      MaxDamage: 7
-      MinHP: 12
-      MaxHP: 15
-    - OverrideAmount: 0
-      OverrideHP: 0
-      OverrideDamage: 0
-      EnemiesAmount: 2
-      MinDamage: 3
-      MaxDamage: 7
-      MinHP: 12
-      MaxHP: 15
-    - OverrideAmount: 0
-      OverrideHP: 0
-      OverrideDamage: 0
-      EnemiesAmount: 2
-      MinDamage: 3
-      MaxDamage: 7
-      MinHP: 12
-      MaxHP: 15
+      EnemiesAmount: 4
+      MinDamage: 7
+      MaxDamage: 10
+      MinHP: 20
+      MaxHP: 30

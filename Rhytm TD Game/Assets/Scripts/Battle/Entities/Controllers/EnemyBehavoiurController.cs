@@ -29,14 +29,12 @@ namespace RhytmTD.Battle.Entities.Controllers
         private void PlayerInitializedHandler(BattleEntity battleEntity)
         {
             m_UpdateModel = Dispatcher.GetModel<UpdateModel>();
-            m_UpdateModel.OnUpdate -= Update;
             m_UpdateModel.OnUpdate += Update;
 
-            m_PlayerDestroyModule = battleEntity.GetModule<DestroyModule>();
-            m_PlayerDestroyModule.OnDestroyed += PlayerDestryedHandler;
+            m_BattleModel.OnBattleFinished += OnBattleFinishedHandler;
         }
 
-        private void PlayerDestryedHandler(BattleEntity battleEntity)
+        private void OnBattleFinishedHandler(bool isSuccess)
         {
             m_UpdateModel.OnUpdate -= Update;
         }
