@@ -282,6 +282,7 @@ namespace RhytmTD.Battle.Entities.Controllers
             FinishBattle();
         }
 
+        //TODO: OnEnemy destroyed or TakeDamag - if no enemy execute next action on next tick if not all chunks spawned
 
         private void SpawnChunk()
         {
