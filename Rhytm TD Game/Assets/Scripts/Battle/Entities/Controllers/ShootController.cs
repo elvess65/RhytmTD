@@ -36,7 +36,7 @@ namespace RhytmTD.Battle.Entities.Controllers
         public void Shoot(BattleEntity sender, BattleEntity target)
         {
             Vector3 targetDir = GetTargetDir(sender, target);
-            BattleEntity bullet = CreateBullet(sender, targetDir.magnitude);
+            BattleEntity bullet = CreateBullet(sender, targetDir);
 
             bullet.GetModule<TargetModule>().SetTarget(target);
             bullet.GetModule<MoveModule>().StartMove(targetDir.normalized);
@@ -55,14 +55,15 @@ namespace RhytmTD.Battle.Entities.Controllers
             return senderTransform.Position - targetTransform.Position;
         }
 
-        private BattleEntity CreateBullet(BattleEntity sender, float distanceToTarget)
+        private BattleEntity CreateBullet(BattleEntity sender, Vector3 vecToTarget)
         {
             SlotModule senderSlot = sender.GetModule<SlotModule>();
             DamageModule senderDamageModule = sender.GetModule<DamageModule>();
 
-            float speed = distanceToTarget / GetTimeToNextTick();
-
-            BattleEntity bullet = m_SpawnController.CreateBullet(1, senderSlot.ProjectileSlot.position, Quaternion.identity, speed, sender);
+            Quaternion rotation = Quaternion.LookRotation(vecToTarget.normalized);
+            float speed = vecToTarget.magnitude / GetTimeToNextTick();
+            
+            BattleEntity bullet = m_SpawnController.CreateBullet(1, senderSlot.ProjectileSlot.position, rotation, speed, sender);
 
             DamageModule damageModule = bullet.GetModule<DamageModule>();
             damageModule.MinDamage = damageModule.MaxDamage = senderDamageModule.RandomDamage();

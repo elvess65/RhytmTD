@@ -63,13 +63,14 @@ namespace RhytmTD.Battle.StateMachine
 
                 if (targetEntity != null)
                 {
+                    AnimationModule animationModule = m_BattleModel.PlayerEntity.GetModule<AnimationModule>();
+                    animationModule.PlayAttackAnimation();
+
                     m_ShootController.Shoot(m_BattleModel.PlayerEntity, targetEntity);
                 }
             }
 
             m_RhytmInputProxy.RegisterInput();
-        }       
-
-
+        }     
     }
 }

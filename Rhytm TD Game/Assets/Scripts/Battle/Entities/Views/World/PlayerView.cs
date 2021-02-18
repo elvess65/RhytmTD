@@ -1,24 +1,22 @@
-﻿using RhytmTD.Animation;
-using UnityEngine;
+﻿using UnityEngine;
 using static CoreFramework.EnumsCollection;
 
 namespace RhytmTD.Battle.Entities.Views
 {
     public class PlayerView : BattleEntityView
     {
-        private AbstractAnimationView m_AnimationView;
+        private AnimationModule m_AnimationModule;
 
         public override void Initialize(BattleEntity entity)
         {
             base.Initialize(entity);
 
-            m_AnimationView = GetComponent<AbstractAnimationView>();
-            m_AnimationView.Initialize();
+            m_AnimationModule = entity.GetModule<AnimationModule>();
+            m_AnimationModule.InitializeModule(this);
 
             SlotModule slotModule = entity.GetModule<SlotModule>();
-            BattleEntitySlotView slotView = GetComponent<BattleEntitySlotView>();
-            slotModule.Initialize(slotView.ProjectileSlot, slotView.HitSlot);
-
+            slotModule.InitializeModule(this);
+            
             MoveModule moveModule = entity.GetModule<MoveModule>();
             moveModule.OnMoveStarted += OnMoveStarted;
             moveModule.OnMoveStopped += OnMoveStopped;
@@ -35,22 +33,22 @@ namespace RhytmTD.Battle.Entities.Views
 
         private void OnMoveStarted()
         {
-            m_AnimationView.PlayAnimation(AnimationTypes.StartMove);
+            m_AnimationModule.PlayAnimation(AnimationTypes.StartMove);
         }
 
         private void OnMoveStopped()
         {
-            m_AnimationView.PlayAnimation(AnimationTypes.StopMove);
+            m_AnimationModule.PlayAnimation(AnimationTypes.StopMove);
         }
 
         private void OnHealthRemoved(int health, int senderID)
         {
-            m_AnimationView.PlayAnimation(AnimationTypes.TakeDamage);
+            m_AnimationModule.PlayAnimation(AnimationTypes.TakeDamage);
         }
 
         private void OnDestroyed(BattleEntity entity)
         {
-            m_AnimationView.PlayAnimation(AnimationTypes.Destroy);
+            m_AnimationModule.PlayAnimation(AnimationTypes.Destroy);
         }
 
         private void OnPositionChanged(Vector3 position)
