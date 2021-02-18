@@ -83,7 +83,7 @@ namespace RhytmTD.Battle.Entities.Views
             //Create View
             BattlePrefabAssets assets = m_WorldModel.Assets;
             ProjectileView projectileView = assets.InstantiatePrefab(assets.SimpleAttackProjectilePrefab);
-            projectileView.transform.localScale = Vector3.one * 0.2f;
+            projectileView.transform.localScale = Vector3.one;
             projectileView.transform.position = transformModule.Position;
 
             //Initialize Entity

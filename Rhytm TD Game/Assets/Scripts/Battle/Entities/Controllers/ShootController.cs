@@ -57,12 +57,12 @@ namespace RhytmTD.Battle.Entities.Controllers
 
         private BattleEntity CreateBullet(BattleEntity sender, float distanceToTarget)
         {
-            TransformModule senderTransform = sender.GetModule<TransformModule>();
+            SlotModule senderSlot = sender.GetModule<SlotModule>();
             DamageModule senderDamageModule = sender.GetModule<DamageModule>();
 
             float speed = distanceToTarget / GetTimeToNextTick();
 
-            BattleEntity bullet = m_SpawnController.CreateBullet(1, senderTransform.Position, Quaternion.identity, speed, sender);
+            BattleEntity bullet = m_SpawnController.CreateBullet(1, senderSlot.ProjectileSlot.position, Quaternion.identity, speed, sender);
 
             DamageModule damageModule = bullet.GetModule<DamageModule>();
             damageModule.MinDamage = damageModule.MaxDamage = senderDamageModule.RandomDamage();

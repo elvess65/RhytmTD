@@ -9,7 +9,7 @@ namespace RhytmTD.Animation.Tools
         public RectTransform Parent;
         public Button AnimationButtonPrefab;
 
-        private AbstractAnimationController m_AnimationController;
+        private AbstractAnimationView m_AnimationController;
 
         public void AddButton(AnimationTypes type, string key)
         {
@@ -22,7 +22,7 @@ namespace RhytmTD.Animation.Tools
             text.text = $"<b>{type}</b>\n{key}"; 
         }
 
-        public void SetController(AbstractAnimationController animationController)
+        public void SetController(AbstractAnimationView animationController)
         {
             m_AnimationController = animationController;
         }

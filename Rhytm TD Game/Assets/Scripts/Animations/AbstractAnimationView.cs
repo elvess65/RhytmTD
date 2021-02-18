@@ -5,7 +5,7 @@ using static CoreFramework.EnumsCollection;
 namespace RhytmTD.Animation
 {
     [System.Serializable]
-    public abstract class AbstractAnimationController : MonoBehaviour
+    public abstract class AbstractAnimationView : MonoBehaviour
     {
         public Animator Controller;
         public AnimationKeys[] ExposedAnimationKeys;

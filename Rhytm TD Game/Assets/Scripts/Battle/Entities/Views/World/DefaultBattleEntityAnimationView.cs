@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
+using RhytmTD.Animation;
 using static CoreFramework.EnumsCollection;
 
-namespace RhytmTD.Animation
+namespace RhytmTD.Battle.Entities.Views
 {
-    public class DefaultBattleEntityAnimationController : AbstractAnimationController
+    public class DefaultBattleEntityAnimationView : AbstractAnimationView
     {
         private int m_MoveHash;
 
@@ -11,7 +12,6 @@ namespace RhytmTD.Animation
         {
             base.Initialize();
 
-            //Hash move animation
             m_MoveHash = Animator.StringToHash($"{m_BASE_LAYER}.{GetKeyByType(AnimationTypes.StartMove)}");
         }
 
@@ -26,7 +26,7 @@ namespace RhytmTD.Animation
                     break;
 
                 case AnimationTypes.TakeDamage:
-                    if (IsPlayingMove())
+                    if (IsPlaying(m_MoveHash))
                         SetTrigger(key);
                     break;
 
@@ -65,10 +65,9 @@ namespace RhytmTD.Animation
             }
         }
 
-
-        private bool IsPlayingMove()
+        private bool IsPlaying(int hash)
         {
-            return Controller.GetCurrentAnimatorStateInfo(0).fullPathHash.Equals(m_MoveHash);
+            return Controller.GetCurrentAnimatorStateInfo(0).fullPathHash.Equals(hash);
         }
     }
 }

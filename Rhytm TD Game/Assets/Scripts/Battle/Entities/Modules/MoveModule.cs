@@ -8,6 +8,9 @@ namespace RhytmTD.Battle.Entities
     /// </summary>
     public class MoveModule : IBattleModule
     {
+        public System.Action OnMoveStarted;
+        public System.Action OnMoveStopped;
+
         public float Speed { get; }
         public float CurrentSpeed { get; }
 
@@ -23,12 +26,16 @@ namespace RhytmTD.Battle.Entities
         {
             MoveDirection = direction;
             IsMoving = true;
+
+            OnMoveStarted?.Invoke();
         }
 
         public void Stop()
         {
             IsMoving = false;
             MoveDirection = Vector3.zero;
+
+            OnMoveStopped?.Invoke();
         }
     }
 }

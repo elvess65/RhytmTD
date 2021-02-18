@@ -35,7 +35,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -275, y: 4}
+  m_AnchoredPosition: {x: -240, y: 4}
   m_SizeDelta: {x: 70.79422, y: -33.459396}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8457453673950210892
@@ -59,7 +59,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.62352943, b: 0.34509805, a: 1}
+  m_Color: {r: 1, g: 0.027672771, b: 0, a: 1}
   m_RaycastTarget: 0
   m_Maskable: 0
   m_OnCullStateChanged:
@@ -143,6 +143,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Root: {fileID: 8457453674409715014}
+  ColorOutOfRange: {r: 1, g: 0.03137255, b: 0, a: 1}
+  ColorInRange: {r: 0, g: 0.1882353, b: 1, a: 1}
   m_Tick: {fileID: 8457453675731112186}
   m_TickArrows:
   - {fileID: 8457453675172628450}
@@ -219,7 +221,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 275, y: 4}
+  m_AnchoredPosition: {x: 240, y: 4}
   m_SizeDelta: {x: 70.79422, y: -33.459396}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8457453675172628451
@@ -243,7 +245,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.62352943, b: 0.34509805, a: 1}
+  m_Color: {r: 1, g: 0.027672771, b: 0, a: 1}
   m_RaycastTarget: 0
   m_Maskable: 0
   m_OnCullStateChanged:
@@ -332,7 +334,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.21456432, g: 1, b: 0, a: 1}
+  m_Color: {r: 0, g: 0.18836021, b: 1, a: 1}
   m_RaycastTarget: 0
   m_Maskable: 0
   m_OnCullStateChanged:

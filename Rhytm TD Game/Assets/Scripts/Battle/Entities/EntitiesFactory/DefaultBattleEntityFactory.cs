@@ -17,6 +17,7 @@ namespace RhytmTD.Battle.Entities.EntitiesFactory
             battleEntity.AddModule(new DestroyModule(battleEntity));
             battleEntity.AddModule(new DamagePredictionModule());
             battleEntity.AddModule(new TargetModule());
+            battleEntity.AddModule(new SlotModule());
 
             return battleEntity;
         }
@@ -33,6 +34,7 @@ namespace RhytmTD.Battle.Entities.EntitiesFactory
             battleEntity.AddModule(new DestroyModule(battleEntity));
             battleEntity.AddModule(new DamageModule(minDamage, maxDamage));
             battleEntity.AddModule(new EnemyBehaviourTag());
+            battleEntity.AddModule(new SlotModule());
 
             return battleEntity;
         }

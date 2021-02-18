@@ -13,7 +13,7 @@ namespace RhytmTD.Animation.Tools
         {
             m_UIManager = GetComponent<AnimationSceneUIManager>();
 
-            AbstractAnimationController animationController = Parent.GetComponentInChildren<AbstractAnimationController>();
+            AbstractAnimationView animationController = Parent.GetComponentInChildren<AbstractAnimationView>();
             if (animationController != null)
             {
                 animationController.Initialize();
