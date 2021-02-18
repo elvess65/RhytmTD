@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4708055953887352}
   - component: {fileID: 8333050106166543772}
-  - component: {fileID: 201526261658683212}
+  - component: {fileID: 8490509966019249447}
   - component: {fileID: 7197749382232164712}
   m_Layer: 0
   m_Name: EnemyPrefab - Slime
@@ -46,8 +46,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75bdaf9720973b7449703220b99c94eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ViewsToInit: []
---- !u!114 &201526261658683212
+  ViewsToInit:
+  - {fileID: 3228504349956209313}
+--- !u!114 &8490509966019249447
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -56,11 +57,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 1054638298448434}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7796595ae4d2bd846b9f2cf3595a7f8b, type: 3}
+  m_Script: {fileID: 11500000, guid: 794461cb6d051dc46963095650eda06e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Controller: {fileID: 0}
-  ExposedAnimationKeys: []
+  Controller: {fileID: 5179417531354652444}
+  ExposedAnimationKeys:
+  - Type: 0
+    Key: Attack01
+  - Type: 1
+    Key: GetHit
+  - Type: 2
+    Key: Die
+  - Type: 8
+    Key: Victory
+  - Type: 6
+    Key: Show
+  - Type: 10
+    Key: IdleBattle
 --- !u!114 &7197749382232164712
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -73,8 +86,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f614a179d8f4e4070b150f5b9cbc4f3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ProjectileSlot: {fileID: 0}
-  HitSlot: {fileID: 0}
+  ProjectileSlot: {fileID: 7051503540657233131}
+  HitSlot: {fileID: 3427625202454749918}
 --- !u!1 &1181376321425960
 GameObject:
   m_ObjectHideFlags: 0
@@ -316,7 +329,8 @@ Transform:
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 3427625202454749918}
   m_Father: {fileID: 5089643894761777300}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -476,6 +490,36 @@ Transform:
   m_Father: {fileID: 4436418903628390}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1444352473087910592
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3427625202454749918}
+  m_Layer: 0
+  m_Name: HitSlot
+  m_TagString: Untagged
+  m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3427625202454749918
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1444352473087910592}
+  m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 0.04699998, y: -0.273, z: 0.963}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4922449210328630}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1839558452066457730
 GameObject:
   m_ObjectHideFlags: 0
@@ -507,6 +551,7 @@ Transform:
   - {fileID: 4182318218153888}
   - {fileID: 4922449210328630}
   - {fileID: 3219815376295141237}
+  - {fileID: 7051503540657233131}
   m_Father: {fileID: 4708055953887352}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -698,6 +743,36 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &6435391928029178263
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7051503540657233131}
+  m_Layer: 0
+  m_Name: ProjectileSlot
+  m_TagString: Untagged
+  m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7051503540657233131
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6435391928029178263}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.106, y: 0.585, z: 0.625}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5089643894761777300}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6860628743107977326
 GameObject:
   m_ObjectHideFlags: 0

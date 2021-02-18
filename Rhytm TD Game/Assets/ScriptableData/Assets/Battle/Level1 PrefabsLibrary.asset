@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Level1 PrefabsLibrary
   m_EditorClassIdentifier: 
   m_EnemyPrefabs:
-  - {fileID: -6856347228502126070, guid: 1ec3aa70a5438ea4eade22f93d47c282, type: 3}
-  - {fileID: 7629166077940740031, guid: 4e2eeeff8e30bb3459315988821d081a, type: 3}
+  - {fileID: 8333050106166543772, guid: 1ec3aa70a5438ea4eade22f93d47c282, type: 3}
+  - {fileID: 5888651600598257811, guid: 4e2eeeff8e30bb3459315988821d081a, type: 3}
