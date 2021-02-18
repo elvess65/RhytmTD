@@ -3,6 +3,7 @@ using static CoreFramework.EnumsCollection;
 
 namespace RhytmTD.Battle.Entities.Views
 {
+    [RequireComponent(typeof(PlayerEntityAnimationView))]
     public class PlayerView : BattleEntityView
     {
         private AnimationModule m_AnimationModule;

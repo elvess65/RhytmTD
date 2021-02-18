@@ -4,7 +4,7 @@ using static CoreFramework.EnumsCollection;
 
 namespace RhytmTD.Battle.Entities.Views
 {
-    public class DefaultBattleEntityAnimationView : AbstractAnimationView
+    public class PlayerEntityAnimationView : AbstractAnimationView
     {
         private int m_MoveHash;
 

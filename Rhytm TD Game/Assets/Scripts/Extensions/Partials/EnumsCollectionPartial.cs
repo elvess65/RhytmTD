@@ -13,7 +13,9 @@
             Show,
             Hide,
             Victory,
-            MenuAction
+            MenuAction,
+            IdleBattle,
+            IdleNormal
         }
     }
 }

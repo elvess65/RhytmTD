@@ -2,6 +2,7 @@
 
 namespace RhytmTD.Battle.Entities.Views
 {
+    [RequireComponent(typeof(EnemyEntityAnimationView))]
     public class EnemyView : BattleEntityView
     {
         [SerializeField] private BattleEntityView[] ViewsToInit;
@@ -38,7 +39,7 @@ namespace RhytmTD.Battle.Entities.Views
         private void OnDrawGizmos()
         {
             Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(transform.position, 1);
+            Gizmos.DrawWireSphere(transform.position + new Vector3(0, 1, 0), 1);
         }
     }
 }
