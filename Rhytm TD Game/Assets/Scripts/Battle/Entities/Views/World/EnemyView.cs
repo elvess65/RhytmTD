@@ -7,18 +7,24 @@ namespace RhytmTD.Battle.Entities.Views
     {
         [SerializeField] private BattleEntityView[] ViewsToInit;
 
-        private TransformModule m_TransformModule;
-        private DestroyModule m_DestroyModule;
+        private AnimationModule m_AnimationModule;
+        private HealthModule m_HealthModule;
 
         public override void Initialize(BattleEntity entity)
         {
             base.Initialize(entity);
 
-            m_TransformModule = entity.GetModule<TransformModule>();
-            m_TransformModule.OnRotationChanged += RotationChanged;
+            m_AnimationModule = entity.GetModule<AnimationModule>();
+            m_AnimationModule.InitializeModule(this);
 
-            m_DestroyModule = entity.GetModule<DestroyModule>();
-            m_DestroyModule.OnDestroyed += OnDestroyed;
+            TransformModule transformModule = entity.GetModule<TransformModule>();
+            transformModule.OnRotationChanged += RotationChanged;
+
+            DestroyModule destroyModule = entity.GetModule<DestroyModule>();
+            destroyModule.OnDestroyed += OnDestroyed;
+
+            m_HealthModule = entity.GetModule<HealthModule>();
+            m_HealthModule.OnHealthRemoved += OnHealthRemoved;
 
             foreach (BattleEntityView view in ViewsToInit)
             {
@@ -28,7 +34,15 @@ namespace RhytmTD.Battle.Entities.Views
 
         private void OnDestroyed(BattleEntity entity)
         {
-            Destroy(gameObject);
+            m_AnimationModule.PlayAnimation(CoreFramework.EnumsCollection.AnimationTypes.Destroy);
+        }
+
+        private void OnHealthRemoved(int health, int senderID)
+        {
+            if (m_HealthModule.CurrentHealth > 0)
+            {
+                m_AnimationModule.PlayAnimation(CoreFramework.EnumsCollection.AnimationTypes.TakeDamage);
+            }
         }
 
         private void RotationChanged(Quaternion rotation)

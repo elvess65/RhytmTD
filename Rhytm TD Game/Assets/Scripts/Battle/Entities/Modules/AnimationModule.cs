@@ -28,5 +28,10 @@ namespace RhytmTD.Battle.Entities
         {
             PlayAnimation(AnimationTypes.Attack);
         }
+
+        public void PlayIdleBattleAnimation()
+        {
+            PlayAnimation(AnimationTypes.IdleBattle);
+        }
     }
 }

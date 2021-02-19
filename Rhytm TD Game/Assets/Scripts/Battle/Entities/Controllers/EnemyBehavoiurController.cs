@@ -49,19 +49,25 @@ namespace RhytmTD.Battle.Entities.Controllers
                     continue;
 
                 FocusModule focusModule = entity.GetModule<FocusModule>();
+                AnimationModule animationModule = entity.GetModule<AnimationModule>();
                 TransformModule entityTransformModule = entity.GetModule<TransformModule>();
                 
                 float zDist = entityTransformModule.Position.z - playerTransform.Position.z;
 
                 if (zDist <= m_ENEMY_FOCUS_Z_DISTANCE && zDist > m_ENEMY_ATTACK_Z_DISTANCE)
                 {
-                    focusModule.StartFocusOnTarget(m_BattleModel.PlayerEntity.ID, playerTransform);
+                    if (!focusModule.IsFocusing)
+                    {
+                        focusModule.StartFocusOnTarget(m_BattleModel.PlayerEntity.ID, playerTransform);
+                        animationModule.PlayIdleBattleAnimation();
+                    }
                 }
                 else if (zDist <= m_ENEMY_ATTACK_Z_DISTANCE)
                 {
                     focusModule.StopFocus();
                     entity.RemoveModule<EnemyBehaviourTag>();
 
+                    animationModule.PlayAttackAnimation();
                     m_DamageController.DealDamage(entity.ID, m_BattleModel.PlayerEntity.ID);
                 }
             }

@@ -16,9 +16,17 @@ namespace RhytmTD.Battle.Entities.Views
             TransformModule transformModule = battleEntity.GetModule<TransformModule>();
             transformModule.OnRotationChanged += RotationChanged;
 
+            DestroyModule destroyModule = battleEntity.GetModule<DestroyModule>();
+            destroyModule.OnDestroyed += OnDestroyed;
+
             m_HealthModule = battleEntity.GetModule<HealthModule>();
             m_HealthModule.OnHealthRemoved += HealthRemoded;
 
+            gameObject.SetActive(false);
+        }
+
+        private void OnDestroyed(BattleEntity entity)
+        {
             gameObject.SetActive(false);
         }
 
