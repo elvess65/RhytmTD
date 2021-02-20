@@ -4,6 +4,9 @@ using System;
 
 namespace RhytmTD.Battle.Entities
 {
+    /// <summary>
+    /// Incapsulates data whether entity is destroyed and provides event 
+    /// </summary>
     public class DestroyModule : IBattleModule
     {
         public Action<BattleEntity> OnDestroyed;

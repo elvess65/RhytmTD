@@ -4,12 +4,16 @@ using RhytmTD.Data.Models;
 
 namespace RhytmTD.Battle.Entities.Controllers
 {
+    /// <summary>
+    /// Enemy behaviour (focusing and attack)
+    /// </summary>
     public class EnemyBehavoiurController : BaseController
     {
-        private BattleModel m_BattleModel;
-        private DamageController m_DamageController;
-        private DestroyModule m_PlayerDestroyModule;
         private UpdateModel m_UpdateModel;
+        private BattleModel m_BattleModel;
+        private SpawnModel m_SpawnModel;
+        
+        private DamageController m_DamageController;
 
         private const float m_ENEMY_FOCUS_Z_DISTANCE = 10;
         private const float m_ENEMY_ATTACK_Z_DISTANCE = 0;
@@ -20,11 +24,13 @@ namespace RhytmTD.Battle.Entities.Controllers
 
         public override void InitializeComplete()
         {
+            m_SpawnModel = Dispatcher.GetModel<SpawnModel>();
             m_BattleModel = Dispatcher.GetModel<BattleModel>();
-            m_DamageController = Dispatcher.GetController<DamageController>();
-
             m_BattleModel.OnPlayerEntityInitialized += PlayerInitializedHandler;
+
+            m_DamageController = Dispatcher.GetController<DamageController>();
         }
+
 
         private void PlayerInitializedHandler(BattleEntity battleEntity)
         {
@@ -69,6 +75,8 @@ namespace RhytmTD.Battle.Entities.Controllers
 
                     animationModule.PlayAttackAnimation();
                     m_DamageController.DealDamage(entity.ID, m_BattleModel.PlayerEntity.ID);
+
+                    m_SpawnModel.OnEnemyRemoved(entity);
                 }
             }
         }

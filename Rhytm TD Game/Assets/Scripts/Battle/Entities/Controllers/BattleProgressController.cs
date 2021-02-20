@@ -9,6 +9,7 @@ namespace RhytmTD.Battle.Entities.Controllers
     public class BattleProgressController : BaseController
     {
         private BattleModel m_BattleModel;
+        private SpawnModel m_SpawnModel;
 
         public BattleProgressController(Dispatcher dispatcher) : base(dispatcher)
         {
@@ -20,6 +21,9 @@ namespace RhytmTD.Battle.Entities.Controllers
 
             m_BattleModel = Dispatcher.GetModel<BattleModel>();
             m_BattleModel.OnPlayerEntityInitialized += PlayerEntityInitializedHandler;
+            
+            m_SpawnModel = Dispatcher.GetModel<SpawnModel>();
+            m_SpawnModel.OnEnemyRemoved += EnemyEntity_OnRemoved;
         }
 
         private void PlayerEntityInitializedHandler(BattleEntity playerEntity)
@@ -30,6 +34,34 @@ namespace RhytmTD.Battle.Entities.Controllers
         private void PlayerEntity_OnDestroyed(BattleEntity entity)
         {
             m_BattleModel.OnBattleFinished?.Invoke(false);
+        }
+
+        private void EnemyEntity_OnRemoved(BattleEntity entity)
+        {
+            CheckBattleState();
+        }
+
+        private void CheckBattleState()
+        {
+            if (GetExistingEnemiesAmount() == 0 && m_SpawnModel.IsBattleSpawnFinished)
+            {
+                m_BattleModel.OnBattleFinished?.Invoke(true);
+            }
+        }
+
+        private int GetExistingEnemiesAmount()
+        {
+            int enemiesAmount = 0;
+
+            foreach (BattleEntity entity in m_BattleModel.BattleEntities)
+            {
+                if (entity.ID == m_BattleModel.ID || !entity.HasModule<EnemyBehaviourTag>() || entity.HasModule<PredictedDestroyedTag>())
+                    continue;
+
+                enemiesAmount++;
+            }
+
+            return enemiesAmount;
         }
     }
 }
