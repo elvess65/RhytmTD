@@ -19,6 +19,7 @@ namespace RhytmTD.Battle.Entities.EntitiesFactory
             battleEntity.AddModule(new TargetModule());
             battleEntity.AddModule(new SlotModule());
             battleEntity.AddModule(new AnimationModule());
+            battleEntity.AddModule(new LoadoutModule());
 
             return battleEntity;
         }

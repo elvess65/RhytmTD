@@ -9,7 +9,7 @@ namespace CoreFramework.Input
     /// </summary>
     public class InputController : BaseController
     {
-        public event System.Action<Vector3> OnTouch;
+        private InputModel m_InputModel;
 
         public InputController(Dispatcher dispatcher) : base(dispatcher)
         {
@@ -17,6 +17,8 @@ namespace CoreFramework.Input
 
         public override void InitializeComplete()
         {
+            m_InputModel = Dispatcher.GetModel<InputModel>();
+
             UpdateModel updateModel = Dispatcher.GetModel<UpdateModel>();
             updateModel.OnUpdate += Update;
         }
@@ -24,7 +26,14 @@ namespace CoreFramework.Input
         public void Update(float deltaTime)
         {
             if (InputDetected() && !IsPointerOverUI())
-                OnTouch?.Invoke(UnityEngine.Input.mousePosition);
+            {
+                m_InputModel.Touch(UnityEngine.Input.mousePosition);
+            }
+
+            if (UnityEngine.Input.GetKeyDown(KeyCode.Space))
+            {
+                m_InputModel.KeyDown(KeyCode.Space);
+            }
         }
 
         private bool InputDetected()

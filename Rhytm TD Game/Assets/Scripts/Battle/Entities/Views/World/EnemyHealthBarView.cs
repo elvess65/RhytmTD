@@ -16,6 +16,8 @@ namespace RhytmTD.Battle.Entities.Views
             TransformModule transformModule = battleEntity.GetModule<TransformModule>();
             transformModule.OnRotationChanged += RotationChanged;
 
+            transform.rotation = Quaternion.LookRotation(Vector3.forward);
+
             DestroyModule destroyModule = battleEntity.GetModule<DestroyModule>();
             destroyModule.OnDestroyed += OnDestroyed;
 
@@ -32,7 +34,7 @@ namespace RhytmTD.Battle.Entities.Views
 
         private void HealthRemoded(int health, int senderID)
         {
-            if (health >= 100)
+            if (m_HealthModule.CurrentHealth >= m_HealthModule.Health)
                 return;
 
             gameObject.SetActive(true);

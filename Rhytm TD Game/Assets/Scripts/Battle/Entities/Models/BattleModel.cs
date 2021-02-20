@@ -11,6 +11,7 @@ namespace RhytmTD.Battle.Entities.Models
         public ICollection<BattleEntity> BattleEntities => m_BattleEntities.Values;
 
         private Dictionary<int, BattleEntity> m_BattleEntities = new Dictionary<int, BattleEntity>();
+        private List<int> m_EntitiesToRemove = new List<int>();
         private BattleEntity m_PlayerEntity;
 
         public Action<BattleEntity> OnPlayerEntityInitialized;
@@ -42,7 +43,7 @@ namespace RhytmTD.Battle.Entities.Models
 
         public void RemoveBattleEntity(int entityID)
         {
-            m_BattleEntities.Remove(entityID);
+            m_EntitiesToRemove.Add(entityID);
         }
 
         public BattleEntity GetEntity(int entityID)
@@ -53,6 +54,19 @@ namespace RhytmTD.Battle.Entities.Models
         public bool HasEntity(int entityID)
         {
             return m_BattleEntities.ContainsKey(entityID);
+        }
+
+        public void CheckEntitiesToDelete()
+        {
+            if (m_EntitiesToRemove.Count > 0)
+            {
+                foreach (int entityID in m_EntitiesToRemove)
+                {
+                    m_BattleEntities.Remove(entityID);
+                }
+
+                m_EntitiesToRemove.Clear();
+            }
         }
 
         public void Dispose()

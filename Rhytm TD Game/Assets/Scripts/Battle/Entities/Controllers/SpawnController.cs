@@ -26,6 +26,7 @@ namespace RhytmTD.Battle.Entities.Controllers
         private AccountBaseParamsDataModel m_AccountBaseParamsDataModel;
 
         private RhytmController m_RhytmController;
+        private SkillsController m_SkillController;
         
         private int m_ActionTargetTick = -1;
         private int m_AreaIndex;
@@ -98,6 +99,8 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_RhytmController = Dispatcher.GetController<RhytmController>();
             m_RhytmController.OnTick += HandleTick;
 
+            m_SkillController = Dispatcher.GetController<SkillsController>();
+
             m_SpawnModel.SpawnsInitialized += SpawnAreasInitializedHandler;
         }
 
@@ -105,6 +108,12 @@ namespace RhytmTD.Battle.Entities.Controllers
         public BattleEntity CreatePlayer(int typeID, Vector3 position, Quaternion rotation, float moveSpeed, int health, int minDamage, int maxDamage)
         {
             BattleEntity entity = m_BattleEntityFactory.CreatePlayer(typeID, position, rotation, moveSpeed, health, minDamage, maxDamage);
+
+            BattleEntity meteoriteSkill = m_SkillController.CreateMeteoriteSkill();
+
+            LoadoutModule loadoutModule = entity.GetModule<LoadoutModule>();
+            loadoutModule.AddSkill(meteoriteSkill.ID, 1);
+
             m_SpawnModel.OnPlayerCreated?.Invoke(typeID, entity);
 
             return entity;

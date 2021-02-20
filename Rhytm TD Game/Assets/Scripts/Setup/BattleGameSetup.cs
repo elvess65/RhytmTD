@@ -34,6 +34,8 @@ namespace RhytmTD.Setup
             dispatcher.CreateController<BattleController>();
             dispatcher.CreateController<BattleUIController>();
             dispatcher.CreateController<BattleProgressController>();
+            dispatcher.CreateController<SkillsController>();
+            dispatcher.CreateController<EffectsController>();
 
             // Models
             dispatcher.CreateModel<BattleModel>();
@@ -41,6 +43,9 @@ namespace RhytmTD.Setup
             dispatcher.CreateModel<BattleAudioModel>();
             dispatcher.CreateModel<SpawnModel>();
             dispatcher.CreateModel<BattleUIModel>();
+            dispatcher.CreateModel<SkillsModel>();
+            dispatcher.CreateModel<EffectsModel>();
+            dispatcher.CreateModel<InputModel>();
         }
     }
 }

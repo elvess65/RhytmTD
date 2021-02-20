@@ -10,17 +10,19 @@ namespace RhytmTD.Battle.StateMachine
     public class BattleState_Normal : BattleState_Abstract
     {
         private BattleModel m_BattleModel;
+        private InputModel m_InputModel;
         private ShootController m_ShootController;
         private FindTargetController m_FindTargetController;
-        private InputController m_InputController;
+        private SkillsController m_SkillsController;
         private RhytmInputProxy m_RhytmInputProxy;
 
         public BattleState_Normal() : base()
         {
             m_BattleModel = Dispatcher.GetModel<BattleModel>();
+            m_InputModel = Dispatcher.GetModel<InputModel>();
             m_ShootController = Dispatcher.GetController<ShootController>();
             m_FindTargetController = Dispatcher.GetController<FindTargetController>();
-            m_InputController = Dispatcher.GetController<InputController>();
+            m_SkillsController = Dispatcher.GetController<SkillsController>();
             m_RhytmInputProxy = Dispatcher.GetController<RhytmInputProxy>();
         }
 
@@ -28,14 +30,16 @@ namespace RhytmTD.Battle.StateMachine
         {
             base.EnterState();
 
-            m_InputController.OnTouch += HandleTouch;
+            m_InputModel.OnTouch += HandleTouch;
+            m_InputModel.OnKeyDown += HandleKeyDown;
         }
 
         public override void ExitState()
         {
             base.ExitState();
 
-            m_InputController.OnTouch -= HandleTouch;
+            m_InputModel.OnTouch -= HandleTouch;
+            m_InputModel.OnKeyDown -= HandleKeyDown;
         }
 
         private void HandleTouch(Vector3 mouseScreenPos)
@@ -71,6 +75,21 @@ namespace RhytmTD.Battle.StateMachine
             }
 
             m_RhytmInputProxy.RegisterInput();
-        }     
+        }
+
+        private void HandleKeyDown(KeyCode keyCode)
+        {
+            if (keyCode == KeyCode.Space)
+            {
+                BattleEntity target = m_FindTargetController.GetNearestTarget(m_BattleModel.PlayerEntity);
+                if (target != null)
+                {
+                    LoadoutModule loadoutModule = m_BattleModel.PlayerEntity.GetModule<LoadoutModule>();
+                    int skillID = loadoutModule.GetSkillIDByTypeID(1);
+
+                    m_SkillsController.UseSkill(skillID, m_BattleModel.PlayerEntity.ID, target.ID);
+                }
+            }
+        }
     }
 }

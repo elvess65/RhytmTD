@@ -4,6 +4,7 @@ using CoreFramework.Rhytm;
 using RhytmTD.Battle.Entities.Models;
 using RhytmTD.Battle.StateMachine;
 using RhytmTD.Data.Controllers;
+using RhytmTD.Data.Models;
 using UnityEngine;
 
 namespace RhytmTD.Battle.Entities.Controllers
@@ -21,6 +22,7 @@ namespace RhytmTD.Battle.Entities.Controllers
 
         private BattleModel m_BattleModel;
         private BattleAudioModel m_AudioModel;
+        private UpdateModel m_UpdateModel;
 
 
         public BattleController(Dispatcher dispatcher) : base(dispatcher)
@@ -39,6 +41,9 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_BattleModel.OnBattleInitialize += Initialize;
             m_BattleModel.OnBattleStarted += BattleStartedHandler;
             m_BattleModel.OnBattleFinished += BattleFinishedHandler;
+
+            m_UpdateModel = Dispatcher.GetModel<UpdateModel>();
+            m_UpdateModel.OnUpdate += Update;
 
             m_AudioModel = Dispatcher.GetModel<BattleAudioModel>();
         }
@@ -60,6 +65,11 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_SpawnController.SpawnPlayer();
 
             Dispatcher.GetController<UpdateController>().UpdaterObject.GetComponent<MonoUpdater>().StartCoroutine(InitializationCoroutine());
+        }
+
+        private void Update(float t)
+        {
+            m_BattleModel.CheckEntitiesToDelete();
         }
 
         private IEnumerator InitializationCoroutine()
