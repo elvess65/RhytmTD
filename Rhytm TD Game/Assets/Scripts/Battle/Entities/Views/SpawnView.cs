@@ -45,7 +45,7 @@ namespace RhytmTD.Battle.Entities.Views
                 m_SpawnModel.EnemySpawnPosition[i] = EnemySpawnAreas[i].transform.position;
             }
 
-            m_SpawnModel.SpawnsInitialized?.Invoke();
+            m_SpawnModel.OnSpawnsInitialized?.Invoke();
         }
 
         private void SpawnPlayer(int typeID, BattleEntity battleEntity)

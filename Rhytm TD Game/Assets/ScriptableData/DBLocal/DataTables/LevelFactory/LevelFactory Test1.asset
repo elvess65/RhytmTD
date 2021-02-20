@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: LevelFactory Test1
   m_EditorClassIdentifier: 
   DelayBeforeStartLevel: 2
+  RecomendedAverageDmg: 12
+  DynamicDifficutlyReducePercent: 40
   Assets: {fileID: 11400000, guid: 80276a13456b79e48944add24b5b2df1, type: 2}
   Waves:
-  - DelayBetweenChunksTicks: 3
-    DurationRestTicks: 4
-    SaveTicksBufferOffset: 3
-    EnemiesAmount: 3
+  - DurationRestTicks: 5
+    EnemiesAmount: 2
     MinDamage: 1
     MaxDamage: 5
     MinHP: 10
@@ -27,7 +27,7 @@ MonoBehaviour:
     - OverrideAmount: 0
       OverrideHP: 0
       OverrideDamage: 0
-      EnemiesAmount: 3
+      EnemiesAmount: 2
       MinDamage: 1
       MaxDamage: 5
       MinHP: 10
@@ -35,7 +35,7 @@ MonoBehaviour:
     - OverrideAmount: 0
       OverrideHP: 0
       OverrideDamage: 0
-      EnemiesAmount: 3
+      EnemiesAmount: 2
       MinDamage: 1
       MaxDamage: 5
       MinHP: 10
@@ -43,49 +43,39 @@ MonoBehaviour:
     - OverrideAmount: 0
       OverrideHP: 0
       OverrideDamage: 0
-      EnemiesAmount: 3
+      EnemiesAmount: 2
       MinDamage: 1
       MaxDamage: 5
       MinHP: 10
       MaxHP: 15
-    - OverrideAmount: 0
-      OverrideHP: 0
-      OverrideDamage: 0
-      EnemiesAmount: 3
-      MinDamage: 1
-      MaxDamage: 5
-      MinHP: 10
-      MaxHP: 15
-    - OverrideAmount: 0
-      OverrideHP: 0
-      OverrideDamage: 0
-      EnemiesAmount: 3
-      MinDamage: 1
-      MaxDamage: 5
-      MinHP: 10
-      MaxHP: 15
-  - DelayBetweenChunksTicks: 2
-    DurationRestTicks: 3
-    SaveTicksBufferOffset: 3
+  - DurationRestTicks: 3
     EnemiesAmount: 4
-    MinDamage: 7
-    MaxDamage: 10
-    MinHP: 20
-    MaxHP: 30
+    MinDamage: 2
+    MaxDamage: 7
+    MinHP: 12
+    MaxHP: 17
     Chunks:
     - OverrideAmount: 0
       OverrideHP: 0
       OverrideDamage: 0
       EnemiesAmount: 4
-      MinDamage: 7
-      MaxDamage: 10
-      MinHP: 20
-      MaxHP: 30
+      MinDamage: 2
+      MaxDamage: 7
+      MinHP: 12
+      MaxHP: 17
     - OverrideAmount: 0
       OverrideHP: 0
       OverrideDamage: 0
       EnemiesAmount: 4
-      MinDamage: 7
-      MaxDamage: 10
-      MinHP: 20
-      MaxHP: 30
+      MinDamage: 2
+      MaxDamage: 7
+      MinHP: 12
+      MaxHP: 17
+    - OverrideAmount: 0
+      OverrideHP: 0
+      OverrideDamage: 0
+      EnemiesAmount: 4
+      MinDamage: 2
+      MaxDamage: 7
+      MinHP: 12
+      MaxHP: 17

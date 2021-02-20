@@ -9,15 +9,16 @@ namespace RhytmTD.Data.Factory
     public class LevelDataFactory : ScriptableObject
     {
         public int DelayBeforeStartLevel = 2;
+        public int RecomendedAverageDmg = 15;  
+        public int DynamicDifficutlyReducePercent = 50;  
+
         public LevelPrefabAssets Assets;
         public List<WaveDataFactory> Waves = new List<WaveDataFactory>();
 
         [System.Serializable]
         public class WaveDataFactory
         {
-            public int DelayBetweenChunksTicks = 2;
             public int DurationRestTicks = 3;
-            public int SaveTicksBufferOffset = 3;
 
             public int EnemiesAmount = 10;
             public int MinDamage = 20;

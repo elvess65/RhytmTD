@@ -1,6 +1,6 @@
 ﻿//#define LOG_SPAWN
 //#define SINGLE_SPAWN
-#define DEBUG_SPAWN
+//#define DEBUG_SPAWN
 
 using System.Collections.Generic;
 using System.Text;
@@ -31,7 +31,8 @@ namespace RhytmTD.Battle.Entities.Controllers
 
         private RhytmController m_RhytmController;
         private SkillsController m_SkillController;
-        
+
+        private int m_CurDynamicDifficultyReduceOffset;
         private int m_ActionTargetTick = -1;
         private int m_AreaIndex;
         private int m_LevelIndex;
@@ -49,9 +50,6 @@ namespace RhytmTD.Battle.Entities.Controllers
 
         private IBattleEntityFactory m_BattleEntityFactory;
 
-        private int m_RecomendedAverageDmg = 15;            //TODO: Comes from lvl settings
-        private int m_DynamicDifficutlyReducePercent = 50;  //TODO: Comes from level settings
-        private int m_CurDynamicDifficultyReduceOffset = 50; 
 
         /// <summary>
         /// На сколько тиков вперед смещена точка спауна (индекс массива отвечает индексу точки спауна)
@@ -89,14 +87,15 @@ namespace RhytmTD.Battle.Entities.Controllers
 
             m_BattleModel = Dispatcher.GetModel<BattleModel>();
             m_BattleModel.OnBattleStarted += StartSpawnLoop;
-            m_BattleModel.OnBattleFinished += StopSpawnLoop;
+            m_BattleModel.OnBattleFinished += BattleFinishedHandler;
 
             m_RhytmController = Dispatcher.GetController<RhytmController>();
             m_RhytmController.OnTick += HandleTick;
 
             m_SkillController = Dispatcher.GetController<SkillsController>();
 
-            m_SpawnModel.SpawnsInitialized += SpawnAreasInitializedHandler;
+            m_SpawnModel.OnSpawnsInitialized += SpawnAreasInitializedHandler;
+            m_SpawnModel.OnSpawnPlayer += SpawnPlayer;
 
 #if DEBUG_SPAWN
             m_InputModel = Dispatcher.GetModel<InputModel>();
@@ -133,13 +132,13 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_SpawnModel.OnBulletCreated?.Invoke(typeID, entity);
 
             DestroyModule destroyModule = entity.GetModule<DestroyModule>();
-            destroyModule.OnDestroyed += BulletDestroyed;
+            destroyModule.OnDestroyed += BulletDestroyedHandler;
 
             return entity;
         }
 
 
-        public void SpawnPlayer()
+        private void SpawnPlayer()
         {
             float moveSpeed = m_AccountBaseParamsDataModel.MoveSpeedUnitsPerTick * (1 / (float)m_RhytmController.TickDurationSeconds);
 
@@ -154,7 +153,7 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_BattleModel.PlayerEntity = entity;
         }
 
-        public void SpawnEnemy(int columnIndex, int rowIndex, float playerSpeed)
+        private void SpawnEnemy(int columnIndex, int rowIndex, float playerSpeed)
         {
             //Spawn point matrix row offset
             float worldRowOffset = rowIndex * playerSpeed * m_ESP_MATRIX_ROW_OFFSET_TICKS;
@@ -170,9 +169,8 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_BattleModel.AddBattleEntity(enemy);
 
             if (enemy.HasModule<DestroyModule>())
-                enemy.GetModule<DestroyModule>().OnDestroyed += EnemyEntity_OnDestroyed;
+                enemy.GetModule<DestroyModule>().OnDestroyed += EnemyEntityDestroyedHandler;
         }
-
 
         private void HandleTick(int ticksSinceStart)
         {
@@ -198,17 +196,17 @@ namespace RhytmTD.Battle.Entities.Controllers
                     //All waves from level spawned
                     if (m_AllWavesSpawned)
                     {
-                        m_LevelIndex++;
+                        //m_LevelIndex++;
 
                         //If all levels was spawned
                         if (m_AllLevelsSpawned)
                         {
-                            FinishBattle();
+                            StopSpawnLoop();
                         }
                         else
                         {
                             ScheduleNextLevel();
-                            FinishBattle(); //TODO: DEBUG
+                            StopSpawnLoop(); //TODO: DEBUG
                         }
                     }
                     else
@@ -228,31 +226,6 @@ namespace RhytmTD.Battle.Entities.Controllers
 #endif
         }
 
-#if DEBUG_SPAWN
-        private void HandleDebugInput(KeyCode keyCode)
-        {
-            if (keyCode != KeyCode.D)
-                return;
-
-            //Adjust enemy spawn areas before spawn and schedule next chunk
-            PrepareSpawn();
-
-            //Spawn chunk
-            SpawnChunk();
-        }
-#endif
-
-
-        private void FinishBattle()
-        {
-            //Stop scheduling tasks
-            m_ActionTargetTick = -1;
-
-            //Al enemies spawned
-            m_SpawnModel.IsBattleSpawnFinished = true;
-
-            Log("Battle is complete");
-        }
 
         private void ScheduleNextLevel()
         {
@@ -288,13 +261,6 @@ namespace RhytmTD.Battle.Entities.Controllers
         }
 
 
-        private void SpawnAreasInitializedHandler()
-        {
-            m_CurDynamicDifficultyReduceOffset = m_DynamicDifficutlyReducePercent;
-            m_EnemySpawnAreasOffsetsTicks = new int[m_SpawnModel.EnemySpawnPosition.Length];
-            m_AvailableESPMatrixIndexes = new List<(int, int)>();
-        }
-
         private void StartSpawnLoop()
         {
             m_AreaIndex = m_AccountDataModel.CompletedAreas;
@@ -308,9 +274,15 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_ActionTargetTick = m_RhytmController.CurrentTick + m_CurrentLevel.DelayBeforeStartLevel;
         }
 
-        private void StopSpawnLoop(bool isSuccess)
+        private void StopSpawnLoop()
         {
-            FinishBattle();
+            //Stop scheduling tasks
+            m_ActionTargetTick = -1;
+
+            //Al enemies spawned
+            m_SpawnModel.IsBattleSpawnFinished = true;
+
+            Log("Battle is complete");
         }
 
 
@@ -320,10 +292,10 @@ namespace RhytmTD.Battle.Entities.Controllers
             float playerSpeed = m_BattleModel.PlayerEntity.GetModule<MoveModule>().CurrentSpeed;
 
             //Amount of enemies in current chunk
-            int enemiesAmount = 5;//m_CurrentWave.EnemiesAmount;
+            int enemiesAmount = m_CurrentWave.EnemiesAmount;
 
-            //Max possible rows index in matrix
-            int maxESPMatrixRowIndex = (enemiesAmount / m_SpawnModel.EnemySpawnPosition.Length) + 1;
+            //Max row index
+            int maxESPMatrixRowIndex = Mathf.FloorToInt(enemiesAmount / m_SpawnModel.EnemySpawnPosition.Length) + 1;
 
             //Matrix size
             int columnsAmount = m_SpawnModel.EnemySpawnPosition.Length;
@@ -331,8 +303,6 @@ namespace RhytmTD.Battle.Entities.Controllers
 
             //Fill matrix array
             CalculateSpawnMatrixArray(columnsAmount, rowsAmount);
-
-            return;
 
             //Spawn Entities
             for (int i = 0; i < enemiesAmount; i++)
@@ -347,11 +317,10 @@ namespace RhytmTD.Battle.Entities.Controllers
                 int rndColumn = m_AvailableESPMatrixIndexes[rndMatrixElement].column;
                 int rndRow = m_AvailableESPMatrixIndexes[rndMatrixElement].row;
 
-                Debug.Log($"Spawn enemy {i}/{enemiesAmount} rndMatrixIndex {rndMatrixElement} rndColumn {rndColumn} rndRow {rndRow}");
-
                 //Remove random element to prevent spawn in the same pos
                 m_AvailableESPMatrixIndexes.RemoveAt(rndMatrixElement);
 
+                //Spawn
                 SpawnEnemy(rndColumn, rndRow, playerSpeed);
             }
         }
@@ -375,13 +344,13 @@ namespace RhytmTD.Battle.Entities.Controllers
             }
             else
             {
-                Debug.Log($"Offset {spawnOffsetTicks} is more then d2fe {ticks2FarthestEnemy}");
+                //Debug.Log($"Offset {spawnOffsetTicks} is more then d2fe {ticks2FarthestEnemy}");
                 spawnOffsetTicks = Mathf.Max(spawnOffsetTicks - ticks2FarthestEnemy, ticks2FarthestEnemy + m_FARTHEST_ENEMY_OFFSET_TICKS);
             }
 
-            Debug.Log($"Spawn offset: {spawnOffsetTicks}");
+            //Debug.Log($"Spawn offset: {spawnOffsetTicks}");
 
-            //m_NextSpawnDelay = offsetTicks / 2;
+            m_NextSpawnDelay = spawnOffsetTicks / 2;
 
             for (int i = 0; i < m_SpawnModel.EnemySpawnPosition.Length; i++)
                 m_EnemySpawnAreasOffsetsTicks[i] = spawnOffsetTicks;
@@ -400,7 +369,7 @@ namespace RhytmTD.Battle.Entities.Controllers
         private int CalculateSpawnAreaOffsetTick()
         {
             //Recomended damage decreased by difficulty percent
-            int targetDmg = Mathf.RoundToInt(m_RecomendedAverageDmg * (m_CurDynamicDifficultyReduceOffset / 100f));
+            int targetDmg = Mathf.RoundToInt(m_CurrentLevel.RecomendedAverageDmg * (m_CurDynamicDifficultyReduceOffset / 100f));
 
             //Approx amount of ticks to destroy existing enemies
             int ticks2DestroyExistingEnemies = CalculateApproxTick2DestroyExistingEnemies(targetDmg);
@@ -411,8 +380,8 @@ namespace RhytmTD.Battle.Entities.Controllers
             //Approx ticks to destroy all enemies
             int totalTicks = ticks2DestroyExistingEnemies + ticks2DestroyNextChunk;
 
-            Debug.Log($"rD: {m_RecomendedAverageDmg} tD: {targetDmg} " +
-                $"t2DExisting: {ticks2DestroyExistingEnemies} t2DNext: {ticks2DestroyNextChunk} Total: {totalTicks}");
+            //Debug.Log($"rD: {m_CurrentLevel.RecomendedAverageDmg} tD: {targetDmg} " +
+            //    $"t2DExisting: {ticks2DestroyExistingEnemies} t2DNext: {ticks2DestroyNextChunk} Total: {totalTicks}");
 
             return totalTicks;
 
@@ -455,7 +424,7 @@ namespace RhytmTD.Battle.Entities.Controllers
                 float worldDistance = Vector3.Distance(enemyTransformModule.Position, playerTransformModule.Position);
                 ticks = Mathf.CeilToInt(worldDistance / playerMoveModule.CurrentSpeed);
 
-                Debug.Log($"D2fE: WD {worldDistance} TD {ticks}");
+                //Debug.Log($"D2fE: WD {worldDistance} TD {ticks}");
             }
 
             return ticks;
@@ -465,16 +434,11 @@ namespace RhytmTD.Battle.Entities.Controllers
         {
             m_AvailableESPMatrixIndexes.Clear();
             int matrixSize = columnsAmount * rowsAmount;
-            int halfMatrixSize = matrixSize / 2;
-
-            Debug.Log("Columns " + columnsAmount + " Rows " + rowsAmount + " half size " + halfMatrixSize);
-
+  
             for (int i = 0; i < matrixSize; i++)
             {
-                int column = i % halfMatrixSize;
-                int row = i / halfMatrixSize;
-
-                Debug.Log("i: " + i + " col " + column + " row " + row);
+                int column = i % columnsAmount;
+                int row = i / columnsAmount;
 
                 m_AvailableESPMatrixIndexes.Add((column, row));
             }
@@ -502,15 +466,27 @@ namespace RhytmTD.Battle.Entities.Controllers
         }
 
 
-        private void EnemyEntity_OnDestroyed(BattleEntity entity)
+        private void SpawnAreasInitializedHandler()
+        {
+            m_CurDynamicDifficultyReduceOffset = m_CurrentLevel.DynamicDifficutlyReducePercent;
+            m_EnemySpawnAreasOffsetsTicks = new int[m_SpawnModel.EnemySpawnPosition.Length];
+            m_AvailableESPMatrixIndexes = new List<(int, int)>();
+        }
+
+        private void EnemyEntityDestroyedHandler(BattleEntity entity)
         {
             m_BattleModel.RemoveBattleEntity(entity.ID);
             m_SpawnModel.OnEnemyRemoved(entity);
         }
 
-        private void BulletDestroyed(BattleEntity battleEntity)
+        private void BulletDestroyedHandler(BattleEntity battleEntity)
         {
             m_BattleModel.RemoveBattleEntity(battleEntity.ID);
+        }
+
+        private void BattleFinishedHandler(bool isSuccess)
+        {
+            StopSpawnLoop();
         }
 
 
@@ -528,5 +504,19 @@ namespace RhytmTD.Battle.Entities.Controllers
             }
 #endif
         }
+
+#if DEBUG_SPAWN
+        private void HandleDebugInput(KeyCode keyCode)
+        {
+            if (keyCode != KeyCode.D)
+                return;
+
+            //Adjust enemy spawn areas before spawn and schedule next chunk
+            PrepareSpawn();
+
+            //Spawn chunk
+            SpawnChunk();
+        }
+#endif
     }
 }

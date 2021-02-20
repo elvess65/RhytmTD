@@ -20,10 +20,11 @@ namespace RhytmTD.Battle.Entities.Controllers
         private RhytmController m_RhytmController;
         private SpawnController m_SpawnController;
 
+        private SpawnModel m_SpawnModel;
         private BattleModel m_BattleModel;
-        private BattleAudioModel m_AudioModel;
         private UpdateModel m_UpdateModel;
-
+        private BattleAudioModel m_AudioModel;
+        
 
         public BattleController(Dispatcher dispatcher) : base(dispatcher)
         {
@@ -45,6 +46,8 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_UpdateModel = Dispatcher.GetModel<UpdateModel>();
             m_UpdateModel.OnUpdate += Update;
 
+            m_SpawnModel = Dispatcher.GetModel<SpawnModel>();
+
             m_AudioModel = Dispatcher.GetModel<BattleAudioModel>();
         }
 
@@ -62,7 +65,7 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_RhytmInputProxy.SetInputPrecious(0.25f);
 
             //Spawn player
-            m_SpawnController.SpawnPlayer();
+            m_SpawnModel.OnSpawnPlayer();
 
             Dispatcher.GetController<UpdateController>().UpdaterObject.GetComponent<MonoUpdater>().StartCoroutine(InitializationCoroutine());
         }

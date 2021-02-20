@@ -327,14 +327,24 @@ namespace RhytmTD.Editor.EditorExtensions
         void DrawLevelProperies(LevelDataFactory level)
         {
             level.DelayBeforeStartLevel = EditorGUILayout.IntField("DelayBeforeStartLevel", level.DelayBeforeStartLevel);
-            level.Assets = (LevelPrefabAssets)EditorGUILayout.ObjectField(level.Assets, typeof(LevelPrefabAssets), false);
+            level.RecomendedAverageDmg = EditorGUILayout.IntField("RecomendedAverageDmg", level.RecomendedAverageDmg);
+
+            using (new EditorGUILayout.HorizontalScope())
+            {
+                GUILayout.Label("DynamicDifficutlyReducePercent");
+                level.DynamicDifficutlyReducePercent = EditorGUILayout.IntSlider(level.DynamicDifficutlyReducePercent, 10, 70);
+            }
+
+            using (new EditorGUILayout.HorizontalScope())
+            {
+                GUILayout.Label("Assets");
+                level.Assets = (LevelPrefabAssets)EditorGUILayout.ObjectField(level.Assets, typeof(LevelPrefabAssets), false);
+            }
         }
 
         void DrawWaveProperties(LevelDataFactory.WaveDataFactory wave, int waveIndex)
         {
-            wave.DelayBetweenChunksTicks = EditorGUILayout.IntField("Delay Between Chunks (Ticks)", wave.DelayBetweenChunksTicks);
             wave.DurationRestTicks = EditorGUILayout.IntField("Duration Rest (Ticks)", wave.DurationRestTicks);
-            wave.SaveTicksBufferOffset = EditorGUILayout.IntField("Save Buffer Offset (Ticks)", wave.SaveTicksBufferOffset);
 
             EditorGUILayout.Space();
 
