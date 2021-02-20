@@ -2,6 +2,10 @@
 
 namespace RhytmTD.Battle.Entities
 {
+    /// <summary>
+    /// Incapsulates position and rotation of the entity as well as events on changing 'em
+    /// Could be applies for each entity that requires position/rotation 
+    /// </summary>
     public class TransformModule : IBattleModule
     {
         private Vector3 m_Position;
