@@ -29,17 +29,29 @@ namespace RhytmTD.Battle.Entities.Skills
         {
             base.SkilUseStarted(senderID, targetID);
 
+            BattleEntity sender = m_BattleModel.GetEntity(senderID);
             BattleEntity target = m_BattleModel.GetEntity(targetID);
+
+            TransformModule senderTransform = sender.GetModule<TransformModule>();
             TransformModule targetTransform = target.GetModule<TransformModule>();
 
-            BattleEntity effectEntity = m_EffectController.CreateMeteoriteEffect();
+            Vector3 effectPosition = senderTransform.Position + m_MeteoriteModule.EffectOffset;
+            Vector3 targetDirection = targetTransform.Position - effectPosition;
+    
+            float effectMoveSpeed = targetDirection.magnitude / m_MeteoriteModule.FlyTime;
+            BattleEntity effectEntity = m_EffectController.CreateMeteoriteEffect(effectPosition, Quaternion.identity, effectMoveSpeed);
             EffectModule effectModule = effectEntity.GetModule<EffectModule>();
+            MoveModule effectMoveModule = effectEntity.GetModule<MoveModule>();
 
-            EffectCreated(effectModule, targetTransform.Position);
+            effectMoveModule.StartMove(targetDirection.normalized);
+
+            m_BattleModel.AddBattleEntity(effectEntity);
 
             await new WaitForSeconds(m_MeteoriteModule.FlyTime);
 
-            BlowMeteorite(effectModule);
+            effectMoveModule.Stop();
+
+            BlowMeteorite(effectModule, m_MeteoriteModule.DamageRadius);
 
             foreach (BattleEntity battleEntity in m_BattleModel.BattleEntities)
             {
@@ -58,21 +70,15 @@ namespace RhytmTD.Battle.Entities.Skills
                     }
                 }
             }
+
+            m_BattleModel.RemoveBattleEntity(effectEntity.ID);
         }
 
-        private void EffectCreated(EffectModule effectModule, Vector3 targetPosition)
-        {
-            DataContainer data = new DataContainer();
-            data.AddString("action", "create");
-            data.AddVector("position", targetPosition);
-
-            effectModule.EffectAction(data);
-        }
-
-        private void BlowMeteorite(EffectModule effectModule)
+        private void BlowMeteorite(EffectModule effectModule, float radius)
         {
             DataContainer data = new DataContainer();
             data.AddString("action", "blow");
+            data.AddFloat("radius", radius);
 
             effectModule.EffectAction(data);
         }

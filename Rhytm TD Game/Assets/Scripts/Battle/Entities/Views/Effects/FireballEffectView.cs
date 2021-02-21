@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace RhytmTD.Battle.Entities.Views.Effects
 {
-    public class MeteoriteEffectView : BattleEntityView
+    public class FireballEffectView : BattleEntityView
     {
         [SerializeField] private GameObject BlowEffectPrefab;
 
@@ -34,19 +34,17 @@ namespace RhytmTD.Battle.Entities.Views.Effects
             {
                 case "blow":
                     {
-                        float radius = data.GetFloat("radius");
-
-                        Blow(radius);
+                        Blow();
                         Destroy(gameObject);
                     }
                     break;
             }
         }
 
-        private void Blow(float radius)
+        private void Blow()
         {
             GameObject blowEffect = Instantiate(BlowEffectPrefab, transform.position, Quaternion.identity);
-            blowEffect.transform.localScale = Vector3.one * radius;
+            blowEffect.transform.localScale = Vector3.one * 3;
 
             Destroy(blowEffect, 5f);
 

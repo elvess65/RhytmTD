@@ -110,9 +110,11 @@ namespace RhytmTD.Battle.Entities.Controllers
             BattleEntity entity = m_BattleEntityFactory.CreatePlayer(typeID, position, rotation, moveSpeed, health, minDamage, maxDamage);
 
             BattleEntity meteoriteSkill = m_SkillController.CreateMeteoriteSkill();
+            BattleEntity fireballSkill = m_SkillController.CreateFireballSkill();
 
             LoadoutModule loadoutModule = entity.GetModule<LoadoutModule>();
             loadoutModule.AddSkill(meteoriteSkill.ID, 1);
+            loadoutModule.AddSkill(fireballSkill.ID, 2);
 
             m_SpawnModel.OnPlayerCreated?.Invoke(typeID, entity);
 

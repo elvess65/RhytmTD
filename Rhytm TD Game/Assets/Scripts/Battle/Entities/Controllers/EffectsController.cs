@@ -1,6 +1,7 @@
 ﻿using CoreFramework;
 using RhytmTD.Battle.Entities.Effects;
 using RhytmTD.Battle.Entities.Models;
+using UnityEngine;
 
 namespace RhytmTD.Battle.Entities.Controllers
 {
@@ -21,9 +22,17 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_EffectsModel = Dispatcher.GetModel<EffectsModel>();
         }
 
-        public BattleEntity CreateMeteoriteEffect()
+        public BattleEntity CreateMeteoriteEffect(Vector3 position, Quaternion rotation, float moveSpeed)
         {
-            BattleEntity battleEntity = m_EffectFactory.CreateMeteoriteEffect();
+            BattleEntity battleEntity = m_EffectFactory.CreateMeteoriteEffect(position, rotation, moveSpeed);
+            m_EffectsModel.EffectCreated(battleEntity);
+
+            return battleEntity;
+        }
+
+        public BattleEntity CreateFireballEffect(Vector3 position, Quaternion rotation, float moveSpeed)
+        {
+            BattleEntity battleEntity = m_EffectFactory.CreateFireballEffect(position, rotation, moveSpeed);
             m_EffectsModel.EffectCreated(battleEntity);
 
             return battleEntity;

@@ -39,5 +39,18 @@ namespace RhytmTD.Battle.Entities.Controllers
 
             return battleEntity;
         }
+
+        public BattleEntity CreateFireballSkill()
+        {
+            BattleEntity battleEntity = m_SkillFactory.CreateFireball();
+
+            SkillFireball skillFireball = new SkillFireball();
+            skillFireball.Initialize(battleEntity);
+
+            m_SkillsModel.AddSkill(skillFireball);
+            m_SkillsModel.SkillCreated(battleEntity);
+
+            return battleEntity;
+        }
     }
 }

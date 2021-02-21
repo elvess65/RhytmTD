@@ -90,6 +90,17 @@ namespace RhytmTD.Battle.StateMachine
                     m_SkillsController.UseSkill(skillID, m_BattleModel.PlayerEntity.ID, target.ID);
                 }
             }
+            else if (keyCode == KeyCode.V)
+            {
+                BattleEntity target = m_FindTargetController.GetNearestTarget(m_BattleModel.PlayerEntity);
+                if (target != null)
+                {
+                    LoadoutModule loadoutModule = m_BattleModel.PlayerEntity.GetModule<LoadoutModule>();
+                    int skillID = loadoutModule.GetSkillIDByTypeID(2);
+
+                    m_SkillsController.UseSkill(skillID, m_BattleModel.PlayerEntity.ID, target.ID);
+                }
+            }
         }
     }
 }
