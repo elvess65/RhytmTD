@@ -39,6 +39,11 @@ namespace CoreFramework.Input
             {
                 m_InputModel.KeyDown(KeyCode.V);
             }
+
+            if (UnityEngine.Input.GetKeyDown(KeyCode.D))
+            {
+                m_InputModel.KeyDown(KeyCode.D);
+            }
         }
 
         private bool InputDetected()

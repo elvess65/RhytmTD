@@ -1,10 +1,10 @@
-﻿
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace RhytmTD.Battle.Entities
 {
     /// <summary>
-    /// Передвижение
+    /// Incapsulates move speed and direction as well as events on start/stop movement
+    /// Could be applies for each entity that requires movement
     /// </summary>
     public class MoveModule : IBattleModule
     {
