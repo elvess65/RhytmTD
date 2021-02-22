@@ -36,6 +36,7 @@ namespace RhytmTD.Setup
             dispatcher.CreateController<BattleProgressController>();
             dispatcher.CreateController<SkillsController>();
             dispatcher.CreateController<EffectsController>();
+            dispatcher.CreateController<WaveController>();
 
             // Models
             dispatcher.CreateModel<BattleModel>();

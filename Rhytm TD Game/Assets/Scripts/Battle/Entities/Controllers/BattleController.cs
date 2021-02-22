@@ -65,7 +65,7 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_RhytmInputProxy.SetInputPrecious(0.25f);
 
             //Spawn player
-            m_SpawnModel.OnSpawnPlayer();
+            m_SpawnModel.OnShouldSpawnPlayer();
 
             Dispatcher.GetController<UpdateController>().UpdaterObject.GetComponent<MonoUpdater>().StartCoroutine(InitializationCoroutine());
         }

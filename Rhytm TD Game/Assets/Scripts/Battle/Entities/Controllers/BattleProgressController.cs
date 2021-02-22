@@ -4,7 +4,7 @@ using RhytmTD.Battle.Entities.Models;
 namespace RhytmTD.Battle.Entities.Controllers
 {
     /// <summary>
-    /// Контроллер прогресса боя
+    /// Controlls battle progress and notifies about finishing
     /// </summary>
     public class BattleProgressController : BaseController
     {
