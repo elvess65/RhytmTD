@@ -15,7 +15,10 @@ namespace RhytmTD.Editor.EditorExtensions
             DrawEffectEntityViews();
 
             if (GUI.changed)
+            {
                 ValidateData();
+                EditorUtility.SetDirty(target);
+            }
         }
 
 
