@@ -63,7 +63,7 @@ namespace RhytmTD.Battle.Entities.Controllers
             Quaternion rotation = Quaternion.LookRotation(vecToTarget);
             float speed = vecToTarget.magnitude / GetTimeToNextTick();
             
-            BattleEntity bulletEnity = m_EffectsController.CreateBulletEffect(3, senderSlot.ProjectileSlot.position, rotation, speed, sender);
+            BattleEntity bulletEnity = m_EffectsController.CreateBulletEffect(EnumsCollection.BattleEntityEffectID.ProjectileArrow, senderSlot.ProjectileSlot.position, rotation, speed, sender);
 
             DamageModule damageModule = bulletEnity.GetModule<DamageModule>();
             damageModule.MinDamage = damageModule.MaxDamage = senderDamageModule.RandomDamage();

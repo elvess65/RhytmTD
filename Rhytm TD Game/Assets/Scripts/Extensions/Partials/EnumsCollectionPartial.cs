@@ -17,5 +17,12 @@
             IdleBattle,
             IdleNormal
         }
+
+        public enum BattleEntityEffectID
+        {
+            ProjectileArrow,
+            SkillMeterite,
+            SkillFireball
+        }
     }
 }
