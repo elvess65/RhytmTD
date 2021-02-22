@@ -4,11 +4,10 @@ using UnityEngine;
 
 namespace RhytmTD.Assets.Battle
 {
-    [CreateAssetMenu(fileName = "New Battle PrefabsLibrary", menuName = "Assets/Battle Prefabs Library", order = 101)]
-    public class BattlePrefabAssets : PrefabAssets
+    [CreateAssetMenu(fileName = "New PlayerCharacter Assets", menuName = "Assets/Player Character Assets", order = 101)]
+    public class PlayerCharacterAssets : PrefabAssets
     {
         public PlayerView PlayerPrefab;
-        public BattleEntityView[] EffectsPrefab;
 
         public override void Initialize()
         {

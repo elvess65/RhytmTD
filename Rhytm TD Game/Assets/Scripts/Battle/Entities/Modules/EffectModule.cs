@@ -1,16 +1,17 @@
 ﻿
 using RhytmTD.Data;
 using System;
+using static CoreFramework.EnumsCollection;
 
 namespace RhytmTD.Battle.Entities
 {
     public class EffectModule : IBattleModule
     {
-        public int TypeID { get; }
+        public BattlEffectID TypeID { get; }
 
         public Action<DataContainer> OnEffectAction;
 
-        public EffectModule(int typeID)
+        public EffectModule(BattlEffectID typeID)
         {
             TypeID = typeID;
         }

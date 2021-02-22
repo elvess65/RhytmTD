@@ -53,8 +53,7 @@ namespace RhytmTD.Battle.Entities.Views
             TransformModule transformModule = battleEntity.GetModule<TransformModule>();
 
             //Create View
-            BattlePrefabAssets assets = m_WorldModel.Assets;
-            BattleEntityView playerView = assets.InstantiatePrefab(assets.PlayerPrefab);
+            BattleEntityView playerView = m_WorldModel.PlayerCharacterAssets.InstantiatePrefab(m_WorldModel.PlayerCharacterAssets.PlayerPrefab);
             playerView.transform.position = transformModule.Position;
             playerView.transform.rotation = transformModule.Rotation;
 
@@ -67,7 +66,7 @@ namespace RhytmTD.Battle.Entities.Views
             TransformModule transformModule = battleEntity.GetModule<TransformModule>();
 
             //Create View
-            LevelPrefabAssets assets = m_WorldModel.Areas[m_AccountModel.CompletedAreas].LevelsData[m_AccountModel.CompletedLevels].Assets;
+            LevelAssets assets = m_WorldModel.Areas[m_AccountModel.CompletedAreas].LevelsData[m_AccountModel.CompletedLevels].Assets;
             BattleEntityView enemyView = assets.InstantiatePrefab(assets.GetRandomEnemyViewPrefab());
             enemyView.transform.position = transformModule.Position;
             enemyView.transform.rotation = transformModule.Rotation;

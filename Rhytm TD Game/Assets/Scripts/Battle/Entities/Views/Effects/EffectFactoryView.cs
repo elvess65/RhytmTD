@@ -29,7 +29,7 @@ namespace RhytmTD.Battle.Entities.Views.Effects
         {
             EffectModule effectModule = entity.GetModule<EffectModule>();
 
-            BattleEntityView battleEntityView = m_WorldModel.Assets.InstantiatePrefab(m_WorldModel.Assets.EffectsPrefab[effectModule.TypeID - 1]);
+            BattleEntityView battleEntityView = m_WorldModel.EffectAssets.InstantiatePrefab(m_WorldModel.EffectAssets.GetEffectViewPrefab(effectModule.TypeID));
             battleEntityView.Initialize(entity);
         }
 

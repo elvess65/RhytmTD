@@ -5,5 +5,7 @@
     /// </summary>
     public abstract class BaseModel
     {
+        public virtual void Initialize()
+        { }
     }
 }

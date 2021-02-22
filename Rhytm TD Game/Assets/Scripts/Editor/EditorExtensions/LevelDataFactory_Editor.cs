@@ -338,7 +338,7 @@ namespace RhytmTD.Editor.EditorExtensions
             using (new EditorGUILayout.HorizontalScope())
             {
                 GUILayout.Label("Assets");
-                level.Assets = (LevelPrefabAssets)EditorGUILayout.ObjectField(level.Assets, typeof(LevelPrefabAssets), false);
+                level.Assets = (LevelAssets)EditorGUILayout.ObjectField(level.Assets, typeof(LevelAssets), false);
             }
         }
 

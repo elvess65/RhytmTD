@@ -18,5 +18,18 @@
             IdleNormal,
             UseSkill
         }
+
+        public enum BattlEffectID
+        {
+            ProjectileArrow,
+            SkillMeterite,
+            SkillFireball
+        }
+
+        public enum PlayerCharacterID
+        {
+            Mage
+        }
+
     }
 }

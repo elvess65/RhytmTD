@@ -11,7 +11,7 @@ namespace RhytmTD.Battle.Entities.Effects
             int entityID = IDGenerator.GenerateID();
 
             BattleEntity battleEntity = new BattleEntity(entityID);
-            battleEntity.AddModule(new EffectModule(1));
+            battleEntity.AddModule(new EffectModule(EnumsCollection.BattlEffectID.SkillMeterite));
             battleEntity.AddModule(new TransformModule(position, rotation));
             battleEntity.AddModule(new MoveModule(moveSpeed));
 
@@ -23,14 +23,14 @@ namespace RhytmTD.Battle.Entities.Effects
             int entityID = IDGenerator.GenerateID();
 
             BattleEntity battleEntity = new BattleEntity(entityID);
-            battleEntity.AddModule(new EffectModule(2));
+            battleEntity.AddModule(new EffectModule(EnumsCollection.BattlEffectID.SkillFireball));
             battleEntity.AddModule(new TransformModule(position, rotation));
             battleEntity.AddModule(new MoveModule(moveSpeed));
 
             return battleEntity;
         }
 
-        public BattleEntity CreateBulletEntity(int typeID, Vector3 position, Quaternion rotation, float speed, BattleEntity owner)
+        public BattleEntity CreateBulletEntity(EnumsCollection.BattlEffectID typeID, Vector3 position, Quaternion rotation, float speed, BattleEntity owner)
         {
             int entityID = IDGenerator.GenerateID();
 

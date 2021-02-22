@@ -12,7 +12,7 @@ namespace RhytmTD.Data.Factory
         public int RecomendedAverageDmg = 15;  
         public int DynamicDifficutlyReducePercent = 50;  
 
-        public LevelPrefabAssets Assets;
+        public LevelAssets Assets;
         public List<WaveDataFactory> Waves = new List<WaveDataFactory>();
 
         [System.Serializable]

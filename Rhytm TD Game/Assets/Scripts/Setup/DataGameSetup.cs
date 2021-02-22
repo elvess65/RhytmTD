@@ -33,10 +33,10 @@ namespace RhytmTD.Setup
             Dispatcher dispatcher = Dispatcher.Instance;
 
             ICustomSerializer serializer = new JsonSerializer();
+            dispatcher.CreateModel(serializer.Deserialize<WorldDataModel>(m_SerializedWorldData));
             dispatcher.CreateModel(serializer.Deserialize<AccountDataModel>(m_SerializedAccountData));
             dispatcher.CreateModel(serializer.Deserialize<EnvironmentDataModel>(m_SerializedEnviromentData));
             dispatcher.CreateModel(serializer.Deserialize<AccountLevelingDataModel>(m_SerializedLevelingData));
-            dispatcher.CreateModel(serializer.Deserialize<WorldDataModel>(m_SerializedWorldData));
             dispatcher.CreateModel(serializer.Deserialize<AccountBaseParamsDataModel>(m_SerializedAccountBaseParamsData));
         }
     }

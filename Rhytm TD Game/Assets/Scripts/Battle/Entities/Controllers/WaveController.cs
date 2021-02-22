@@ -111,11 +111,11 @@ namespace RhytmTD.Battle.Entities.Controllers
 
             //Spawn Entity
             BattleEntity enemy = m_SolidEntitySpawnController.SpawnEnemy(typeID,
-                                                                          position,
-                                                                          rotation, rotationSpeed,
-                                                                          m_CurrentChunk.MaxHP,
-                                                                          m_CurrentChunk.MinDamage,
-                                                                          m_CurrentChunk.MaxDamage);
+                                                                         position,
+                                                                         rotation, rotationSpeed,
+                                                                         m_CurrentChunk.MaxHP,
+                                                                         m_CurrentChunk.MinDamage,
+                                                                         m_CurrentChunk.MaxDamage);
 
             m_BattleModel.AddBattleEntity(enemy);
 

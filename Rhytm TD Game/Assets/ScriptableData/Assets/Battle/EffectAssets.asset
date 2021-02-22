@@ -10,13 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 67950a67092acc641bc4491ce895b0c0, type: 3}
-  m_Name: Battle PrefabsLibrary
+  m_Name: EffectAssets
   m_EditorClassIdentifier: 
   PlayerPrefab: {fileID: -2155832804963624608, guid: 38b78716e5243fc4891b0654df0189dd,
     type: 3}
-  SimpleAttackProjectilePrefab: {fileID: 5243094043493272542, guid: b2a7384554ba33f46a5863f9595cc029,
-    type: 3}
-  EffectsPrefab:
-  - {fileID: -6254917294670049622, guid: bc771dae8243f854a8b2b85c909a5834, type: 3}
-  - {fileID: 4383053405783325504, guid: fb5997c8699d7d04c9aa98165b5723c1, type: 3}
-  - {fileID: 5243094043493272542, guid: b2a7384554ba33f46a5863f9595cc029, type: 3}
+  EffectEntityViewPrefabs:
+  - ID: 0
+    Prefab: {fileID: 5243094043493272542, guid: b2a7384554ba33f46a5863f9595cc029,
+      type: 3}
+  - ID: 1
+    Prefab: {fileID: -6254917294670049622, guid: bc771dae8243f854a8b2b85c909a5834,
+      type: 3}
+  - ID: 2
+    Prefab: {fileID: 4383053405783325504, guid: fb5997c8699d7d04c9aa98165b5723c1,
+      type: 3}

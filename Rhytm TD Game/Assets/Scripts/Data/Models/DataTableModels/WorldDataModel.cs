@@ -9,8 +9,17 @@ namespace RhytmTD.Data.Models.DataTableModels
     /// </summary>
     public class WorldDataModel : BaseModel
     {
-        public BattlePrefabAssets Assets;
+        public PlayerCharacterAssets PlayerCharacterAssets;
+        public EffectAssets EffectAssets;
         public AreaData[] Areas;
+
+        public override void Initialize()
+        {
+            base.Initialize();
+
+            PlayerCharacterAssets.Initialize();
+            EffectAssets.Initialize();
+        }
 
         /// <summary>
         /// Данные о зоне, которая содержит данные для построения уровней

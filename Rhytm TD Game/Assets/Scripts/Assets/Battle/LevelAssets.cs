@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace RhytmTD.Assets.Battle
 {
-    [CreateAssetMenu(fileName = "New Level PrefabsLibrary", menuName = "Assets/Level Prefabs Library", order = 101)]
-    public class LevelPrefabAssets : PrefabAssets
+    [CreateAssetMenu(fileName = "New Level Assets", menuName = "Assets/Level Assets", order = 101)]
+    public class LevelAssets : PrefabAssets
     {
         [SerializeField] private EnemyView[] m_EnemyPrefabs;
 
