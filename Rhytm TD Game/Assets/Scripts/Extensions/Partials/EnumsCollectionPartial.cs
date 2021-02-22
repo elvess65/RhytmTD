@@ -15,7 +15,8 @@
             Victory,
             MenuAction,
             IdleBattle,
-            IdleNormal
+            IdleNormal,
+            UseSkill
         }
     }
 }

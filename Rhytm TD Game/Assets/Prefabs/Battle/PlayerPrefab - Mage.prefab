@@ -1160,6 +1160,7 @@ GameObject:
   - component: {fileID: -2155832804963624608}
   - component: {fileID: 286159510}
   - component: {fileID: 4525815807916513740}
+  - component: {fileID: -9144846108971482084}
   m_Layer: 0
   m_Name: PlayerPrefab - Mage
   m_TagString: Untagged
@@ -1194,6 +1195,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9d838b918f9b42d5adea31e90c728d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ViewsToInit:
+  - {fileID: 286159510}
+  - {fileID: -9144846108971482084}
 --- !u!114 &286159510
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1236,6 +1240,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ProjectileSlot: {fileID: 2062404665840242934}
   HitSlot: {fileID: 8704355056960604131}
+--- !u!114 &-9144846108971482084
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1580023137681114}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 429b133e4cdce924994e73a88461bddc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1583688891333824
 GameObject:
   m_ObjectHideFlags: 0

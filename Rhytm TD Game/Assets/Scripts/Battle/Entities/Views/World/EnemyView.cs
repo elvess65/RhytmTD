@@ -2,7 +2,6 @@
 
 namespace RhytmTD.Battle.Entities.Views
 {
-    [RequireComponent(typeof(EnemyEntityAnimationView))]
     public class EnemyView : BattleEntityView
     {
         [SerializeField] private BattleEntityView[] ViewsToInit;
@@ -15,7 +14,6 @@ namespace RhytmTD.Battle.Entities.Views
             base.Initialize(entity);
 
             m_AnimationModule = entity.GetModule<AnimationModule>();
-            m_AnimationModule.InitializeModule(this);
 
             TransformModule transformModule = entity.GetModule<TransformModule>();
             transformModule.OnRotationChanged += RotationChanged;

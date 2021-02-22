@@ -1,9 +1,6 @@
 ﻿
 namespace RhytmTD.Battle.Entities
 {
-    /// <summary>
-    /// Holds base skill's data
-    /// </summary>
     public class SkillModule : IBattleModule
     {
         public int TypeID { get; }
@@ -12,9 +9,13 @@ namespace RhytmTD.Battle.Entities
         public float FinishingTime { get; }
         public float CooldownTime { get; }
 
-        /// <summary>
-        /// Holds base skill's data
-        /// </summary>
+        public delegate void SkillUseHanlder(int senderID, int targetID);
+
+        public event SkillUseHanlder OnSkillPrepareStarted;
+        public event SkillUseHanlder OnSkillUseStarted;
+        public event SkillUseHanlder OnFinishingSkillUseStarted;
+        public event SkillUseHanlder OnSkillUseFinished;
+
         public SkillModule(int typeID, float activationTime, float useTime, float finishingTime, float cooldownTime)
         {
             TypeID = typeID;
@@ -22,6 +23,26 @@ namespace RhytmTD.Battle.Entities
             UseTime = useTime;
             FinishingTime = finishingTime;
             CooldownTime = cooldownTime;
+        }
+
+        public void SkillPrepareStarted(int senderID, int targetID)
+        {
+            OnSkillPrepareStarted?.Invoke(senderID, targetID);
+        }
+
+        public void SkillUseStarted(int senderID, int targetID)
+        {
+            OnSkillUseStarted?.Invoke(senderID, targetID);
+        }
+
+        public void FinishingSkillUseStarted(int senderID, int targetID)
+        {
+            OnFinishingSkillUseStarted?.Invoke(senderID, targetID);
+        }
+
+        public void SkillUseFinished(int senderID, int targetID)
+        {
+            OnSkillUseFinished?.Invoke(senderID, targetID);
         }
     }
 }

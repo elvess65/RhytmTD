@@ -1,19 +1,24 @@
-﻿using UnityEngine;
+﻿using RhytmTD.Battle.Entities.Controllers;
+using UnityEngine;
 using static CoreFramework.EnumsCollection;
 
 namespace RhytmTD.Battle.Entities.Views
 {
-    [RequireComponent(typeof(PlayerEntityAnimationView))]
     public class PlayerView : BattleEntityView
     {
+        [SerializeField] private BattleEntityView[] ViewsToInit;
+
         private AnimationModule m_AnimationModule;
+        private MarkerController m_MarkerController;
+        private int m_TargetMarkerID;
+        private bool m_MarkerShowed = false;
 
         public override void Initialize(BattleEntity entity)
         {
             base.Initialize(entity);
 
             m_AnimationModule = entity.GetModule<AnimationModule>();
-            m_AnimationModule.InitializeModule(this);
+            m_MarkerController = Dispatcher.GetController<MarkerController>();
 
             SlotModule slotModule = entity.GetModule<SlotModule>();
             slotModule.InitializeModule(this);
@@ -30,6 +35,14 @@ namespace RhytmTD.Battle.Entities.Views
 
             DestroyModule destroyModule = entity.GetModule<DestroyModule>();
             destroyModule.OnDestroyed += OnDestroyed;
+
+            TargetModule targetModule = entity.GetModule<TargetModule>();
+            targetModule.OnTargetChanged += TargetChanged;
+
+            foreach (BattleEntityView view in ViewsToInit)
+            {
+                view.Initialize(entity);
+            }
         }
 
         private void OnMoveStarted()
@@ -55,6 +68,20 @@ namespace RhytmTD.Battle.Entities.Views
         private void OnPositionChanged(Vector3 position)
         {
             transform.position = position;
+        }
+
+        private void TargetChanged(BattleEntity target)
+        {
+            if (target != null)
+            {
+                m_TargetMarkerID = m_MarkerController.ShowTargetMarker(Models.MarkerTypes.Target, target);
+                m_MarkerShowed = true;
+            }
+            else if (m_MarkerShowed)
+            {
+                m_MarkerController.HideMarker(m_TargetMarkerID);
+                m_MarkerShowed = false;
+            }
         }
 
         private void OnDrawGizmos()

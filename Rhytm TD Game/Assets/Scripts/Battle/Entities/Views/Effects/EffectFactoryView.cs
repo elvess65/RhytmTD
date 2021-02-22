@@ -18,7 +18,7 @@ namespace RhytmTD.Battle.Entities.Views.Effects
         private void Initialize()
         {
             Dispatcher.AddDisposable(this);
-
+ 
             m_EffectsModel = Dispatcher.GetModel<EffectsModel>();
             m_EffectsModel.OnEffectEntityCreated += CreateEffectView;
 

@@ -1,22 +1,35 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using static CoreFramework.EnumsCollection;
+using RhytmTD.Battle.Entities.Views;
+using RhytmTD.Battle.Entities;
 
 namespace RhytmTD.Animation
 {
     [System.Serializable]
-    public abstract class AbstractAnimationView : MonoBehaviour
+    public abstract class AbstractAnimationView : BattleEntityView
     {
         public Animator Controller;
         public AnimationKeys[] ExposedAnimationKeys;
+
+        private AnimationModule m_AnimationModule;
 
         private Dictionary<AnimationTypes, string> m_AnimationKeys;
         private Dictionary<string, float> m_AnimationActionEventsExecuteTime;
 
         protected const string m_BASE_LAYER = "Base Layer";
 
-
         public abstract void PlayAnimation(AnimationTypes animationType);
+
+        public override void Initialize(BattleEntity entity)
+        {
+            base.Initialize(entity);
+
+            m_AnimationModule = entity.GetModule<AnimationModule>();
+            m_AnimationModule.OnPlayAnimation += PlayAnimation;
+
+            Initialize();
+        }
 
         public virtual void Initialize()
         {
@@ -82,6 +95,11 @@ namespace RhytmTD.Animation
                 return m_AnimationKeys[animationType];
 
             return string.Empty;
+        }
+
+        private void OnDestroy()
+        {
+            m_AnimationModule.OnPlayAnimation -= PlayAnimation;
         }
 
 

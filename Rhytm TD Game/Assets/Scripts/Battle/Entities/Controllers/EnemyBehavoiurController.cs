@@ -65,7 +65,7 @@ namespace RhytmTD.Battle.Entities.Controllers
                     if (!focusModule.IsFocusing)
                     {
                         focusModule.StartFocusOnTarget(m_BattleModel.PlayerEntity.ID, playerTransform);
-                        animationModule.PlayIdleBattleAnimation();
+                        animationModule.PlayAnimation(EnumsCollection.AnimationTypes.IdleBattle);
                     }
                 }
                 else if (zDist <= m_ENEMY_ATTACK_Z_DISTANCE)
@@ -73,7 +73,7 @@ namespace RhytmTD.Battle.Entities.Controllers
                     focusModule.StopFocus();
                     entity.RemoveModule<EnemyBehaviourTag>();
 
-                    animationModule.PlayAttackAnimation();
+                    animationModule.PlayAnimation(EnumsCollection.AnimationTypes.Attack);
                     m_DamageController.DealDamage(entity.ID, m_BattleModel.PlayerEntity.ID);
 
                     m_SpawnModel.OnEnemyRemoved(entity);

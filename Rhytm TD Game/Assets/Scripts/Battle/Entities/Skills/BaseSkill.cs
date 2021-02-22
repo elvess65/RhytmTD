@@ -1,26 +1,22 @@
 ﻿
 using CoreFramework;
-using RhytmTD.Battle.Entities.Models;
 using UnityEngine;
 
 namespace RhytmTD.Battle.Entities.Skills
 {
     public abstract class BaseSkill : ISkill
     {
-        public int ID => m_BattleEntity.ID;
+        public int ID => BattleEntity.ID;
+        public BattleEntity BattleEntity { get; private set; }
 
-        protected SkillsModel m_SkillsModel { get; private set; }
-        protected BattleEntity m_BattleEntity { get; private set; }
         protected SkillModule m_SkillModule { get; private set; }
-
-        public Dispatcher Dispatcher => Dispatcher.Instance;
+        protected Dispatcher Dispatcher => Dispatcher.Instance;
 
         public virtual void Initialize(BattleEntity battleEntity)
         {
-            m_BattleEntity = battleEntity;
+            BattleEntity = battleEntity;
 
             m_SkillModule = battleEntity.GetModule<SkillModule>();
-            m_SkillsModel = Dispatcher.GetModel<SkillsModel>();
         }
 
         public async virtual void UseSkill(int senderID, int targetID)
@@ -39,22 +35,22 @@ namespace RhytmTD.Battle.Entities.Skills
 
         protected virtual void SkillPrepareStarted(int senderID, int targetID)
         {
-            m_SkillsModel.SkillPrepareStarted(ID, senderID, targetID, m_SkillModule.ActivationTime);
+            m_SkillModule.SkillPrepareStarted(senderID, targetID);
         }
 
         protected virtual void SkilUseStarted(int senderID, int targetID)
         {
-            m_SkillsModel.SkillUseStarted(ID, senderID, targetID, m_SkillModule.UseTime);
+            m_SkillModule.SkillUseStarted(senderID, targetID);
         }
 
         protected virtual void FinishingSkillUseStarted(int senderID, int targetID)
         {
-            m_SkillsModel.FinishingSkillUseStarted(ID, senderID, targetID, m_SkillModule.FinishingTime);
+            m_SkillModule.FinishingSkillUseStarted(senderID, targetID);
         }
 
         protected virtual void SkillUseFinished(int senderID, int targetID)
         {
-            m_SkillsModel.SkillUseFinished(ID, senderID, targetID, m_SkillModule.CooldownTime);
+            m_SkillModule.SkillUseFinished(senderID, targetID);
         }
     }
 }

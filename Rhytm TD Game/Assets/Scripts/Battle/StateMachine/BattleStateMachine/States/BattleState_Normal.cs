@@ -15,6 +15,7 @@ namespace RhytmTD.Battle.StateMachine
         private FindTargetController m_FindTargetController;
         private SkillsController m_SkillsController;
         private RhytmInputProxy m_RhytmInputProxy;
+        private MarkerController m_MarkerController;
 
         public BattleState_Normal() : base()
         {
@@ -68,7 +69,7 @@ namespace RhytmTD.Battle.StateMachine
                 if (targetEntity != null)
                 {
                     AnimationModule animationModule = m_BattleModel.PlayerEntity.GetModule<AnimationModule>();
-                    animationModule.PlayAttackAnimation();
+                    animationModule.PlayAnimation(CoreFramework.EnumsCollection.AnimationTypes.Attack);
 
                     m_ShootController.Shoot(m_BattleModel.PlayerEntity, targetEntity);
                 }

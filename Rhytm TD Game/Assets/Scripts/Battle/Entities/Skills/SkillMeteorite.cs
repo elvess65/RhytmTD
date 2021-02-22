@@ -11,8 +11,10 @@ namespace RhytmTD.Battle.Entities.Skills
         private BattleModel m_BattleModel;
         private DamageController m_DamageController;
         private EffectsController m_EffectController;
+        private MarkerController m_MarkerController;
 
         private MeteoriteSkillModule m_MeteoriteModule;
+        private int m_MarkerID;
 
         public override void Initialize(BattleEntity battleEntity)
         {
@@ -23,6 +25,16 @@ namespace RhytmTD.Battle.Entities.Skills
             m_BattleModel = Dispatcher.GetModel<BattleModel>();
             m_DamageController = Dispatcher.GetController<DamageController>();
             m_EffectController = Dispatcher.GetController<EffectsController>();
+            m_MarkerController = Dispatcher.GetController<MarkerController>();
+        }
+
+        public override void UseSkill(int senderID, int targetID)
+        {
+            base.UseSkill(senderID, targetID);
+
+            BattleEntity target = m_BattleModel.GetEntity(targetID);
+
+            m_MarkerID = m_MarkerController.ShowAttackRadiusMarker(MarkerTypes.AttackRadius, target, m_MeteoriteModule.DamageRadius);
         }
 
         protected async override void SkilUseStarted(int senderID, int targetID)
@@ -50,6 +62,8 @@ namespace RhytmTD.Battle.Entities.Skills
             await new WaitForSeconds(m_MeteoriteModule.FlyTime);
 
             effectMoveModule.Stop();
+
+            m_MarkerController.HideMarker(m_MarkerID);
 
             BlowMeteorite(effectModule, m_MeteoriteModule.DamageRadius);
 

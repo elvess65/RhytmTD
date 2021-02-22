@@ -461,6 +461,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ViewsToInit:
   - {fileID: 2639323191108383651}
+  - {fileID: 6980876583665680447}
 --- !u!114 &6980876583665680447
 MonoBehaviour:
   m_ObjectHideFlags: 0

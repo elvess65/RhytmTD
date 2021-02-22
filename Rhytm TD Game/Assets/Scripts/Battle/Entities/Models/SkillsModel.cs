@@ -9,14 +9,7 @@ namespace RhytmTD.Battle.Entities.Models
     {
         private Dictionary<int, BaseSkill> m_Skills = new Dictionary<int, BaseSkill>();
 
-        public delegate void SkillUseHanlder(int skillID, int senderID, int targetID, float duration);
-
         public Action<BattleEntity> OnSkillCreated;
-        public event SkillUseHanlder OnSkillPrepareStarted;
-        public event SkillUseHanlder OnSkillUseStarted;
-        public event SkillUseHanlder OnFinishingSkillUseStarted;
-        public event SkillUseHanlder OnSkillUseFinished;
-
 
         public void AddSkill(BaseSkill skill)
         {
@@ -31,27 +24,6 @@ namespace RhytmTD.Battle.Entities.Models
         public BaseSkill GetSkill(int skillID)
         {
             return m_Skills[skillID];
-        }
-
-
-        public void SkillPrepareStarted(int skillID, int senderID, int targetID, float duration)
-        {
-            OnSkillPrepareStarted?.Invoke(skillID, senderID, targetID, duration);
-        }
-
-        public void SkillUseStarted(int skillID, int senderID, int targetID, float duration)
-        {
-            OnSkillUseStarted?.Invoke(skillID, senderID, targetID, duration);
-        }
-
-        public void FinishingSkillUseStarted(int skillID, int senderID, int targetID, float duration)
-        {
-            OnFinishingSkillUseStarted?.Invoke(skillID, senderID, targetID, duration);
-        }
-
-        public void SkillUseFinished(int skillID, int senderID, int targetID, float duration)
-        {
-            OnSkillUseFinished?.Invoke(skillID, senderID, targetID, duration);
         }
     }
 }
