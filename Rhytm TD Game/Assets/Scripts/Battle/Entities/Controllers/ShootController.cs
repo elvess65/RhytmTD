@@ -14,7 +14,7 @@ namespace RhytmTD.Battle.Entities.Controllers
         private BattleModel m_BattleModel;
         private DamageController m_DamageController;
         private RhytmController m_RhytmController;
-        private SpawnController m_SpawnController;
+        private SolidEntitySpawnController m_SpawnController;
         private Dictionary<int, BattleEntity> m_Bullets = new Dictionary<int, BattleEntity>();
         private List<int> m_BulletsToRemove = new List<int>();
 
@@ -27,7 +27,7 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_BattleModel = Dispatcher.GetModel<BattleModel>();
             m_DamageController = Dispatcher.GetController<DamageController>();
             m_RhytmController = Dispatcher.GetController<RhytmController>();
-            m_SpawnController = Dispatcher.GetController<SpawnController>();
+            m_SpawnController = Dispatcher.GetController<SolidEntitySpawnController>();
 
             UpdateModel updateModel = Dispatcher.GetModel<UpdateModel>();
             updateModel.OnUpdate += Update;
@@ -60,7 +60,7 @@ namespace RhytmTD.Battle.Entities.Controllers
             SlotModule senderSlot = sender.GetModule<SlotModule>();
             DamageModule senderDamageModule = sender.GetModule<DamageModule>();
 
-            Quaternion rotation = Quaternion.LookRotation(vecToTarget.normalized);
+            Quaternion rotation = Quaternion.LookRotation(vecToTarget);
             float speed = vecToTarget.magnitude / GetTimeToNextTick();
             
             BattleEntity bullet = m_SpawnController.CreateBullet(1, senderSlot.ProjectileSlot.position, rotation, speed, sender);

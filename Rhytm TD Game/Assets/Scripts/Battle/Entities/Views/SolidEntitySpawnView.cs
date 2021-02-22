@@ -1,6 +1,5 @@
 ﻿using CoreFramework;
 using RhytmTD.Assets.Battle;
-using RhytmTD.Battle.Entities.Controllers;
 using RhytmTD.Battle.Entities.Models;
 using RhytmTD.Data.Models;
 using RhytmTD.Data.Models.DataTableModels;
@@ -10,16 +9,17 @@ using UnityEngine;
 namespace RhytmTD.Battle.Entities.Views
 {
     /// <summary>
-    /// Отображение содержащие точки спауна
+    /// Links world spawn points with entities 
+    /// Creates views for solid entities
     /// </summary>
-    public class SpawnView : BaseView, IDisposable
+    public class SolidEntitySpawnView : BaseView, IDisposable
     {
         [SerializeField] private Transform PlayerSpawnArea;
         [SerializeField] private Transform[] EnemySpawnAreas;
 
         private SpawnModel m_SpawnModel;
-        private AccountDataModel m_AccountModel;
         private WorldDataModel m_WorldModel;
+        private AccountDataModel m_AccountModel;
 
         private void Awake()
         {
@@ -30,15 +30,16 @@ namespace RhytmTD.Battle.Entities.Views
         {
             Dispatcher.AddDisposable(this);
 
-            m_AccountModel = Dispatcher.GetModel<AccountDataModel>();
             m_WorldModel = Dispatcher.GetModel<WorldDataModel>();
+            m_AccountModel = Dispatcher.GetModel<AccountDataModel>();
 
             m_SpawnModel = Dispatcher.GetModel<SpawnModel>();
             m_SpawnModel.PlayerSpawnPosition = PlayerSpawnArea.position;
             m_SpawnModel.EnemySpawnPosition = new Vector3[EnemySpawnAreas.Length];
-            m_SpawnModel.OnPlayerCreated += SpawnPlayer;
-            m_SpawnModel.OnEnemyCreated += SpawnEnemy;
-            m_SpawnModel.OnBulletCreated += SpawnBullet;
+
+            m_SpawnModel.OnPlayerEntityCreated += CreatePlayerView;
+            m_SpawnModel.OnEnemyEntityCreated += CreateEnemyView;
+            m_SpawnModel.OnBulletEntityCreated += CreateBulletView;
 
             for (int i = 0; i < EnemySpawnAreas.Length; ++i)
             {
@@ -48,7 +49,7 @@ namespace RhytmTD.Battle.Entities.Views
             m_SpawnModel.OnSpawnPointsInitialized?.Invoke();
         }
 
-        private void SpawnPlayer(int typeID, BattleEntity battleEntity)
+        private void CreatePlayerView(int typeID, BattleEntity battleEntity)
         {
             TransformModule transformModule = battleEntity.GetModule<TransformModule>();
 
@@ -62,7 +63,7 @@ namespace RhytmTD.Battle.Entities.Views
             playerView.Initialize(battleEntity);
         }
 
-        private void SpawnEnemy(int typeID, BattleEntity battleEntity)
+        private void CreateEnemyView(int typeID, BattleEntity battleEntity)
         {
             TransformModule transformModule = battleEntity.GetModule<TransformModule>();
 
@@ -76,7 +77,7 @@ namespace RhytmTD.Battle.Entities.Views
             enemyView.Initialize(battleEntity);
         }
 
-        private void SpawnBullet(int typeID, BattleEntity battleEntity)
+        private void CreateBulletView(int typeID, BattleEntity battleEntity)
         {
             TransformModule transformModule = battleEntity.GetModule<TransformModule>();
 
@@ -93,9 +94,9 @@ namespace RhytmTD.Battle.Entities.Views
 
         public void Dispose()
         {
-            m_SpawnModel.OnPlayerCreated -= SpawnPlayer;
-            m_SpawnModel.OnEnemyCreated -= SpawnEnemy;
-            m_SpawnModel.OnBulletCreated -= SpawnBullet;
+            m_SpawnModel.OnPlayerEntityCreated -= CreatePlayerView;
+            m_SpawnModel.OnEnemyEntityCreated -= CreateEnemyView;
+            m_SpawnModel.OnBulletEntityCreated -= CreateBulletView;
 
             Dispatcher.RemoveDisposable(this);
         }

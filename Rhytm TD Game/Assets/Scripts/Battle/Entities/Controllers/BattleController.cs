@@ -18,7 +18,7 @@ namespace RhytmTD.Battle.Entities.Controllers
 
         private RhytmInputProxy m_RhytmInputProxy;
         private RhytmController m_RhytmController;
-        private SpawnController m_SpawnController;
+        private SolidEntitySpawnController m_SpawnController;
 
         private SpawnModel m_SpawnModel;
         private BattleModel m_BattleModel;
@@ -36,7 +36,7 @@ namespace RhytmTD.Battle.Entities.Controllers
 
             m_RhytmController = Dispatcher.GetController<RhytmController>();
             m_RhytmInputProxy = Dispatcher.GetController<RhytmInputProxy>();
-            m_SpawnController = Dispatcher.GetController<SpawnController>();
+            m_SpawnController = Dispatcher.GetController<SolidEntitySpawnController>();
 
             m_BattleModel = Dispatcher.GetModel<BattleModel>();
             m_BattleModel.OnBattleInitialize += Initialize;
@@ -65,7 +65,7 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_RhytmInputProxy.SetInputPrecious(0.25f);
 
             //Spawn player
-            m_SpawnModel.OnShouldSpawnPlayer();
+            m_SpawnModel.OnShouldCreatePlayer?.Invoke();
 
             Dispatcher.GetController<UpdateController>().UpdaterObject.GetComponent<MonoUpdater>().StartCoroutine(InitializationCoroutine());
         }

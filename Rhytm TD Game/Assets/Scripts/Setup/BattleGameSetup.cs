@@ -22,7 +22,7 @@ namespace RhytmTD.Setup
             dispatcher.CreateController<RhytmController>();
             dispatcher.CreateController<RhytmInputProxy>();
             dispatcher.CreateController<InputController>();
-            dispatcher.CreateController<SpawnController>();
+            dispatcher.CreateController<SolidEntitySpawnController>();
             dispatcher.CreateController<DamageController>();
             dispatcher.CreateController<EnemyBehavoiurController>();
             dispatcher.CreateController<CameraController>();

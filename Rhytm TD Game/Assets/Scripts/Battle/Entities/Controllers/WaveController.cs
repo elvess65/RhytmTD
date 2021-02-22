@@ -26,9 +26,8 @@ namespace RhytmTD.Battle.Entities.Controllers
         private BattleModel m_BattleModel;
         private WorldDataModel m_WorldDataModel;
         private AccountDataModel m_AccountDataModel;
-        private AccountBaseParamsDataModel m_AccountBaseParamsDataModel;
 
-        private SpawnController m_SpawnController;
+        private SolidEntitySpawnController m_SolidEntitySpawnController;
         private RhytmController m_RhytmController;
 
         private int m_CurDynamicDifficultyReduceOffset;
@@ -77,17 +76,15 @@ namespace RhytmTD.Battle.Entities.Controllers
 
             m_WorldDataModel = Dispatcher.GetModel<WorldDataModel>();
             m_AccountDataModel = Dispatcher.GetModel<AccountDataModel>();
-            m_AccountBaseParamsDataModel = Dispatcher.GetModel<AccountBaseParamsDataModel>();
 
             m_SpawnModel = Dispatcher.GetModel<SpawnModel>();
             m_SpawnModel.OnSpawnPointsInitialized += SpawnAreasInitializedHandler;
-            m_SpawnModel.OnShouldSpawnPlayer += SpawnPlayer;
 
             m_BattleModel = Dispatcher.GetModel<BattleModel>();
             m_BattleModel.OnBattleStarted += StartSpawnLoop;
             m_BattleModel.OnBattleFinished += BattleFinishedHandler;
 
-            m_SpawnController = Dispatcher.GetController<SpawnController>();
+            m_SolidEntitySpawnController = Dispatcher.GetController<SolidEntitySpawnController>();
 
             m_RhytmController = Dispatcher.GetController<RhytmController>();
             m_RhytmController.OnTick += HandleTick;            
@@ -96,24 +93,6 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_InputModel = Dispatcher.GetModel<InputModel>();
             m_InputModel.OnKeyDown += HandleDebugInput;
 #endif
-        }
-
-
-        private void SpawnPlayer()
-        {
-            float moveSpeed = m_AccountBaseParamsDataModel.MoveSpeedUnitsPerTick * (1 / (float)m_RhytmController.TickDurationSeconds);
-            int typeID = 1;
-
-            //Spawn Entity
-            BattleEntity entity = m_SpawnController.CreatePlayer(typeID,
-                                                                 m_SpawnModel.PlayerSpawnPosition, Quaternion.identity,
-                                                                 moveSpeed,
-                                                                 m_AccountBaseParamsDataModel.Health,
-                                                                 m_AccountBaseParamsDataModel.MinDamage,
-                                                                 m_AccountBaseParamsDataModel.MaxDamage);
-
-            m_BattleModel.AddBattleEntity(entity);
-            m_BattleModel.PlayerEntity = entity;
         }
 
         private void SpawnEnemy(int columnIndex, int rowIndex, float playerSpeed)
@@ -131,12 +110,12 @@ namespace RhytmTD.Battle.Entities.Controllers
             float rotationSpeed = 2;
 
             //Spawn Entity
-            BattleEntity enemy = m_SpawnController.CreateEnemy(typeID,
-                                                               position,
-                                                               rotation, rotationSpeed,
-                                                               m_CurrentChunk.MaxHP,
-                                                               m_CurrentChunk.MinDamage,
-                                                               m_CurrentChunk.MaxDamage);
+            BattleEntity enemy = m_SolidEntitySpawnController.CreateEnemy(typeID,
+                                                                          position,
+                                                                          rotation, rotationSpeed,
+                                                                          m_CurrentChunk.MaxHP,
+                                                                          m_CurrentChunk.MinDamage,
+                                                                          m_CurrentChunk.MaxDamage);
 
             m_BattleModel.AddBattleEntity(enemy);
 
