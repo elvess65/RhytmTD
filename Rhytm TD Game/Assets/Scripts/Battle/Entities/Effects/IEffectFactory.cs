@@ -8,6 +8,6 @@ namespace RhytmTD.Battle.Entities.Effects
     {
         BattleEntity CreateMeteoriteEffectEntity(Vector3 position, Quaternion rotation, float moveSpeed);
         BattleEntity CreateFireballEffectEntity(Vector3 position, Quaternion rotation, float moveSpeed);
-        BattleEntity CreateBulletEntity(EnumsCollection.BattleEntityEffectID typeID, Vector3 position, Quaternion rotation, float speed, BattleEntity owner);
+        BattleEntity CreateBulletEntity(EnumsCollection.BattlEffectID typeID, Vector3 position, Quaternion rotation, float speed, BattleEntity owner);
     }
 }

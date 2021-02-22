@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 67950a67092acc641bc4491ce895b0c0, type: 3}
-  m_Name: Battle PrefabsLibrary
+  m_Name: EffectAssets
   m_EditorClassIdentifier: 
   PlayerPrefab: {fileID: -2155832804963624608, guid: 38b78716e5243fc4891b0654df0189dd,
     type: 3}

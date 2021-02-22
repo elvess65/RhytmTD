@@ -6,39 +6,22 @@ using static CoreFramework.EnumsCollection;
 
 namespace RhytmTD.Editor.EditorExtensions
 {
-    [CustomEditor(typeof(BattlePrefabAssets))]
-    public class BattlePrefabAssets_Editor : UnityEditor.Editor
+    [CustomEditor(typeof(EffectAssets))]
+    public class EffectPrefabAssets_Editor : UnityEditor.Editor
     {
         public override void OnInspectorGUI()
         {
-            DrawPlayerView();
             DrawEffectEntityViews();
 
             if (GUI.changed)
             {
-                ValidateData();
                 EditorUtility.SetDirty(target);
             }
         }
 
-
-        void DrawPlayerView()
-        {
-            BattlePrefabAssets castedTarget = (BattlePrefabAssets)target;
-
-            using (new EditorGUILayout.HorizontalScope())
-            {
-                GUILayout.Label("PlayerView");
-                castedTarget.PlayerPrefab = (PlayerView)EditorGUILayout.ObjectField(castedTarget.PlayerPrefab, typeof(PlayerView), false);
-            }
-
-            GUILayout.Space(5);
-        }
-
-
         void DrawEffectEntityViews()
         {
-            BattlePrefabAssets castedTarget = (BattlePrefabAssets)target;
+            EffectAssets castedTarget = (EffectAssets)target;
 
             using (new GUILayout.VerticalScope("box"))
             {
@@ -54,7 +37,7 @@ namespace RhytmTD.Editor.EditorExtensions
             GUILayout.Space(5);
         }
 
-        void DrawEffectEntityViewTitle(BattlePrefabAssets castedTarget)
+        void DrawEffectEntityViewTitle(EffectAssets castedTarget)
         {
             string title = "EffectViews";
 
@@ -66,13 +49,13 @@ namespace RhytmTD.Editor.EditorExtensions
             GUILayout.Label(title);
         }
 
-        void DrawEffectEntityViewButtons(BattlePrefabAssets castedTarget)
+        void DrawEffectEntityViewButtons(EffectAssets castedTarget)
         {
             using (new EditorGUILayout.HorizontalScope())
             {
                 if (GUILayout.Button("+"))
                 {
-                    castedTarget.EffectEntityViewPrefabs.Add(new BattlePrefabAssets.EffectEntityViewPrefabData());
+                    castedTarget.EffectEntityViewPrefabs.Add(new EffectAssets.EffectEntityViewPrefabData());
                 }
 
                 using (new EditorGUI.DisabledScope(castedTarget.EffectEntityViewPrefabs == null || castedTarget.EffectEntityViewPrefabs.Count == 0))
@@ -85,30 +68,16 @@ namespace RhytmTD.Editor.EditorExtensions
             }
         }
 
-        void DrawEffectEntityViewItems(BattlePrefabAssets castedTarget)
+        void DrawEffectEntityViewItems(EffectAssets castedTarget)
         {
             for (int i = 0; i < castedTarget.EffectEntityViewPrefabs.Count; i++)
             {
                 using (new EditorGUILayout.HorizontalScope())
                 {
-                    castedTarget.EffectEntityViewPrefabs[i].ID = (BattleEntityEffectID)EditorGUILayout.EnumPopup(string.Empty, castedTarget.EffectEntityViewPrefabs[i].ID);
+                    castedTarget.EffectEntityViewPrefabs[i].ID = (BattlEffectID)EditorGUILayout.EnumPopup(string.Empty, castedTarget.EffectEntityViewPrefabs[i].ID);
                     castedTarget.EffectEntityViewPrefabs[i].Prefab = (BattleEntityView)EditorGUILayout.ObjectField(castedTarget.EffectEntityViewPrefabs[i].Prefab, typeof(BattleEntityView), false);
                 }
             }
-        }
-
-
-        void ValidateData()
-        {
-            Debug.Log("Validate");
-
-            BattlePrefabAssets castedTarget = (BattlePrefabAssets)target;
-            ValidateEffectEntityViews(castedTarget);
-        }
-
-        void ValidateEffectEntityViews(BattlePrefabAssets castedTarget)
-        {
-            castedTarget.Initialize();
         }
     }
 }

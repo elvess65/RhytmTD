@@ -13,7 +13,8 @@ namespace RhytmTD.Data.DataBaseLocal
     [CreateAssetMenu(fileName = "New Local WorldData", menuName = "DBLocal/Levels/WorldData", order = 101)]
     public class DBLocal_WorldData : ScriptableObject
     {
-        public BattlePrefabAssets Assets;
+        public PlayerCharacterAssets PlayerCharacterAssets;
+        public EffectAssets EffectAssets;
         public AreaData[] Areas;
 
         [System.Serializable]

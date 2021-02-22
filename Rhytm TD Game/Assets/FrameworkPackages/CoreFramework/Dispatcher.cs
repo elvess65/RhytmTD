@@ -57,6 +57,7 @@ namespace CoreFramework
         public T CreateModel<T>(T value) where T : BaseModel
         {
             m_Models.Add(value.GetType(), value);
+            value.Initialize();
 
             return value;
         }

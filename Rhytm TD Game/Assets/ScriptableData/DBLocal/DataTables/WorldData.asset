@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 114d091429e2649b99e7195cbef93644, type: 3}
   m_Name: WorldData
   m_EditorClassIdentifier: 
-  Assets: {fileID: 11400000, guid: f81ebea77171de04194ff00577f94c6a, type: 2}
+  PlayerCharacterAssets: {fileID: 11400000, guid: 6651c543e30fc7648b2060384bbed64c,
+    type: 2}
+  EffectAssets: {fileID: 11400000, guid: f81ebea77171de04194ff00577f94c6a, type: 2}
   Areas:
   - ID: 12
     LevelsData:

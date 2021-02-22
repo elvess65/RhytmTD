@@ -18,11 +18,17 @@
             IdleNormal
         }
 
-        public enum BattleEntityEffectID
+        public enum BattlEffectID
         {
             ProjectileArrow,
             SkillMeterite,
             SkillFireball
         }
+
+        public enum PlayerCharacterID
+        {
+            Mage
+        }
+
     }
 }

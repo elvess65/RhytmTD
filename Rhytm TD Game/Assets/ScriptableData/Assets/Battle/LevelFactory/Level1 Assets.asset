@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 58c9cbd5555294c90bee688d71133215, type: 3}
-  m_Name: Level1 PrefabsLibrary
+  m_Name: Level1 Assets
   m_EditorClassIdentifier: 
   m_EnemyPrefabs:
   - {fileID: 8333050106166543772, guid: 1ec3aa70a5438ea4eade22f93d47c282, type: 3}
