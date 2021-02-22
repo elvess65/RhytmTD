@@ -42,21 +42,10 @@ namespace RhytmTD.Battle.Entities.Controllers
         }
 
       
-        public BattleEntity CreateEnemy(int typeID, Vector3 position, Quaternion rotation, float rotateSpeed, int health, int minDamage, int maxDamage)
+        public BattleEntity SpawnEnemy(int typeID, Vector3 position, Quaternion rotation, float rotateSpeed, int health, int minDamage, int maxDamage)
         {
             BattleEntity entity = m_BattleEntityFactory.CreateEnemy(typeID, position, rotation, rotateSpeed, health, minDamage, maxDamage);
             m_SpawnModel.OnEnemyEntityCreated?.Invoke(typeID, entity);
-
-            return entity;
-        }
-
-        public BattleEntity CreateBullet(int typeID, Vector3 position, Quaternion rotation, float speed, BattleEntity owner)
-        {
-            BattleEntity entity = m_BattleEntityFactory.CreateBullet(typeID, position, rotation, speed, owner);
-            m_SpawnModel.OnBulletEntityCreated?.Invoke(typeID, entity);
-
-            DestroyModule destroyModule = entity.GetModule<DestroyModule>();
-            destroyModule.OnDestroyed += BulletDestroyedHandler;
 
             return entity;
         }
@@ -92,12 +81,6 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_SpawnModel.OnPlayerEntityCreated?.Invoke(typeID, entity);
 
             return entity;
-        }
-
-
-        private void BulletDestroyedHandler(BattleEntity battleEntity)
-        {
-            m_BattleModel.RemoveBattleEntity(battleEntity.ID);
         }
     }
 }

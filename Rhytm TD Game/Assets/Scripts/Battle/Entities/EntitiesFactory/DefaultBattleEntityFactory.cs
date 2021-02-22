@@ -41,20 +41,5 @@ namespace RhytmTD.Battle.Entities.EntitiesFactory
 
             return battleEntity;
         }
-
-        public BattleEntity CreateBullet(int typeID, Vector3 position, Quaternion rotation, float speed, BattleEntity owner)
-        {
-            int entityID = IDGenerator.GenerateID();
-
-            BattleEntity bullet = new BattleEntity(entityID);
-            bullet.AddModule(new TransformModule(position, rotation));
-            bullet.AddModule(new MoveModule(speed));
-            bullet.AddModule(new TargetModule());
-            bullet.AddModule(new DamageModule());
-            bullet.AddModule(new OwnerModule { Owner = owner });
-            bullet.AddModule(new DestroyModule(bullet));
-
-            return bullet;
-        }
     }
 }

@@ -110,7 +110,7 @@ namespace RhytmTD.Battle.Entities.Controllers
             float rotationSpeed = 2;
 
             //Spawn Entity
-            BattleEntity enemy = m_SolidEntitySpawnController.CreateEnemy(typeID,
+            BattleEntity enemy = m_SolidEntitySpawnController.SpawnEnemy(typeID,
                                                                           position,
                                                                           rotation, rotationSpeed,
                                                                           m_CurrentChunk.MaxHP,

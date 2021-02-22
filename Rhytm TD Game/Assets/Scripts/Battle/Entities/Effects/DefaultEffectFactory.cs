@@ -29,5 +29,21 @@ namespace RhytmTD.Battle.Entities.Effects
 
             return battleEntity;
         }
+
+        public BattleEntity CreateBulletEntity(int typeID, Vector3 position, Quaternion rotation, float speed, BattleEntity owner)
+        {
+            int entityID = IDGenerator.GenerateID();
+
+            BattleEntity battleEntity = new BattleEntity(entityID);
+            battleEntity.AddModule(new TransformModule(position, rotation));
+            battleEntity.AddModule(new MoveModule(speed));
+            battleEntity.AddModule(new TargetModule());
+            battleEntity.AddModule(new DamageModule());
+            battleEntity.AddModule(new OwnerModule { Owner = owner });
+            battleEntity.AddModule(new DestroyModule(battleEntity));
+            battleEntity.AddModule(new EffectModule(typeID));
+
+            return battleEntity;
+        }
     }
 }

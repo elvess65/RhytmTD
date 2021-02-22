@@ -1,15 +1,16 @@
-﻿using CoreFramework;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace RhytmTD.Battle.Entities.Views
 {
-    public class ProjectileView : BaseView
+    public class ProjectileView : BattleEntityView
     {
         private TransformModule m_TransformModule;
         private DestroyModule m_DestroyModule;
 
-        public void Initialize(BattleEntity entity)
+        public override void Initialize(BattleEntity entity)
         {
+            base.Initialize(entity);
+
             m_TransformModule = entity.GetModule<TransformModule>();
             m_TransformModule.OnPositionChanged += OnPositionChanged;
 

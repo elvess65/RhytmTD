@@ -39,7 +39,6 @@ namespace RhytmTD.Battle.Entities.Views
 
             m_SpawnModel.OnPlayerEntityCreated += CreatePlayerView;
             m_SpawnModel.OnEnemyEntityCreated += CreateEnemyView;
-            m_SpawnModel.OnBulletEntityCreated += CreateBulletView;
 
             for (int i = 0; i < EnemySpawnAreas.Length; ++i)
             {
@@ -77,26 +76,11 @@ namespace RhytmTD.Battle.Entities.Views
             enemyView.Initialize(battleEntity);
         }
 
-        private void CreateBulletView(int typeID, BattleEntity battleEntity)
-        {
-            TransformModule transformModule = battleEntity.GetModule<TransformModule>();
-
-            //Create View
-            BattlePrefabAssets assets = m_WorldModel.Assets;
-            ProjectileView projectileView = assets.InstantiatePrefab(assets.SimpleAttackProjectilePrefab);
-            projectileView.transform.localScale = Vector3.one;
-            projectileView.transform.position = transformModule.Position;
-
-            //Initialize Entity
-            projectileView.Initialize(battleEntity);
-        }
-
 
         public void Dispose()
         {
             m_SpawnModel.OnPlayerEntityCreated -= CreatePlayerView;
             m_SpawnModel.OnEnemyEntityCreated -= CreateEnemyView;
-            m_SpawnModel.OnBulletEntityCreated -= CreateBulletView;
 
             Dispatcher.RemoveDisposable(this);
         }

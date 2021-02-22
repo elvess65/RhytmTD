@@ -9,7 +9,6 @@ namespace RhytmTD.Battle.Entities.Models
         public Action OnShouldCreatePlayer;
         public Action<int, BattleEntity> OnPlayerEntityCreated;
         public Action<int, BattleEntity> OnEnemyEntityCreated;
-        public Action<int, BattleEntity> OnBulletEntityCreated;
         public Action<BattleEntity> OnEnemyRemoved;
         public Action OnSpawnPointsInitialized;
 

@@ -12,9 +12,9 @@ namespace RhytmTD.Battle.Entities.Controllers
         private static float DISTANCE_TO_HIT = 0.1f; 
 
         private BattleModel m_BattleModel;
-        private DamageController m_DamageController;
         private RhytmController m_RhytmController;
-        private SolidEntitySpawnController m_SpawnController;
+        private DamageController m_DamageController;
+        private EffectsController m_EffectsController;
         private Dictionary<int, BattleEntity> m_Bullets = new Dictionary<int, BattleEntity>();
         private List<int> m_BulletsToRemove = new List<int>();
 
@@ -27,7 +27,7 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_BattleModel = Dispatcher.GetModel<BattleModel>();
             m_DamageController = Dispatcher.GetController<DamageController>();
             m_RhytmController = Dispatcher.GetController<RhytmController>();
-            m_SpawnController = Dispatcher.GetController<SolidEntitySpawnController>();
+            m_EffectsController = Dispatcher.GetController<EffectsController>();
 
             UpdateModel updateModel = Dispatcher.GetModel<UpdateModel>();
             updateModel.OnUpdate += Update;
@@ -63,10 +63,13 @@ namespace RhytmTD.Battle.Entities.Controllers
             Quaternion rotation = Quaternion.LookRotation(vecToTarget);
             float speed = vecToTarget.magnitude / GetTimeToNextTick();
             
-            BattleEntity bullet = m_SpawnController.CreateBullet(1, senderSlot.ProjectileSlot.position, rotation, speed, sender);
+            BattleEntity bulletEnity = m_EffectsController.CreateBulletEffect(3, senderSlot.ProjectileSlot.position, rotation, speed, sender);
 
-            DamageModule damageModule = bullet.GetModule<DamageModule>();
+            DamageModule damageModule = bulletEnity.GetModule<DamageModule>();
             damageModule.MinDamage = damageModule.MaxDamage = senderDamageModule.RandomDamage();
+
+            DestroyModule destroyModule = bulletEnity.GetModule<DestroyModule>();
+            destroyModule.OnDestroyed += BulletDestroyedHandler;
 
             if (sender.HasModule<DamagePredictionModule>())
             {
@@ -74,7 +77,7 @@ namespace RhytmTD.Battle.Entities.Controllers
                 damagePredictionModule.PotentialDamage += damageModule.MaxDamage;
             }
 
-            return bullet;
+            return bulletEnity;
         }
 
         private float GetTimeToNextTick()
@@ -123,6 +126,11 @@ namespace RhytmTD.Battle.Entities.Controllers
 
                 m_BulletsToRemove.Clear();
             }
+        }
+
+        private void BulletDestroyedHandler(BattleEntity battleEntity)
+        {
+            m_BattleModel.RemoveBattleEntity(battleEntity.ID);
         }
     }
 }
