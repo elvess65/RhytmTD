@@ -1,30 +1,32 @@
-﻿
-using CoreFramework;
+﻿using CoreFramework;
 using RhytmTD.Battle.Entities.Models;
-using UnityEngine;
+using RhytmTD.Data.Models.DataTableModels;
 
 namespace RhytmTD.Battle.Entities.Views.Effects
 {
     public class EffectFactoryView : BaseView
     {
-        public GameObject[] EffectsPrefab;
-
         private EffectsModel m_EffectsModel;
+        private WorldDataModel m_WorldModel;
 
         private void Awake()
         {
-            m_EffectsModel = Dispatcher.GetModel<EffectsModel>();
-            m_EffectsModel.OnEffectCreated += EffectCreatedHandler;
+            Initialize();
         }
 
-        private void EffectCreatedHandler(BattleEntity entity)
+        private void Initialize()
+        {
+            m_EffectsModel = Dispatcher.GetModel<EffectsModel>();
+            m_EffectsModel.OnEffectEntityCreated += CreateEffectView;
+
+            m_WorldModel = Dispatcher.GetModel<WorldDataModel>();
+        }
+
+        private void CreateEffectView(BattleEntity entity)
         {
             EffectModule effectModule = entity.GetModule<EffectModule>();
 
-            GameObject prefab = EffectsPrefab[effectModule.TypeID - 1];
-            GameObject effectGo = GameObject.Instantiate(prefab);
-
-            BattleEntityView battleEntityView = effectGo.GetComponent<BattleEntityView>();
+            BattleEntityView battleEntityView = m_WorldModel.Assets.InstantiatePrefab(m_WorldModel.Assets.EffectsPrefab[effectModule.TypeID - 1]);
             battleEntityView.Initialize(entity);
         }
     }

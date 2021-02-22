@@ -17,6 +17,7 @@ namespace RhytmTD.Battle.Entities.Models
         public event SkillUseHanlder OnFinishingSkillUseStarted;
         public event SkillUseHanlder OnSkillUseFinished;
 
+
         public void AddSkill(BaseSkill skill)
         {
             m_Skills.Add(skill.ID, skill);
@@ -32,10 +33,6 @@ namespace RhytmTD.Battle.Entities.Models
             return m_Skills[skillID];
         }
 
-        public void SkillCreated(BattleEntity battleEntity)
-        {
-            OnSkillCreated?.Invoke(battleEntity);
-        }
 
         public void SkillPrepareStarted(int skillID, int senderID, int targetID, float duration)
         {

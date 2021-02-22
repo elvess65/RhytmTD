@@ -4,9 +4,9 @@ using UnityEngine;
 
 namespace RhytmTD.Battle.Entities.Skills
 {
-    public class DefaultSkillFactory : ISkillFactory
+    public class DefaultSkilEntityFactory : ISkillEntityFactory
     {
-        public BattleEntity CreateMeteorite()
+        public BattleEntity CreateMeteoriteEntity()
         {
             int entityID = IDGenerator.GenerateID();
 
@@ -17,7 +17,7 @@ namespace RhytmTD.Battle.Entities.Skills
             return battleEntity;
         }
 
-        public BattleEntity CreateFireball()
+        public BattleEntity CreateFireballEntity()
         {
             int entityID = IDGenerator.GenerateID();
 

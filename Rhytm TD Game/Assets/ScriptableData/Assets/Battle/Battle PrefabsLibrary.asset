@@ -16,3 +16,6 @@ MonoBehaviour:
     type: 3}
   SimpleAttackProjectilePrefab: {fileID: 5243094043493272542, guid: b2a7384554ba33f46a5863f9595cc029,
     type: 3}
+  EffectsPrefab:
+  - {fileID: -6254917294670049622, guid: bc771dae8243f854a8b2b85c909a5834, type: 3}
+  - {fileID: 4383053405783325504, guid: fb5997c8699d7d04c9aa98165b5723c1, type: 3}

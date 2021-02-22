@@ -1,9 +1,9 @@
 ﻿
 namespace RhytmTD.Battle.Entities.Skills
 {
-    public interface ISkillFactory
+    public interface ISkillEntityFactory
     {
-        BattleEntity CreateMeteorite();
-        BattleEntity CreateFireball();
+        BattleEntity CreateMeteoriteEntity();
+        BattleEntity CreateFireballEntity();
     }
 }

@@ -8,11 +8,11 @@ namespace RhytmTD.Battle.Entities.Controllers
     public class EffectsController : BaseController
     {
         private EffectsModel m_EffectsModel;
-        private IEffectFactory m_EffectFactory;
+        private IEffectEntityFactory m_EffectFactory;
 
         public EffectsController(Dispatcher dispatcher) : base(dispatcher)
         {
-            m_EffectFactory = new DefaultEffectFactory();
+            m_EffectFactory = new DefaultEffectEntityFactory();
         }
 
         public override void InitializeComplete()
@@ -24,16 +24,16 @@ namespace RhytmTD.Battle.Entities.Controllers
 
         public BattleEntity CreateMeteoriteEffect(Vector3 position, Quaternion rotation, float moveSpeed)
         {
-            BattleEntity battleEntity = m_EffectFactory.CreateMeteoriteEffect(position, rotation, moveSpeed);
-            m_EffectsModel.EffectCreated(battleEntity);
+            BattleEntity battleEntity = m_EffectFactory.CreateMeteoriteEffectEntity(position, rotation, moveSpeed);
+            m_EffectsModel.OnEffectEntityCreated?.Invoke(battleEntity);
 
             return battleEntity;
         }
 
         public BattleEntity CreateFireballEffect(Vector3 position, Quaternion rotation, float moveSpeed)
         {
-            BattleEntity battleEntity = m_EffectFactory.CreateFireballEffect(position, rotation, moveSpeed);
-            m_EffectsModel.EffectCreated(battleEntity);
+            BattleEntity battleEntity = m_EffectFactory.CreateFireballEffectEntity(position, rotation, moveSpeed);
+            m_EffectsModel.OnEffectEntityCreated?.Invoke(battleEntity);
 
             return battleEntity;
         }

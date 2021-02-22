@@ -9,6 +9,7 @@ namespace RhytmTD.Assets.Battle
     {
         public PlayerView PlayerPrefab;
         public ProjectileView SimpleAttackProjectilePrefab;
+        public BattleEntityView[] EffectsPrefab;
 
         public override void Initialize()
         {

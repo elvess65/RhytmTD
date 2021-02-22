@@ -7,11 +7,11 @@ namespace RhytmTD.Battle.Entities.Controllers
     public class SkillsController : BaseController
     {
         private SkillsModel m_SkillsModel;
-        private ISkillFactory m_SkillFactory;
+        private ISkillEntityFactory m_SkillFactory;
 
         public SkillsController(Dispatcher dispatcher) : base(dispatcher)
         {
-            m_SkillFactory = new DefaultSkillFactory();
+            m_SkillFactory = new DefaultSkilEntityFactory();
         }
 
         public override void InitializeComplete()
@@ -27,28 +27,28 @@ namespace RhytmTD.Battle.Entities.Controllers
             skill.UseSkill(senderID, targetID);
         }
 
-        public BattleEntity CreateMeteoriteSkill()
+        public BattleEntity CreateMeteoriteSkillEntity()
         {
-            BattleEntity battleEntity = m_SkillFactory.CreateMeteorite();
+            BattleEntity battleEntity = m_SkillFactory.CreateMeteoriteEntity();
 
             SkillMeteorite skillMeteorite = new SkillMeteorite();
             skillMeteorite.Initialize(battleEntity);
 
             m_SkillsModel.AddSkill(skillMeteorite);
-            m_SkillsModel.SkillCreated(battleEntity);
+            m_SkillsModel.OnSkillCreated?.Invoke(battleEntity);
 
             return battleEntity;
         }
 
-        public BattleEntity CreateFireballSkill()
+        public BattleEntity CreateFireballSkillEntity()
         {
-            BattleEntity battleEntity = m_SkillFactory.CreateFireball();
+            BattleEntity battleEntity = m_SkillFactory.CreateFireballEntity();
 
             SkillFireball skillFireball = new SkillFireball();
             skillFireball.Initialize(battleEntity);
 
             m_SkillsModel.AddSkill(skillFireball);
-            m_SkillsModel.SkillCreated(battleEntity);
+            m_SkillsModel.OnSkillCreated?.Invoke(battleEntity);
 
             return battleEntity;
         }

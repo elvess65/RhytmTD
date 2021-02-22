@@ -4,9 +4,9 @@ using UnityEngine;
 
 namespace RhytmTD.Battle.Entities.Effects
 {
-    public class DefaultEffectFactory : IEffectFactory
+    public class DefaultEffectEntityFactory : IEffectEntityFactory
     {
-        public BattleEntity CreateMeteoriteEffect(Vector3 position, Quaternion rotation, float moveSpeed)
+        public BattleEntity CreateMeteoriteEffectEntity(Vector3 position, Quaternion rotation, float moveSpeed)
         {
             int entityID = IDGenerator.GenerateID();
 
@@ -18,7 +18,7 @@ namespace RhytmTD.Battle.Entities.Effects
             return battleEntity;
         }
 
-        public BattleEntity CreateFireballEffect(Vector3 position, Quaternion rotation, float moveSpeed)
+        public BattleEntity CreateFireballEffectEntity(Vector3 position, Quaternion rotation, float moveSpeed)
         {
             int entityID = IDGenerator.GenerateID();
 
