@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace RhytmTD.Battle.Entities
 {
+    /// <summary>
+    /// Holds current and max health as well as event of changing current health
+    /// </summary>
     public class HealthModule : IBattleModule
     {
         public int Health { get; private set; }
@@ -13,6 +16,9 @@ namespace RhytmTD.Battle.Entities
 
         public Action<int, int> OnHealthRemoved;
 
+        /// <summary>
+        /// Holds current and max health as well as event of changing current health
+        /// </summary>
         public HealthModule(BattleEntity battleEntity, int health)
         {
             m_BattleEntity = battleEntity;

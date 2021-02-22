@@ -12,13 +12,13 @@ namespace RhytmTD.Battle.Entities.Skills
         private DamageController m_DamageController;
         private EffectsController m_EffectController;
 
-        private MeteoriteModule m_MeteoriteModule;
+        private MeteoriteSkillModule m_MeteoriteModule;
 
         public override void Initialize(BattleEntity battleEntity)
         {
             base.Initialize(battleEntity);
 
-            m_MeteoriteModule = battleEntity.GetModule<MeteoriteModule>();
+            m_MeteoriteModule = battleEntity.GetModule<MeteoriteSkillModule>();
 
             m_BattleModel = Dispatcher.GetModel<BattleModel>();
             m_DamageController = Dispatcher.GetController<DamageController>();

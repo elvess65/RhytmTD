@@ -3,6 +3,10 @@ using System;
 
 namespace RhytmTD.Battle.Entities
 {
+    /// <summary>
+    /// Holds pottential damage that entity can deal to its target
+    /// Is part of "Enemy destroyed prediction system"
+    /// </summary>
     public class DamagePredictionModule : IBattleModule
     {
         private int m_PotentialDamage;
@@ -17,6 +21,15 @@ namespace RhytmTD.Battle.Entities
                 m_PotentialDamage = value;
                 OnPotentialDamageChanged?.Invoke(value);
             }
+        }
+
+        /// <summary>
+        /// Holds pottential damage that entity can deal to its target
+        /// Is part of "Enemy destroyed prediction system"
+        /// </summary>
+        public DamagePredictionModule()
+        {
+
         }
     }
 }

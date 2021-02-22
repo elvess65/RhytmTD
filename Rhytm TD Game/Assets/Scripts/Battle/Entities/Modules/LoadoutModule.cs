@@ -2,9 +2,20 @@
 
 namespace RhytmTD.Battle.Entities
 {
+    /// <summary>
+    /// Holds entity related stuff as skills, weapons, etc.
+    /// </summary>
     public class LoadoutModule : IBattleModule
     {
         private Dictionary<int, int> m_SelectedSkills = new Dictionary<int, int>();
+
+        /// <summary>
+        /// Holds entity related stuff as skills, weapons, etc.
+        /// </summary>
+        public LoadoutModule()
+        {
+
+        }
 
         public void AddSkill(int typeID, int skillID)
         {

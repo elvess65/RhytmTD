@@ -17,6 +17,10 @@ namespace RhytmTD.Battle.Entities
         public Vector3 MoveDirection { get; private set; }
         public bool IsMoving { get; private set; }
 
+        /// <summary>
+        /// Incapsulates move speed and direction as well as events on start/stop movement
+        /// Could be applies for each entity that requires movement
+        /// </summary>
         public MoveModule(float speed)
         {
             Speed = CurrentSpeed = speed;

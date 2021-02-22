@@ -3,14 +3,20 @@ using UnityEngine;
 
 namespace RhytmTD.Battle.Entities
 {
-    public class MeteoriteModule : IBattleModule
+    /// <summary>
+    /// Holds data about meteorite skill
+    /// </summary>
+    public class MeteoriteSkillModule : IBattleModule
     {
         public float FlyTime { get; }
         public float DamageRadius { get; }
         public int Damage { get; }
         public Vector3 EffectOffset { get; }
 
-        public MeteoriteModule(float flyTime, float damageRadius, int damage, Vector3 effectOffset)
+        /// <summary>
+        /// Holds data for meteorite skill
+        /// </summary>
+        public MeteoriteSkillModule(float flyTime, float damageRadius, int damage, Vector3 effectOffset)
         {
             FlyTime = flyTime;
             DamageRadius = damageRadius;

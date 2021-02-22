@@ -5,11 +5,20 @@ using static CoreFramework.EnumsCollection;
 namespace RhytmTD.Battle.Entities
 {
     /// <summary>
-    /// Manages animation controller and is linked with view its init
+    /// Manages animation controller and is linked with view that holds reference to controller in world
+    /// Transmits posibility to play animation from entity to view
     /// </summary>
     public class AnimationModule : IBattleModule
     {
         private AbstractAnimationView m_AnimationView;
+
+        /// <summary>
+        /// Manages animation controller and is linked with view that holds reference to controller in world
+        /// Transmits posibility to play animation from entity to view
+        /// </summary>
+        public AnimationModule()
+        {
+        }
 
         public void InitializeModule(BattleEntityView entityView)
         {

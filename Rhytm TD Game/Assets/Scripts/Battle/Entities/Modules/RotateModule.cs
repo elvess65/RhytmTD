@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace RhytmTD.Battle.Entities
 {
+    /// <summary>
+    /// Holds rotation speed and data for target rotation
+    /// </summary>
     public class RotateModule : IBattleModule
     {
         public float Speed { get; }
@@ -11,6 +14,9 @@ namespace RhytmTD.Battle.Entities
         public Quaternion Destination { get; private set; }
         public bool IsRotating { get; private set; }
 
+        /// <summary>
+        /// Holds rotation speed and data for target rotation
+        /// </summary>
         public RotateModule(float speed)
         {
             Speed = CurrentSpeed = speed;

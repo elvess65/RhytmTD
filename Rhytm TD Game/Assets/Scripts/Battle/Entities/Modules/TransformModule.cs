@@ -34,6 +34,10 @@ namespace RhytmTD.Battle.Entities
         public System.Action<Vector3> OnPositionChanged;
         public System.Action<Quaternion> OnRotationChanged;
 
+        /// <summary>
+        /// Incapsulates position and rotation of the entity as well as events on changing 'em
+        /// Could be applies for each entity that requires position/rotation 
+        /// </summary>
         public TransformModule(Vector3 position, Quaternion rotation)
         {
             m_Position = position;

@@ -12,7 +12,7 @@ namespace RhytmTD.Battle.Entities.Skills
 
             BattleEntity battleEntity = new BattleEntity(entityID);
             battleEntity.AddModule(new SkillModule(1, 1, 1, 1, 10));
-            battleEntity.AddModule(new MeteoriteModule(1, 5, 10, new Vector3(7.7f, 7.7f, 0)));
+            battleEntity.AddModule(new MeteoriteSkillModule(1, 5, 10, new Vector3(7.7f, 7.7f, 0)));
 
             return battleEntity;
         }
@@ -23,7 +23,7 @@ namespace RhytmTD.Battle.Entities.Skills
 
             BattleEntity battleEntity = new BattleEntity(entityID);
             battleEntity.AddModule(new SkillModule(1, 1, 1, 1, 10));
-            battleEntity.AddModule(new FireballModule(4, 20));
+            battleEntity.AddModule(new FireballSkillModule(4, 20));
 
             return battleEntity;
         }

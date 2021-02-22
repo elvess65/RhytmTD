@@ -16,6 +16,9 @@ namespace RhytmTD.Battle.Entities
 
         public bool IsDestroyed => m_IsDestroyed;
 
+        /// <summary>
+        /// Incapsulates data whether entity is destroyed and provides event 
+        /// </summary>
         public DestroyModule(BattleEntity owner)
         {
             m_Owner = owner;

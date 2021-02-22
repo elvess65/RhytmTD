@@ -3,6 +3,9 @@ using System;
 
 namespace RhytmTD.Battle.Entities
 {
+    /// <summary>
+    /// Holds data about current focusing target and provides method for starting/stopping focusing
+    /// </summary>
     public class FocusModule : IBattleModule
     {
         private TransformModule m_TargetTransform;
@@ -13,6 +16,9 @@ namespace RhytmTD.Battle.Entities
 
         public Action<int> OnFocusTargetChanged;
 
+        /// <summary>
+        /// Holds data about current focusing target and provides method for starting/stopping focusing
+        /// </summary>
         public FocusModule()
         {
             m_IsFocusing = false;

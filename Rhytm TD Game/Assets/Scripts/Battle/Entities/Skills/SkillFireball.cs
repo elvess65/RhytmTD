@@ -15,13 +15,13 @@ namespace RhytmTD.Battle.Entities.Skills
         private EffectsController m_EffectController;
         private RhytmController m_RhytmController;
 
-        private FireballModule m_FireballModule;
+        private FireballSkillModule m_FireballModule;
 
         public override void Initialize(BattleEntity battleEntity)
         {
             base.Initialize(battleEntity);
 
-            m_FireballModule = battleEntity.GetModule<FireballModule>();
+            m_FireballModule = battleEntity.GetModule<FireballSkillModule>();
 
             m_BattleModel = Dispatcher.GetModel<BattleModel>();
             m_DamageController = Dispatcher.GetController<DamageController>();
