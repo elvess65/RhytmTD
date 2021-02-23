@@ -30,17 +30,20 @@ namespace RhytmTD.Battle.Entities.Views
 
         private void SkillModule_OnSkillUseStarted(int senderID, int targetID)
         {
-            m_AnimationModule.PlayAnimation(AnimationTypes.UseSkill);
+            //m_AnimationModule.PlayAnimation(AnimationTypes.UseSkill);
         }
 
         private void OnDestroy()
         {
-            foreach (int skillID in m_LoadoutModule.SelectedSkillIDs)
+            if (m_LoadoutModule != null)
             {
-                BaseSkill skill = m_SkillsModel.GetSkill(skillID);
-                SkillModule skillModule = skill.BattleEntity.GetModule<SkillModule>();
+                foreach (int skillID in m_LoadoutModule.SelectedSkillIDs)
+                {
+                    BaseSkill skill = m_SkillsModel.GetSkill(skillID);
+                    SkillModule skillModule = skill.BattleEntity.GetModule<SkillModule>();
 
-                skillModule.OnSkillUseStarted -= SkillModule_OnSkillUseStarted;
+                    skillModule.OnSkillUseStarted -= SkillModule_OnSkillUseStarted;
+                }
             }
         }
     }

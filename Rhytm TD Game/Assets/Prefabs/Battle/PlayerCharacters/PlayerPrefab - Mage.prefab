@@ -1213,7 +1213,7 @@ MonoBehaviour:
   Controller: {fileID: 2821583020469628258}
   ExposedAnimationKeys:
   - Type: 0
-    Key: Attack01
+    Key: AttackBase
   - Type: 1
     Key: GetHit
   - Type: 2
@@ -1226,6 +1226,10 @@ MonoBehaviour:
     Key: Victory
   - Type: 9
     Key: Attack02
+  - Type: 12
+    Key: WeaponSkill
+  - Type: 13
+    Key: CastableSkill
 --- !u!114 &4525815807916513740
 MonoBehaviour:
   m_ObjectHideFlags: 0

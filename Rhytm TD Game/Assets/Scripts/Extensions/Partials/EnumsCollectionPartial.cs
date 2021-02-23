@@ -16,7 +16,8 @@
             MenuAction,
             IdleBattle,
             IdleNormal,
-            UseSkill
+            UseWeaponSkill, 
+            UseCastableSkill,
         }
 
         public enum BattlEffectID

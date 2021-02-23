@@ -15,8 +15,9 @@ namespace RhytmTD.Battle.StateMachine
         private FindTargetController m_FindTargetController;
         private SkillsController m_SkillsController;
         private RhytmInputProxy m_RhytmInputProxy;
-        private BattleEntity m_TargetEntity;
         private AnimationModule m_PlayerAnimationModule;
+        private BattleEntity m_TargetEntity;
+        private int m_SkillID;
 
 
         public BattleState_Normal() : base()
@@ -77,26 +78,34 @@ namespace RhytmTD.Battle.StateMachine
         {
             if (keyCode == KeyCode.Space)
             {
-                BattleEntity target = m_FindTargetController.GetNearestTarget(m_BattleModel.PlayerEntity);
-                if (target != null)
+                m_TargetEntity = m_FindTargetController.GetNearestTarget(m_BattleModel.PlayerEntity);
+                if (m_TargetEntity != null)
                 {
                     LoadoutModule loadoutModule = m_BattleModel.PlayerEntity.GetModule<LoadoutModule>();
-                    int skillID = loadoutModule.GetSkillIDByTypeID(1);
+                    m_SkillID = loadoutModule.GetSkillIDByTypeID(1);
 
-                    m_SkillsController.UseSkill(skillID, m_BattleModel.PlayerEntity.ID, target.ID);
+                    m_SkillsController.UseSkill(m_SkillID, m_BattleModel.PlayerEntity.ID, m_TargetEntity.ID);
+                    m_PlayerAnimationModule.PlayAnimation(CoreFramework.EnumsCollection.AnimationTypes.UseCastableSkill);
                 }
             }
             else if (keyCode == KeyCode.V)
             {
-                BattleEntity target = m_FindTargetController.GetNearestTarget(m_BattleModel.PlayerEntity);
-                if (target != null)
+                m_TargetEntity = m_FindTargetController.GetNearestTarget(m_BattleModel.PlayerEntity);
+                if (m_TargetEntity != null)
                 {
                     LoadoutModule loadoutModule = m_BattleModel.PlayerEntity.GetModule<LoadoutModule>();
-                    int skillID = loadoutModule.GetSkillIDByTypeID(2);
+                    m_SkillID = loadoutModule.GetSkillIDByTypeID(2);
 
-                    m_SkillsController.UseSkill(skillID, m_BattleModel.PlayerEntity.ID, target.ID);
+                    m_PlayerAnimationModule.OnAnimationMoment += SkillAnimationMomentHandler;
+                    m_PlayerAnimationModule.PlayAnimation(CoreFramework.EnumsCollection.AnimationTypes.UseWeaponSkill);
                 }
             }
+        }
+
+        private void SkillAnimationMomentHandler()
+        {
+            m_PlayerAnimationModule.OnAnimationMoment -= SkillAnimationMomentHandler;
+            m_SkillsController.UseSkill(m_SkillID, m_BattleModel.PlayerEntity.ID, m_TargetEntity.ID);
         }
 
         private BattleEntity GetTargetForBaseAttack()

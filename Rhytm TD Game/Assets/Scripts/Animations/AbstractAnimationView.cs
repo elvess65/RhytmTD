@@ -37,7 +37,7 @@ namespace RhytmTD.Animation
         public virtual void Initialize()
         {
             m_EventListener = Controller.GetComponent<AnimationEventListener>();
-            if (m_EventListener != null)
+            if (m_EventListener != null && m_AnimationModule != null)
                 m_EventListener.OnAnimationMoment += m_AnimationModule.AnimationMomentHandler;
 
             m_AnimationKeys = new Dictionary<AnimationTypes, string>();

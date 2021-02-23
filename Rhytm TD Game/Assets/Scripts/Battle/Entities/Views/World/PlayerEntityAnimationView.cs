@@ -62,6 +62,14 @@ namespace RhytmTD.Battle.Entities.Views
                 case AnimationTypes.MenuAction:
                     SetTrigger(key);
                     break;
+
+                case AnimationTypes.UseWeaponSkill:
+                    SetTrigger(key);
+                    break;
+
+                case AnimationTypes.UseCastableSkill:
+                    SetTrigger(key);
+                    break;
             }
         }
 
