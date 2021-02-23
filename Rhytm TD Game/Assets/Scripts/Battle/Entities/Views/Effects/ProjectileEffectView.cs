@@ -45,7 +45,6 @@ namespace RhytmTD.Battle.Entities.Views
 
         private void ShowMuzzleEffect()
         {
-            Debug.Log("ShowMuzzleEffect " + transform.position);
             GameObject muzzleEffect = Instantiate(MuzzleEffectPrefab, transform.position, Quaternion.identity);
             muzzleEffect.transform.localScale = Vector3.one * 3;
 
