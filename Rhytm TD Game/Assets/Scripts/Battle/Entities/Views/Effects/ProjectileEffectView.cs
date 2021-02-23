@@ -21,7 +21,6 @@ namespace RhytmTD.Battle.Entities.Views
 
         private void OnPositionChanged(Vector3 position)
         {
-            Debug.Log("POSITION CHANGED " + position);
             transform.position = position;
         }
 
