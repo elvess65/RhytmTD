@@ -757,10 +757,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerPrefab - Mage
       objectReference: {fileID: 0}
-    - target: {fileID: 1580023137681114, guid: 38b78716e5243fc4891b0654df0189dd, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4162560473967594, guid: 38b78716e5243fc4891b0654df0189dd, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

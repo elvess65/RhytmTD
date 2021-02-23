@@ -15,7 +15,9 @@ namespace RhytmTD.Battle.StateMachine
         private FindTargetController m_FindTargetController;
         private SkillsController m_SkillsController;
         private RhytmInputProxy m_RhytmInputProxy;
-        private MarkerController m_MarkerController;
+        private BattleEntity m_TargetEntity;
+        private AnimationModule m_PlayerAnimationModule;
+
 
         public BattleState_Normal() : base()
         {
@@ -43,39 +45,32 @@ namespace RhytmTD.Battle.StateMachine
             m_InputModel.OnKeyDown -= HandleKeyDown;
         }
 
+
         private void HandleTouch(Vector3 mouseScreenPos)
         {
             if (m_RhytmInputProxy.IsInputAllowed() && m_RhytmInputProxy.IsInputTickValid())
             {
-                TargetModule targetModule = m_BattleModel.PlayerEntity.GetModule<TargetModule>();
-                BattleEntity targetEntity;
+                m_TargetEntity = GetTargetForBaseAttack();
 
-                m_RhytmInputProxy.IsInputTickValid();
-
-                if (!targetModule.HasTarget)
+                if (m_TargetEntity != null)
                 {
-                    targetEntity = m_FindTargetController.GetNearestTarget(m_BattleModel.PlayerEntity);
+                    if (m_PlayerAnimationModule == null)
+                        m_PlayerAnimationModule = m_BattleModel.PlayerEntity.GetModule<AnimationModule>();
 
-                    if (targetEntity != null)
-                    {
-                        targetModule.SetTarget(targetEntity);
-                    }
-                }
-                else
-                {
-                    targetEntity = targetModule.Target;
-                }
-
-                if (targetEntity != null)
-                {
-                    AnimationModule animationModule = m_BattleModel.PlayerEntity.GetModule<AnimationModule>();
-                    animationModule.PlayAnimation(CoreFramework.EnumsCollection.AnimationTypes.Attack);
-
-                    m_ShootController.Shoot(m_BattleModel.PlayerEntity, targetEntity);
+                    m_PlayerAnimationModule.OnAnimationMoment += BaseAttackAnimationMomentHandler;
+                    m_PlayerAnimationModule.PlayAnimation(CoreFramework.EnumsCollection.AnimationTypes.Attack);
                 }
             }
 
             m_RhytmInputProxy.RegisterInput();
+        }
+
+        private void BaseAttackAnimationMomentHandler()
+        {
+            m_PlayerAnimationModule.OnAnimationMoment -= BaseAttackAnimationMomentHandler;
+
+            m_RhytmInputProxy.IsInputTickValid();
+            m_ShootController.Shoot(m_BattleModel.PlayerEntity, m_TargetEntity);
         }
 
         private void HandleKeyDown(KeyCode keyCode)
@@ -102,6 +97,28 @@ namespace RhytmTD.Battle.StateMachine
                     m_SkillsController.UseSkill(skillID, m_BattleModel.PlayerEntity.ID, target.ID);
                 }
             }
+        }
+
+        private BattleEntity GetTargetForBaseAttack()
+        {
+            TargetModule targetModule = m_BattleModel.PlayerEntity.GetModule<TargetModule>();
+            BattleEntity targetEntity;
+
+            if (!targetModule.HasTarget)
+            {
+                targetEntity = m_FindTargetController.GetNearestTarget(m_BattleModel.PlayerEntity);
+
+                if (targetEntity != null)
+                {
+                    targetModule.SetTarget(targetEntity);
+                }
+            }
+            else
+            {
+                targetEntity = targetModule.Target;
+            }
+
+            return targetEntity;
         }
     }
 }

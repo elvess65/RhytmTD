@@ -12,12 +12,15 @@ namespace RhytmTD.Animation
         public Animator Controller;
         public AnimationKeys[] ExposedAnimationKeys;
 
+        protected AnimationEventListener m_EventListener;
+
         private AnimationModule m_AnimationModule;
 
         private Dictionary<AnimationTypes, string> m_AnimationKeys;
         private Dictionary<string, float> m_AnimationActionEventsExecuteTime;
 
         protected const string m_BASE_LAYER = "Base Layer";
+
 
         public abstract void PlayAnimation(AnimationTypes animationType);
 
@@ -33,6 +36,10 @@ namespace RhytmTD.Animation
 
         public virtual void Initialize()
         {
+            m_EventListener = Controller.GetComponent<AnimationEventListener>();
+            if (m_EventListener != null)
+                m_EventListener.OnAnimationMoment += m_AnimationModule.AnimationMomentHandler;
+
             m_AnimationKeys = new Dictionary<AnimationTypes, string>();
             m_AnimationActionEventsExecuteTime = new Dictionary<string, float>();
 
@@ -99,7 +106,10 @@ namespace RhytmTD.Animation
 
         private void OnDestroy()
         {
-            m_AnimationModule.OnPlayAnimation -= PlayAnimation;
+            if (m_AnimationModule != null)
+            {
+                m_AnimationModule.OnPlayAnimation -= PlayAnimation;
+            }
         }
 
 

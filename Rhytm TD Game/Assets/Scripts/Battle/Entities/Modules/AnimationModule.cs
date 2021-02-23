@@ -9,7 +9,11 @@ namespace RhytmTD.Battle.Entities
     public class AnimationModule : IBattleModule
     {
         public event Action<AnimationTypes> OnPlayAnimation;
+        public event Action OnAnimationMoment;
 
+        /// <summary>
+        /// Manages animations
+        /// </summary>
         public AnimationModule()
         {
         }
@@ -17,6 +21,11 @@ namespace RhytmTD.Battle.Entities
         public void PlayAnimation(AnimationTypes animationType)
         {
             OnPlayAnimation?.Invoke(animationType);
+        }
+
+        public void AnimationMomentHandler()
+        {
+            OnAnimationMoment?.Invoke();
         }
     }
 }
