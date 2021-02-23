@@ -29,10 +29,10 @@ namespace RhytmTD.Battle.Entities.Views.Effects
 
         private void EffectActionHandler(DataContainer data)
         {
-            string action = data.GetString("action");
+            string action = data.GetString(DataConsts.ACTION);
             switch (action)
             {
-                case "blow":
+                case DataConsts.BLOW:
                     {
                         Blow();
                         Destroy(gameObject);

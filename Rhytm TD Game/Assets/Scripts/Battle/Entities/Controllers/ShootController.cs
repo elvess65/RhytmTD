@@ -1,6 +1,7 @@
 ﻿using CoreFramework;
 using CoreFramework.Rhytm;
 using RhytmTD.Battle.Entities.Models;
+using RhytmTD.Data;
 using RhytmTD.Data.Models;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,6 +18,8 @@ namespace RhytmTD.Battle.Entities.Controllers
         private EffectsController m_EffectsController;
         private Dictionary<int, BattleEntity> m_Bullets = new Dictionary<int, BattleEntity>();
         private List<int> m_BulletsToRemove = new List<int>();
+        private DataContainer m_BulletDataContainer = new DataContainer();
+
 
         public ShootController(Dispatcher dispatcher) : base(dispatcher)
         {
@@ -31,6 +34,8 @@ namespace RhytmTD.Battle.Entities.Controllers
 
             UpdateModel updateModel = Dispatcher.GetModel<UpdateModel>();
             updateModel.OnUpdate += Update;
+
+            m_BulletDataContainer = new DataContainer();
         }
 
         public void Shoot(BattleEntity sender, BattleEntity target)
@@ -65,11 +70,21 @@ namespace RhytmTD.Battle.Entities.Controllers
             
             BattleEntity bulletEnity = m_EffectsController.CreateBulletEffect(EnumsCollection.BattlEffectID.ProjectileArrow, senderSlot.ProjectileSlot.position, rotation, speed, sender);
 
+            TransformModule transformModule = bulletEnity.GetModule<TransformModule>();
+            transformModule.Position = senderSlot.ProjectileSlot.position;
+
             DamageModule damageModule = bulletEnity.GetModule<DamageModule>();
             damageModule.MinDamage = damageModule.MaxDamage = senderDamageModule.RandomDamage();
 
             DestroyModule destroyModule = bulletEnity.GetModule<DestroyModule>();
             destroyModule.OnDestroyed += BulletDestroyedHandler;
+
+            //WARNING - EXTRA ALLOCATION. CAUSE GARBAGE
+            DataContainer data = new DataContainer();
+            data.AddString(DataConsts.ACTION, DataConsts.MUZZLE);
+
+            EffectModule effectModule = bulletEnity.GetModule<EffectModule>();
+            effectModule.EffectAction(data);
 
             if (sender.HasModule<DamagePredictionModule>())
             {
@@ -114,6 +129,13 @@ namespace RhytmTD.Battle.Entities.Controllers
 
                     DestroyModule destroyModule = bullet.GetModule<DestroyModule>();
                     destroyModule.SetDestroyed();
+
+                    //WARNING - EXTRA ALLOCATION. CAUSE GARBAGE
+                    DataContainer data = new DataContainer();
+                    data.AddString(DataConsts.ACTION, DataConsts.BLOW);
+
+                    EffectModule effectModule = bullet.GetModule<EffectModule>();
+                    effectModule.EffectAction(data);
                 }
             }
 

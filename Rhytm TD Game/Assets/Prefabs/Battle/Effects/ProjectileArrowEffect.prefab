@@ -4981,7 +4981,7 @@ GameObject:
   - component: {fileID: 4689540533852751121}
   - component: {fileID: 5243094043493272542}
   m_Layer: 0
-  m_Name: ProjectilePrefab - Simple
+  m_Name: ProjectileArrowEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9822,6 +9822,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85dda084a4f53084ebdc9eec57c48d91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MuzzleEffectPrefab: {fileID: 3564993737778466243, guid: 8cb851ec20d733e41a29be7b82509528,
+    type: 3}
+  BlowEffectPrefab: {fileID: 6838925035958063094, guid: a243ede5b09758142b90ff5893e9712e,
+    type: 3}
 --- !u!1 &4649366126990037463
 GameObject:
   m_ObjectHideFlags: 0
