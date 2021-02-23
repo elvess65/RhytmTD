@@ -53,15 +53,15 @@ namespace RhytmTD.Battle.Entities.Controllers
 
         private void SpawnPlayer()
         {
-            float moveSpeed = m_AccountBaseParamsDataModel.MoveSpeedUnitsPerTick * (1 / (float)m_RhytmController.TickDurationSeconds);
+            float moveSpeed = m_AccountBaseParamsDataModel.BaseCharacterData.MoveSpeedUnitsPerTick * (1 / (float)m_RhytmController.TickDurationSeconds);
             int typeID = 1;
 
             //Spawn Entity
             BattleEntity entity = CreatePlayer(typeID, m_SpawnModel.PlayerSpawnPosition, Quaternion.identity,
                                                        moveSpeed,
-                                                       m_AccountBaseParamsDataModel.Health,
-                                                       m_AccountBaseParamsDataModel.MinDamage,
-                                                       m_AccountBaseParamsDataModel.MaxDamage);
+                                                       m_AccountBaseParamsDataModel.BaseCharacterData.Health,
+                                                       m_AccountBaseParamsDataModel.BaseCharacterData.MinDamage,
+                                                       m_AccountBaseParamsDataModel.BaseCharacterData.MaxDamage);
 
             m_BattleModel.AddBattleEntity(entity);
             m_BattleModel.PlayerEntity = entity;

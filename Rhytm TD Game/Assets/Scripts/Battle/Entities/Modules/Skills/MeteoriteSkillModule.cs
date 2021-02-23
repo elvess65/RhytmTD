@@ -16,7 +16,7 @@ namespace RhytmTD.Battle.Entities
         /// <summary>
         /// Holds data for meteorite skill
         /// </summary>
-        public MeteoriteSkillModule(float flyTime, float damageRadius, int damage, Vector3 effectOffset)
+        public MeteoriteSkillModule(float flyTime, float damageRadius, int damage, Vector2 effectOffset)
         {
             FlyTime = flyTime;
             DamageRadius = damageRadius;

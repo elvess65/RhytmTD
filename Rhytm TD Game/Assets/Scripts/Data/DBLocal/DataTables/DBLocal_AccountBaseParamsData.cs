@@ -9,11 +9,48 @@ namespace RhytmTD.Data.DataBaseLocal
     [CreateAssetMenu(fileName = "New Local AccountBaseParamsData", menuName = "DBLocal/Account/AccountBaseParamsData", order = 101)]
     public class DBLocal_AccountBaseParamsData : ScriptableObject
     {
-        public float MoveSpeedUnitsPerTick;
-        public float FocusSpeed;
-        public int MinDamage;
-        public int MaxDamage;
-        public int Health;
-        public int Mana;
+        public CharacterBaseData BaseCharacterData;
+        public FireballSkillBaseData BaseFireballData;
+        public MeteoriteSkillBaseData BaseMeteoriteData;
+
+
+        [System.Serializable]
+        public class CharacterBaseData
+        {
+            public float MoveSpeedUnitsPerTick = 2;
+            public float FocusSpeed = 3;
+            public int MinDamage = 12;
+            public int MaxDamage = 17;
+            public int Health = 50;
+            public int Mana = 10;
+        }
+
+        [System.Serializable]
+        public abstract class SkillBaseData
+        {
+            public int TypeID = 1;
+            public float ActivationTime = 1;
+            public float UseTime = 1;
+            public float FinishingTime = 1;
+            public float CooldownTime = 10;
+        }
+
+        [System.Serializable]
+        public class FireballSkillBaseData : SkillBaseData
+        {
+            [Header("Fireball")]
+            public float MoveSpeed = 4;
+            public int Damage = 20;
+        }
+
+        [System.Serializable]
+        public class MeteoriteSkillBaseData : SkillBaseData
+        {
+            [Header("Meteorite")]
+            public float FlyTime = 1;
+            public float DamageRadius = 5;
+            public int Damage = 10;
+            public Vector2 EffectOffset = new Vector2(7.7f, 7.7f);
+        }
     }
 }
