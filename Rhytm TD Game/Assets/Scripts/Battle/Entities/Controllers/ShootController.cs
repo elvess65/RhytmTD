@@ -68,23 +68,13 @@ namespace RhytmTD.Battle.Entities.Controllers
             Quaternion rotation = Quaternion.LookRotation(vecToTarget);
             float speed = vecToTarget.magnitude / GetTimeToNextTick();
             
-            BattleEntity bulletEnity = m_EffectsController.CreateBulletEffect(EnumsCollection.BattlEffectID.ProjectileArrow, senderSlot.ProjectileSlot.position, rotation, speed, sender);
-
-            TransformModule transformModule = bulletEnity.GetModule<TransformModule>();
-            transformModule.Position = senderSlot.ProjectileSlot.position;
+            BattleEntity bulletEnity = m_EffectsController.CreateBulletEffect(ConstsCollection.EffectConsts.ProjectileArrow, senderSlot.ProjectileSlot.position, rotation, speed, sender);
 
             DamageModule damageModule = bulletEnity.GetModule<DamageModule>();
             damageModule.MinDamage = damageModule.MaxDamage = senderDamageModule.RandomDamage();
 
             DestroyModule destroyModule = bulletEnity.GetModule<DestroyModule>();
             destroyModule.OnDestroyed += BulletDestroyedHandler;
-
-            //WARNING - EXTRA ALLOCATION. CAUSE GARBAGE
-            DataContainer data = new DataContainer();
-            data.AddString(DataConsts.ACTION, DataConsts.MUZZLE);
-
-            EffectModule effectModule = bulletEnity.GetModule<EffectModule>();
-            effectModule.EffectAction(data);
 
             if (sender.HasModule<DamagePredictionModule>())
             {
@@ -132,7 +122,7 @@ namespace RhytmTD.Battle.Entities.Controllers
 
                     //WARNING - EXTRA ALLOCATION. CAUSE GARBAGE
                     DataContainer data = new DataContainer();
-                    data.AddString(DataConsts.ACTION, DataConsts.BLOW);
+                    data.AddString(ConstsCollection.DataConsts.ACTION, ConstsCollection.DataConsts.EXPLOSION);
 
                     EffectModule effectModule = bullet.GetModule<EffectModule>();
                     effectModule.EffectAction(data);

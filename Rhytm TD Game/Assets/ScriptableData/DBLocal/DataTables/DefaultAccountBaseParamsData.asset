@@ -12,9 +12,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 357bd71464a454f07bdd05c28d451e30, type: 3}
   m_Name: DefaultAccountBaseParamsData
   m_EditorClassIdentifier: 
-  MoveSpeedUnitsPerTick: 2
-  FocusSpeed: 3
-  MinDamage: 12
-  MaxDamage: 17
-  Health: 50
-  Mana: 10
+  BaseCharacterData:
+    MoveSpeedUnitsPerTick: 2
+    FocusSpeed: 3
+    MinDamage: 12
+    MaxDamage: 17
+    Health: 50
+    Mana: 10
+  BaseFireballData:
+    TypeID: 101
+    ActivationTime: 0
+    UseTime: 1
+    FinishingTime: 1
+    CooldownTime: 10
+    MoveSpeed: 4
+    Damage: 20
+  BaseMeteoriteData:
+    TypeID: 100
+    ActivationTime: 1
+    UseTime: 1
+    FinishingTime: 1
+    CooldownTime: 10
+    FlyTime: 1
+    DamageRadius: 5
+    Damage: 10
+    EffectOffset: {x: 7.7, y: 7.7}

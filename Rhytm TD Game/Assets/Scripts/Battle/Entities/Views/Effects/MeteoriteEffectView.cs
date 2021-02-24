@@ -29,21 +29,21 @@ namespace RhytmTD.Battle.Entities.Views.Effects
 
         private void EffectActionHandler(DataContainer data)
         {
-            string action = data.GetString(DataConsts.ACTION);
+            string action = data.GetString(ConstsCollection.DataConsts.ACTION);
             switch (action)
             {
-                case DataConsts.BLOW:
-                    {
-                        float radius = data.GetFloat(DataConsts.RADIUS);
+                case ConstsCollection.DataConsts.EXPLOSION:
+                {
+                    float radius = data.GetFloat(ConstsCollection.DataConsts.RADIUS);
 
-                        Blow(radius);
-                        Destroy(gameObject);
-                    }
+                    ShowExplosionEffect(radius);
+                    Destroy(gameObject);
                     break;
+                }    
             }
         }
 
-        private void Blow(float radius)
+        private void ShowExplosionEffect(float radius)
         {
             GameObject blowEffect = Instantiate(BlowEffectPrefab, transform.position, Quaternion.identity);
             blowEffect.transform.localScale = Vector3.one * radius;

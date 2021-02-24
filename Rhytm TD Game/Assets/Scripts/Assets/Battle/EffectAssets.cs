@@ -25,11 +25,12 @@ namespace RhytmTD.Assets.Battle
             }
         }
 
-        public BattleEntityView GetEffectViewPrefab(BattlEffectID id)
+        public BattleEntityView GetEffectViewPrefab(int id)
         {
-            if (m_EffectEntityViewPrefabs.ContainsKey(id))
+            BattlEffectID battleEffectID = (BattlEffectID)id;
+            if (m_EffectEntityViewPrefabs.ContainsKey(battleEffectID))
             {
-                return m_EffectEntityViewPrefabs[id];
+                return m_EffectEntityViewPrefabs[battleEffectID];
             }
 
             return null;

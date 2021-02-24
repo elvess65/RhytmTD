@@ -1,4 +1,6 @@
-﻿namespace CoreFramework
+﻿using RhytmTD;
+
+namespace CoreFramework
 {
     public static partial class EnumsCollection
     {
@@ -22,14 +24,20 @@
 
         public enum BattlEffectID
         {
-            ProjectileArrow,
-            SkillMeterite,
-            SkillFireball
+            ProjectileArrow = ConstsCollection.EffectConsts.ProjectileArrow,
+            SkillMeterite = ConstsCollection.EffectConsts.Meteorite,
+            SkillFireball = ConstsCollection.EffectConsts.Fireball
+        }
+
+        public enum SkillID
+        {
+            Meteorite = ConstsCollection.SkillConsts.METEORITE_ID,
+            Fireball = ConstsCollection.SkillConsts.FIREBALL_ID
         }
 
         public enum PlayerCharacterID
         {
-            Mage
+            Mage = ConstsCollection.CharacterConsts.MAGE_ID
         }
 
     }

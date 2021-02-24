@@ -7,11 +7,11 @@ namespace RhytmTD.Battle.Entities
 {
     public class EffectModule : IBattleModule
     {
-        public BattlEffectID TypeID { get; }
+        public int TypeID { get; }
 
         public Action<DataContainer> OnEffectAction;
 
-        public EffectModule(BattlEffectID typeID)
+        public EffectModule(int typeID)
         {
             TypeID = typeID;
         }

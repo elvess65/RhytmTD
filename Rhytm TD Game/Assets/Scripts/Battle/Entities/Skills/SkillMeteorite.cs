@@ -91,8 +91,8 @@ namespace RhytmTD.Battle.Entities.Skills
         private void BlowMeteorite(EffectModule effectModule, float radius)
         {
             DataContainer data = new DataContainer();
-            data.AddString(DataConsts.ACTION, DataConsts.BLOW);
-            data.AddFloat(DataConsts.RADIUS, radius);
+            data.AddString(ConstsCollection.DataConsts.ACTION, ConstsCollection.DataConsts.EXPLOSION);
+            data.AddFloat(ConstsCollection.DataConsts.RADIUS, radius);
 
             effectModule.EffectAction(data);
         }

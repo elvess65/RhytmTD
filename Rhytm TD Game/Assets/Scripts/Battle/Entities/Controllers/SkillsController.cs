@@ -34,7 +34,7 @@ namespace RhytmTD.Battle.Entities.Controllers
         public BattleEntity CreateMeteoriteSkillEntity()
         {
             AccountBaseParamsDataModel.MeteoriteSkillBaseData data = m_AccountBaseParamsDataModel.BaseMeteoriteData;
-            BattleEntity battleEntity = m_SkillFactory.CreateMeteoriteEntity(data.TypeID, data.ActivationTime,
+            BattleEntity battleEntity = m_SkillFactory.CreateMeteoriteEntity((int)data.TypeID, data.ActivationTime,
                                                                              data.UseTime, data.FinishingTime,
                                                                              data.CooldownTime,
                                                                              data.FlyTime, data.DamageRadius, data.Damage,
@@ -52,7 +52,7 @@ namespace RhytmTD.Battle.Entities.Controllers
         public BattleEntity CreateFireballSkillEntity()
         {
             AccountBaseParamsDataModel.FireballSkillBaseData data = m_AccountBaseParamsDataModel.BaseFireballData;
-            BattleEntity battleEntity = m_SkillFactory.CreateFireballEntity(data.TypeID, data.ActivationTime,
+            BattleEntity battleEntity = m_SkillFactory.CreateFireballEntity((int)data.TypeID, data.ActivationTime,
                                                                             data.UseTime, data.FinishingTime,
                                                                             data.CooldownTime,
                                                                             data.MoveSpeed, data.Damage);

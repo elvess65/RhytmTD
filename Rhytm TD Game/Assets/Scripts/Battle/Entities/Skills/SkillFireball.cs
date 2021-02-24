@@ -85,7 +85,7 @@ namespace RhytmTD.Battle.Entities.Skills
         private void BlowFireball(EffectModule effectModule)
         {
             DataContainer data = new DataContainer();
-            data.AddString(DataConsts.ACTION, DataConsts.BLOW);
+            data.AddString(ConstsCollection.DataConsts.ACTION, ConstsCollection.DataConsts.EXPLOSION);
 
             effectModule.EffectAction(data);
         }

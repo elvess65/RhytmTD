@@ -26,7 +26,7 @@ namespace RhytmTD.Data.Models.DataTableModels
         [System.Serializable]
         public abstract class SkillBaseData
         {
-            public int TypeID;
+            public EnumsCollection.SkillID TypeID;
             public float ActivationTime;
             public float UseTime;
             public float FinishingTime;

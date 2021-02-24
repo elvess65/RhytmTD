@@ -54,7 +54,7 @@ namespace RhytmTD.Battle.Entities.Controllers
         private void SpawnPlayer()
         {
             float moveSpeed = m_AccountBaseParamsDataModel.BaseCharacterData.MoveSpeedUnitsPerTick * (1 / (float)m_RhytmController.TickDurationSeconds);
-            int typeID = 1;
+            int typeID = (int)EnumsCollection.PlayerCharacterID.Mage;
 
             //Spawn Entity
             BattleEntity entity = CreatePlayer(typeID, m_SpawnModel.PlayerSpawnPosition, Quaternion.identity,
@@ -75,8 +75,8 @@ namespace RhytmTD.Battle.Entities.Controllers
             BattleEntity fireballSkill = m_SkillController.CreateFireballSkillEntity();
 
             LoadoutModule loadoutModule = entity.GetModule<LoadoutModule>();
-            loadoutModule.AddSkill(meteoriteSkill.ID, 1);
-            loadoutModule.AddSkill(fireballSkill.ID, 2);
+            loadoutModule.AddSkill(meteoriteSkill.GetModule<SkillModule>().TypeID, meteoriteSkill.ID);
+            loadoutModule.AddSkill(fireballSkill.GetModule<SkillModule>().TypeID, fireballSkill.ID);
 
             m_SpawnModel.OnPlayerEntityCreated?.Invoke(typeID, entity);
 

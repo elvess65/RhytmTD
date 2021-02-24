@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using CoreFramework;
+using UnityEngine;
 
 namespace RhytmTD.Data.DataBaseLocal
 {
@@ -28,7 +29,7 @@ namespace RhytmTD.Data.DataBaseLocal
         [System.Serializable]
         public abstract class SkillBaseData
         {
-            public int TypeID = 1;
+            public EnumsCollection.SkillID TypeID;
             public float ActivationTime = 1;
             public float UseTime = 1;
             public float FinishingTime = 1;

@@ -15,8 +15,12 @@ namespace RhytmTD.Battle.Entities.Views
             TransformModule transformModule = entity.GetModule<TransformModule>();
             transformModule.OnPositionChanged += OnPositionChanged;
 
+            transform.position = transformModule.Position;
+
             EffectModule effectModule = entity.GetModule<EffectModule>();
             effectModule.OnEffectAction += EffectActionHandler;
+
+            ShowMuzzleEffect();
         }
 
         private void OnPositionChanged(Vector3 position)
@@ -26,35 +30,31 @@ namespace RhytmTD.Battle.Entities.Views
 
         private void EffectActionHandler(DataContainer data)
         {
-            string action = data.GetString(DataConsts.ACTION);
+            string action = data.GetString(ConstsCollection.DataConsts.ACTION);
             switch (action)
             {
-                case DataConsts.BLOW:
-                    {
-                        ShowBlowEffect();
-                        Destroy(gameObject);
-                    }
+                case ConstsCollection.DataConsts.EXPLOSION:
+                {
+                    ShowExplosionEffect();
+                    Destroy(gameObject);
                     break;
-                case DataConsts.MUZZLE:
-                    {
-                        ShowMuzzleEffect();
-                    }
-                    break;
+                }
+                
             }
         }
 
         private void ShowMuzzleEffect()
         {
             GameObject muzzleEffect = Instantiate(MuzzleEffectPrefab, transform.position, Quaternion.identity);
-            muzzleEffect.transform.localScale = Vector3.one * 3;
+            muzzleEffect.transform.localScale = Vector3.one;
 
             Destroy(muzzleEffect, 5f);
         }
 
-        private void ShowBlowEffect()
+        private void ShowExplosionEffect()
         {
             GameObject blowEffect = Instantiate(BlowEffectPrefab, transform.position, Quaternion.identity);
-            blowEffect.transform.localScale = Vector3.one * 3;
+            blowEffect.transform.localScale = Vector3.one;
 
             Destroy(blowEffect, 5f);
 

@@ -1,4 +1,5 @@
-﻿using CoreFramework.Input;
+﻿using CoreFramework;
+using CoreFramework.Input;
 using CoreFramework.Rhytm;
 using RhytmTD.Battle.Entities;
 using RhytmTD.Battle.Entities.Controllers;
@@ -28,6 +29,8 @@ namespace RhytmTD.Battle.StateMachine
             m_FindTargetController = Dispatcher.GetController<FindTargetController>();
             m_SkillsController = Dispatcher.GetController<SkillsController>();
             m_RhytmInputProxy = Dispatcher.GetController<RhytmInputProxy>();
+
+            m_BattleModel.OnPlayerEntityInitialized += PlayerInitializedHandlder;
         }
 
         public override void EnterState()
@@ -55,9 +58,6 @@ namespace RhytmTD.Battle.StateMachine
 
                 if (m_TargetEntity != null)
                 {
-                    if (m_PlayerAnimationModule == null)
-                        m_PlayerAnimationModule = m_BattleModel.PlayerEntity.GetModule<AnimationModule>();
-
                     m_PlayerAnimationModule.OnAnimationMoment += BaseAttackAnimationMomentHandler;
                     m_PlayerAnimationModule.PlayAnimation(CoreFramework.EnumsCollection.AnimationTypes.Attack);
                 }
@@ -82,10 +82,10 @@ namespace RhytmTD.Battle.StateMachine
                 if (m_TargetEntity != null)
                 {
                     LoadoutModule loadoutModule = m_BattleModel.PlayerEntity.GetModule<LoadoutModule>();
-                    m_SkillID = loadoutModule.GetSkillIDByTypeID(1);
+                    m_SkillID = loadoutModule.GetSkillIDByTypeID(ConstsCollection.SkillConsts.METEORITE_ID);
 
                     m_SkillsController.UseSkill(m_SkillID, m_BattleModel.PlayerEntity.ID, m_TargetEntity.ID);
-                    m_PlayerAnimationModule.PlayAnimation(CoreFramework.EnumsCollection.AnimationTypes.UseCastableSkill);
+                    m_PlayerAnimationModule.PlayAnimation(EnumsCollection.AnimationTypes.UseCastableSkill);
                 }
             }
             else if (keyCode == KeyCode.V)
@@ -94,7 +94,7 @@ namespace RhytmTD.Battle.StateMachine
                 if (m_TargetEntity != null)
                 {
                     LoadoutModule loadoutModule = m_BattleModel.PlayerEntity.GetModule<LoadoutModule>();
-                    m_SkillID = loadoutModule.GetSkillIDByTypeID(2);
+                    m_SkillID = loadoutModule.GetSkillIDByTypeID(ConstsCollection.SkillConsts.FIREBALL_ID);
 
                     m_PlayerAnimationModule.OnAnimationMoment += SkillAnimationMomentHandler;
                     m_PlayerAnimationModule.PlayAnimation(CoreFramework.EnumsCollection.AnimationTypes.UseWeaponSkill);
@@ -128,6 +128,13 @@ namespace RhytmTD.Battle.StateMachine
             }
 
             return targetEntity;
+        }
+
+        private void PlayerInitializedHandlder(BattleEntity playerEntity)
+        {
+            m_BattleModel.OnPlayerEntityInitialized -= PlayerInitializedHandlder;
+
+            m_PlayerAnimationModule = playerEntity.GetModule<AnimationModule>();
         }
     }
 }
