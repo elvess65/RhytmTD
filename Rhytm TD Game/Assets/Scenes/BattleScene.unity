@@ -457,7 +457,7 @@ PrefabInstance:
     - target: {fileID: 8457453674409715015, guid: 89809aa23fdccc74e9e76a5841e9c092,
         type: 3}
       propertyPath: m_Name
-      value: UIWidget - Tick
+      value: UIWidget - Metronome
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 89809aa23fdccc74e9e76a5841e9c092, type: 3}
@@ -1478,7 +1478,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Root: {fileID: 782814927}
-  UIWidget_Tick: {fileID: 107328195}
+  UIWidget_Metronome: {fileID: 107328195}
   UIWidget_PlayerHealthBar: {fileID: 1741432353}
 --- !u!114 &782814929
 MonoBehaviour:

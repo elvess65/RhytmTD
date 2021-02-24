@@ -1,9 +1,10 @@
-﻿namespace CoreFramework.Rhytm
+﻿#define LOG_ENABLED
+
+namespace CoreFramework.Rhytm
 {
     public class RhytmInputProxy : BaseController
     {
-        private static RhytmInputProxy m_Instance;
-
+        private RhytmController m_RhytmController;
         private double m_InputPrecious01;
         private float m_LastInputTime;
         private const float m_TICK_DURATION_REDUCE = 0.4f;
@@ -11,15 +12,19 @@
         /// <summary>
         /// Находиться ли текущее состояние времени в окне ввода
         /// </summary>
-        [System.Obsolete("Dont forget to remove this")]
-        public static bool IsInUseRange => 1 - RhytmController.GetInstance().ProgressToNextTickAnalog < m_Instance.m_InputPrecious01 ||
-                                               RhytmController.GetInstance().ProgressToNextTickAnalog < m_Instance.m_InputPrecious01;
+        public bool IsInUseRange => 1 - m_RhytmController.ProgressToNextTickAnalog < m_InputPrecious01 ||
+                                        m_RhytmController.ProgressToNextTickAnalog < m_InputPrecious01;
 
 
         public RhytmInputProxy(Dispatcher dispatcher) : base(dispatcher)
         {
-            if (m_Instance == null)
-                m_Instance = this;
+        }
+
+        public override void InitializeComplete()
+        {
+            base.InitializeComplete();
+
+            m_RhytmController = Dispatcher.GetController<RhytmController>();
         }
 
         /// <summary>
@@ -46,37 +51,44 @@
         {
             //Время с предыдущего тика сравнивается с временем тика уменьшеным на константу
 
-            return UnityEngine.Time.time - m_LastInputTime > RhytmController.GetInstance().TickDurationSeconds * m_TICK_DURATION_REDUCE;
+            return UnityEngine.Time.time - m_LastInputTime > m_RhytmController.TickDurationSeconds * m_TICK_DURATION_REDUCE;
         }
 
         /// <summary>
         /// Находится ли ввод в окне ввода и кеширование результатов в контроллер
         /// </summary>
-        /// <returns></returns>
         public bool IsInputTickValid()
         {
-            double progressToNextTickAnalog = RhytmController.GetInstance().ProgressToNextTickAnalog;
+            double progressToNextTickAnalog = m_RhytmController.ProgressToNextTickAnalog;
+            bool result = false;
 
             //Pre tick
             if (progressToNextTickAnalog >= 0.5f)
             {
-                RhytmController.GetInstance().DeltaInput = -RhytmController.GetInstance().TimeToNextTick;
-                RhytmController.GetInstance().InputTickResult = EnumsCollection.InputTickResult.PreTick;
+                m_RhytmController.DeltaInput = -m_RhytmController.TimeToNextTick;
+                m_RhytmController.InputTickResult = EnumsCollection.InputTickResult.PreTick;
 
-                //UnityEngine.Debug.Log("RhytmInputProxy: Pre Tick: " + RhytmController.GetInstance().DeltaInput);
-
-                return 1 - progressToNextTickAnalog <= m_InputPrecious01;
+                result = 1 - progressToNextTickAnalog <= m_InputPrecious01;
             }
             //Post tick
             else
             {
-                RhytmController.GetInstance().DeltaInput = RhytmController.GetInstance().TickDurationSeconds - RhytmController.GetInstance().TimeToNextTick;
-                RhytmController.GetInstance().InputTickResult = EnumsCollection.InputTickResult.PostTick;
+                m_RhytmController.DeltaInput = m_RhytmController.TickDurationSeconds - m_RhytmController.TimeToNextTick;
+                m_RhytmController.InputTickResult = EnumsCollection.InputTickResult.PostTick;
 
-                //UnityEngine.Debug.Log("RhytmInputProxy: Post Tick: " + RhytmController.GetInstance().DeltaInput);
-
-                return progressToNextTickAnalog <= m_InputPrecious01;
+                result = progressToNextTickAnalog <= m_InputPrecious01;
             }
+
+            Log($"RhytmInputProxy: {m_RhytmController.InputTickResult} : {m_RhytmController.DeltaInput}");
+
+            return result;
+        }
+
+        private void Log(string message)
+        {
+#if LOG_ENABLED
+            UnityEngine.Debug.Log(message);
+#endif
         }
     }
 }

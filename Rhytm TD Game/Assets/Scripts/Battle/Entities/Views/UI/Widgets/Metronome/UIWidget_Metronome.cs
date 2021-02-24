@@ -6,39 +6,41 @@ using UnityEngine;
 namespace RhytmTD.UI.Widget
 {
     /// <summary>
-    /// Виджет отображения состояния тиков
+    /// Виджет метронома
     /// </summary>
-    public class UIWidget_Tick : UIWidget
+    public class UIWidget_Metronome : UIWidget
     {
         public Color ColorOutOfRange;
         public Color ColorInRange;
 
         private RhytmController m_RhytmController;
+        private RhytmInputProxy m_RhytmInputProxy;
 
         [Space(10)]
-        [SerializeField] UIComponent_TickWidget_Tick m_Tick;
-        [SerializeField] UIComponent_TickWidget_Arrow[] m_TickArrows;
+        [SerializeField] UIComponent_WidgetMetronome_Tick m_TickComponent;
+        [SerializeField] UIComponent_WidgetMetronome_Arrow[] m_ArrowComponents;
    
         private InterpolationData<float> m_LerpData;
 
 
-        public void Initialize(float tickDuration)
+        public void Initialize()
         {
+            m_RhytmInputProxy = Dispatcher.GetController<RhytmInputProxy>();
+
             m_RhytmController = Dispatcher.GetController<RhytmController>();
             m_RhytmController.OnTick += TickHandler;
             m_RhytmController.OnEventProcessingTick += ProcessTickHandler;
 
-            //Lerp
             m_LerpData = new InterpolationData<float>();
 
-            //Tick
-            m_Tick.Initialize(tickDuration);
+            //Tick Component
+            m_TickComponent.Initialize((float)m_RhytmController.TickDurationSeconds / 8);
 
-            //Arrows
-            for (int i = 0; i < m_TickArrows.Length; i++)
+            //Arrow Components
+            for (int i = 0; i < m_ArrowComponents.Length; i++)
             {
-                m_TickArrows[i].InitializeColors(ColorOutOfRange, ColorInRange);
-                m_TickArrows[i].Initialize();
+                m_ArrowComponents[i].InitializeData(ColorOutOfRange, ColorInRange, m_RhytmInputProxy);
+                m_ArrowComponents[i].Initialize();
             }
 
             InternalInitialize();
@@ -49,12 +51,12 @@ namespace RhytmTD.UI.Widget
         {
             base.WidgetUpdate(deltaTime);
 
-            PlayArrowsAnimation();
+            ProcessArrowsAnimation();
         }
       
         private void TickHandler(int ticksSinceStart)
         {
-            m_Tick.StartPlayTickAnimation();
+            m_TickComponent.StartPlayTickAnimation();
         }
 
         private void ProcessTickHandler(int ticksSinceStart)
@@ -64,16 +66,15 @@ namespace RhytmTD.UI.Widget
 
         private void StartPlayArrowsAnimation()
         {
-            //Arrows
-            for (int i = 0; i < m_TickArrows.Length; i++)
-                m_TickArrows[i].PrepareForInterpolation();
+            for (int i = 0; i < m_ArrowComponents.Length; i++)
+                m_ArrowComponents[i].PrepareForInterpolation();
 
             //Lerp
             m_LerpData.TotalTime = (float)m_RhytmController.TimeToNextTick + (float)m_RhytmController.ProcessTickDelta;
             m_LerpData.Start();
         }
 
-        private void PlayArrowsAnimation()
+        private void ProcessArrowsAnimation()
         {
             if (m_LerpData.IsStarted)
             {
@@ -81,16 +82,16 @@ namespace RhytmTD.UI.Widget
                 m_LerpData.Increment();
 
                 //Process
-                for (int i = 0; i < m_TickArrows.Length; i++)
-                    m_TickArrows[i].ProcessInterpolation(m_LerpData.Progress);
+                for (int i = 0; i < m_ArrowComponents.Length; i++)
+                    m_ArrowComponents[i].ProcessInterpolation(m_LerpData.Progress);
 
                 //Overtime
                 if (m_LerpData.Overtime())
                 {
                     m_LerpData.Stop();
 
-                    for (int i = 0; i < m_TickArrows.Length; i++)
-                        m_TickArrows[i].FinishInterpolation();
+                    for (int i = 0; i < m_ArrowComponents.Length; i++)
+                        m_ArrowComponents[i].FinishInterpolation();
                 }
             }
         }

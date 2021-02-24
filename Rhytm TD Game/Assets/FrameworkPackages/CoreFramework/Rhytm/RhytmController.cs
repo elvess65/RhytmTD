@@ -6,8 +6,6 @@ namespace CoreFramework.Rhytm
 {
     public class RhytmController : BaseController
     {
-        private static RhytmController m_Instance;
-
         public System.Action OnStarted;
         public System.Action OnStopped;
         public System.Action<int> OnTick;
@@ -77,16 +75,9 @@ namespace CoreFramework.Rhytm
         private const float m_TICKS_PER_LOOP = 4;
         private const double m_PROCESS_TICK_OFFSET = 0.25;
 
-        [System.Obsolete("Dont forget to remove this")]
-        public static RhytmController GetInstance()
-        {
-            return m_Instance;
-        }
 
         public RhytmController(Dispatcher dispatcher) : base(dispatcher)
         {
-            m_Instance = this;
-
             m_IsStarted = false;
             m_CompletedLoops = 0;
         }

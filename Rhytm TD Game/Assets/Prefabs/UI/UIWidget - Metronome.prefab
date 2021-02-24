@@ -102,7 +102,7 @@ GameObject:
   - component: {fileID: 8457453674409715008}
   - component: {fileID: 8457453674409715009}
   m_Layer: 5
-  m_Name: UIWidget - Tick
+  m_Name: UIWidget - Metronome
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -145,8 +145,8 @@ MonoBehaviour:
   Root: {fileID: 8457453674409715014}
   ColorOutOfRange: {r: 1, g: 0.03137255, b: 0, a: 1}
   ColorInRange: {r: 0, g: 0.1882353, b: 1, a: 1}
-  m_Tick: {fileID: 8457453675731112186}
-  m_TickArrows:
+  m_TickComponent: {fileID: 8457453675731112186}
+  m_ArrowComponents:
   - {fileID: 8457453675172628450}
   - {fileID: 8457453673950210895}
 --- !u!222 &8457453674409715008

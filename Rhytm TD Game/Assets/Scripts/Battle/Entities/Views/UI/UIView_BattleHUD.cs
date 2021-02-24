@@ -17,7 +17,7 @@ namespace RhytmTD.UI.Battle.View.UI
         private BattleModel m_BattleModel;
 
         [Space]
-        [SerializeField] private UIWidget_Tick UIWidget_Tick;
+        [SerializeField] private UIWidget_Metronome UIWidget_Metronome;
         [SerializeField] private UIWidget_PlayerHealthBar UIWidget_PlayerHealthBar;
 
         public override void Initialize()
@@ -30,8 +30,8 @@ namespace RhytmTD.UI.Battle.View.UI
 
             m_RhytmController = Dispatcher.GetController<RhytmController>();
 
-            UIWidget_Tick.Initialize((float)m_RhytmController.TickDurationSeconds / 8);    
-            RegisterWidget(UIWidget_Tick);
+            UIWidget_Metronome.Initialize();    
+            RegisterWidget(UIWidget_Metronome);
 
             UIWidget_PlayerHealthBar.Initialize();
             RegisterWidget(UIWidget_PlayerHealthBar);

@@ -4,9 +4,9 @@ using UnityEngine.UI;
 namespace RhytmTD.UI.Components
 {
     /// <summary>
-    /// Компонент наступления тика
+    /// Компонент объекта показывающего наступления тика
     /// </summary>
-    public class UIComponent_TickWidget_Tick : MonoBehaviour
+    public class UIComponent_WidgetMetronome_Tick : MonoBehaviour
     {
         [SerializeField] private Image m_ControlledImage;
 
@@ -22,7 +22,6 @@ namespace RhytmTD.UI.Components
         {
             StartCoroutine(TickAnimationCoroutine());
         }
-
 
         private System.Collections.IEnumerator TickAnimationCoroutine()
         {
