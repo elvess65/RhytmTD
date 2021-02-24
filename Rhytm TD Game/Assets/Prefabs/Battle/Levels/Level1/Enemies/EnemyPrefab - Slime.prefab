@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8333050106166543772}
   - component: {fileID: 8490509966019249447}
   - component: {fileID: 7197749382232164712}
+  - component: {fileID: 9113933191592815974}
   m_Layer: 0
   m_Name: EnemyPrefab - Slime
   m_TagString: Untagged
@@ -75,6 +76,15 @@ MonoBehaviour:
     Key: Show
   - Type: 10
     Key: IdleBattle
+  - Type: 6
+    Key: Show
+  TweenControlledObject: {fileID: 1424131060247876119}
+  ScaleDuration: 0.5
+  ShakeDuration: 0.5
+  ShakeStrength: 0.5
+  ShakeVibrato: 10
+  ShakeRandom: 90
+  ShakeFade: 0
 --- !u!114 &7197749382232164712
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -89,6 +99,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ProjectileSlot: {fileID: 7051503540657233131}
   HitSlot: {fileID: 3427625202454749918}
+--- !u!114 &9113933191592815974
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1054638298448434}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab33e93565c1d9343b9898b88c4b4c94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1181376321425960
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,13 +1,40 @@
-﻿using UnityEngine;
-using RhytmTD.Animation;
+﻿using RhytmTD.Animation;
+using RhytmTD.Animation.DOTween;
+using UnityEngine;
 using static CoreFramework.EnumsCollection;
 
 namespace RhytmTD.Battle.Entities.Views
 {
     public class EnemyEntityAnimationView : AbstractAnimationView
     {
+        [Header("DOTween")]
+        public Transform TweenControlledObject;  
+        public float ScaleDuration = 0.2f;
+        public float ShakeDuration = 0.2f;
+        public float ShakeStrength = 0.5f;
+        public int ShakeVibrato = 10;
+        public int ShakeRandom = 90;
+        public bool ShakeFade = false;
+
+        private DOTweenSequenceAnimator DOTweenController;
+        private TweenContainer[] m_ShowTweens;
+
+        public override void Initialize()
+        {
+            base.Initialize();
+
+            DOTweenController = GetComponent<DOTweenSequenceAnimator>();
+
+            m_ShowTweens = new TweenContainer[] 
+            {
+                new ScaleTweenContainer(TweenControlledObject, Vector3.zero, ScaleDuration, true),
+                new ShakeScaleTweenContainer(TweenControlledObject, ShakeDuration, new Vector3(ShakeDuration, ShakeDuration, ShakeDuration), ShakeVibrato, ShakeRandom, ShakeFade)
+            };
+        }
+
         public override void PlayAnimation(AnimationTypes animationType)
         {
+            Debug.Log(animationType);
             string key = GetKeyByType(animationType);
 
             switch (animationType)
@@ -27,7 +54,8 @@ namespace RhytmTD.Battle.Entities.Views
                     break;
 
                 case AnimationTypes.Show:
-                    SetTrigger(key);
+                    //SetTrigger(key);
+                    DOTweenController.PlaySequence(m_ShowTweens);
                     break;
 
                 case AnimationTypes.Victory:

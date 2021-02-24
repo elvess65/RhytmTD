@@ -28,6 +28,8 @@ namespace RhytmTD.Battle.Entities.Views
             {
                 view.Initialize(entity);
             }
+
+            m_AnimationModule.PlayAnimation(CoreFramework.EnumsCollection.AnimationTypes.Show);
         }
 
         private void OnDestroyed(BattleEntity entity)
