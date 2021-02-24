@@ -26,13 +26,15 @@ namespace CoreFramework
         {
             ProjectileArrow = ConstsCollection.EffectConsts.ProjectileArrow,
             SkillMeterite = ConstsCollection.EffectConsts.Meteorite,
-            SkillFireball = ConstsCollection.EffectConsts.Fireball
+            SkillFireball = ConstsCollection.EffectConsts.Fireball,
+            SkillHealth = ConstsCollection.EffectConsts.Health
         }
 
         public enum SkillID
         {
             Meteorite = ConstsCollection.SkillConsts.METEORITE_ID,
-            Fireball = ConstsCollection.SkillConsts.FIREBALL_ID
+            Fireball = ConstsCollection.SkillConsts.FIREBALL_ID,
+            Health = ConstsCollection.SkillConsts.HEALTH_ID
         }
 
         public enum PlayerCharacterID

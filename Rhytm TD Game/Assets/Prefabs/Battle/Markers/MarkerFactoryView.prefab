@@ -46,3 +46,4 @@ MonoBehaviour:
   MarkerPrefabs:
   - {fileID: 383192249371643888, guid: 8d33edd8d94af6a408baca9a3f798088, type: 3}
   - {fileID: 7511404072005292725, guid: 0eccaf944697ec843ad3360d66a0c9c9, type: 3}
+  - {fileID: 7511404072005292725, guid: 09fa249394ca95c41bdaf656214bf547, type: 3}

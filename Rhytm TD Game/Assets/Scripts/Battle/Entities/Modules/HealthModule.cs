@@ -15,6 +15,7 @@ namespace RhytmTD.Battle.Entities
         private BattleEntity m_BattleEntity;
 
         public Action<int, int> OnHealthRemoved;
+        public Action<int> OnHealthRestored;
 
         /// <summary>
         /// Holds current and max health as well as event of changing current health
@@ -28,6 +29,7 @@ namespace RhytmTD.Battle.Entities
         public void AddHealth(int health)
         {
             CurrentHealth += health;
+            OnHealthRestored.Invoke(CurrentHealth);
         }
 
         public void RemoveHealth(int health, int senderID)
@@ -36,7 +38,7 @@ namespace RhytmTD.Battle.Entities
             {
                 CurrentHealth = Mathf.Max(CurrentHealth - health, 0);
 
-                OnHealthRemoved?.Invoke(health, senderID);
+                OnHealthRemoved?.Invoke(CurrentHealth, senderID);
 
                 if (CurrentHealth <= 0 && m_BattleEntity.HasModule<DestroyModule>())
                 {

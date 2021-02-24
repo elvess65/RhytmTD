@@ -65,5 +65,22 @@ namespace RhytmTD.Battle.Entities.Controllers
 
             return battleEntity;
         }
+
+        public BattleEntity CreateHealthSkillEntity()
+        {
+            AccountBaseParamsDataModel.FireballSkillBaseData data = m_AccountBaseParamsDataModel.BaseFireballData;
+            BattleEntity battleEntity = m_SkillFactory.CreateHealthEntity(ConstsCollection.SkillConsts.HEALTH_ID, data.ActivationTime,
+                                                                            data.UseTime, data.FinishingTime,
+                                                                            data.CooldownTime,
+                                                                            data.Damage);
+
+            SkillHealth skillHealth = new SkillHealth();
+            skillHealth.Initialize(battleEntity);
+
+            m_SkillsModel.AddSkill(skillHealth);
+            m_SkillsModel.OnSkillCreated?.Invoke(battleEntity);
+
+            return battleEntity;
+        }
     }
 }

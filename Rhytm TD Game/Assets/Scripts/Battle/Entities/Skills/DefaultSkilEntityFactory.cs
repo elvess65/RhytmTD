@@ -29,5 +29,16 @@ namespace RhytmTD.Battle.Entities.Skills
 
             return battleEntity;
         }
+
+        public BattleEntity CreateHealthEntity(int typeID, float activationTime, float useTime, float finishingTime, float cooldownTime, float restorePercent)
+        {
+            int entityID = IDGenerator.GenerateID();
+
+            BattleEntity battleEntity = new BattleEntity(entityID);
+            battleEntity.AddModule(new SkillModule(typeID, activationTime, useTime, finishingTime, cooldownTime));
+            battleEntity.AddModule(new HealthSkillModule(restorePercent));
+
+            return battleEntity;
+        }
     }
 }

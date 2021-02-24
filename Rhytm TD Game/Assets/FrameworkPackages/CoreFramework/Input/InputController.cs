@@ -40,6 +40,11 @@ namespace CoreFramework.Input
                 m_InputModel.KeyDown(KeyCode.V);
             }
 
+            if (UnityEngine.Input.GetKeyDown(KeyCode.Z))
+            {
+                m_InputModel.KeyDown(KeyCode.Z);
+            }
+
             if (UnityEngine.Input.GetKeyDown(KeyCode.D))
             {
                 m_InputModel.KeyDown(KeyCode.D);

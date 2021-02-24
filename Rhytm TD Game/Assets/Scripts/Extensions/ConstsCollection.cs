@@ -12,12 +12,14 @@
             public const int ProjectileArrow = 500;
             public const int Meteorite = 501;
             public const int Fireball = 502;
+            public const int Health = 503;
         }
 
         public static class SkillConsts
         {
             public const int METEORITE_ID = 100;
             public const int FIREBALL_ID = 101;
+            public const int HEALTH_ID = 102;
         }
 
         public static class DataConsts

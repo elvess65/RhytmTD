@@ -40,6 +40,14 @@ namespace RhytmTD.Battle.Entities.Controllers
             return battleEntity;
         }
 
+        public BattleEntity CreateHealthEffect(Vector3 position, Quaternion rotation)
+        {
+            BattleEntity battleEntity = m_EffectFactory.CreateHealthEffectEntity(position, rotation);
+            m_EffectsModel.OnEffectEntityCreated?.Invoke(battleEntity);
+
+            return battleEntity;
+        }
+
         public BattleEntity CreateBulletEffect(int typeID, Vector3 position, Quaternion rotation, float speed, BattleEntity owner)
         {
             BattleEntity battleEntity = m_EffectFactory.CreateBulletEntity(typeID, position, rotation, speed, owner);
