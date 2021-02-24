@@ -34,7 +34,6 @@ namespace RhytmTD.Battle.Entities.Views
 
         public override void PlayAnimation(AnimationTypes animationType)
         {
-            Debug.Log(animationType);
             string key = GetKeyByType(animationType);
 
             switch (animationType)
