@@ -1,5 +1,4 @@
-﻿using RhytmTD.Battle.Entities.Views;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace RhytmTD.Battle.Entities
 {
@@ -20,12 +19,10 @@ namespace RhytmTD.Battle.Entities
         {
         }
 
-        public void InitializeModule(BattleEntityView entityView)
+        public void SetTransforms(Transform projectileSlot, Transform hitSlot)
         {
-            BattleEntitySlotView slotView = entityView.transform.GetComponent<BattleEntitySlotView>();
-
-            ProjectileSlot = slotView.ProjectileSlot;
-            HitSlot = slotView.HitSlot;
+            ProjectileSlot = projectileSlot;
+            HitSlot = hitSlot;
         }
     }
 }

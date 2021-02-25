@@ -18,8 +18,6 @@ namespace RhytmTD.Battle.Entities.Controllers
         private EffectsController m_EffectsController;
         private Dictionary<int, BattleEntity> m_Bullets = new Dictionary<int, BattleEntity>();
         private List<int> m_BulletsToRemove = new List<int>();
-        private DataContainer m_BulletDataContainer = new DataContainer();
-
 
         public ShootController(Dispatcher dispatcher) : base(dispatcher)
         {
@@ -34,8 +32,6 @@ namespace RhytmTD.Battle.Entities.Controllers
 
             UpdateModel updateModel = Dispatcher.GetModel<UpdateModel>();
             updateModel.OnUpdate += Update;
-
-            m_BulletDataContainer = new DataContainer();
         }
 
         public void Shoot(BattleEntity sender, BattleEntity target)
@@ -55,9 +51,9 @@ namespace RhytmTD.Battle.Entities.Controllers
         private Vector3 GetTargetDir(BattleEntity sender, BattleEntity target)
         {
             TransformModule senderTransform = sender.GetModule<TransformModule>();
-            TransformModule targetTransform = target.GetModule<TransformModule>();
+            SlotModule targetTransform = target.GetModule<SlotModule>();
 
-            return senderTransform.Position - targetTransform.Position;
+            return senderTransform.Position - targetTransform.HitSlot.position;
         }
 
         private BattleEntity CreateBullet(BattleEntity sender, Vector3 vecToTarget)
@@ -102,8 +98,10 @@ namespace RhytmTD.Battle.Entities.Controllers
                 OwnerModule ownerModule = bullet.GetModule<OwnerModule>();
                 TransformModule transformModule = bullet.GetModule<TransformModule>();
 
+                SlotModule targetSlotModule = targetModule.Target.GetModule<SlotModule>();
+
                 // Correct direction for bullets
-                Vector3 dir = targetModule.TargetTransform.Position - transformModule.Position;
+                Vector3 dir = targetSlotModule.HitSlot.position - transformModule.Position;
                 moveModule.StartMove(dir.normalized);
 
                 if (dir.sqrMagnitude <= DISTANCE_TO_HIT * DISTANCE_TO_HIT)
@@ -122,7 +120,7 @@ namespace RhytmTD.Battle.Entities.Controllers
 
                     //WARNING - EXTRA ALLOCATION. CAUSE GARBAGE
                     DataContainer data = new DataContainer();
-                    data.AddString(ConstsCollection.DataConsts.ACTION, ConstsCollection.DataConsts.EXPLOSION);
+                    data.AddObject(ConstsCollection.DataConsts.ACTION, ConstsCollection.DataConsts.EXPLOSION);
 
                     EffectModule effectModule = bullet.GetModule<EffectModule>();
                     effectModule.EffectAction(data);

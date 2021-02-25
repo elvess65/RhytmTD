@@ -30,7 +30,7 @@ namespace RhytmTD.Battle.Entities.Views
 
         private void EffectActionHandler(DataContainer data)
         {
-            string action = data.GetString(ConstsCollection.DataConsts.ACTION);
+            string action = data.GetObject<string>(ConstsCollection.DataConsts.ACTION);
             switch (action)
             {
                 case ConstsCollection.DataConsts.EXPLOSION:

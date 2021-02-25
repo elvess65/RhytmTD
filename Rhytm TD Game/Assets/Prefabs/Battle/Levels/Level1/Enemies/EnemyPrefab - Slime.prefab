@@ -135,6 +135,7 @@ MonoBehaviour:
   ViewsToInit:
   - {fileID: 8330830939845466241}
   - {fileID: 8490509966019249447}
+  - {fileID: 7197749382232164712}
 --- !u!114 &8490509966019249447
 MonoBehaviour:
   m_ObjectHideFlags: 0

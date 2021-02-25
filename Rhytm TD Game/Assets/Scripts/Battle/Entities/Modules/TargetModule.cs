@@ -9,10 +9,8 @@ namespace RhytmTD.Battle.Entities
     public class TargetModule : IBattleModule
     {
         private BattleEntity m_Target;
-        private TransformModule m_TargetTransform;
 
         public BattleEntity Target => m_Target;
-        public TransformModule TargetTransform => m_TargetTransform  ?? (m_TargetTransform = m_Target.GetModule<TransformModule>());
         public bool HasTarget => m_Target != null;
 
         public Action<BattleEntity> OnTargetChanged;

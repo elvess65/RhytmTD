@@ -19,9 +19,6 @@ namespace RhytmTD.Battle.Entities.Views
 
             m_AnimationModule = entity.GetModule<AnimationModule>();
             m_MarkerController = Dispatcher.GetController<MarkerController>();
-
-            SlotModule slotModule = entity.GetModule<SlotModule>();
-            slotModule.InitializeModule(this);
             
             MoveModule moveModule = entity.GetModule<MoveModule>();
             moveModule.OnMoveStarted += OnMoveStarted;
