@@ -96,10 +96,8 @@ namespace RhytmTD.Battle.StateMachine
                     LoadoutModule loadoutModule = m_BattleModel.PlayerEntity.GetModule<LoadoutModule>();
                     m_SkillID = loadoutModule.GetSkillIDByTypeID(ConstsCollection.SkillConsts.FIREBALL_ID);
 
-                    m_SkillsController.UseSkill(m_SkillID, m_BattleModel.PlayerEntity.ID, m_TargetEntity.ID);
-
                     m_PlayerAnimationModule.OnAnimationMoment += SkillAnimationMomentHandler;
-                    m_PlayerAnimationModule.PlayAnimation(CoreFramework.EnumsCollection.AnimationTypes.UseWeaponSkill);
+                    m_PlayerAnimationModule.PlayAnimation(EnumsCollection.AnimationTypes.UseWeaponSkill);
                 }
             }
 
@@ -111,7 +109,7 @@ namespace RhytmTD.Battle.StateMachine
                 m_SkillsController.UseSkill(m_SkillID, m_BattleModel.PlayerEntity.ID, m_BattleModel.PlayerEntity.ID);
 
                 m_PlayerAnimationModule.OnAnimationMoment += SkillAnimationMomentHandler;
-                m_PlayerAnimationModule.PlayAnimation(CoreFramework.EnumsCollection.AnimationTypes.UseCastableSkill);
+                m_PlayerAnimationModule.PlayAnimation(EnumsCollection.AnimationTypes.UseCastableSkill);
             }
         }
 
