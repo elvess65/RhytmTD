@@ -10,6 +10,8 @@ namespace RhytmTD.Battle.Entities.Views
 
         private AnimationModule m_AnimationModule;
         private MarkerController m_MarkerController;
+        private CameraController m_CameraController;
+
         private int m_TargetMarkerID;
         private bool m_MarkerShowed = false;
 
@@ -17,9 +19,12 @@ namespace RhytmTD.Battle.Entities.Views
         {
             base.Initialize(entity);
 
-            m_AnimationModule = entity.GetModule<AnimationModule>();
             m_MarkerController = Dispatcher.GetController<MarkerController>();
-            
+            m_CameraController = Dispatcher.GetController<CameraController>();
+            m_CameraController.SetTarget(transform);
+
+            m_AnimationModule = entity.GetModule<AnimationModule>();
+
             MoveModule moveModule = entity.GetModule<MoveModule>();
             moveModule.OnMoveStarted += OnMoveStarted;
             moveModule.OnMoveStopped += OnMoveStopped;
@@ -71,7 +76,7 @@ namespace RhytmTD.Battle.Entities.Views
         {
             if (target != null)
             {
-                m_TargetMarkerID = m_MarkerController.ShowTargetMarker(Models.MarkerTypes.Target, target);
+                m_TargetMarkerID = m_MarkerController.ShowTargetMarker(MarkerTypes.Target, target);
                 m_MarkerShowed = true;
             }
             else if (m_MarkerShowed)

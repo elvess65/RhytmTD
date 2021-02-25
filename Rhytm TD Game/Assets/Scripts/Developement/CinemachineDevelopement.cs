@@ -1,5 +1,7 @@
 ﻿using Cinemachine;
+using System.Collections.Generic;
 using UnityEngine;
+using static CoreFramework.EnumsCollection;
 
 namespace RhytmTD.Developement
 {
@@ -9,6 +11,8 @@ namespace RhytmTD.Developement
         public CinemachineVirtualCamera Brain;
         public CinemachineVirtualCamera Default;
         public CinemachineVirtualCamera Main;
+
+        private Dictionary<CameraTypes, CinemachineVirtualCameraBase> m_Cameras;
 
         void Update()
         {
