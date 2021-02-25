@@ -46,7 +46,7 @@ namespace RhytmTD.Battle.Entities.Skills
             Vector3 targetDirectionNormalized = targetDirection / targetDistance;
 
             Quaternion fireballRotation = Quaternion.LookRotation(targetDirectionNormalized);
-            float moveTime = GetTimeToNextTick();
+            float moveTime = m_RhytmController.GetTimeToNextTick();
             float fireballSpeed = targetDistance / moveTime;
 
             BattleEntity battleEntitiy = m_EffectController.CreateFireballEffect(senderSlot.ProjectileSlot.position, fireballRotation, fireballSpeed);
@@ -72,14 +72,6 @@ namespace RhytmTD.Battle.Entities.Skills
             BlowFireball(effectModule);
 
             m_BattleModel.RemoveBattleEntity(battleEntitiy.ID);
-        }
-
-        private float GetTimeToNextTick()
-        {
-            if (m_RhytmController.InputTickResult == EnumsCollection.InputTickResult.PreTick)
-                return (float)m_RhytmController.TickDurationSeconds + -(float)m_RhytmController.DeltaInput;
-
-            return (float)m_RhytmController.TimeToNextTick;
         }
 
         private void BlowFireball(EffectModule effectModule)

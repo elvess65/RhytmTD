@@ -11,6 +11,7 @@ namespace RhytmTD.Data.Models.DataTableModels
         public CharacterBaseData BaseCharacterData;
         public FireballSkillBaseData BaseFireballData;
         public MeteoriteSkillBaseData BaseMeteoriteData;
+        public HealthSkillBaseData BaseHealthSkillBaseData;
 
         [System.Serializable]
         public class CharacterBaseData
@@ -43,10 +44,15 @@ namespace RhytmTD.Data.Models.DataTableModels
         [System.Serializable]
         public class MeteoriteSkillBaseData : SkillBaseData
         {
-            public float FlyTime;
             public float DamageRadius;
             public int Damage;
             public Vector2 EffectOffset;
+        }
+
+        [System.Serializable]
+        public class HealthSkillBaseData : SkillBaseData
+        {
+            public float HealthPercent;
         }
     }
 }

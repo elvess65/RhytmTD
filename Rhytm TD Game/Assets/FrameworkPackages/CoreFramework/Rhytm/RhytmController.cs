@@ -65,6 +65,7 @@ namespace CoreFramework.Rhytm
         /// </summary>
         public EnumsCollection.InputTickResult InputTickResult { get; set; }
 
+
         /// <summary>
         /// Amount of seconds on how much command processing tick offsets normal tick
         /// </summary>
@@ -106,6 +107,14 @@ namespace CoreFramework.Rhytm
 
             m_IsStarted = true;
             ExecuteTick();
+        }
+
+        public float GetTimeToNextTick()
+        {
+            if (InputTickResult == EnumsCollection.InputTickResult.PreTick)
+                return (float)TickDurationSeconds + (float)-DeltaInput;
+
+            return (float)TimeToNextTick;
         }
 
         public void StopTicking()

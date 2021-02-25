@@ -36,8 +36,7 @@ namespace RhytmTD.Battle.Entities.Controllers
             AccountBaseParamsDataModel.MeteoriteSkillBaseData data = m_AccountBaseParamsDataModel.BaseMeteoriteData;
             BattleEntity battleEntity = m_SkillFactory.CreateMeteoriteEntity((int)data.TypeID, data.ActivationTime,
                                                                              data.UseTime, data.FinishingTime,
-                                                                             data.CooldownTime,
-                                                                             data.FlyTime, data.DamageRadius, data.Damage,
+                                                                             data.CooldownTime,data.DamageRadius, data.Damage,
                                                                              data.EffectOffset);
 
             SkillMeteorite skillMeteorite = new SkillMeteorite();
@@ -68,11 +67,11 @@ namespace RhytmTD.Battle.Entities.Controllers
 
         public BattleEntity CreateHealthSkillEntity()
         {
-            AccountBaseParamsDataModel.FireballSkillBaseData data = m_AccountBaseParamsDataModel.BaseFireballData;
+            AccountBaseParamsDataModel.HealthSkillBaseData data = m_AccountBaseParamsDataModel.BaseHealthSkillBaseData;
             BattleEntity battleEntity = m_SkillFactory.CreateHealthEntity(ConstsCollection.SkillConsts.HEALTH_ID, data.ActivationTime,
                                                                             data.UseTime, data.FinishingTime,
                                                                             data.CooldownTime,
-                                                                            data.Damage);
+                                                                            data.HealthPercent);
 
             SkillHealth skillHealth = new SkillHealth();
             skillHealth.Initialize(battleEntity);

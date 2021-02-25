@@ -7,13 +7,13 @@ namespace RhytmTD.Battle.Entities.Skills
     public class DefaultSkilEntityFactory : ISkillEntityFactory
     {
         public BattleEntity CreateMeteoriteEntity(int typeID, float activationTime, float useTime, float finishingTime, float cooldownTime,
-                                                  float flyTime, float damageRadius, int damage, Vector2 effectOffset)
+                                                  float damageRadius, int damage, Vector2 effectOffset)
         {
             int entityID = IDGenerator.GenerateID();
 
             BattleEntity battleEntity = new BattleEntity(entityID);
             battleEntity.AddModule(new SkillModule(typeID, activationTime, useTime, finishingTime, cooldownTime));
-            battleEntity.AddModule(new MeteoriteSkillModule(flyTime, damageRadius, damage, effectOffset));
+            battleEntity.AddModule(new MeteoriteSkillModule(damageRadius, damage, effectOffset));
 
             return battleEntity;
         }

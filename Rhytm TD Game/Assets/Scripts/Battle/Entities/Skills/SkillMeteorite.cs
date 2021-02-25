@@ -1,4 +1,6 @@
 ﻿
+using CoreFramework;
+using CoreFramework.Rhytm;
 using RhytmTD.Battle.Entities.Controllers;
 using RhytmTD.Battle.Entities.Models;
 using RhytmTD.Data;
@@ -12,6 +14,7 @@ namespace RhytmTD.Battle.Entities.Skills
         private DamageController m_DamageController;
         private EffectsController m_EffectController;
         private MarkerController m_MarkerController;
+        private RhytmController m_RhytmController;
 
         private MeteoriteSkillModule m_MeteoriteModule;
         private int m_MarkerID;
@@ -26,6 +29,7 @@ namespace RhytmTD.Battle.Entities.Skills
             m_DamageController = Dispatcher.GetController<DamageController>();
             m_EffectController = Dispatcher.GetController<EffectsController>();
             m_MarkerController = Dispatcher.GetController<MarkerController>();
+            m_RhytmController = Dispatcher.GetController<RhytmController>();
         }
 
         public override void UseSkill(int senderID, int targetID)
@@ -49,17 +53,20 @@ namespace RhytmTD.Battle.Entities.Skills
 
             Vector3 effectPosition = senderTransform.Position + m_MeteoriteModule.EffectOffset;
             Vector3 targetDirection = targetTransform.Position - effectPosition;
-    
-            float effectMoveSpeed = targetDirection.magnitude / m_MeteoriteModule.FlyTime;
-            BattleEntity effectEntity = m_EffectController.CreateMeteoriteEffect(effectPosition, Quaternion.identity, effectMoveSpeed);
+            float targetDistance = targetDirection.magnitude;
+
+            float moveTime = m_RhytmController.GetTimeToNextTick();
+            float fireballSpeed = targetDistance / moveTime;
+
+            BattleEntity effectEntity = m_EffectController.CreateMeteoriteEffect(effectPosition, Quaternion.identity, fireballSpeed);
             EffectModule effectModule = effectEntity.GetModule<EffectModule>();
             MoveModule effectMoveModule = effectEntity.GetModule<MoveModule>();
 
-            effectMoveModule.StartMove(targetDirection.normalized);
+            effectMoveModule.StartMove(targetDirection / targetDistance);
 
             m_BattleModel.AddBattleEntity(effectEntity);
 
-            await new WaitForSeconds(m_MeteoriteModule.FlyTime);
+            await new WaitForSeconds(moveTime);
 
             effectMoveModule.Stop();
 

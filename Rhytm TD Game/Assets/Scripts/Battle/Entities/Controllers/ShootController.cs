@@ -62,8 +62,8 @@ namespace RhytmTD.Battle.Entities.Controllers
             DamageModule senderDamageModule = sender.GetModule<DamageModule>();
 
             Quaternion rotation = Quaternion.LookRotation(vecToTarget);
-            float speed = vecToTarget.magnitude / GetTimeToNextTick();
-            
+            float speed = vecToTarget.magnitude / m_RhytmController.GetTimeToNextTick();
+
             BattleEntity bulletEnity = m_EffectsController.CreateBulletEffect(ConstsCollection.EffectConsts.ProjectileArrow, senderSlot.ProjectileSlot.position, rotation, speed, sender);
 
             DamageModule damageModule = bulletEnity.GetModule<DamageModule>();
@@ -79,14 +79,6 @@ namespace RhytmTD.Battle.Entities.Controllers
             }
 
             return bulletEnity;
-        }
-
-        private float GetTimeToNextTick()
-        {
-            if (m_RhytmController.InputTickResult == EnumsCollection.InputTickResult.PreTick)
-                return (float)m_RhytmController.TickDurationSeconds + -(float)m_RhytmController.DeltaInput;
-
-            return (float)m_RhytmController.TimeToNextTick;
         }
 
         private void Update(float deltaTime)

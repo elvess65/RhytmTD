@@ -33,7 +33,13 @@ MonoBehaviour:
     UseTime: 1
     FinishingTime: 1
     CooldownTime: 10
-    FlyTime: 1
     DamageRadius: 5
     Damage: 10
     EffectOffset: {x: 7.7, y: 7.7}
+  BaseHealthData:
+    TypeID: 102
+    ActivationTime: 1
+    UseTime: 1
+    FinishingTime: 1
+    CooldownTime: 10
+    HealthPercent: 50

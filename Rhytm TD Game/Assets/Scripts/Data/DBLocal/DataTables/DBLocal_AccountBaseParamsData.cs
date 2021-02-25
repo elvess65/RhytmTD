@@ -13,7 +13,7 @@ namespace RhytmTD.Data.DataBaseLocal
         public CharacterBaseData BaseCharacterData;
         public FireballSkillBaseData BaseFireballData;
         public MeteoriteSkillBaseData BaseMeteoriteData;
-
+        public HealthSkillBaseData BaseHealthData;
 
         [System.Serializable]
         public class CharacterBaseData
@@ -48,10 +48,16 @@ namespace RhytmTD.Data.DataBaseLocal
         public class MeteoriteSkillBaseData : SkillBaseData
         {
             [Header("Meteorite")]
-            public float FlyTime = 1;
             public float DamageRadius = 5;
             public int Damage = 10;
             public Vector2 EffectOffset = new Vector2(7.7f, 7.7f);
+        }
+
+        [System.Serializable]
+        public class HealthSkillBaseData : SkillBaseData
+        {
+            [Header("Health")]
+            public float HealthPercent;
         }
     }
 }
