@@ -5,23 +5,20 @@ namespace RhytmTD.Animation.DOTween
 {
     public class ShakeScaleTweenContainer : TweenContainer
     {
-        private float m_Duration = 0.2f;
-        private Vector3 m_Strength;
-        private int m_Vibrato = 10;
-        private int m_Randomness = 90;
-        private bool m_ShakeFade = false;
-
-        public ShakeScaleTweenContainer(Transform controlledTransform, float duration, Vector3 strength, int vibrato, int randomness, bool shakeFade) : base(controlledTransform)
-        {
-            m_Duration = duration;
-            m_Strength = strength;
-            m_Vibrato = vibrato;
-            m_Randomness = randomness;
-            m_ShakeFade = shakeFade;
-        }
+        [Header("Shake Scale Tween")]
+        [SerializeField] private float m_Duration = 0.5f;
+        [SerializeField] private Vector3 m_Strength;
+        [SerializeField] private int m_Vibrato = 10;
+        [SerializeField] private int m_Randomness = 90;
+        [SerializeField] private bool m_ShakeFade = false;
 
         public override Tween GetTween()
         {
+            if (m_IsFrom)
+            {
+                m_ControlledTransofrm.DOShakeScale(m_Duration, m_Strength, m_Vibrato, m_Randomness, m_ShakeFade).From();
+            }
+
             return m_ControlledTransofrm.DOShakeScale(m_Duration, m_Strength, m_Vibrato, m_Randomness, m_ShakeFade);
         }
     }

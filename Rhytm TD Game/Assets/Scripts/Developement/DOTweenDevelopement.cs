@@ -15,6 +15,8 @@ namespace RhytmTD.Developement
         public int ShakeVibrato = 10;
         public int ShakeRandom = 90;
         public bool ShakeFade = false;
+        public DOTweenSequenceAnimator Animator;
+        public DOTweenSequenceAnimator HideAnimator;
 
         private Sequence m_HPSequence;
 
@@ -22,48 +24,21 @@ namespace RhytmTD.Developement
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                UseSequenceComponent();
             }
 
             if (Input.GetKeyDown(KeyCode.H))
             {
-                HealthBar();
+                m_HPSequence = Animator.PlayExposedSequence(() => Debug.Log("Finish appear"));
             }
 
             if (Input.GetKeyDown(KeyCode.R))
             {
-                ReverseHealthBar();
+                HideAnimator.PlayExposedSequence(() => Debug.Log("Finish hide"));
             }
         }
 
         void ReverseHealthBar()
         {
-            DOTweenSequenceAnimator animator = SequenceObject.GetComponent<DOTweenSequenceAnimator>();
-
-            TweenContainer[] tweens = { new ShakeScaleTweenContainer(HealthBarTransform, ShakeSpeed, new Vector3(ShakeSpeed, 0, 0), ShakeVibrato, ShakeRandom, ShakeFade),
-                                        new ScaleTweenContainer(HealthBarTransform, new Vector3(ShakeStrength, 0, 0), ScaleSpeed, false) };
-
-            animator.PlaySequence(tweens);
-        }
-
-        void HealthBar()
-        {
-            DOTweenSequenceAnimator animator = SequenceObject.GetComponent<DOTweenSequenceAnimator>();
-
-            TweenContainer[] tweens = { new ScaleTweenContainer(HealthBarTransform, new Vector3(ShakeStrength, 0, 0), ScaleSpeed, true),
-                                        new ShakeScaleTweenContainer(HealthBarTransform, ShakeSpeed, new Vector3(ShakeSpeed, 0, 0), ShakeVibrato, ShakeRandom, ShakeFade) };
-
-            animator.PlaySequence(tweens);
-        }
-
-        void UseSequenceComponent()
-        {
-            DOTweenSequenceAnimator animator = SequenceObject.GetComponent<DOTweenSequenceAnimator>();
-
-            TweenContainer[] tweens = { new ScaleTweenContainer(EnemyAppearSimulationObject, Vector3.zero, ScaleSpeed, true),
-                                        new ShakeScaleTweenContainer(EnemyAppearSimulationObject, ShakeSpeed, new Vector3(ShakeSpeed, ShakeSpeed, ShakeSpeed), ShakeVibrato, ShakeRandom, ShakeFade) };
-
-            animator.PlaySequence(tweens);
 
         }
 

@@ -7,30 +7,7 @@ namespace RhytmTD.Battle.Entities.Views
 {
     public class EnemyEntityAnimationView : AbstractAnimationView
     {
-        [Header("DOTween")]
-        public Transform TweenControlledObject;  
-        public float ScaleDuration = 0.2f;
-        public float ShakeDuration = 0.2f;
-        public float ShakeStrength = 0.5f;
-        public int ShakeVibrato = 10;
-        public int ShakeRandom = 90;
-        public bool ShakeFade = false;
-
-        private DOTweenSequenceAnimator DOTweenController;
-        private TweenContainer[] m_ShowTweens;
-
-        public override void Initialize()
-        {
-            base.Initialize();
-
-            DOTweenController = GetComponent<DOTweenSequenceAnimator>();
-
-            m_ShowTweens = new TweenContainer[] 
-            {
-                new ScaleTweenContainer(TweenControlledObject, Vector3.zero, ScaleDuration, true),
-                new ShakeScaleTweenContainer(TweenControlledObject, ShakeDuration, new Vector3(ShakeDuration, ShakeDuration, ShakeDuration), ShakeVibrato, ShakeRandom, ShakeFade)
-            };
-        }
+        [SerializeField] private DOTweenSequenceAnimator DOTweenController;
 
         public override void PlayAnimation(AnimationTypes animationType)
         {
@@ -54,7 +31,7 @@ namespace RhytmTD.Battle.Entities.Views
 
                 case AnimationTypes.Show:
                     //SetTrigger(key);
-                    DOTweenController.PlaySequence(m_ShowTweens);
+                    DOTweenController.PlayExposedSequence();
                     break;
 
                 case AnimationTypes.Victory:

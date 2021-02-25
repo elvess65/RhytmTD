@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using RhytmTD.Animation.DOTween;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace RhytmTD.Battle.Entities.Views
@@ -6,6 +7,8 @@ namespace RhytmTD.Battle.Entities.Views
     public class EnemyHealthBarView : BattleEntityView
     {
         [SerializeField] private Image Foreground;
+        [SerializeField] private DOTweenSequenceAnimator ShowDoTweenAnimator;
+        [SerializeField] private DOTweenSequenceAnimator HideDoTweenAnimator;
 
         private HealthModule m_HealthModule;
 
@@ -22,22 +25,34 @@ namespace RhytmTD.Battle.Entities.Views
             destroyModule.OnDestroyed += OnDestroyed;
 
             m_HealthModule = battleEntity.GetModule<HealthModule>();
-            m_HealthModule.OnHealthRemoved += HealthRemoded;
+            m_HealthModule.OnHealthRemoved += HealthRemoved;
 
             gameObject.SetActive(false);
         }
 
         private void OnDestroyed(BattleEntity entity)
         {
+            if (gameObject.activeSelf)
+            {
+                HideDoTweenAnimator.PlayExposedSequence(OnHealthBarHideAnimationComplete);
+            }
+        }
+
+        private void OnHealthBarHideAnimationComplete()
+        {
             gameObject.SetActive(false);
         }
 
-        private void HealthRemoded(int health, int senderID)
+        private void HealthRemoved(int health, int senderID)
         {
             if (m_HealthModule.CurrentHealth >= m_HealthModule.Health)
                 return;
 
-            gameObject.SetActive(true);
+            if (m_HealthModule.CurrentHealth > 0 && !gameObject.activeSelf)
+            {
+                gameObject.SetActive(true);
+                ShowDoTweenAnimator.PlayExposedSequence();
+            }
 
             Foreground.fillAmount = m_HealthModule.CurrentHealth / (float)m_HealthModule.Health;
         }

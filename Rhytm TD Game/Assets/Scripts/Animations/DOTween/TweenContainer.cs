@@ -3,14 +3,12 @@ using UnityEngine;
 
 namespace RhytmTD.Animation.DOTween
 {
-    public abstract class TweenContainer
+    public abstract class TweenContainer : MonoBehaviour
     {
-        protected Transform m_ControlledTransofrm;
-
-        public TweenContainer(Transform controlledTransform)
-        {
-            m_ControlledTransofrm = controlledTransform;
-        }
+        [Header("Base Tween")]
+        [SerializeField] protected Transform m_ControlledTransofrm;
+        [SerializeField] protected bool m_IsFrom;
+        [SerializeField] protected float m_Delay;
 
         public abstract Tween GetTween();
     }

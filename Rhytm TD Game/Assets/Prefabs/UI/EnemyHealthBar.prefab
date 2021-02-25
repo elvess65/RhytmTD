@@ -31,6 +31,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1675037251655775578}
+  - {fileID: 629740827452880490}
+  - {fileID: 207593558405574480}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -52,6 +54,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Foreground: {fileID: 7273950047231595036}
+  ShowDoTweenAnimator: {fileID: 7328707482106286017}
+  HideDoTweenAnimator: {fileID: 526913369487503653}
 --- !u!223 &2477212830451726997
 Canvas:
   m_ObjectHideFlags: 0
@@ -169,6 +173,91 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &2427047727207428788
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 207593558405574480}
+  - component: {fileID: 526913369487503653}
+  - component: {fileID: 8787167752815492098}
+  - component: {fileID: 3469325642448267186}
+  m_Layer: 0
+  m_Name: Hide DoTweenSequenceController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &207593558405574480
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2427047727207428788}
+  m_LocalRotation: {x: -0, y: -0.99997526, z: -0, w: 0.0070394725}
+  m_LocalPosition: {x: 194.52, y: 386.9, z: -1.31}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1593559905037507520}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &526913369487503653
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2427047727207428788}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab33e93565c1d9343b9898b88c4b4c94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ExposedTweens:
+  - {fileID: 3469325642448267186}
+  - {fileID: 8787167752815492098}
+--- !u!114 &8787167752815492098
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2427047727207428788}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a15039ff8fe3e74396667cd502ff9c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ControlledTransofrm: {fileID: 1675037251655775578}
+  m_IsFrom: 0
+  m_Delay: 0
+  m_Scale: {x: 0, y: 0, z: 0}
+  m_Duration: 0.2
+--- !u!114 &3469325642448267186
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2427047727207428788}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23b2e2ac10c1e31418d9ed4276ec4c4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ControlledTransofrm: {fileID: 1675037251655775578}
+  m_IsFrom: 1
+  m_Delay: 0
+  m_Duration: 0.2
+  m_Strength: {x: 0.5, y: 0.5, z: 0.5}
+  m_Vibrato: 10
+  m_Randomness: 90
+  m_ShakeFade: 0
 --- !u!1 &2536951447900412983
 GameObject:
   m_ObjectHideFlags: 0
@@ -206,6 +295,91 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 2, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &5220725475780960925
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 629740827452880490}
+  - component: {fileID: 7328707482106286017}
+  - component: {fileID: 6278407504860601908}
+  - component: {fileID: 4165491089601348524}
+  m_Layer: 0
+  m_Name: Show DoTweenSequenceController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &629740827452880490
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5220725475780960925}
+  m_LocalRotation: {x: -0, y: -0.99997526, z: -0, w: 0.0070394725}
+  m_LocalPosition: {x: 194.52, y: 386.9, z: -1.31}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1593559905037507520}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7328707482106286017
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5220725475780960925}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab33e93565c1d9343b9898b88c4b4c94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ExposedTweens:
+  - {fileID: 6278407504860601908}
+  - {fileID: 4165491089601348524}
+--- !u!114 &6278407504860601908
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5220725475780960925}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a15039ff8fe3e74396667cd502ff9c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ControlledTransofrm: {fileID: 1675037251655775578}
+  m_IsFrom: 1
+  m_Delay: 0
+  m_Scale: {x: 0, y: 0, z: 0}
+  m_Duration: 0.2
+--- !u!114 &4165491089601348524
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5220725475780960925}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23b2e2ac10c1e31418d9ed4276ec4c4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ControlledTransofrm: {fileID: 1675037251655775578}
+  m_IsFrom: 0
+  m_Delay: 0
+  m_Duration: 0.2
+  m_Strength: {x: 0.5, y: 0.5, z: 0.5}
+  m_Vibrato: 10
+  m_Randomness: 90
+  m_ShakeFade: 0
 --- !u!1 &5271100164728531259
 GameObject:
   m_ObjectHideFlags: 0

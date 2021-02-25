@@ -60,6 +60,91 @@ Transform:
   m_Father: {fileID: 4087285324287038}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1721285028
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1721285029}
+  - component: {fileID: 1721285032}
+  - component: {fileID: 1721285031}
+  - component: {fileID: 1721285030}
+  m_Layer: 0
+  m_Name: Show DoTweenSequenceController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1721285029
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1721285028}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5349960463400246618}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1721285032
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1721285028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab33e93565c1d9343b9898b88c4b4c94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ExposedTweens:
+  - {fileID: 1721285031}
+  - {fileID: 1721285030}
+--- !u!114 &1721285031
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1721285028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a15039ff8fe3e74396667cd502ff9c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ControlledTransofrm: {fileID: 3080916490314174694}
+  m_IsFrom: 1
+  m_Delay: 0
+  m_Scale: {x: 0, y: 0, z: 0}
+  m_Duration: 0.5
+--- !u!114 &1721285030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1721285028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23b2e2ac10c1e31418d9ed4276ec4c4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ControlledTransofrm: {fileID: 3080916490314174694}
+  m_IsFrom: 0
+  m_Delay: 0
+  m_Duration: 0.5
+  m_Strength: {x: 0.5, y: 0.5, z: 0.5}
+  m_Vibrato: 10
+  m_Randomness: 90
+  m_ShakeFade: 0
 --- !u!1 &1009017232346152
 GameObject:
   m_ObjectHideFlags: 0
@@ -425,7 +510,6 @@ GameObject:
   - component: {fileID: 5888651600598257811}
   - component: {fileID: 6980876583665680447}
   - component: {fileID: 6340706300630847981}
-  - component: {fileID: 963963259}
   m_Layer: 0
   m_Name: EnemyPrefab - TurtleShell
   m_TagString: Untagged
@@ -489,15 +573,7 @@ MonoBehaviour:
     Key: Show
   - Type: 10
     Key: IdleBattle
-  - Type: 6
-    Key: Show
-  TweenControlledObject: {fileID: 3080916490314174694}
-  ScaleDuration: 0.5
-  ShakeDuration: 0.5
-  ShakeStrength: 0.5
-  ShakeVibrato: 10
-  ShakeRandom: 90
-  ShakeFade: 0
+  DOTweenController: {fileID: 1721285032}
 --- !u!114 &6340706300630847981
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -512,18 +588,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ProjectileSlot: {fileID: 1445890040}
   HitSlot: {fileID: 1264113866}
---- !u!114 &963963259
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1228834762862560}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab33e93565c1d9343b9898b88c4b4c94, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1249373359732670
 GameObject:
   m_ObjectHideFlags: 0
@@ -1277,6 +1341,7 @@ Transform:
   m_Children:
   - {fileID: 3080916490314174694}
   - {fileID: 2749061297468896687}
+  - {fileID: 1721285029}
   m_Father: {fileID: 4185619969915650}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
