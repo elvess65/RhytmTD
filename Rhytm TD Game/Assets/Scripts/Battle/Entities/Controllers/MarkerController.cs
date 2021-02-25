@@ -1,6 +1,7 @@
 ﻿using CoreFramework;
 using RhytmTD.Battle.Entities.Models;
 using System.Collections.Generic;
+using static CoreFramework.EnumsCollection;
 
 namespace RhytmTD.Battle.Entities.Controllers
 {

@@ -1,15 +1,23 @@
-﻿using CoreFramework;
-using RhytmTD.Battle.Entities.Controllers;
+﻿using Cinemachine;
+using CoreFramework;
 using RhytmTD.Battle.Entities.Models;
-using System;
 using UnityEngine;
+using static CoreFramework.EnumsCollection;
 
 namespace RhytmTD.Battle.Entities.Views
 {
-    public class CameraView : BaseView, IDisposable
+    public class CameraView : BaseView
     {
+        public Transform DefaultCameraPos;
+
+        [Header("Cinemachine Virtual Cameras")]
+        public CinemachineVirtualCamera VCDefault;
+        public CinemachineVirtualCamera VCamMain;
+
+        [Header("Cinemachine Additional")]
+        public CinemachineBrain CMBrain;
+
         private CameraModel m_CameraModel;
-        private CameraController m_CameraController;
 
         private void Awake()
         {
@@ -18,33 +26,14 @@ namespace RhytmTD.Battle.Entities.Views
 
         private void Initialize()
         {
-            Dispatcher.AddDisposable(this);
-
             m_CameraModel = Dispatcher.GetModel<CameraModel>();
-            m_CameraModel.OnPositionChanged += OnPositionChanged;
-            m_CameraModel.OnRotationChanger += OnRotationChanged;
+            m_CameraModel.Cameras = new System.Collections.Generic.Dictionary<CameraTypes, CinemachineVirtualCameraBase>();            
+            m_CameraModel.Cameras[CameraTypes.Default] = VCDefault;
+            m_CameraModel.Cameras[CameraTypes.Main] = VCamMain;
+            m_CameraModel.CurrentCamera = VCDefault;
+            m_CameraModel.CMBrain = CMBrain;
 
-            m_CameraController = Dispatcher.GetController<CameraController>();
-            m_CameraController.SetCameraPosition(transform.position);
-            m_CameraController.SetCamearRotatation(transform.rotation);
-        }
-
-        private void OnPositionChanged(Vector3 pos)
-        {
-            transform.position = pos;
-        }
-
-        private void OnRotationChanged(Quaternion rot)
-        {
-            transform.rotation = rot;
-        }
-
-        public void Dispose()
-        {
-            m_CameraModel.OnPositionChanged -= OnPositionChanged;
-            m_CameraModel.OnRotationChanger -= OnRotationChanged;
-
-            Dispatcher.RemoveDisposable(this);
+            VCDefault.transform.position = DefaultCameraPos.position;
         }
     }
 }

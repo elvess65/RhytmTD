@@ -42,5 +42,17 @@ namespace CoreFramework
             Mage = ConstsCollection.CharacterConsts.MAGE_ID
         }
 
+        public enum CameraTypes
+        {
+            Default,
+            Main
+        }
+
+        public enum MarkerTypes
+        {
+            AttackRadius,
+            Target,
+            AllyTarget
+        }
     }
 }

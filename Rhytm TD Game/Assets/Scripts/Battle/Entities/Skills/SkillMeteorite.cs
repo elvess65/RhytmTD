@@ -5,6 +5,7 @@ using RhytmTD.Battle.Entities.Controllers;
 using RhytmTD.Battle.Entities.Models;
 using RhytmTD.Data;
 using UnityEngine;
+using static CoreFramework.EnumsCollection;
 
 namespace RhytmTD.Battle.Entities.Skills
 {

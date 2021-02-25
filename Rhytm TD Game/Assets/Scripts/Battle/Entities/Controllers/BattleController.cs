@@ -1,11 +1,8 @@
-﻿using System.Collections;
-using CoreFramework;
+﻿using CoreFramework;
 using CoreFramework.Rhytm;
 using RhytmTD.Battle.Entities.Models;
 using RhytmTD.Battle.StateMachine;
-using RhytmTD.Data.Controllers;
 using RhytmTD.Data.Models;
-using UnityEngine;
 
 namespace RhytmTD.Battle.Entities.Controllers
 {
@@ -19,12 +16,14 @@ namespace RhytmTD.Battle.Entities.Controllers
         private RhytmInputProxy m_RhytmInputProxy;
         private RhytmController m_RhytmController;
         private SolidEntitySpawnController m_SpawnController;
+        private StartBattleSequenceController m_StartBattleSequenceController;
 
         private SpawnModel m_SpawnModel;
         private BattleModel m_BattleModel;
         private UpdateModel m_UpdateModel;
         private BattleAudioModel m_AudioModel;
-        
+        private StartBattleSequenceModel m_StartBattleSequenceModel;
+
 
         public BattleController(Dispatcher dispatcher) : base(dispatcher)
         {
@@ -37,6 +36,7 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_RhytmController = Dispatcher.GetController<RhytmController>();
             m_RhytmInputProxy = Dispatcher.GetController<RhytmInputProxy>();
             m_SpawnController = Dispatcher.GetController<SolidEntitySpawnController>();
+            m_StartBattleSequenceController = Dispatcher.GetController<StartBattleSequenceController>();
 
             m_BattleModel = Dispatcher.GetModel<BattleModel>();
             m_BattleModel.OnBattleInitialize += Initialize;
@@ -49,6 +49,9 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_SpawnModel = Dispatcher.GetModel<SpawnModel>();
 
             m_AudioModel = Dispatcher.GetModel<BattleAudioModel>();
+
+            m_StartBattleSequenceModel = Dispatcher.GetModel<StartBattleSequenceModel>();
+            m_StartBattleSequenceModel.OnSequenceFinished += StartLoop;
         }
 
         
@@ -67,22 +70,16 @@ namespace RhytmTD.Battle.Entities.Controllers
             //Spawn player
             m_SpawnModel.OnShouldCreatePlayer?.Invoke();
 
-            Dispatcher.GetController<UpdateController>().UpdaterObject.GetComponent<MonoUpdater>().StartCoroutine(InitializationCoroutine());
+            m_StartBattleSequenceController.StartStartBattleSequence();
         }
 
-        private void Update(float t)
+        private void Update(float deltaTime)
         {
             m_BattleModel.CheckEntitiesToDelete();
         }
 
-        private IEnumerator InitializationCoroutine()
-        {
-            yield return new WaitForSeconds(2);
-
-            InitializationFinished();
-        }
-
-        private void InitializationFinished()
+      
+        private void StartLoop()
         {
             m_RhytmController.StartTicking();
            

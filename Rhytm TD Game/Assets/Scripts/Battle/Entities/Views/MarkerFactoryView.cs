@@ -2,6 +2,7 @@
 using RhytmTD.Battle.Entities.Models;
 using System.Collections.Generic;
 using UnityEngine;
+using static CoreFramework.EnumsCollection;
 
 namespace RhytmTD.Battle.Entities.Views
 {

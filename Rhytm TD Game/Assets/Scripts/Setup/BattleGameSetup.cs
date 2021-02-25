@@ -26,7 +26,6 @@ namespace RhytmTD.Setup
             dispatcher.CreateController<DamageController>();
             dispatcher.CreateController<EnemyBehavoiurController>();
             dispatcher.CreateController<CameraController>();
-            dispatcher.CreateController<CameraFollowController>();
             dispatcher.CreateController<BattleAudioController>();
             dispatcher.CreateController<ShootController>();
             dispatcher.CreateController<PlayerBehavoiurController>();
@@ -38,6 +37,7 @@ namespace RhytmTD.Setup
             dispatcher.CreateController<EffectsController>();
             dispatcher.CreateController<WaveController>();
             dispatcher.CreateController<MarkerController>();
+            dispatcher.CreateController<StartBattleSequenceController>();
 
             // Models
             dispatcher.CreateModel<BattleModel>();
@@ -49,6 +49,7 @@ namespace RhytmTD.Setup
             dispatcher.CreateModel<EffectsModel>();
             dispatcher.CreateModel<InputModel>();
             dispatcher.CreateModel<MarkerModel>();
+            dispatcher.CreateModel<StartBattleSequenceModel>();
         }
     }
 }
