@@ -55,12 +55,12 @@ namespace RhytmTD.Battle.Entities.Controllers
 
         private void SpellBookEnterHandler()
         {
-            m_AudioModel.Music.pitch = -1;
+            m_AudioModel.SpellbookSnapshot.TransitionTo(ConstsCollection.SPELLBOOK_AUDIO_TRANISTION_DURATION);
         }
 
         private void SpellBookExitHandler()
         {
-            m_AudioModel.Music.pitch = 1;
+            m_AudioModel.BattleSnapshot.TransitionTo(ConstsCollection.SPELLBOOK_AUDIO_TRANISTION_DURATION);
         }
     }
 }

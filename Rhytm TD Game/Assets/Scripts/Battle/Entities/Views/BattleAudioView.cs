@@ -2,6 +2,7 @@
 using CoreFramework.Utils;
 using RhytmTD.Battle.Entities.Models;
 using UnityEngine;
+using UnityEngine.Audio;
 
 namespace RhytmTD.Battle.Entities.Views
 {
@@ -9,6 +10,9 @@ namespace RhytmTD.Battle.Entities.Views
     {
         public Metronome Metronome;
         public AudioSource Music;
+        public AudioMixer Mixer;
+        public AudioMixerSnapshot BattleSnapshot;
+        public AudioMixerSnapshot SpellbookSnapshot;
 
         private BattleAudioModel m_AudioModel;
 
@@ -23,6 +27,9 @@ namespace RhytmTD.Battle.Entities.Views
 
             m_AudioModel.Metronome = Metronome;
             m_AudioModel.Music = Music;
+            m_AudioModel.Mixer = Mixer;
+            m_AudioModel.BattleSnapshot = BattleSnapshot;
+            m_AudioModel.SpellbookSnapshot = SpellbookSnapshot;
         }
     }
 }

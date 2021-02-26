@@ -1656,7 +1656,8 @@ AudioSource:
   m_GameObject: {fileID: 794415096}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -8790884448620523413, guid: 59fe5fb83369b4fbe8b34b0affefa4d6,
+    type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 1
@@ -2920,6 +2921,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Metronome: {fileID: 794415097}
   Music: {fileID: 2046058377}
+  Mixer: {fileID: 24100000, guid: 59fe5fb83369b4fbe8b34b0affefa4d6, type: 2}
+  BattleSnapshot: {fileID: 24500006, guid: 59fe5fb83369b4fbe8b34b0affefa4d6, type: 2}
+  SpellbookSnapshot: {fileID: -2042076395853731827, guid: 59fe5fb83369b4fbe8b34b0affefa4d6,
+    type: 2}
 --- !u!1001 &1245404483
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4770,7 +4775,8 @@ AudioSource:
   m_GameObject: {fileID: 2046058376}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -8421371339974557982, guid: 59fe5fb83369b4fbe8b34b0affefa4d6,
+    type: 2}
   m_audioClip: {fileID: 8300000, guid: 4d9e42daab3bcf641b9adead476af603, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1

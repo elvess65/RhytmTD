@@ -1,6 +1,7 @@
 ﻿using CoreFramework;
 using CoreFramework.Utils;
 using UnityEngine;
+using UnityEngine.Audio;
 
 namespace RhytmTD.Battle.Entities.Models
 {
@@ -20,6 +21,9 @@ namespace RhytmTD.Battle.Entities.Models
 
         public Metronome Metronome;
         public AudioSource Music;
+        public AudioMixer Mixer;
+        public AudioMixerSnapshot BattleSnapshot;
+        public AudioMixerSnapshot SpellbookSnapshot;
 
         public System.Action<bool> OnPlayMetronome;
         public System.Action<bool> OnPlayMusic;

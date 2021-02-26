@@ -3,6 +3,7 @@
     public static class ConstsCollection
     {
         public const float SPELLBOOK_SPEED_MULTIPLAYER = 0.2f;
+        public const float SPELLBOOK_AUDIO_TRANISTION_DURATION = 0.5f;
 
         public static class CharacterConsts
         {
