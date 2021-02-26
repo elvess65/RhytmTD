@@ -9,7 +9,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: DissolveCutoutDevelopement
   m_Shader: {fileID: 4800000, guid: 5cb79633f11db4354a13fb953b8e0e9e, type: 3}
-  m_ShaderKeywords: 
+  m_ShaderKeywords: _INVERT_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -20,7 +20,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _Albedo:
-        m_Texture: {fileID: 2800000, guid: c862c6b29790a53419e2940de44b1939, type: 3}
+        m_Texture: {fileID: 2800000, guid: 3b42dcbd436d8e44889230ead4a6fc73, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
@@ -81,12 +81,12 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _Invert: 0
+    - _Invert: 1
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _Radius: 13.13
+    - _Radius: 15
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
@@ -94,11 +94,11 @@ Material:
     - _ZWrite: 1
     - __dirty: 1
     m_Colors:
-    - _Albedo_tint: {r: 1, g: 1, b: 1, a: 1}
-    - _Bordercolor: {r: 0, g: 200.78432, b: 257.00394, a: 0}
+    - _Albedo_tint: {r: 0.67853516, g: 0.6273585, b: 1, a: 1}
+    - _Bordercolor: {r: 0.16283165, g: 0.7169812, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Noisespeed: {r: 0.5, g: 0.5, b: 0.5, a: 0}
     - _Offset: {r: 0, g: 0, b: 0, a: 0}
-    - _Position: {r: 0, g: 0, b: 10, a: 0}
+    - _Position: {r: 0, g: 0, b: -7.3, a: 0}
     - _Tiling: {r: 1, g: 1, b: 0, a: 0}

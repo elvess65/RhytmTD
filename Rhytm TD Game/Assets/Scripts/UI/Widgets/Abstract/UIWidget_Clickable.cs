@@ -21,6 +21,8 @@ namespace RhytmTD.UI.Widget
 
         protected override void InternalInitialize()
         {
+            base.InternalInitialize();
+
             WidgetButton.onClick.AddListener(WidgetPressHandler);
         }
 

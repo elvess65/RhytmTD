@@ -19,6 +19,7 @@ namespace RhytmTD.UI.Battle.View.UI
         [Space]
         [SerializeField] private UIWidget_Metronome UIWidget_Metronome;
         [SerializeField] private UIWidget_PlayerHealthBar UIWidget_PlayerHealthBar;
+        [SerializeField] private UIWidget_Button UIWidget_SpellBookButton;
 
         public override void Initialize()
         {
@@ -35,6 +36,10 @@ namespace RhytmTD.UI.Battle.View.UI
 
             UIWidget_PlayerHealthBar.Initialize();
             RegisterWidget(UIWidget_PlayerHealthBar);
+
+            UIWidget_SpellBookButton.Initialize();
+            UIWidget_SpellBookButton.OnWidgetPress += SpellBookWidgetPressHandler;
+            RegisterWidget(UIWidget_SpellBookButton);
         }
 
         private void PlayerInitialized(BattleEntity battleEntity)
@@ -54,6 +59,11 @@ namespace RhytmTD.UI.Battle.View.UI
         {
             UIWidget_PlayerHealthBar.UpdateHealthBar(m_HealthModule.CurrentHealth, m_HealthModule.Health);
             UIWidget_PlayerHealthBar.PlayHealAnimation();
+        }
+
+        private void SpellBookWidgetPressHandler()
+        {
+            m_BattleModel?.OnSpellbookEnter();
         }
     }
 }

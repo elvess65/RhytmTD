@@ -18,6 +18,8 @@ namespace RhytmTD.Battle.Entities.Models
         public Action<bool> OnBattleFinished;
         public Action OnBattleStarted;
         public Action OnBattleInitialize;
+        public Action OnSpellbookEnter;
+        public Action OnSpellbookExit;
 
         public BattleModel()
         {
