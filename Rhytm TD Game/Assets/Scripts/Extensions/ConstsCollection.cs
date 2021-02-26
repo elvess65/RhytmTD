@@ -2,6 +2,8 @@
 {
     public static class ConstsCollection
     {
+        public const float SPELLBOOK_SPEED_MULTIPLAYER = 0.2f;
+
         public static class CharacterConsts
         {
             public const int MAGE_ID = 1000;

@@ -42,6 +42,8 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_BattleModel.OnBattleInitialize += Initialize;
             m_BattleModel.OnBattleStarted += BattleStartedHandler;
             m_BattleModel.OnBattleFinished += BattleFinishedHandler;
+            m_BattleModel.OnSpellbookEnter += SpellBookEnterHandler;
+            m_BattleModel.OnSpellbookExit += SpellBookExitHandler;
 
             m_UpdateModel = Dispatcher.GetModel<UpdateModel>();
             m_UpdateModel.OnUpdate += Update;
@@ -88,8 +90,8 @@ namespace RhytmTD.Battle.Entities.Controllers
 
         private void BattleStartedHandler()
         {
-            //m_AudioModel.OnPlayMetronome(true);
-            //m_AudioModel.OnPlayMusic(true);
+            m_AudioModel.OnPlayMetronome(true);
+            m_AudioModel.OnPlayMusic(true);
 
             m_StateMachine.ChangeState<BattleState_Normal>();
         }
@@ -102,6 +104,16 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_AudioModel.OnPlayMusic(false);
 
             m_StateMachine.ChangeState<BattleState_LockInput>();
+        }
+
+        private void SpellBookEnterHandler()
+        {
+            m_StateMachine.ChangeState<BattleState_LockInput>();
+        }
+
+        private void SpellBookExitHandler()
+        {
+            m_StateMachine.ChangeState<BattleState_Normal>();
         }
     }
 }

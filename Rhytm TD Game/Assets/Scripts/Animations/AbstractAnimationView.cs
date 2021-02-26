@@ -30,6 +30,7 @@ namespace RhytmTD.Animation
 
             m_AnimationModule = entity.GetModule<AnimationModule>();
             m_AnimationModule.OnPlayAnimation += PlayAnimation;
+            m_AnimationModule.OnChangeSpeedMultiplayer += SetSpeedMultiplayer;
 
             Initialize();
         }
@@ -102,6 +103,11 @@ namespace RhytmTD.Animation
                 return m_AnimationKeys[animationType];
 
             return string.Empty;
+        }
+
+        private void SetSpeedMultiplayer(float speedMultiplayer)
+        {
+            Controller.speed = 1f * speedMultiplayer;
         }
 
         private void OnDestroy()

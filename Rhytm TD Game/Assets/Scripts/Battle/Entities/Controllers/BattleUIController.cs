@@ -9,7 +9,7 @@ namespace RhytmTD.Battle.Entities.Controllers
     /// </summary>
     public class BattleUIController : BaseController
     {
-        private UIBattleStateMachine<UIBattleState_Abstract> StateMachine;
+        private UIBattleStateMachine<UIBattleState_Abstract> m_StateMachine;
 
         private BattleUIModel m_UIModel;
         private BattleModel m_BattleModel;
@@ -28,29 +28,43 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_BattleModel.OnBattleInitialize += Initialize;
             m_BattleModel.OnBattleStarted += BattleStartedHandler;
             m_BattleModel.OnBattleFinished += BattleFinishedHandler;
+            m_BattleModel.OnSpellbookEnter += SpellBookEnterHandler;
+            m_BattleModel.OnSpellbookExit += SpellBookExitHandler;
         }
 
 
         private void Initialize()
         {
             m_UIModel.UIView_BattleHUD.Initialize();
+            m_UIModel.UIView_SpellbookHUD.Initialize();
             m_UIModel.UIView_BattleResultHUD.Initialize();
 
-            StateMachine = new UIBattleStateMachine<UIBattleState_Abstract>();
-            StateMachine.AddState(new UIBattleState_NoUI());
-            StateMachine.AddState(new UIBattleState_Normal());
-            StateMachine.AddState(new UIBattleState_BattleResult());
-            StateMachine.Initialize<UIBattleState_NoUI>();
+            m_StateMachine = new UIBattleStateMachine<UIBattleState_Abstract>();
+            m_StateMachine.AddState(new UIBattleState_NoUI());
+            m_StateMachine.AddState(new UIBattleState_Normal());
+            m_StateMachine.AddState(new UIBattleState_BattleResult());
+            m_StateMachine.AddState(new UIBattleState_Spellbook());
+            m_StateMachine.Initialize<UIBattleState_NoUI>();
         }
 
         private void BattleStartedHandler()
         {
-            StateMachine.ChangeState<UIBattleState_Normal>();
+            m_StateMachine.ChangeState<UIBattleState_Normal>();
         }
 
         private void BattleFinishedHandler(bool isSuccess)
         {
-            StateMachine.ChangeState<UIBattleState_BattleResult>();
+            m_StateMachine.ChangeState<UIBattleState_BattleResult>();
+        }
+
+        private void SpellBookEnterHandler()
+        {
+            m_StateMachine.ChangeState<UIBattleState_Spellbook>();
+        }
+
+        private void SpellBookExitHandler()
+        {
+            m_StateMachine.ChangeState<UIBattleState_Normal>();
         }
     }
 }

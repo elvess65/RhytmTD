@@ -35,6 +35,9 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_SpawnModel.OnShouldCreatePlayer += SpawnPlayer;
 
             m_BattleModel = Dispatcher.GetModel<BattleModel>();
+            m_BattleModel.OnSpellbookEnter += SpellBookEnterHandler;
+            m_BattleModel.OnSpellbookExit += SpellBookExitHandler;
+
             m_AccountBaseParamsDataModel = Dispatcher.GetModel<AccountBaseParamsDataModel>();
 
             m_RhytmController = Dispatcher.GetController<RhytmController>();
@@ -83,6 +86,24 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_SpawnModel.OnPlayerEntityCreated?.Invoke(typeID, entity);
 
             return entity;
+        }
+
+        private void SpellBookEnterHandler()
+        {
+            foreach(BattleEntity entity in m_BattleModel.BattleEntities)
+            {
+                if (entity.HasModule<AnimationModule>())
+                    entity.GetModule<AnimationModule>().ChangeSpeedMultiplayer(ConstsCollection.SPELLBOOK_SPEED_MULTIPLAYER);
+            }
+        }
+
+        private void SpellBookExitHandler()
+        {
+            foreach (BattleEntity entity in m_BattleModel.BattleEntities)
+            {
+                if (entity.HasModule<AnimationModule>())
+                    entity.GetModule<AnimationModule>().ChangeSpeedMultiplayer(1f);
+            }
         }
     }
 }

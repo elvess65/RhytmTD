@@ -8,6 +8,7 @@ namespace RhytmTD.Battle.Entities.Controllers
     {
         private RhytmController m_RhytmController;
         private BattleAudioModel m_AudioModel;
+        private BattleModel m_BattleModel;
 
         public BattleAudioController(Dispatcher dispatcher) : base(dispatcher)
         {
@@ -23,6 +24,10 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_AudioModel.OnPlayMetronome += PlayMetronomeHandler;
             m_AudioModel.OnPlayMusic += PlayMusicHandler;
             m_AudioModel.OnBPMChanged += BPMChangedHandler;
+
+            m_BattleModel = Dispatcher.GetModel<BattleModel>();
+            m_BattleModel.OnSpellbookEnter += SpellBookEnterHandler;
+            m_BattleModel.OnSpellbookExit += SpellBookExitHandler;
         }
 
 
@@ -46,6 +51,16 @@ namespace RhytmTD.Battle.Entities.Controllers
         {
             m_AudioModel.Metronome.bpm = bpm;
             m_RhytmController.SetBPM(bpm);
+        }
+
+        private void SpellBookEnterHandler()
+        {
+            m_AudioModel.Music.pitch = -1;
+        }
+
+        private void SpellBookExitHandler()
+        {
+            m_AudioModel.Music.pitch = 1;
         }
     }
 }

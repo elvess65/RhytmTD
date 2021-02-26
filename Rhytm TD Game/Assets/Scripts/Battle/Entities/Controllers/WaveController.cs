@@ -83,6 +83,8 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_BattleModel = Dispatcher.GetModel<BattleModel>();
             m_BattleModel.OnBattleStarted += StartSpawnLoop;
             m_BattleModel.OnBattleFinished += BattleFinishedHandler;
+            m_BattleModel.OnSpellbookEnter += SpellBookEnterHandler;
+            m_BattleModel.OnSpellbookExit += SpellBookExitHandler;
 
             m_SolidEntitySpawnController = Dispatcher.GetController<SolidEntitySpawnController>();
 
@@ -433,6 +435,23 @@ namespace RhytmTD.Battle.Entities.Controllers
         private void BattleFinishedHandler(bool isSuccess)
         {
             StopSpawnLoop();
+        }
+
+
+        private int m_SpellbookTick;
+
+        private void SpellBookEnterHandler()
+        {
+            m_RhytmController.OnTick -= HandleTick;
+
+            m_SpellbookTick = m_RhytmController.CurrentTick;
+            Debug.Log("WaveController. Enter spell book at tick " + m_SpellbookTick);
+        }
+
+        private void SpellBookExitHandler()
+        {
+            m_RhytmController.OnTick += HandleTick;
+            Debug.Log("WaveController. Exit spell book at tick " + m_RhytmController.CurrentTick + " Entered: " + m_SpellbookTick);
         }
 
 

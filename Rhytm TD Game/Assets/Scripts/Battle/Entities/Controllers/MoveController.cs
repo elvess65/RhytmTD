@@ -10,7 +10,7 @@ namespace RhytmTD.Battle.Entities.Controllers
     public class MoveController : BaseController
     {
         private BattleModel m_BattleModel;
-
+        private float m_CurSpeedMultiplayer = 1;
 
         public MoveController(Dispatcher dispatcher) : base(dispatcher)
         {
@@ -23,6 +23,8 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_BattleModel = Dispatcher.GetModel<BattleModel>();
             m_BattleModel.OnBattleStarted += BattleStartedHandler;
             m_BattleModel.OnBattleFinished += BattleFinishedHandler;
+            m_BattleModel.OnSpellbookEnter += SpellBookEnterHandler;
+            m_BattleModel.OnSpellbookExit += SpellBookExitHandler;
 
             UpdateModel updateModel = Dispatcher.GetModel<UpdateModel>();
             updateModel.OnUpdate += Update;
@@ -44,7 +46,7 @@ namespace RhytmTD.Battle.Entities.Controllers
                     if (moveModule.IsMoving)
                     {
                         TransformModule transformModule = entity.GetModule<TransformModule>();
-                        transformModule.Position += moveModule.MoveDirection * moveModule.CurrentSpeed * deltaTime;
+                        transformModule.Position += moveModule.MoveDirection * moveModule.CurrentSpeed * deltaTime * m_CurSpeedMultiplayer;
                     }
                 }
             }
@@ -58,6 +60,16 @@ namespace RhytmTD.Battle.Entities.Controllers
         private void BattleFinishedHandler(bool isSuccess)
         {
             m_BattleModel.PlayerEntity?.GetModule<MoveModule>().Stop();
+        }
+
+        private void SpellBookEnterHandler()
+        {
+            m_CurSpeedMultiplayer = ConstsCollection.SPELLBOOK_SPEED_MULTIPLAYER;
+        }
+
+        private void SpellBookExitHandler()
+        {
+            m_CurSpeedMultiplayer = 1f;
         }
     }
 }
