@@ -31,7 +31,7 @@ namespace RhytmTD.Battle.Entities.Views
 
                 case AnimationTypes.Show:
                     //SetTrigger(key);
-                    DOTweenController.PlayExposedSequence();
+                    DOTweenController.PlaSequence();
                     break;
 
                 case AnimationTypes.Victory:

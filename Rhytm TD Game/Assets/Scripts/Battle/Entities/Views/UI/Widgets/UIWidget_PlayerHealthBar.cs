@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using RhytmTD.Animation.DOTween;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace RhytmTD.UI.Widget
@@ -8,6 +9,8 @@ namespace RhytmTD.UI.Widget
         [Space]
 
         [SerializeField] private Image Foreground;
+        [SerializeField] private DOTweenSequenceAnimator DamageSequenceAnimator;
+        [SerializeField] private DOTweenSequenceAnimator HealSequenceAnimator;
 
         public void Initialize()
         {
@@ -17,6 +20,16 @@ namespace RhytmTD.UI.Widget
         public void UpdateHealthBar(int currentHeath, int health)
         {
             Foreground.fillAmount = currentHeath / (float)health;
+        }
+
+        public void PlayDamageAnimation()
+        {
+            DamageSequenceAnimator.PlaSequence();
+        }
+
+        public void PlayHealAnimation()
+        {
+            HealSequenceAnimator.PlaSequence();
         }
     }
 }

@@ -15,11 +15,9 @@ namespace RhytmTD.Animation.DOTween
         public override Tween GetTween()
         {
             if (m_IsFrom)
-            {
-                m_ControlledTransofrm.DOShakeScale(m_Duration, m_Strength, m_Vibrato, m_Randomness, m_ShakeFade).From();
-            }
+                return m_ControlledTransofrm.DOShakeScale(m_Duration, m_Strength, m_Vibrato, m_Randomness, m_ShakeFade).SetDelay(m_Delay).From();
 
-            return m_ControlledTransofrm.DOShakeScale(m_Duration, m_Strength, m_Vibrato, m_Randomness, m_ShakeFade);
+            return m_ControlledTransofrm.DOShakeScale(m_Duration, m_Strength, m_Vibrato, m_Randomness, m_ShakeFade).SetDelay(m_Delay);
         }
     }
 }

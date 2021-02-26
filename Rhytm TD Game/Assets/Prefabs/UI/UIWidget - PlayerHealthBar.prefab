@@ -1,5 +1,135 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1241794665
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1241794666}
+  - component: {fileID: 1241794669}
+  - component: {fileID: 1241794667}
+  m_Layer: 0
+  m_Name: 'Damage DoTweenSequenceController '
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1241794666
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1241794665}
+  m_LocalRotation: {x: -0, y: 0.011277033, z: -0, w: -0.99993646}
+  m_LocalPosition: {x: -610.2723, y: -551.734, z: -11.368351}
+  m_LocalScale: {x: 1.5690757, y: 1.5690753, z: 1.5690757}
+  m_Children: []
+  m_Father: {fileID: 1593559905037507520}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1241794669
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1241794665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab33e93565c1d9343b9898b88c4b4c94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ExposedTweens:
+  - {fileID: 1241794667}
+--- !u!114 &1241794667
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1241794665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0d1d68b7a8f8412a85cd29659a247d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ControlledTransofrm: {fileID: 1675037251655775578}
+  m_IsFrom: 0
+  m_Delay: 0
+  m_Punch: {x: -0.5, y: 0, z: 0}
+  m_Duration: 0.3
+  m_Vibrato: 1
+  m_Elasticity: 1
+--- !u!1 &1999011020
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1999011021}
+  - component: {fileID: 1999011023}
+  - component: {fileID: 1999011022}
+  m_Layer: 0
+  m_Name: 'Heal DoTweenSequenceController '
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1999011021
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1999011020}
+  m_LocalRotation: {x: -0, y: 0.011277033, z: -0, w: -0.99993646}
+  m_LocalPosition: {x: -610.2723, y: -551.734, z: -11.368351}
+  m_LocalScale: {x: 1.5690757, y: 1.5690753, z: 1.5690757}
+  m_Children: []
+  m_Father: {fileID: 1593559905037507520}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1999011023
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1999011020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab33e93565c1d9343b9898b88c4b4c94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ExposedTweens:
+  - {fileID: 1999011022}
+--- !u!114 &1999011022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1999011020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0d1d68b7a8f8412a85cd29659a247d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ControlledTransofrm: {fileID: 1675037251655775578}
+  m_IsFrom: 0
+  m_Delay: 0
+  m_Punch: {x: 0.5, y: 0, z: 0}
+  m_Duration: 0.3
+  m_Vibrato: 1
+  m_Elasticity: 1
 --- !u!1 &637390392011132168
 GameObject:
   m_ObjectHideFlags: 0
@@ -29,6 +159,8 @@ RectTransform:
   m_LocalScale: {x: 1.3106797, y: 1.3106797, z: 1.3106797}
   m_Children:
   - {fileID: 1675037251655775578}
+  - {fileID: 1241794666}
+  - {fileID: 1999011021}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -51,6 +183,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Root: {fileID: 1675037251655775578}
   Foreground: {fileID: 7273950047231595036}
+  DamageSequenceAnimator: {fileID: 1241794669}
+  HealSequenceAnimator: {fileID: 1999011023}
 --- !u!1 &924405612165002676
 GameObject:
   m_ObjectHideFlags: 0
@@ -76,7 +210,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 924405612165002676}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0.0000040460973}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -148,7 +282,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2536951447900412983}
-  m_LocalRotation: {x: 0.38268343, y: 0, z: 0, w: 0.92387956}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -156,11 +290,11 @@ RectTransform:
   - {fileID: 332117844359608405}
   m_Father: {fileID: 1593559905037507520}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 45, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 293.66925, y: 74}
+  m_SizeDelta: {x: 294.23, y: 74}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &5271100164728531259
 GameObject:
@@ -187,7 +321,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5271100164728531259}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0.0000040460973}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []

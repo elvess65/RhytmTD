@@ -12,11 +12,9 @@ namespace RhytmTD.Animation.DOTween
         public override Tween GetTween()
         {
             if (m_IsFrom)
-            {
-                return m_ControlledTransofrm.DOScale(m_Scale, m_Duration).From();
-            }
+                return m_ControlledTransofrm.DOScale(m_Scale, m_Duration).SetDelay(m_Delay).From();
 
-            return m_ControlledTransofrm.DOScale(m_Scale, m_Duration);
+            return m_ControlledTransofrm.DOScale(m_Scale, m_Duration).SetDelay(m_Delay);
         }
     }
 }

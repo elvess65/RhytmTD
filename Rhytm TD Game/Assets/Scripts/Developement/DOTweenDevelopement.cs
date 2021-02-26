@@ -17,23 +17,30 @@ namespace RhytmTD.Developement
         public bool ShakeFade = false;
         public DOTweenSequenceAnimator Animator;
         public DOTweenSequenceAnimator HideAnimator;
+        public DOTweenSequenceAnimator PunchAnimator;
 
         private Sequence m_HPSequence;
+
+        public Vector3 Punch = new Vector3(1, 0, 0);
+        public float Duration = 0.5f;
+        public int Vibrato = 10;
+        public int Elasticity = 1;
 
         void Update()
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
+                PunchAnimator.PlaSequence();
             }
 
             if (Input.GetKeyDown(KeyCode.H))
             {
-                m_HPSequence = Animator.PlayExposedSequence(() => Debug.Log("Finish appear"));
+                m_HPSequence = Animator.PlaSequence(() => Debug.Log("Finish appear"));
             }
 
             if (Input.GetKeyDown(KeyCode.R))
             {
-                HideAnimator.PlayExposedSequence(() => Debug.Log("Finish hide"));
+                HideAnimator.PlaSequence(() => Debug.Log("Finish hide"));
             }
         }
 

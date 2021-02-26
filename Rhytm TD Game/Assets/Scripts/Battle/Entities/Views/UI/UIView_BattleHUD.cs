@@ -47,11 +47,13 @@ namespace RhytmTD.UI.Battle.View.UI
         private void HealthRemovedHandler(int health, int senderID)
         {
             UIWidget_PlayerHealthBar.UpdateHealthBar(m_HealthModule.CurrentHealth, m_HealthModule.Health);
+            UIWidget_PlayerHealthBar.PlayDamageAnimation();
         }
 
         private void HealthRestoredHandler(int health)
         {
             UIWidget_PlayerHealthBar.UpdateHealthBar(m_HealthModule.CurrentHealth, m_HealthModule.Health);
+            UIWidget_PlayerHealthBar.PlayHealAnimation();
         }
     }
 }
