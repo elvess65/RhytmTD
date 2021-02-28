@@ -9,14 +9,21 @@ namespace RhytmTD.Animation.DOTween
         [SerializeField] private string m_Property;
         [SerializeField] private float m_Value;
 
+        private Material m_Taterial;
+
+        public override void PrewarmTween()
+        {
+            base.PrewarmTween();
+
+            m_Taterial = m_ControlledTransofrm.gameObject.GetComponent<MeshRenderer>().material;
+        }
+
         public override Tween GetTween()
         {
-            Material material = m_ControlledTransofrm.gameObject.GetComponent<MeshRenderer>().material;
-
             if (m_IsFrom)
-                return material.DOFloat(m_Value, m_Property, m_Duration).SetDelay(m_Delay).From();
+                return m_Taterial.DOFloat(m_Value, m_Property, m_Duration).SetDelay(m_Delay).From().SetEase(m_Ease);
 
-            return material.DOFloat(m_Value, m_Property, m_Duration).SetDelay(m_Delay);
+            return m_Taterial.DOFloat(m_Value, m_Property, m_Duration).SetDelay(m_Delay).SetEase(m_Ease);
         }
     }
 }

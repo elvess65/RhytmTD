@@ -128,6 +128,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2017301924}
     m_Modifications:
+    - target: {fileID: 4234370384567884991, guid: 9c8e62ed975281147b94ef81619d3f5a,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5418656487726605659, guid: 9c8e62ed975281147b94ef81619d3f5a,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6033639086024806025, guid: 9c8e62ed975281147b94ef81619d3f5a,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -198,6 +208,11 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 7.646134
       objectReference: {fileID: 0}
+    - target: {fileID: 6033639086024806026, guid: 9c8e62ed975281147b94ef81619d3f5a,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6033639086024806036, guid: 9c8e62ed975281147b94ef81619d3f5a,
         type: 3}
       propertyPath: m_Name
@@ -207,6 +222,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7656448862562939585, guid: 9c8e62ed975281147b94ef81619d3f5a,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9c8e62ed975281147b94ef81619d3f5a, type: 3}
@@ -221,8 +241,9 @@ GameObject:
   - component: {fileID: 375909843}
   - component: {fileID: 375909845}
   - component: {fileID: 375909844}
+  - component: {fileID: 375909846}
   m_Layer: 0
-  m_Name: DOTweenSequence Show
+  m_Name: DOTweenSequence Portal Show
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -254,12 +275,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96b2ab19f70ab2b4ca420a6826a483fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_Ease: 9
   m_ControlledTransofrm: {fileID: 666264099}
   m_IsFrom: 0
-  m_Delay: 0
-  m_Duration: 0
+  m_Delay: 0.5
+  m_Duration: 1
   m_Property: _Radius
-  m_Value: 0
+  m_Value: 18
 --- !u!114 &375909845
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -272,7 +294,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab33e93565c1d9343b9898b88c4b4c94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ExposedTweens: []
+  ExposedTweens:
+  - {fileID: 375909844}
+  - {fileID: 375909846}
+--- !u!114 &375909846
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 375909842}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96b2ab19f70ab2b4ca420a6826a483fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Ease: 5
+  m_ControlledTransofrm: {fileID: 666264099}
+  m_IsFrom: 0
+  m_Delay: 0
+  m_Duration: 0.5
+  m_Property: _Radius
+  m_Value: 15
+--- !u!198 &419420558 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 6777814509314115035, guid: e21bb233f31c80442bb6c1116194d69c,
+    type: 3}
+  m_PrefabInstance: {fileID: 935449846}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &639369466 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5506635153944478715, guid: e21bb233f31c80442bb6c1116194d69c,
@@ -529,7 +578,7 @@ GameObject:
   - component: {fileID: 732370263}
   - component: {fileID: 732370262}
   m_Layer: 0
-  m_Name: DOTweenSequence Hide
+  m_Name: DOTweenSequence Vortex Hide
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -561,9 +610,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a15039ff8fe3e74396667cd502ff9c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_Ease: 1
   m_ControlledTransofrm: {fileID: 639369466}
   m_IsFrom: 0
-  m_Delay: 1.5
+  m_Delay: 0.5
   m_Duration: 0.5
   m_Scale: {x: 0, y: 0, z: 0}
 --- !u!114 &732370263
@@ -788,7 +838,7 @@ GameObject:
   - component: {fileID: 913305907}
   - component: {fileID: 913305906}
   m_Layer: 0
-  m_Name: DOTweenSequence Show
+  m_Name: DOTweenSequence Vortex Show
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -820,6 +870,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a15039ff8fe3e74396667cd502ff9c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_Ease: 1
   m_ControlledTransofrm: {fileID: 639369466}
   m_IsFrom: 1
   m_Delay: 0
@@ -846,6 +897,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1244244687}
     m_Modifications:
+    - target: {fileID: 1302214554213398019, guid: e21bb233f31c80442bb6c1116194d69c,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5506635153944478715, guid: e21bb233f31c80442bb6c1116194d69c,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -921,6 +977,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: VortexPortalPurple
       objectReference: {fileID: 0}
+    - target: {fileID: 6777814509314115035, guid: e21bb233f31c80442bb6c1116194d69c,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e21bb233f31c80442bb6c1116194d69c, type: 3}
 --- !u!1 &937051344
@@ -947,7 +1008,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 937051344}
   m_LocalRotation: {x: -0, y: 0.9933044, z: -0, w: -0.11552734}
-  m_LocalPosition: {x: -0.72, y: -8.2, z: 6.7000003}
+  m_LocalPosition: {x: -0.72, y: -8.2, z: -3.55}
   m_LocalScale: {x: 3.0953004, y: 3.0953, z: 3.0953004}
   m_Children: []
   m_Father: {fileID: 664835001}
@@ -1075,7 +1136,7 @@ GameObject:
   - component: {fileID: 1074817586}
   - component: {fileID: 1074817585}
   m_Layer: 0
-  m_Name: DOTweenSequence Hide
+  m_Name: DOTweenSequence Portal Hide
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1107,12 +1168,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96b2ab19f70ab2b4ca420a6826a483fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_Ease: 1
   m_ControlledTransofrm: {fileID: 666264099}
   m_IsFrom: 0
   m_Delay: 0
-  m_Duration: 0
+  m_Duration: 0.7
   m_Property: _Radius
-  m_Value: 0
+  m_Value: 0.5
 --- !u!114 &1074817586
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1125,7 +1187,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab33e93565c1d9343b9898b88c4b4c94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ExposedTweens: []
+  ExposedTweens:
+  - {fileID: 1074817585}
 --- !u!198 &1187042769 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 198472046996112406, guid: 97786ae8e944f4c47953c0d63ca0293e,
@@ -1195,7 +1258,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1796335524}
   m_LocalRotation: {x: -0, y: 0.9933044, z: -0, w: -0.11552734}
-  m_LocalPosition: {x: -0.72, y: -8.2, z: -2.33}
+  m_LocalPosition: {x: -0.72, y: -8.2, z: 6.94}
   m_LocalScale: {x: 3.0953004, y: 3.0953, z: 3.0953004}
   m_Children: []
   m_Father: {fileID: 664835001}
@@ -1231,13 +1294,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PortalRenderer: {fileID: 666264097}
-  GraphicsAnimator: {fileID: 0}
-  GraphicsAnimato2: {fileID: 0}
-  AppearEffects:
+  PortalShowAnimator: {fileID: 375909845}
+  PortalHideAnimator: {fileID: 1074817586}
+  VortexEffect: {fileID: 419420558}
+  VortexShowAnimator: {fileID: 913305907}
+  VortexHideAnimator: {fileID: 732370263}
+  SpawnEffects:
   - {fileID: 2119519447}
   - {fileID: 1187042769}
-  Obj: {fileID: 865048410}
-  BeforePos: {fileID: 1796335525}
+  FromPortalPos: {fileID: 1796335525}
+  ToPortalPos: {fileID: 937051345}
+  Player: {fileID: 865048410}
 --- !u!4 &1818415888
 Transform:
   m_ObjectHideFlags: 0
@@ -1328,6 +1395,21 @@ PrefabInstance:
       propertyPath: LightsModule.enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 198170001708179150, guid: 97786ae8e944f4c47953c0d63ca0293e,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 198472046996112406, guid: 97786ae8e944f4c47953c0d63ca0293e,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 198955123427888790, guid: 97786ae8e944f4c47953c0d63ca0293e,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 97786ae8e944f4c47953c0d63ca0293e, type: 3}
 --- !u!1001 &1954810694
@@ -1355,7 +1437,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4162560473967594, guid: 38b78716e5243fc4891b0654df0189dd, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -8.6
+      value: -9
       objectReference: {fileID: 0}
     - target: {fileID: 4162560473967594, guid: 38b78716e5243fc4891b0654df0189dd, type: 3}
       propertyPath: m_LocalRotation.x

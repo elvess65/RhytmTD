@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace RhytmTD.Developement
 {
-    public class PortalTilling : MonoBehaviour
+    public class PortalTillingAnimator : MonoBehaviour
     {
         public float speed = 2;
         public float radius = 1;

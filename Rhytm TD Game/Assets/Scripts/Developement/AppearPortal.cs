@@ -1,6 +1,4 @@
 ﻿using RhytmTD.Animation.DOTween;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
@@ -8,78 +6,74 @@ namespace RhytmTD.Developement
 {
     public class AppearPortal : MonoBehaviour
     {
+        [Header("Portal")]
         public MeshRenderer PortalRenderer;
-        public DOTweenSequenceAnimator GraphicsAnimator;
-        public DOTweenSequenceAnimator GraphicsAnimato2;
-        public ParticleSystem[] AppearEffects;
-        public GameObject Obj;
-        public Transform BeforePos;
+        public DOTweenSequenceAnimator PortalShowAnimator;
+        public DOTweenSequenceAnimator PortalHideAnimator;
 
-        private Vector3 startPos; 
+        [Header("Vortex")]
+        public ParticleSystem VortexEffect;
+        public DOTweenSequenceAnimator VortexShowAnimator;
+        public DOTweenSequenceAnimator VortexHideAnimator;
+        
+        [Header("Spawn")]
+        public ParticleSystem[] SpawnEffects;        
+        public Transform FromPortalPos;
+        public Transform ToPortalPos;
+
+        public GameObject Player;
 
         private void Start()
         {
             Material mat = new Material(PortalRenderer.material);
             PortalRenderer.material = mat;
+            PortalRenderer.enabled = false;
 
-            PortalRenderer.material.DOFloat(0.5f, "_Radius", 0f);
+            PortalRenderer.material.SetFloat("_Radius", 0.5f);
 
-            startPos = Obj.transform.position;
-            Obj.gameObject.transform.position = BeforePos.position;
-            Obj.gameObject.SetActive(false);
-            GraphicsAnimator.gameObject.SetActive(false);
-            PortalRenderer.gameObject.SetActive(false);
-            for (int i = 0; i < AppearEffects.Length; i++)
-            {
-                AppearEffects[i].gameObject.SetActive(false);
-            }
+            PortalShowAnimator.PrewarmSequence();
+            PortalHideAnimator.PrewarmSequence();
+
+            Player.transform.position = FromPortalPos.position;
+            Player.gameObject.SetActive(false);
         }
 
         void Update()
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                GraphicsAnimator.gameObject.SetActive(true);
-                PortalRenderer.gameObject.SetActive(true);
+                PortalRenderer.enabled = true;
+                VortexEffect.Play();
 
-                GraphicsAnimator.PlaySequence();
-                Sequence sequence = DG.Tweening.DOTween.Sequence();
-                sequence.AppendInterval(0.2f);
-                sequence.Append(PortalRenderer.material.DOFloat(18, "_Radius", 1f).SetEase(Ease.OutCubic));
-                sequence.Append(PortalRenderer.material.DOFloat(15, "_Radius", 0.5f).SetEase(Ease.InQuad));
-                sequence.AppendCallback(CompleteShow);
-
-            }
-
-            if (Input.GetKeyDown(KeyCode.H))
-            {
-              
+                VortexShowAnimator.PlaySequence();
+                PortalShowAnimator.PlaySequence(PortalShowSequenceComplete);
             }
         }
 
-        void CompleteShow()
+        void PortalShowSequenceComplete()
         {
-            for (int i =0; i < AppearEffects.Length; i++)
+            Player.gameObject.SetActive(true);
+
+            for (int i =0; i < SpawnEffects.Length; i++)
             {
-                AppearEffects[i].gameObject.SetActive(true);
+                SpawnEffects[i].Play();
             }
 
-            Obj.gameObject.SetActive(true);
-            Obj.transform.DOScale(0, 0.2f).From();
-            Obj.transform.DOMove(startPos, 0.2f);
-
-            GraphicsAnimato2.PlaySequence(Complete);
-            Sequence sequence = DG.Tweening.DOTween.Sequence();
-            sequence.AppendInterval(1f);
-            sequence.Append(PortalRenderer.material.DOFloat(18, "_Radius", 0.2f));
-            sequence.Append(PortalRenderer.material.DOFloat(0.5f, "_Radius", 1f));
-            sequence.AppendCallback(Complete);
+            Sequence playerSequence = DOTween.Sequence();
+            playerSequence.Append(Player.transform.DOScale(0, 0.2f).From());
+            playerSequence.Append(Player.transform.DOMove(ToPortalPos.position, 0.2f));
+            playerSequence.AppendCallback(PlayerSequenceCompleteHandler);
         }
 
-        void Complete()
+        void PlayerSequenceCompleteHandler()
         {
-            GraphicsAnimator.gameObject.SetActive(false);
-            PortalRenderer.gameObject.SetActive(false);
+            VortexHideAnimator.PlaySequence(PortalHideSequenceComplete);
+            PortalHideAnimator.PlaySequence();
+        }
+
+        void PortalHideSequenceComplete()
+        {
+            PortalRenderer.enabled = false;
         }
     }
 }

@@ -9,6 +9,12 @@ namespace RhytmTD.Animation.DOTween
 
         private bool m_IsPlaying = false;
 
+        public void PrewarmSequence()
+        {
+            for (int i = 0; i < ExposedTweens.Length; i++)
+                ExposedTweens[i].PrewarmTween();
+        }
+
         public Sequence PlaySequence(TweenCallback onCompleteCallback = null)
         {
             return PlaySequence(ExposedTweens, onCompleteCallback);
