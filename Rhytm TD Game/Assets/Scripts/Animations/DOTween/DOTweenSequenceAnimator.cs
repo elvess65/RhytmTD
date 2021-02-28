@@ -9,7 +9,7 @@ namespace RhytmTD.Animation.DOTween
 
         private bool m_IsPlaying = false;
 
-        public Sequence PlaSequence(TweenCallback onCompleteCallback = null)
+        public Sequence PlaySequence(TweenCallback onCompleteCallback = null)
         {
             return PlaySequence(ExposedTweens, onCompleteCallback);
         }

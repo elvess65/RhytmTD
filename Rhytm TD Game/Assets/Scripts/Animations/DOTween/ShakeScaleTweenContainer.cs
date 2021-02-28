@@ -6,7 +6,6 @@ namespace RhytmTD.Animation.DOTween
     public class ShakeScaleTweenContainer : TweenContainer
     {
         [Header("Shake Scale Tween")]
-        [SerializeField] private float m_Duration = 0.5f;
         [SerializeField] private Vector3 m_Strength;
         [SerializeField] private int m_Vibrato = 10;
         [SerializeField] private int m_Randomness = 90;

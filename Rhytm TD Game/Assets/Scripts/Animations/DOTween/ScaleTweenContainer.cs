@@ -7,7 +7,6 @@ namespace RhytmTD.Animation.DOTween
     {
         [Header("Scale Tween")]
         [SerializeField] private Vector3 m_Scale;
-        [SerializeField] private float m_Duration;
 
         public override Tween GetTween()
         {

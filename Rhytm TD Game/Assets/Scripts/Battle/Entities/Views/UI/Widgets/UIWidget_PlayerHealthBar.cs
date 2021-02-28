@@ -24,12 +24,12 @@ namespace RhytmTD.UI.Widget
 
         public void PlayDamageAnimation()
         {
-            DamageSequenceAnimator.PlaSequence();
+            DamageSequenceAnimator.PlaySequence();
         }
 
         public void PlayHealAnimation()
         {
-            HealSequenceAnimator.PlaSequence();
+            HealSequenceAnimator.PlaySequence();
         }
     }
 }

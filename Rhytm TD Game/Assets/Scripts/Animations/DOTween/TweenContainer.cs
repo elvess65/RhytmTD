@@ -9,6 +9,7 @@ namespace RhytmTD.Animation.DOTween
         [SerializeField] protected Transform m_ControlledTransofrm;
         [SerializeField] protected bool m_IsFrom;
         [SerializeField] protected float m_Delay;
+        [SerializeField] protected float m_Duration;
 
         public abstract Tween GetTween();
     }

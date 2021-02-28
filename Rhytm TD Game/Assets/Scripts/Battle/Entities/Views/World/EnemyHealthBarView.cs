@@ -34,7 +34,7 @@ namespace RhytmTD.Battle.Entities.Views
         {
             if (gameObject.activeSelf)
             {
-                HideDoTweenAnimator.PlaSequence(OnHealthBarHideAnimationComplete);
+                HideDoTweenAnimator.PlaySequence(OnHealthBarHideAnimationComplete);
             }
         }
 
@@ -51,7 +51,7 @@ namespace RhytmTD.Battle.Entities.Views
             if (m_HealthModule.CurrentHealth > 0 && !gameObject.activeSelf)
             {
                 gameObject.SetActive(true);
-                ShowDoTweenAnimator.PlaSequence();
+                ShowDoTweenAnimator.PlaySequence();
             }
 
             Foreground.fillAmount = m_HealthModule.CurrentHealth / (float)m_HealthModule.Health;

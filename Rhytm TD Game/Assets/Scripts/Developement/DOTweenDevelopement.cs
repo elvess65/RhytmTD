@@ -30,17 +30,17 @@ namespace RhytmTD.Developement
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                PunchAnimator.PlaSequence();
+                PunchAnimator.PlaySequence();
             }
 
             if (Input.GetKeyDown(KeyCode.H))
             {
-                m_HPSequence = Animator.PlaSequence(() => Debug.Log("Finish appear"));
+                m_HPSequence = Animator.PlaySequence(() => Debug.Log("Finish appear"));
             }
 
             if (Input.GetKeyDown(KeyCode.R))
             {
-                HideAnimator.PlaSequence(() => Debug.Log("Finish hide"));
+                HideAnimator.PlaySequence(() => Debug.Log("Finish hide"));
             }
         }
 

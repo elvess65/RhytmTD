@@ -7,7 +7,6 @@ namespace RhytmTD.Animation.DOTween
     {
         [Header("Punch Tween")]
         [SerializeField] private Vector3 m_Punch = new Vector3(0.5f, 0, 0);
-        [SerializeField] private float m_Duration = 0.3f;
         [SerializeField] private int m_Vibrato = 1;
         [SerializeField] private int m_Elasticity = 1;
 
