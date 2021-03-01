@@ -16,6 +16,7 @@ namespace RhytmTD.Battle.Entities.Views
             m_AnimationModule = entity.GetModule<AnimationModule>();
 
             TransformModule transformModule = entity.GetModule<TransformModule>();
+            transformModule.OnPositionChanged += PositionChanged;
             transformModule.OnRotationChanged += RotationChanged;
 
             DestroyModule destroyModule = entity.GetModule<DestroyModule>();
@@ -43,6 +44,11 @@ namespace RhytmTD.Battle.Entities.Views
             {
                 m_AnimationModule.PlayAnimation(CoreFramework.EnumsCollection.AnimationTypes.TakeDamage);
             }
+        }
+
+        private void PositionChanged(Vector3 position)
+        {
+            transform.position = position;
         }
 
         private void RotationChanged(Quaternion rotation)

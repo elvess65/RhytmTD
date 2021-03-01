@@ -29,7 +29,7 @@ namespace RhytmTD.Battle.Entities
         public void AddHealth(int health)
         {
             CurrentHealth += health;
-            OnHealthRestored.Invoke(CurrentHealth);
+            OnHealthRestored?.Invoke(CurrentHealth);
         }
 
         public void RemoveHealth(int health, int senderID)

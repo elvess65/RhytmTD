@@ -31,6 +31,7 @@ namespace RhytmTD.Battle.Entities.EntitiesFactory
             BattleEntity battleEntity = new BattleEntity(entityID);
             battleEntity.AddModule(new TransformModule(position, rotation));
             battleEntity.AddModule(new RotateModule(rotateSpeed));
+            battleEntity.AddModule(new MoveModule());
             battleEntity.AddModule(new FocusModule());
             battleEntity.AddModule(new HealthModule(battleEntity, health));
             battleEntity.AddModule(new DestroyModule(battleEntity));
