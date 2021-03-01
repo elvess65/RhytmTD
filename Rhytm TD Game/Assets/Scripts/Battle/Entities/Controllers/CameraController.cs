@@ -22,7 +22,7 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_BattleModel.OnPlayerEntityInitialized += PlayerInitializedHandler;
 
             m_StartBattleSequenceModel = Dispatcher.GetModel<StartBattleSequenceModel>();
-            m_StartBattleSequenceModel.OnSequencePrepared += SequencePreparedHandler;
+            m_StartBattleSequenceModel.OnMainSequenceCompleted += MainSequencePreparedHandler;
         }
 
         public void SetTarget(Transform transform)
@@ -38,7 +38,7 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_CameraModel.CurrentCamera.Priority = m_CameraModel.ActiveCamPriority;
         }
 
-        private void SequencePreparedHandler()
+        private void MainSequencePreparedHandler()
         {
             ActivateCamera(EnumsCollection.CameraTypes.Main);
         }

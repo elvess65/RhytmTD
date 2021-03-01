@@ -1,4 +1,5 @@
 ﻿using CoreFramework;
+using UnityEngine;
 
 namespace RhytmTD.Battle.Entities.Views
 {

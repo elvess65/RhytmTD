@@ -26,15 +26,15 @@ namespace RhytmTD.UI.Battle.View.UI
         public override void Initialize()
         {
             m_BattleModel = Dispatcher.GetModel<BattleModel>();
+            m_BattleModel.OnPlayerEntityInitialized += InitializeWidgets;
+
             m_SkillsModel = Dispatcher.GetModel<SkillsModel>();
             m_WorldDataModel = Dispatcher.GetModel<WorldDataModel>();
 
             m_RhytmController = Dispatcher.GetController<RhytmController>();
-
-            InitializeWidgets();
         }
 
-        private void InitializeWidgets()
+        private void InitializeWidgets(BattleEntity entity)
         {
             m_UIWidget_ButtonClose.Initialize();
             m_UIWidget_ButtonClose.OnWidgetPress += ButtonCloseWidgetPressHandler;

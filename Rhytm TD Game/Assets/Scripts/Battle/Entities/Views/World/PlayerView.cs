@@ -1,4 +1,5 @@
 ﻿using RhytmTD.Battle.Entities.Controllers;
+using RhytmTD.Battle.Entities.Models;
 using UnityEngine;
 using static CoreFramework.EnumsCollection;
 
@@ -22,6 +23,9 @@ namespace RhytmTD.Battle.Entities.Views
             m_MarkerController = Dispatcher.GetController<MarkerController>();
             m_CameraController = Dispatcher.GetController<CameraController>();
             m_CameraController.SetTarget(transform);
+
+            StartBattleSequenceModel startBattleSequenceModel = Dispatcher.GetModel<StartBattleSequenceModel>();
+            startBattleSequenceModel.PlayerViewTransform = transform;
 
             m_AnimationModule = entity.GetModule<AnimationModule>();
 

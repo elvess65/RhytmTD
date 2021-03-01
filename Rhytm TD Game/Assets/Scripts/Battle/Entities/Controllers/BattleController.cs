@@ -16,7 +16,6 @@ namespace RhytmTD.Battle.Entities.Controllers
         private RhytmInputProxy m_RhytmInputProxy;
         private RhytmController m_RhytmController;
         private SolidEntitySpawnController m_SpawnController;
-        private StartBattleSequenceController m_StartBattleSequenceController;
 
         private SpawnModel m_SpawnModel;
         private BattleModel m_BattleModel;
@@ -36,7 +35,6 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_RhytmController = Dispatcher.GetController<RhytmController>();
             m_RhytmInputProxy = Dispatcher.GetController<RhytmInputProxy>();
             m_SpawnController = Dispatcher.GetController<SolidEntitySpawnController>();
-            m_StartBattleSequenceController = Dispatcher.GetController<StartBattleSequenceController>();
 
             m_BattleModel = Dispatcher.GetModel<BattleModel>();
             m_BattleModel.OnBattleInitialize += Initialize;
@@ -71,8 +69,6 @@ namespace RhytmTD.Battle.Entities.Controllers
 
             //Spawn player
             m_SpawnModel.OnShouldCreatePlayer?.Invoke();
-
-            m_StartBattleSequenceController.StartStartBattleSequence();
         }
 
         private void Update(float deltaTime)
