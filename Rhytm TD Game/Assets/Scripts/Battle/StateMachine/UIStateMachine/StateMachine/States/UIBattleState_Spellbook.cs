@@ -12,7 +12,10 @@
 
             //UI
             m_UIModel.UIView_BattleHUD.SetWidgetsActive(false, true);
+            m_UIModel.UIView_BattleHUD.LockInput(true);
+
             m_UIModel.UIView_SpellbookHUD.SetWidgetsActive(true, true);
+            m_UIModel.UIView_SpellbookHUD.LockInput(false);
         }
 
         public override void ExitState()
@@ -21,6 +24,7 @@
 
             //UI
             m_UIModel.UIView_SpellbookHUD.SetWidgetsActive(false, true);
+            m_UIModel.UIView_SpellbookHUD.LockInput(true);
         }
     }
 }

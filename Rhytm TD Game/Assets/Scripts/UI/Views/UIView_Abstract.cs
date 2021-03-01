@@ -17,8 +17,13 @@ namespace RhytmTD.UI.View
 
         public abstract void Initialize();
 
-        public virtual void LockInput(bool isLocked)
-        { }
+        public void LockInput(bool isLocked)
+        {
+            for (int i = 0; i < m_Widgets.Count; i++)
+            {
+                m_Widgets[i].LockInput(isLocked);
+            }
+        }
 
         /// <summary>
         /// Включить/выключить визуальное отображение виджета

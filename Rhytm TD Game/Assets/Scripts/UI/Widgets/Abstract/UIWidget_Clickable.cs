@@ -13,7 +13,7 @@ namespace RhytmTD.UI.Widget
         [SerializeField] public Button WidgetButton;
 
 
-        public void LockInput(bool isLocked)
+        public override void LockInput(bool isLocked)
         {
             WidgetButton.enabled = !isLocked;
         }

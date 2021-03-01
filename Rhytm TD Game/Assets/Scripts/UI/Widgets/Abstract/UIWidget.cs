@@ -38,6 +38,9 @@ namespace RhytmTD.UI.Widget
                 Root.localScale = isEnabled ? Vector3.one : Vector3.zero;
         }
 
+        public virtual void LockInput(bool isLocked)
+        { }
+
         protected virtual void InternalInitialize()
         {
             Dispatcher.AddDisposable(this);

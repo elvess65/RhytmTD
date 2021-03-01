@@ -42,8 +42,7 @@ namespace RhytmTD.UI.Battle.View.UI
             LoadoutModule playerLodouatModule = m_BattleModel.PlayerEntity.GetModule<LoadoutModule>();
             foreach(int skillTypeID in playerLodouatModule.SelectedSkillTypeIDs)
             {
-                
-                UIWidget_Spell spellWidget = m_WorldDataModel.UIAssets.InstantiatePrefab(m_WorldDataModel.UIAssets.UIWidgetSpellPrefab) as UIWidget_Spell;
+                UIWidget_Spell spellWidget = m_WorldDataModel.UIAssets.InstantiatePrefab(m_WorldDataModel.UIAssets.UIWidgetSpellPrefab);
                 spellWidget.transform.parent = m_SpellsRoot;
 
                 spellWidget.Initialize(skillTypeID, playerLodouatModule.GetSkillIDByTypeID(skillTypeID));

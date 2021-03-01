@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace RhytmTD.UI.Components.Spell
 {
-    public class UIComponent_SpellInfo : MonoBehaviour
+    public class UIWidget_SpellInfo : UIWidget
     {
         public System.Action OnButtonInfoPressHandler;
 
@@ -18,6 +18,13 @@ namespace RhytmTD.UI.Components.Spell
 
             UIWidget_ButtonInfo.Initialize();
             UIWidget_ButtonInfo.OnWidgetPress += UIWidgetButtonInfoPressHandler;
+
+            InternalInitialize();
+        }
+
+        public override void LockInput(bool isLocked)
+        {
+            UIWidget_ButtonInfo.LockInput(isLocked);
         }
 
         private void UIWidgetButtonInfoPressHandler()

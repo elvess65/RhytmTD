@@ -12,6 +12,7 @@
 
             //UI
             m_UIModel.UIView_BattleHUD.SetWidgetsActive(true, true);
+            m_UIModel.UIView_BattleHUD.LockInput(false);
         }
     }
 }

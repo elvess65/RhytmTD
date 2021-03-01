@@ -28,13 +28,7 @@ namespace RhytmTD.UI.View
             //RegisterUpdatable(UIWidget_Currency);
         }
 
-        public override void LockInput(bool isLocked)
-        {
-            UIWidget_ButtonPlay.LockInput(isLocked);
-        }
-
-
-        void ButtonPlay_Widget_PressHandler()
+        private void ButtonPlay_Widget_PressHandler()
         {
              LockInput(true);
 

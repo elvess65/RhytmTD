@@ -8,7 +8,7 @@ namespace RhytmTD.UI.Widget
         public System.Action<int> OnSpellUse;
 
         [Space]
-        [SerializeField] private UIComponent_SpellInfo UIComponentSpellInfo;
+        [SerializeField] private UIWidget_SpellInfo UIWidgetSpellInfo;
 
         private int m_SkillTypeID;
         private int m_SkillID;
@@ -18,10 +18,15 @@ namespace RhytmTD.UI.Widget
             m_SkillTypeID = skillTypeID;
             m_SkillID = skillID;
 
-            UIComponentSpellInfo.Initialize(TEMP_GetSpellNameByID(m_SkillTypeID));
-            UIComponentSpellInfo.OnButtonInfoPressHandler += SpellInfoPressHandler;
+            UIWidgetSpellInfo.Initialize(TEMP_GetSpellNameByID(m_SkillTypeID));
+            UIWidgetSpellInfo.OnButtonInfoPressHandler += SpellInfoPressHandler;
 
             InternalInitialize();
+        }
+
+        public override void LockInput(bool isLocked)
+        {
+            UIWidgetSpellInfo.LockInput(isLocked);
         }
 
         private string TEMP_GetSpellNameByID(int skillTypeID)
