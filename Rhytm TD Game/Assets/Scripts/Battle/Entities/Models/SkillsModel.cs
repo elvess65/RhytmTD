@@ -10,6 +10,7 @@ namespace RhytmTD.Battle.Entities.Models
         private Dictionary<int, BaseSkill> m_Skills = new Dictionary<int, BaseSkill>();
 
         public Action<BattleEntity> OnSkillCreated;
+        public Action<int, int> OnPrepareSkill;
 
         public void AddSkill(BaseSkill skill)
         {

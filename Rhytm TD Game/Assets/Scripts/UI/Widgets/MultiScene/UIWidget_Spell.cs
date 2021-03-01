@@ -5,7 +5,7 @@ namespace RhytmTD.UI.Widget
 {
     public class UIWidget_Spell : UIWidget
     {
-        public System.Action<int> OnSpellUse;
+        public System.Action<int, int> OnPrepareSkillUse;
 
         [Space]
         [SerializeField] private UIWidget_SpellInfo UIWidgetSpellInfo;
@@ -46,7 +46,7 @@ namespace RhytmTD.UI.Widget
 
         private void SpellInfoPressHandler()
         {
-            OnSpellUse?.Invoke(m_SkillID);
+            OnPrepareSkillUse?.Invoke(m_SkillTypeID, m_SkillID);
         }
     }
 }

@@ -15,9 +15,9 @@ namespace RhytmTD.UI.Battle.View.UI
     public class UIView_SpellbookHUD : UIView_Abstract
     {
         private BattleModel m_BattleModel;
+        private SkillsModel m_SkillsModel;
         private WorldDataModel m_WorldDataModel;
         private RhytmController m_RhytmController;
-        private PrepareSkillUseController m_PrepareSkillUseController;
 
         [Space]
         [SerializeField] private UIWidget_Button m_UIWidget_ButtonClose;
@@ -26,10 +26,16 @@ namespace RhytmTD.UI.Battle.View.UI
         public override void Initialize()
         {
             m_BattleModel = Dispatcher.GetModel<BattleModel>();
+            m_SkillsModel = Dispatcher.GetModel<SkillsModel>();
             m_WorldDataModel = Dispatcher.GetModel<WorldDataModel>();
-            m_RhytmController = Dispatcher.GetController<RhytmController>();
-            m_PrepareSkillUseController = Dispatcher.GetController<PrepareSkillUseController>();
 
+            m_RhytmController = Dispatcher.GetController<RhytmController>();
+
+            InitializeWidgets();
+        }
+
+        private void InitializeWidgets()
+        {
             m_UIWidget_ButtonClose.Initialize();
             m_UIWidget_ButtonClose.OnWidgetPress += ButtonCloseWidgetPressHandler;
             RegisterWidget(m_UIWidget_ButtonClose);
@@ -46,15 +52,15 @@ namespace RhytmTD.UI.Battle.View.UI
                 spellWidget.transform.parent = m_SpellsRoot;
 
                 spellWidget.Initialize(skillTypeID, playerLodouatModule.GetSkillIDByTypeID(skillTypeID));
-                spellWidget.OnSpellUse += SpellUseHandler;
+                spellWidget.OnPrepareSkillUse += PrepareSkillUseHandler;
                 RegisterWidget(spellWidget);
             }
         }
 
-        private void SpellUseHandler(int skillID)
+        private void PrepareSkillUseHandler(int skillTypeID, int skillID)
         {
-            m_PrepareSkillUseController.StartUseSkill(skillID);
             m_BattleModel.OnSpellbookExit?.Invoke();
+            m_SkillsModel.OnPrepareSkill?.Invoke(skillTypeID, skillID);
         }
 
         private void ButtonCloseWidgetPressHandler()
