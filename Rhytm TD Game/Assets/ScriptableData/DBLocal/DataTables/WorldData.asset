@@ -15,6 +15,7 @@ MonoBehaviour:
   PlayerCharacterAssets: {fileID: 11400000, guid: 6651c543e30fc7648b2060384bbed64c,
     type: 2}
   EffectAssets: {fileID: 11400000, guid: f81ebea77171de04194ff00577f94c6a, type: 2}
+  UIAssets: {fileID: 11400000, guid: 9a405f8f0aa15c141b4483ad65054393, type: 2}
   Areas:
   - ID: 12
     LevelsData:

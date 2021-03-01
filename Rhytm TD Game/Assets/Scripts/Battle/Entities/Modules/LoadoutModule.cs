@@ -9,6 +9,8 @@ namespace RhytmTD.Battle.Entities
     {
         public ICollection<int> SelectedSkillIDs => m_SelectedSkills.Values;
 
+        public ICollection<int> SelectedSkillTypeIDs => m_SelectedSkills.Keys;
+
         private Dictionary<int, int> m_SelectedSkills = new Dictionary<int, int>();
 
         /// <summary>

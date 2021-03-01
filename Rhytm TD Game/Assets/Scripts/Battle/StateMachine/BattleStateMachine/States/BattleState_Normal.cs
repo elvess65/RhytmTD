@@ -17,6 +17,7 @@ namespace RhytmTD.Battle.StateMachine
         private SkillsController m_SkillsController;
         private RhytmInputProxy m_RhytmInputProxy;
         private AnimationModule m_PlayerAnimationModule;
+
         private BattleEntity m_TargetEntity;
         private int m_SkillID;
 
