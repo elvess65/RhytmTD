@@ -20,6 +20,7 @@ namespace RhytmTD.Battle.Entities.Models
         public Action OnBattleInitialize;
         public Action OnSpellbookEnter;
         public Action OnSpellbookExit;
+        public Action OnSpellbookUsed;
 
         public BattleModel()
         {

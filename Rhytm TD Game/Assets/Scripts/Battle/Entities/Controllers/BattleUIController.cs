@@ -30,6 +30,7 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_BattleModel.OnBattleFinished += BattleFinishedHandler;
             m_BattleModel.OnSpellbookEnter += SpellBookEnterHandler;
             m_BattleModel.OnSpellbookExit += SpellBookExitHandler;
+            m_BattleModel.OnSpellbookUsed += SpellBookUsedHandler;
         }
 
 
@@ -44,6 +45,7 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_StateMachine.AddState(new UIBattleState_Normal());
             m_StateMachine.AddState(new UIBattleState_BattleResult());
             m_StateMachine.AddState(new UIBattleState_Spellbook());
+            m_StateMachine.AddState(new UIBattleState_SpellbookUsed());
             m_StateMachine.Initialize<UIBattleState_NoUI>();
         }
 
@@ -65,6 +67,11 @@ namespace RhytmTD.Battle.Entities.Controllers
         private void SpellBookExitHandler()
         {
             m_StateMachine.ChangeState<UIBattleState_Normal>();
+        }
+
+        private void SpellBookUsedHandler()
+        {
+            m_StateMachine.ChangeState<UIBattleState_SpellbookUsed>();
         }
     }
 }

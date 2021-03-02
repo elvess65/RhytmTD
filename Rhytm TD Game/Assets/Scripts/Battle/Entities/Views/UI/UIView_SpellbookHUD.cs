@@ -25,27 +25,26 @@ namespace RhytmTD.UI.Battle.View.UI
 
         public override void Initialize()
         {
-            m_BattleModel = Dispatcher.GetModel<BattleModel>();
-            m_BattleModel.OnPlayerEntityInitialized += InitializeWidgets;
-
             m_SkillsModel = Dispatcher.GetModel<SkillsModel>();
             m_WorldDataModel = Dispatcher.GetModel<WorldDataModel>();
 
-            m_RhytmController = Dispatcher.GetController<RhytmController>();
-        }
+            m_BattleModel = Dispatcher.GetModel<BattleModel>();
 
-        private void InitializeWidgets(BattleEntity entity)
-        {
+            if (m_BattleModel.PlayerEntity == null)
+                m_BattleModel.OnPlayerEntityInitialized += CreateSpellWidgets;
+            else
+                CreateSpellWidgets(m_BattleModel.PlayerEntity);
+
+            m_RhytmController = Dispatcher.GetController<RhytmController>();
+
             m_UIWidget_ButtonClose.Initialize();
             m_UIWidget_ButtonClose.OnWidgetPress += ButtonCloseWidgetPressHandler;
             RegisterWidget(m_UIWidget_ButtonClose);
-
-            CreateSpellWidgets();
         }
 
-        private void CreateSpellWidgets()
+        private void CreateSpellWidgets(BattleEntity entity)
         {
-            LoadoutModule playerLodouatModule = m_BattleModel.PlayerEntity.GetModule<LoadoutModule>();
+            LoadoutModule playerLodouatModule = entity.GetModule<LoadoutModule>();
             foreach(int skillTypeID in playerLodouatModule.SelectedSkillTypeIDs)
             {
                 UIWidget_Spell spellWidget = m_WorldDataModel.UIAssets.InstantiatePrefab(m_WorldDataModel.UIAssets.UIWidgetSpellPrefab);
@@ -59,7 +58,7 @@ namespace RhytmTD.UI.Battle.View.UI
 
         private void PrepareSkillUseHandler(int skillTypeID, int skillID)
         {
-            m_BattleModel.OnSpellbookExit?.Invoke();
+            m_BattleModel.OnSpellbookUsed?.Invoke();
             m_SkillsModel.OnPrepareSkill?.Invoke(skillTypeID, skillID);
         }
 
