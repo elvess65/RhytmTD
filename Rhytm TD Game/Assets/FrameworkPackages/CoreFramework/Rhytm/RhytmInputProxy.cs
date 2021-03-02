@@ -5,15 +5,15 @@ namespace CoreFramework.Rhytm
     public class RhytmInputProxy : BaseController
     {
         private RhytmController m_RhytmController;
-        private double m_InputPrecious01;
+        public double InputPrecious01 { get; private set; }
         private float m_LastInputTime;
         private const float m_TICK_DURATION_REDUCE = 0.4f;
 
         /// <summary>
         /// Находиться ли текущее состояние времени в окне ввода
         /// </summary>
-        public bool IsInUseRange => 1 - m_RhytmController.ProgressToNextTickAnalog < m_InputPrecious01 ||
-                                        m_RhytmController.ProgressToNextTickAnalog < m_InputPrecious01;
+        public bool IsInUseRange => 1 - m_RhytmController.ProgressToNextTickAnalog < InputPrecious01 ||
+                                        m_RhytmController.ProgressToNextTickAnalog < InputPrecious01;
 
 
         public RhytmInputProxy(Dispatcher dispatcher) : base(dispatcher)
@@ -33,7 +33,7 @@ namespace CoreFramework.Rhytm
         /// <param name="inputPrecious01">Значение от 0 до 1</param>
         public void SetInputPrecious(double inputPrecious01)
         {
-            m_InputPrecious01 = inputPrecious01;
+            InputPrecious01 = inputPrecious01;
         }
 
         /// <summary>
@@ -57,9 +57,8 @@ namespace CoreFramework.Rhytm
         /// <summary>
         /// Находится ли ввод в окне ввода и кеширование результатов в контроллер
         /// </summary>
-        public bool IsInputTickValid()
+        public bool IsInputTickValid(double progressToNextTickAnalog)
         {
-            double progressToNextTickAnalog = m_RhytmController.ProgressToNextTickAnalog;
             bool result = false;
 
             //Pre tick
@@ -68,7 +67,7 @@ namespace CoreFramework.Rhytm
                 m_RhytmController.DeltaInput = -m_RhytmController.TimeToNextTick;
                 m_RhytmController.InputTickResult = EnumsCollection.InputTickResult.PreTick;
 
-                result = 1 - progressToNextTickAnalog <= m_InputPrecious01;
+                result = 1 - progressToNextTickAnalog <= InputPrecious01;
             }
             //Post tick
             else
@@ -76,13 +75,15 @@ namespace CoreFramework.Rhytm
                 m_RhytmController.DeltaInput = m_RhytmController.TickDurationSeconds - m_RhytmController.TimeToNextTick;
                 m_RhytmController.InputTickResult = EnumsCollection.InputTickResult.PostTick;
 
-                result = progressToNextTickAnalog <= m_InputPrecious01;
+                result = progressToNextTickAnalog <= InputPrecious01;
             }
 
             Log($"RhytmInputProxy: {m_RhytmController.InputTickResult} : {m_RhytmController.DeltaInput}");
 
             return result;
         }
+
+        public bool IsInputTickValid() => IsInputTickValid(m_RhytmController.ProgressToNextTickAnalog);
 
         private void Log(string message)
         {

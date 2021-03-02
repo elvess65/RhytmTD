@@ -89,7 +89,7 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_SolidEntitySpawnController = Dispatcher.GetController<SolidEntitySpawnController>();
 
             m_RhytmController = Dispatcher.GetController<RhytmController>();
-            m_RhytmController.OnTick += HandleTick;            
+            //m_RhytmController.OnTick += HandleTick;            
 
 #if DEBUG_SPAWN
             m_InputModel = Dispatcher.GetModel<InputModel>();

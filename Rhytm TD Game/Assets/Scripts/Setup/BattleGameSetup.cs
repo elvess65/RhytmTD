@@ -50,6 +50,7 @@ namespace RhytmTD.Setup
             dispatcher.CreateModel<InputModel>();
             dispatcher.CreateModel<MarkerModel>();
             dispatcher.CreateModel<StartBattleSequenceModel>();
+            dispatcher.CreateModel<PrepareSkilIUseModel>();
         }
     }
 }

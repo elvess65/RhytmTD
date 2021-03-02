@@ -41,8 +41,10 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_BattleModel.OnBattleStarted += BattleStartedHandler;
             m_BattleModel.OnBattleFinished += BattleFinishedHandler;
             m_BattleModel.OnSpellbookOpened += SpellBookOpenedHandler;
-            m_BattleModel.OnSpellbookClosed += SpellBookClosedHandler;
-            m_BattleModel.OnSpellbookPostUsed += SpellBookClosedHandler;
+            m_BattleModel.OnSpellbookClosed += SpellBookClosedAndPostUsedHandler;
+            m_BattleModel.OnSpellbookUsed += SpellBookUsedHandler;
+            m_BattleModel.OnSpellbookPostUsed += SpellBookClosedAndPostUsedHandler;
+            
 
             m_UpdateModel = Dispatcher.GetModel<UpdateModel>();
             m_UpdateModel.OnUpdate += Update;
@@ -62,6 +64,7 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_StateMachine = new BattleStateMachine<BattleState_Abstract>();
             m_StateMachine.AddState(new BattleState_LockInput());
             m_StateMachine.AddState(new BattleState_Normal());
+            m_StateMachine.AddState(new BattleState_Spellbook());
             m_StateMachine.Initialize<BattleState_LockInput>();
 
             //Rhytm data
@@ -105,10 +108,15 @@ namespace RhytmTD.Battle.Entities.Controllers
 
         private void SpellBookOpenedHandler()
         {
+            m_StateMachine.ChangeState<BattleState_Spellbook>();
+        }
+
+        private void SpellBookUsedHandler()
+        {
             m_StateMachine.ChangeState<BattleState_LockInput>();
         }
 
-        private void SpellBookClosedHandler()
+        private void SpellBookClosedAndPostUsedHandler()
         {
             m_StateMachine.ChangeState<BattleState_Normal>();
         }

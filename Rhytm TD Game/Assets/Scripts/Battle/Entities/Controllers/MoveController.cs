@@ -23,9 +23,9 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_BattleModel = Dispatcher.GetModel<BattleModel>();
             m_BattleModel.OnBattleStarted += BattleStartedHandler;
             m_BattleModel.OnBattleFinished += BattleFinishedHandler;
-            m_BattleModel.OnSpellbookOpened += SpellBookEnterHandler;
-            m_BattleModel.OnSpellbookClosed += SpellBookExitHandler;
-            m_BattleModel.OnSpellbookUsed += SpellBookExitHandler;
+            m_BattleModel.OnSpellbookOpened += SpellBookOpenedHandler;
+            m_BattleModel.OnSpellbookClosed += SpellBookClosedAndUsedHandler;
+            m_BattleModel.OnSpellbookUsed += SpellBookClosedAndUsedHandler;
 
             UpdateModel updateModel = Dispatcher.GetModel<UpdateModel>();
             updateModel.OnUpdate += Update;
@@ -63,12 +63,12 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_BattleModel.PlayerEntity?.GetModule<MoveModule>().Stop();
         }
 
-        private void SpellBookEnterHandler()
+        private void SpellBookOpenedHandler()
         {
             m_CurSpeedMultiplayer = ConstsCollection.SPELLBOOK_SPEED_MULTIPLAYER;
         }
 
-        private void SpellBookExitHandler()
+        private void SpellBookClosedAndUsedHandler()
         {
             m_CurSpeedMultiplayer = 1f;
         }

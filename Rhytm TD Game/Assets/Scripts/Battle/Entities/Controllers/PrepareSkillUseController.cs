@@ -2,7 +2,7 @@
 using CoreFramework.Rhytm;
 using RhytmTD.Battle.Entities.Models;
 using RhytmTD.Core;
-using UnityEngine;
+using RhytmTD.Data.Models;
 
 namespace RhytmTD.Battle.Entities.Controllers
 {
@@ -11,8 +11,11 @@ namespace RhytmTD.Battle.Entities.Controllers
     /// </summary>
     public class PrepareSkillUseController : BaseController
     {
+        private UpdateModel m_UpdateModel;
         private BattleModel m_BattleModel;
         private SkillsModel m_SkillsModel;
+        private PrepareSkilIUseModel m_PrepareSkilIUseModel;
+
         private RhytmController m_RhytmController;
         private SkillsController m_SkillsController;
         private FindTargetController m_FindTargetController;
@@ -30,17 +33,45 @@ namespace RhytmTD.Battle.Entities.Controllers
         {
             base.InitializeComplete();
 
+            m_UpdateModel = Dispatcher.GetModel<UpdateModel>();
+
             m_BattleModel = Dispatcher.GetModel<BattleModel>();
             m_BattleModel.OnPlayerEntityInitialized += PlayerInitializedHandlder;
+            m_BattleModel.OnSpellbookOpened += SpellbookOpenedHandler;
+            m_BattleModel.OnSpellbookClosed += SpellbookClosedHandler;
+            m_BattleModel.OnSpellbookUsed += SpellbookClosedHandler;
 
             m_SkillsModel = Dispatcher.GetModel<SkillsModel>();
             m_SkillsModel.OnPrepareSkill += PrepareSkillHandler;
+
+            m_PrepareSkilIUseModel = Dispatcher.GetModel<PrepareSkilIUseModel>();
+            m_PrepareSkilIUseModel.OnTouch += TouchHandler;
 
             m_RhytmController = Dispatcher.GetController<RhytmController>();
             m_SkillsController = Dispatcher.GetController<SkillsController>();
             m_FindTargetController = Dispatcher.GetController<FindTargetController>();
         }
 
+
+        private void SpellbookOpenedHandler()
+        {
+            m_UpdateModel.OnUpdate += UpdateHandler;
+        }
+
+        private void SpellbookClosedHandler()
+        {
+            m_UpdateModel.OnUpdate -= UpdateHandler;
+        }
+
+        private void UpdateHandler(float deltaTime)
+        {
+            UnityEngine.Debug.Log("Update " + m_RhytmController.ProgressToNextTickAnalog);
+        }
+
+        private void TouchHandler()
+        {
+            UnityEngine.Debug.Log("TOUCH");
+        }
 
         private void PrepareSkillHandler(int skillTypeID, int skillID)
         {
