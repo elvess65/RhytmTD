@@ -18,9 +18,10 @@ namespace RhytmTD.Battle.Entities.Models
         public Action<bool> OnBattleFinished;
         public Action OnBattleStarted;
         public Action OnBattleInitialize;
-        public Action OnSpellbookEnter;
-        public Action OnSpellbookExit;
+        public Action OnSpellbookOpened;
+        public Action OnSpellbookClosed;
         public Action OnSpellbookUsed;
+        public Action OnSpellbookPostUsed;
 
         public BattleModel()
         {

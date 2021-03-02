@@ -63,7 +63,7 @@ namespace RhytmTD.UI.Battle.View.UI
 
         private void SpellBookWidgetPressHandler()
         {
-            m_BattleModel?.OnSpellbookEnter();
+            m_BattleModel?.OnSpellbookOpened();
         }
     }
 }

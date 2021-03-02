@@ -23,8 +23,9 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_BattleModel = Dispatcher.GetModel<BattleModel>();
             m_BattleModel.OnBattleStarted += BattleStartedHandler;
             m_BattleModel.OnBattleFinished += BattleFinishedHandler;
-            m_BattleModel.OnSpellbookEnter += SpellBookEnterHandler;
-            m_BattleModel.OnSpellbookExit += SpellBookExitHandler;
+            m_BattleModel.OnSpellbookOpened += SpellBookEnterHandler;
+            m_BattleModel.OnSpellbookClosed += SpellBookExitHandler;
+            m_BattleModel.OnSpellbookUsed += SpellBookExitHandler;
 
             UpdateModel updateModel = Dispatcher.GetModel<UpdateModel>();
             updateModel.OnUpdate += Update;

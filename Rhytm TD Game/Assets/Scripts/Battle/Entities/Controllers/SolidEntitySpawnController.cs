@@ -35,8 +35,9 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_SpawnModel.OnShouldCreatePlayer += SpawnPlayer;
 
             m_BattleModel = Dispatcher.GetModel<BattleModel>();
-            m_BattleModel.OnSpellbookEnter += SpellBookEnterHandler;
-            m_BattleModel.OnSpellbookExit += SpellBookExitHandler;
+            m_BattleModel.OnSpellbookOpened += SpellBookOpenedHandler;
+            m_BattleModel.OnSpellbookClosed += SpellBookClosedHandler;
+            m_BattleModel.OnSpellbookUsed += SpellBookClosedHandler;
 
             m_AccountBaseParamsDataModel = Dispatcher.GetModel<AccountBaseParamsDataModel>();
 
@@ -88,7 +89,7 @@ namespace RhytmTD.Battle.Entities.Controllers
             return entity;
         }
 
-        private void SpellBookEnterHandler()
+        private void SpellBookOpenedHandler()
         {
             foreach(BattleEntity entity in m_BattleModel.BattleEntities)
             {
@@ -97,7 +98,7 @@ namespace RhytmTD.Battle.Entities.Controllers
             }
         }
 
-        private void SpellBookExitHandler()
+        private void SpellBookClosedHandler()
         {
             foreach (BattleEntity entity in m_BattleModel.BattleEntities)
             {

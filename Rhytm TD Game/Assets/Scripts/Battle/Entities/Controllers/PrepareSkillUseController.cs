@@ -6,6 +6,9 @@ using UnityEngine;
 
 namespace RhytmTD.Battle.Entities.Controllers
 {
+    /// <summary>
+    /// Is responsible for using ability after it was selected in spellbook
+    /// </summary>
     public class PrepareSkillUseController : BaseController
     {
         private BattleModel m_BattleModel;
@@ -15,6 +18,7 @@ namespace RhytmTD.Battle.Entities.Controllers
         private FindTargetController m_FindTargetController;
 
         private AnimationModule m_PlayerAnimationModule;
+        private LoadoutModule m_PlayerLodoutModule;
         private BattleEntity m_TargetEntity;
         private int m_SkillID;
 
@@ -37,15 +41,14 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_FindTargetController = Dispatcher.GetController<FindTargetController>();
         }
 
+
         private void PrepareSkillHandler(int skillTypeID, int skillID)
         {
             m_SkillID = skillID;
-            m_TargetEntity = m_FindTargetController.GetNearestTarget(m_BattleModel.PlayerEntity);
+            m_TargetEntity = GetTargetBySkillType(skillTypeID);
 
             if (m_TargetEntity != null)
             {
-                LoadoutModule loadoutModule = m_BattleModel.PlayerEntity.GetModule<LoadoutModule>();
-
                 m_PlayerAnimationModule.OnAnimationMoment += SkillAnimationMomentHandler;
                 m_PlayerAnimationModule.PlayAnimation(ConvertersCollection.ConvertSkillTypeID2AnimationType(skillTypeID));
             }
@@ -55,6 +58,8 @@ namespace RhytmTD.Battle.Entities.Controllers
         {
             m_PlayerAnimationModule.OnAnimationMoment -= SkillAnimationMomentHandler;
             m_SkillsController.UseSkill(m_SkillID, m_BattleModel.PlayerEntity.ID, m_TargetEntity.ID);
+
+            m_BattleModel.OnSpellbookPostUsed?.Invoke();
         }
 
         private void PlayerInitializedHandlder(BattleEntity playerEntity)
@@ -62,6 +67,24 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_BattleModel.OnPlayerEntityInitialized -= PlayerInitializedHandlder;
 
             m_PlayerAnimationModule = playerEntity.GetModule<AnimationModule>();
+            m_PlayerLodoutModule = playerEntity.GetModule<LoadoutModule>();
+        }
+
+        private BattleEntity GetTargetBySkillType(int skillTypeID)
+        {
+            BattleEntity target = null;
+            switch (skillTypeID)
+            {
+                case ConstsCollection.SkillConsts.FIREBALL_ID:
+                case ConstsCollection.SkillConsts.METEORITE_ID:
+                    target = m_FindTargetController.GetNearestTarget(m_BattleModel.PlayerEntity);
+                    break;
+                case ConstsCollection.SkillConsts.HEALTH_ID:
+                    target = m_BattleModel.PlayerEntity;
+                    break;
+            }
+
+            return target;
         }
     }
 }

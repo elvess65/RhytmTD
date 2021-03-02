@@ -64,7 +64,7 @@ namespace RhytmTD.UI.Battle.View.UI
 
         private void ButtonCloseWidgetPressHandler()
         {
-            m_BattleModel.OnSpellbookExit?.Invoke();
+            m_BattleModel.OnSpellbookClosed?.Invoke();
         }
     }
 }

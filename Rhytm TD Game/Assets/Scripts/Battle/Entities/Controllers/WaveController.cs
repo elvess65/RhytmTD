@@ -2,7 +2,6 @@
 //#define SINGLE_SPAWN
 //#define DEBUG_SPAWN
 
-using System.Collections;
 using System.Collections.Generic;
 using CoreFramework;
 using CoreFramework.Input;
@@ -83,8 +82,9 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_BattleModel = Dispatcher.GetModel<BattleModel>();
             m_BattleModel.OnBattleStarted += StartSpawnLoop;
             m_BattleModel.OnBattleFinished += BattleFinishedHandler;
-            m_BattleModel.OnSpellbookEnter += SpellBookEnterHandler;
-            m_BattleModel.OnSpellbookExit += SpellBookExitHandler;
+            m_BattleModel.OnSpellbookOpened += SpellBookOpenedHandler;
+            m_BattleModel.OnSpellbookClosed += SpellBookClosedHandler;
+            m_BattleModel.OnSpellbookUsed += SpellBookClosedHandler;
 
             m_SolidEntitySpawnController = Dispatcher.GetController<SolidEntitySpawnController>();
 
@@ -440,7 +440,7 @@ namespace RhytmTD.Battle.Entities.Controllers
 
         private int m_SpellbookTick;
 
-        private void SpellBookEnterHandler()
+        private void SpellBookOpenedHandler()
         {
             m_RhytmController.OnTick -= HandleTick;
 
@@ -448,10 +448,14 @@ namespace RhytmTD.Battle.Entities.Controllers
             Debug.Log("WaveController. Enter spell book at tick " + m_SpellbookTick);
         }
 
-        private void SpellBookExitHandler()
+        private void SpellBookClosedHandler()
         {
             m_RhytmController.OnTick += HandleTick;
-            Debug.Log("WaveController. Exit spell book at tick " + m_RhytmController.CurrentTick + " Entered: " + m_SpellbookTick);
+            int ticksInSpellBook = m_RhytmController.CurrentTick - m_SpellbookTick;
+
+            m_ActionTargetTick += ticksInSpellBook;
+
+            Debug.Log("WaveController. Exit spell book at tick " + m_RhytmController.CurrentTick + " Entered: " + m_SpellbookTick + " " + m_ActionTargetTick);
         }
 
 
