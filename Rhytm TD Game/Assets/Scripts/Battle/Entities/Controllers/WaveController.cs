@@ -445,17 +445,14 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_RhytmController.OnTick -= HandleTick;
 
             m_SpellbookTick = m_RhytmController.CurrentTick;
-            Debug.Log("WaveController. Enter spell book at tick " + m_SpellbookTick);
         }
 
         private void SpellBookClosedHandler()
         {
             m_RhytmController.OnTick += HandleTick;
+
             int ticksInSpellBook = m_RhytmController.CurrentTick - m_SpellbookTick;
-
             m_ActionTargetTick += ticksInSpellBook;
-
-            Debug.Log("WaveController. Exit spell book at tick " + m_RhytmController.CurrentTick + " Entered: " + m_SpellbookTick + " " + m_ActionTargetTick);
         }
 
 

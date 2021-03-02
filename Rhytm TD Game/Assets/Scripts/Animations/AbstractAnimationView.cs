@@ -65,7 +65,9 @@ namespace RhytmTD.Animation
                     {
                         //If there are some events and the key was not added - add to animation delay list
                         if (clip.events.Length > 0 && !m_AnimationActionEventsExecuteTime.ContainsKey(animKey))
+                        {
                             m_AnimationActionEventsExecuteTime.Add(animKey, clip.events[0].time);
+                        }
 
                         continue;
                     }

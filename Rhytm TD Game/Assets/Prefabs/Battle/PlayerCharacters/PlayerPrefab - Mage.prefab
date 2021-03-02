@@ -1195,7 +1195,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9d838b918f9b42d5adea31e90c728d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Graphics: {fileID: 6810269620064714245}
   ViewsToInit:
   - {fileID: 286159510}
   - {fileID: -9144846108971482084}
@@ -1212,11 +1211,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7796595ae4d2bd846b9f2cf3595a7f8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Graphics: {fileID: 0}
   Controller: {fileID: 2821583020469628258}
   ExposedAnimationKeys:
   - Type: 0
-    Key: AttackBase
+    Key: Attack01
   - Type: 1
     Key: GetHit
   - Type: 2
@@ -1228,7 +1226,7 @@ MonoBehaviour:
   - Type: 8
     Key: Victory
   - Type: 9
-    Key: Attack02
+    Key: MenuAction
   - Type: 12
     Key: WeaponSkill
   - Type: 13
@@ -1245,7 +1243,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f614a179d8f4e4070b150f5b9cbc4f3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Graphics: {fileID: 0}
   ProjectileSlot: {fileID: 2062404665840242934}
   HitSlot: {fileID: 8704355056960604131}
 --- !u!114 &-9144846108971482084
@@ -1260,7 +1257,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 429b133e4cdce924994e73a88461bddc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Graphics: {fileID: 0}
 --- !u!1 &1583688891333824
 GameObject:
   m_ObjectHideFlags: 0
