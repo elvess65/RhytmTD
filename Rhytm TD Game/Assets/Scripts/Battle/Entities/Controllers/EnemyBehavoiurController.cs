@@ -21,6 +21,7 @@ namespace RhytmTD.Battle.Entities.Controllers
         private const float m_ENEMY_FOCUS_Z_DISTANCE = 10;
         private const float m_ENEMY_MOVE_Z_DISTANCE = 2f;
         private const float m_ENEMY_ATTACK_DISTANCE = 2f;
+        private const float m_MOVE_TO_ENEMY_MIN_TIME = 0.1f;
 
         public EnemyBehavoiurController(Dispatcher dispatcher) : base(dispatcher)
         {
@@ -75,12 +76,8 @@ namespace RhytmTD.Battle.Entities.Controllers
                 }
                 else if (zDist <= m_ENEMY_MOVE_Z_DISTANCE && !moveModule.IsMoving)
                 {
-                    float moveTime = m_RhytmController.GetTimeToNextTick();
-                    float distanceToTarget = (entityTransformModule.Position - playerTransform.Position).magnitude;
                     Vector3 enemyDirection = playerTransform.Position - entityTransformModule.Position;
-                    
-                    moveModule.SetSpeed(distanceToTarget / moveTime);
-                    moveModule.StartMove(enemyDirection / distanceToTarget);
+                    StartMoveToEnemy(enemyDirection, moveModule, animationModule);
                 }
                 else if (moveModule.IsMoving)
                 {
@@ -88,15 +85,7 @@ namespace RhytmTD.Battle.Entities.Controllers
 
                     if (enemyDirection.sqrMagnitude <= m_ENEMY_ATTACK_DISTANCE * m_ENEMY_ATTACK_DISTANCE)
                     {
-                        moveModule.Stop();
-                        focusModule.StopFocus();
-
-                        entity.RemoveModule<EnemyBehaviourTag>();
-
-                        animationModule.PlayAnimation(EnumsCollection.AnimationTypes.Attack);
-                        m_DamageController.DealDamage(entity.ID, m_BattleModel.PlayerEntity.ID);
-
-                        m_SpawnModel.OnEnemyRemoved(entity);
+                        AttackEnemy(entity, moveModule, focusModule, animationModule);
                     }
                     else
                     {
@@ -104,6 +93,34 @@ namespace RhytmTD.Battle.Entities.Controllers
                     }
                 }
             }
+        }
+
+        private void StartMoveToEnemy(Vector3 enemyDirection, MoveModule moveModule, AnimationModule animationModule)
+        {
+            float moveTime = m_RhytmController.GetTimeToNextTick() - animationModule.AttackAnimationTime;
+
+            if (moveTime <= m_MOVE_TO_ENEMY_MIN_TIME)
+            {
+                moveTime += (float)m_RhytmController.TickDurationSeconds;
+            }
+
+            float distanceToTarget = enemyDirection.magnitude;
+
+            moveModule.SetSpeed(distanceToTarget / moveTime);
+            moveModule.StartMove(enemyDirection / distanceToTarget);
+        }
+
+        private void AttackEnemy(BattleEntity sender, MoveModule moveModule, FocusModule focusModule, AnimationModule animationModule)
+        {
+            moveModule.Stop();
+            focusModule.StopFocus();
+
+            sender.RemoveModule<EnemyBehaviourTag>();
+
+            animationModule.PlayAnimation(EnumsCollection.AnimationTypes.Attack);
+            m_DamageController.DealDamage(sender.ID, m_BattleModel.PlayerEntity.ID);
+
+            m_SpawnModel.OnEnemyRemoved(sender);
         }
     }
 }

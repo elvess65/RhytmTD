@@ -1,7 +1,6 @@
 ﻿
 using RhytmTD.Data;
 using System;
-using static CoreFramework.EnumsCollection;
 
 namespace RhytmTD.Battle.Entities
 {

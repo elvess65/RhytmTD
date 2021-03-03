@@ -8,6 +8,8 @@ namespace RhytmTD.Battle.Entities
     /// </summary>
     public class AnimationModule : IBattleModule
     {
+        public float AttackAnimationTime { get; set; }
+
         public event Action<AnimationTypes> OnPlayAnimation;
         public event Action<float> OnChangeSpeedMultiplayer;
         public event Action OnAnimationMoment;
