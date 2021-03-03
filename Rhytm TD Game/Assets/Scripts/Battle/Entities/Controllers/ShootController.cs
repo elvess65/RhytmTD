@@ -37,10 +37,13 @@ namespace RhytmTD.Battle.Entities.Controllers
         public void Shoot(BattleEntity sender, BattleEntity target)
         {
             Vector3 targetDir = GetTargetDir(sender, target);
-            BattleEntity bullet = CreateBullet(sender, targetDir);
+            float distanceToTarget = targetDir.magnitude;
+            Vector3 targetDirNorm = targetDir / distanceToTarget;
+            
+            BattleEntity bullet = CreateBullet(sender, targetDirNorm, distanceToTarget);
 
             bullet.GetModule<TargetModule>().SetTarget(target);
-            bullet.GetModule<MoveModule>().StartMove(targetDir.normalized);
+            bullet.GetModule<MoveModule>().StartMove(targetDirNorm);
 
             m_Bullets.Add(bullet.ID, bullet);
 
@@ -50,19 +53,19 @@ namespace RhytmTD.Battle.Entities.Controllers
  
         private Vector3 GetTargetDir(BattleEntity sender, BattleEntity target)
         {
-            TransformModule senderTransform = sender.GetModule<TransformModule>();
-            SlotModule targetTransform = target.GetModule<SlotModule>();
+            SlotModule senderSlotModule = sender.GetModule<SlotModule>();
+            SlotModule targetSlotModule = target.GetModule<SlotModule>();
 
-            return senderTransform.Position - targetTransform.HitSlot.position;
+            return targetSlotModule.HitSlot.position - senderSlotModule.ProjectileSlot.position;
         }
 
-        private BattleEntity CreateBullet(BattleEntity sender, Vector3 vecToTarget)
+        private BattleEntity CreateBullet(BattleEntity sender, Vector3 vecToTarget, float distanceToTarget)
         {
             SlotModule senderSlot = sender.GetModule<SlotModule>();
             DamageModule senderDamageModule = sender.GetModule<DamageModule>();
 
             Quaternion rotation = Quaternion.LookRotation(vecToTarget);
-            float speed = vecToTarget.magnitude / m_RhytmController.GetTimeToNextTick();
+            float speed = distanceToTarget / m_RhytmController.GetTimeToNextTick();
 
             BattleEntity bulletEnity = m_EffectsController.CreateBulletEffect(ConstsCollection.EffectConsts.ProjectileArrow, senderSlot.ProjectileSlot.position, rotation, speed, sender);
 

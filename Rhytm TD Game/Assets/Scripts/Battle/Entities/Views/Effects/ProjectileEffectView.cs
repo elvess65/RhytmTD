@@ -16,6 +16,7 @@ namespace RhytmTD.Battle.Entities.Views
             transformModule.OnPositionChanged += OnPositionChanged;
 
             transform.position = transformModule.Position;
+            transform.rotation = transformModule.Rotation;
 
             EffectModule effectModule = entity.GetModule<EffectModule>();
             effectModule.OnEffectAction += EffectActionHandler;
