@@ -74,7 +74,8 @@ namespace RhytmTD.Animation
                 }
             }
 
-            m_AnimationModule.AttackAnimationTime = GetActionEventExecuteTime(AnimationTypes.Attack);
+            if (m_AnimationModule != null)
+                m_AnimationModule.AttackAnimationTime = GetActionEventExecuteTime(AnimationTypes.Attack);
         }
 
         public float GetActionEventExecuteTime(AnimationTypes animationType)
