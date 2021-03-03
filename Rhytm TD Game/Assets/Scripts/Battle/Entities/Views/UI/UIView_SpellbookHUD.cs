@@ -1,6 +1,5 @@
 ﻿using CoreFramework.Rhytm;
 using RhytmTD.Battle.Entities;
-using RhytmTD.Battle.Entities.Controllers;
 using RhytmTD.Battle.Entities.Models;
 using RhytmTD.Data.Models.DataTableModels;
 using RhytmTD.UI.View;
@@ -20,8 +19,8 @@ namespace RhytmTD.UI.Battle.View.UI
         private RhytmController m_RhytmController;
 
         [Space]
-        [SerializeField] private UIWidget_Button m_UIWidget_ButtonClose;
-        [SerializeField] private RectTransform m_SpellsRoot;
+        [SerializeField] private UIWidget_Button m_UIWidget_ButtonClose = null;
+        [SerializeField] private RectTransform m_SpellsRoot = null;
 
         public override void Initialize()
         {

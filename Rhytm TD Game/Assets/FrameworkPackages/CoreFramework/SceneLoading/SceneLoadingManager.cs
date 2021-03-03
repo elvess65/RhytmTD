@@ -13,7 +13,7 @@ namespace CoreFramework.SceneLoading
 
         private enum FadeStates { Default, FadingIn, FadingOut, FadedIn, FadedOut };
 
-        [UnityEngine.SerializeField] private SceneTransitionFadeController m_TransitionController;
+        [UnityEngine.SerializeField] private SceneTransitionFadeController m_TransitionController = null;
 
         private void Start()
         {

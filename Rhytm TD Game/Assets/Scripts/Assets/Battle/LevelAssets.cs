@@ -7,7 +7,7 @@ namespace RhytmTD.Assets.Battle
     [CreateAssetMenu(fileName = "New Level Assets", menuName = "Assets/Level Assets", order = 101)]
     public class LevelAssets : PrefabAssets
     {
-        [SerializeField] private EnemyView[] m_EnemyPrefabs;
+        [SerializeField] private EnemyView[] m_EnemyPrefabs = null;
 
         public override void Initialize()
         {

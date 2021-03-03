@@ -7,8 +7,8 @@ namespace RhytmTD.OtherScenes.MenuScene
     {
         public System.Action OnCameraPushKeyFrameReached;
 
-        [SerializeField] private Transform CameraTransform;
-        [SerializeField] private AnimationCurve AnimationCurve;
+        [SerializeField] private Transform CameraTransform = null;
+        [SerializeField] private AnimationCurve AnimationCurve = null;
 
         private InterpolationData<Vector3> m_LerpData;
 

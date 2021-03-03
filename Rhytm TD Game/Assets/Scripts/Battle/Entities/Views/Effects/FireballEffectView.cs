@@ -5,8 +5,8 @@ namespace RhytmTD.Battle.Entities.Views.Effects
 {
     public class FireballEffectView : BattleEntityView
     {
-        [SerializeField] private GameObject MuzzleEffectPrefab;
-        [SerializeField] private GameObject BlowEffectPrefab;
+        [SerializeField] private GameObject MuzzleEffectPrefab = null;
+        [SerializeField] private GameObject BlowEffectPrefab = null;
 
         private TransformModule m_TransformModule;
 

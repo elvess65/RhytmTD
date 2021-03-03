@@ -9,8 +9,8 @@ namespace RhytmTD.UI.Components
     /// </summary>
     public class UIComponent_WidgetMetronome_Arrow : InterpolatableComponent
     {
-        [SerializeField] private RectTransform m_ControlledTransform;
-        [SerializeField] private Image m_ArrowImage;
+        [SerializeField] private RectTransform m_ControlledTransform = null;
+        [SerializeField] private Image m_ArrowImage = null;
 
         private Vector3 m_InitPos;
         private Vector3 m_InitScale;

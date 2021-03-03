@@ -5,7 +5,7 @@ namespace RhytmTD.Battle.Entities.Views.Effects
 {
     public class MeteoriteEffectView : BattleEntityView
     {
-        [SerializeField] private GameObject BlowEffectPrefab;
+        [SerializeField] private GameObject BlowEffectPrefab = null;
 
         private TransformModule m_TransformModule;
 

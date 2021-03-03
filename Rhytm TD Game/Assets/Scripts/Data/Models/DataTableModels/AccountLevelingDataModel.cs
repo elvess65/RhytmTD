@@ -18,8 +18,7 @@ namespace RhytmTD.Data.Models.DataTableModels
 
         public void ReorganizeData()
         {
-            return;
-            UnityEngine.Debug.Log($"Damage {Damage}. HP {HP}. Mana {Mana}.");
+           /* UnityEngine.Debug.Log($"Damage {Damage}. HP {HP}. Mana {Mana}.");
             
             for (int i = 0; i <= TestLevelProgression.TotalLevels; i++)
             {
@@ -40,7 +39,7 @@ namespace RhytmTD.Data.Models.DataTableModels
 
                 (int min, int max) damage = TestMinMaxProgression.EvaluateInt(progress);
                 UnityEngine.Debug.Log($" - Damage {damage.min} - {damage.max}");
-            }
+            }*/
         }
     }
 }

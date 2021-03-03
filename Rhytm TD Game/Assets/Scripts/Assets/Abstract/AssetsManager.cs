@@ -4,7 +4,7 @@ namespace RhytmTD.Assets.Abstract
 {
     public abstract class AssetsManager<T> : MonoBehaviour where T: PrefabAssets
     {
-        [SerializeField] private T m_PrefabAssets;
+        [SerializeField] private T m_PrefabAssets = null;
 
         public T GetAssets() => m_PrefabAssets;
 

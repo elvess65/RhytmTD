@@ -8,7 +8,7 @@ namespace RhytmTD.UI.Components
     /// </summary>
     public class UIComponent_InterpolatableGroup : MonoBehaviour
     {
-        [SerializeField] private InterpolatableComponent[] m_ControlledObjects;
+        [SerializeField] private InterpolatableComponent[] m_ControlledObjects = null;
 
         private InterpolationData<float> m_LerpData;
 

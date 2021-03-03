@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace PolygonArsenal
@@ -7,7 +6,7 @@ namespace PolygonArsenal
     public class PolygonEffectCycler : MonoBehaviour
     {
         [SerializeField]
-        List<GameObject> listOfEffects;
+        List<GameObject> listOfEffects = null;
 
         [Header("Loop length in seconds")]
         [SerializeField]

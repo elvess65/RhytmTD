@@ -5,8 +5,8 @@ namespace RhytmTD.Battle.Entities.Views
 {
     public class ProjectileEffectView : BattleEntityView
     {
-        [SerializeField] private GameObject MuzzleEffectPrefab;
-        [SerializeField] private GameObject BlowEffectPrefab;
+        [SerializeField] private GameObject MuzzleEffectPrefab = null;
+        [SerializeField] private GameObject BlowEffectPrefab = null;
 
         public override void Initialize(BattleEntity entity)
         {

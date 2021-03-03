@@ -6,7 +6,7 @@ namespace RhytmTD.Animation.DOTween
     public class ScaleTweenContainer : TweenContainer
     {
         [Header("Scale Tween")]
-        [SerializeField] private Vector3 m_Scale;
+        [SerializeField] private Vector3 m_Scale = Vector3.zero;
 
         public override Tween GetTween()
         {

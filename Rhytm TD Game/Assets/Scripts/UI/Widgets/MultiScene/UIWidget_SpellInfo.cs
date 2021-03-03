@@ -8,9 +8,9 @@ namespace RhytmTD.UI.Components.Spell
     {
         public System.Action OnButtonInfoPressHandler;
 
-        [SerializeField] private Text Text_SpellName;
         [SerializeField] private Image Image_SpellIcon;
-        [SerializeField] private UIWidget_Button UIWidget_ButtonInfo;
+        [SerializeField] private Text Text_SpellName = null;
+        [SerializeField] private UIWidget_Button UIWidget_ButtonInfo = null;
 
         public void Initialize(string spellName)
         {

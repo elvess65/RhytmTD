@@ -11,9 +11,9 @@ namespace RhytmTD.OtherScenes.MenuScene
 {
     public class MenuSceneManager : Singleton<MenuSceneManager>
     {
-        [SerializeField] private UIView_MenuScene UIView;
-        [SerializeField] private CameraContoller CameraContoller;
-        [SerializeField] private CharactersController CharacterController;
+        [SerializeField] private UIView_MenuScene UIView = null;
+        [SerializeField] private CameraContoller CameraContoller = null;
+        [SerializeField] private CharactersController CharacterController = null;
 
         //private AnimationEventsListener m_SelectedCharacterAnimationEventsListener;
 

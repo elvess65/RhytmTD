@@ -4,7 +4,7 @@ namespace RhytmTD.Battle.Entities.Views
 {
     public class EnemyView : BattleEntityView
     {
-        [SerializeField] private BattleEntityView[] ViewsToInit;
+        [SerializeField] private BattleEntityView[] ViewsToInit = null;
 
         private AnimationModule m_AnimationModule;
         private HealthModule m_HealthModule;

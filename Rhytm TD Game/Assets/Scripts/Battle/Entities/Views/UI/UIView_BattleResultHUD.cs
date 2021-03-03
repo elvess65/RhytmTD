@@ -15,7 +15,7 @@ namespace RhytmTD.UI.Battle.View.UI
         private BattleModel m_BattleModel;
 
         [Header("Widgets")]
-        [SerializeField] private UIWidget_BattleResult UIWidget_BattleResult;
+        [SerializeField] private UIWidget_BattleResult UIWidget_BattleResult = null;
 
         public override void Initialize()
         {

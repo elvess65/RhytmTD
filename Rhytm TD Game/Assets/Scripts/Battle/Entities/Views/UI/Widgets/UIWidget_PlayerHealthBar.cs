@@ -8,9 +8,9 @@ namespace RhytmTD.UI.Widget
     {
         [Space]
 
-        [SerializeField] private Image Foreground;
-        [SerializeField] private DOTweenSequenceAnimator DamageSequenceAnimator;
-        [SerializeField] private DOTweenSequenceAnimator HealSequenceAnimator;
+        [SerializeField] private Image Foreground = null;
+        [SerializeField] private DOTweenSequenceAnimator DamageSequenceAnimator = null;
+        [SerializeField] private DOTweenSequenceAnimator HealSequenceAnimator = null;
 
         public void Initialize()
         {

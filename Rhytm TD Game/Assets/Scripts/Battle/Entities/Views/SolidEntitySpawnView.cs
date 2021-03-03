@@ -14,8 +14,8 @@ namespace RhytmTD.Battle.Entities.Views
     /// </summary>
     public class SolidEntitySpawnView : BaseView, IDisposable
     {
-        [SerializeField] private Transform PlayerSpawnArea;
-        [SerializeField] private Transform[] EnemySpawnAreas;
+        [SerializeField] private Transform PlayerSpawnArea = null;
+        [SerializeField] private Transform[] EnemySpawnAreas = null;
 
         private SpawnModel m_SpawnModel;
         private WorldDataModel m_WorldModel;

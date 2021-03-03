@@ -17,9 +17,9 @@ namespace RhytmTD.UI.Battle.View.UI
         private BattleModel m_BattleModel;
 
         [Space]
-        [SerializeField] private UIWidget_Metronome UIWidget_Metronome;
-        [SerializeField] private UIWidget_PlayerHealthBar UIWidget_PlayerHealthBar;
-        [SerializeField] private UIWidget_Button UIWidget_SpellBookButton;
+        [SerializeField] private UIWidget_Metronome UIWidget_Metronome = null;
+        [SerializeField] private UIWidget_PlayerHealthBar UIWidget_PlayerHealthBar = null;
+        [SerializeField] private UIWidget_Button UIWidget_SpellBookButton = null;
 
         public override void Initialize()
         {

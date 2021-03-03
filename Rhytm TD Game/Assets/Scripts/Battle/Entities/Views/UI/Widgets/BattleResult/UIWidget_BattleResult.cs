@@ -14,9 +14,9 @@ namespace RhytmTD.UI.Widget
         private BattleModel m_BattleModel;
 
         [Space(10)]
-        [SerializeField] private Text Text_BattleResult;
-        [SerializeField] private Image Image_BattleResult;
-        [SerializeField] private Button Button_Replay;
+        [SerializeField] private Text Text_BattleResult = null;
+        [SerializeField] private Image Image_BattleResult = null;
+        [SerializeField] private Button Button_Replay = null;
 
         public void Initialze()
         {

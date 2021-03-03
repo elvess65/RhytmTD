@@ -8,7 +8,7 @@ namespace RhytmTD.UI.Components
     /// </summary>
     public class UIComponent_WidgetMetronome_Tick : MonoBehaviour
     {
-        [SerializeField] private Image m_ControlledImage;
+        [SerializeField] private Image m_ControlledImage = null;
 
         private WaitForSeconds m_WaitBeatIndicatorDelay;
 

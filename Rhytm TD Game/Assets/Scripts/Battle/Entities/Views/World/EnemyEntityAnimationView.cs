@@ -7,7 +7,7 @@ namespace RhytmTD.Battle.Entities.Views
 {
     public class EnemyEntityAnimationView : AbstractAnimationView
     {
-        [SerializeField] private DOTweenSequenceAnimator DOTweenController;
+        [SerializeField] private DOTweenSequenceAnimator DOTweenController = null;
 
         public override void PlayAnimation(AnimationTypes animationType)
         {

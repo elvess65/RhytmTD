@@ -7,9 +7,9 @@ namespace RhytmTD.Battle.Entities.Views
 {
     public class BattleUIView : BaseView
     {
-        [SerializeField] private UIView_BattleHUD m_UIView_BattleHUD;
-        [SerializeField] private UIView_SpellbookHUD m_UIView_SpellbookHUD;
-        [SerializeField] private UIView_BattleResultHUD m_UIView_BattleResultHUD;
+        [SerializeField] private UIView_BattleHUD m_UIView_BattleHUD = null;
+        [SerializeField] private UIView_SpellbookHUD m_UIView_SpellbookHUD = null;
+        [SerializeField] private UIView_BattleResultHUD m_UIView_BattleResultHUD = null;
 
         private BattleUIModel m_UIModel;
 

@@ -8,7 +8,7 @@ namespace RhytmTD.UI.Widget
         public System.Action<int, int> OnPrepareSkillUse;
 
         [Space]
-        [SerializeField] private UIWidget_SpellInfo UIWidgetSpellInfo;
+        [SerializeField] private UIWidget_SpellInfo UIWidgetSpellInfo = null;
 
         private int m_SkillTypeID;
         private int m_SkillID;

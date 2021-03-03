@@ -18,17 +18,17 @@ namespace CoreFramework.StateMachine
         /// <summary>
         /// Инициализация начальным состоянием
         /// </summary>
-        public virtual void Initialize<T>()
+        public virtual void Initialize<T1>() where T1 : AbstractState
         {
-            SetState(m_InitializedStates[typeof(T)]);
+            SetState(m_InitializedStates[typeof(T1)]);
         }
 
         /// <summary>
         /// Переход в состояние
         /// </summary>
-        public void ChangeState<T>() where T : AbstractState
+        public void ChangeState<T1>() where T1 : AbstractState
         {
-            ChangeState(m_InitializedStates[typeof(T)]);
+            ChangeState(m_InitializedStates[typeof(T1)]);
         }
 
         /// <summary>

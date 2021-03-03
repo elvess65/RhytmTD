@@ -17,8 +17,8 @@ namespace RhytmTD.UI.Widget
         private RhytmInputProxy m_RhytmInputProxy;
 
         [Space(10)]
-        [SerializeField] UIComponent_WidgetMetronome_Tick m_TickComponent;
-        [SerializeField] UIComponent_WidgetMetronome_Arrow[] m_ArrowComponents;
+        [SerializeField] UIComponent_WidgetMetronome_Tick m_TickComponent = null;
+        [SerializeField] UIComponent_WidgetMetronome_Arrow[] m_ArrowComponents = null;
    
         private InterpolationData<float> m_LerpData;
 

@@ -7,7 +7,7 @@ namespace RhytmTD.Battle.Entities.Views
 {
     public class PlayerView : BattleEntityView
     {
-        [SerializeField] private BattleEntityView[] ViewsToInit;
+        [SerializeField] private BattleEntityView[] ViewsToInit = null;
 
         private AnimationModule m_AnimationModule;
         private MarkerController m_MarkerController;
