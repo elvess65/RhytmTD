@@ -65,12 +65,81 @@ namespace RhytmTD.Battle.Entities.Controllers
 
         private void UpdateHandler(float deltaTime)
         {
-            UnityEngine.Debug.Log("Update " + m_RhytmController.ProgressToNextTickAnalog);
+            
+        }
+
+        private bool[] m_Pattern = new bool[] { true, true, false, true, true };
+        private int m_CurPatternIndex = 0;
+        private int m_NextCheckTick;
+        private bool m_IsSequenceStrted => m_NextCheckTick > 0;
+
+        private void EventProcessingTick(int ticksSinceStart)
+        {
+            if (ticksSinceStart == m_NextCheckTick)
+            {
+                UnityEngine.Debug.Log("Auto reset");
+                Reset();
+            }
+        }
+
+        private void GetNextTick()
+        {
+            for (int i = m_CurPatternIndex; i < m_Pattern.Length; i++)
+            {
+                m_NextCheckTick++;
+                m_CurPatternIndex++;
+
+                if (m_CurPatternIndex < m_Pattern.Length && m_Pattern[m_CurPatternIndex])
+                {
+                    break;
+                }
+            }
+
+            if (m_CurPatternIndex >= m_Pattern.Length)
+            {
+                UnityEngine.Debug.Log("Cast selected");
+                Reset();
+            }
+            else
+            {
+                UnityEngine.Debug.Log("Next tick at: " + m_NextCheckTick);
+            }
+        }
+
+        void Reset()
+        {
+            m_RhytmController.OnEventProcessingTick -= EventProcessingTick;
+            m_NextCheckTick = 0;
+            m_CurPatternIndex = 0;
         }
 
         private void TouchHandler()
         {
-            UnityEngine.Debug.Log("TOUCH");
+            UnityEngine.Debug.Log("TOUCH at tick " + m_RhytmController.CurrentTick);
+
+            if (!m_IsSequenceStrted)
+            {
+                UnityEngine.Debug.Log("Start sequence");
+                m_RhytmController.OnEventProcessingTick += EventProcessingTick;
+                m_NextCheckTick = m_RhytmController.CurrentTick;
+
+                GetNextTick();
+            }
+            else
+            {
+                if (m_RhytmController.CurrentTick == m_NextCheckTick)
+                {
+                    UnityEngine.Debug.Log("Correct");
+
+                    GetNextTick();
+                }
+                else
+                {
+                    UnityEngine.Debug.Log("Wrong");
+                    Reset();
+                    return;
+                }
+            }
         }
 
         private void PrepareSkillHandler(int skillTypeID, int skillID)
@@ -87,6 +156,9 @@ namespace RhytmTD.Battle.Entities.Controllers
 
         private void SkillAnimationMomentHandler()
         {
+            //TODO: Temp
+            Reset();
+
             m_PlayerAnimationModule.OnAnimationMoment -= SkillAnimationMomentHandler;
             m_SkillsController.UseSkill(m_SkillID, m_BattleModel.PlayerEntity.ID, m_TargetEntity.ID);
 

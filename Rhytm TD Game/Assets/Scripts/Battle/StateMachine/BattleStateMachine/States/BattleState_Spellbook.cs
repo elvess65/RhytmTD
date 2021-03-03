@@ -48,9 +48,9 @@ namespace RhytmTD.Battle.StateMachine
                 mappedProgressToNextTickAnalog = (mappedProgressToNextTickAnalog - 0.5f) * 2;
             }
 
-            Debug.Log("Touch " + m_RhytmController.ProgressToNextTickAnalog + " " + mappedProgressToNextTickAnalog);
+            //Debug.Log("Raw tick: " + m_RhytmController.ProgressToNextTickAnalog + " " + mappedProgressToNextTickAnalog);
 
-            if (m_RhytmInputProxy.IsInputAllowed() && m_RhytmInputProxy.IsInputTickValid(mappedProgressToNextTickAnalog))
+            if (m_RhytmInputProxy.IsInputAllowed() && m_RhytmInputProxy.IsInputTickValid())
             {
                 m_PrepareSkilIUseModel.OnTouch?.Invoke();
             }
