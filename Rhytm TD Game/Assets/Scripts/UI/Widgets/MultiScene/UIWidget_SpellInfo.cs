@@ -1,8 +1,7 @@
-﻿using RhytmTD.UI.Widget;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace RhytmTD.UI.Components.Spell
+namespace RhytmTD.UI.Widget
 {
     public class UIWidget_SpellInfo : UIWidget
     {

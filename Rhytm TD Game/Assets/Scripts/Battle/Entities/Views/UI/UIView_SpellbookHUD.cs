@@ -16,7 +16,6 @@ namespace RhytmTD.UI.Battle.View.UI
         private BattleModel m_BattleModel;
         private SkillsModel m_SkillsModel;
         private WorldDataModel m_WorldDataModel;
-        private RhytmController m_RhytmController;
 
         [Space]
         [SerializeField] private UIWidget_Button m_UIWidget_ButtonClose = null;
@@ -34,8 +33,6 @@ namespace RhytmTD.UI.Battle.View.UI
             else
                 CreateSpellWidgets(m_BattleModel.PlayerEntity);
 
-            m_RhytmController = Dispatcher.GetController<RhytmController>();
-
             m_UIWidget_ButtonClose.Initialize();
             m_UIWidget_ButtonClose.OnWidgetPress += ButtonCloseWidgetPressHandler;
             RegisterWidget(m_UIWidget_ButtonClose);
@@ -51,15 +48,8 @@ namespace RhytmTD.UI.Battle.View.UI
                 spellWidget.transform.localPosition = Vector3.zero;
 
                 spellWidget.Initialize(skillTypeID, playerLodouatModule.GetSkillIDByTypeID(skillTypeID));
-                spellWidget.OnPrepareSkillUse += PrepareSkillUseHandler;
                 RegisterWidget(spellWidget);
             }
-        }
-
-        private void PrepareSkillUseHandler(int skillTypeID, int skillID)
-        {
-            m_BattleModel.OnSpellbookUsed?.Invoke();
-            m_SkillsModel.OnPrepareSkill?.Invoke(skillTypeID, skillID);
         }
 
         private void ButtonCloseWidgetPressHandler()

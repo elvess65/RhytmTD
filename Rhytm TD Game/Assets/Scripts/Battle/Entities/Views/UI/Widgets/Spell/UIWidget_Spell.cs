@@ -1,14 +1,12 @@
-﻿using RhytmTD.UI.Components.Spell;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace RhytmTD.UI.Widget
 {
     public class UIWidget_Spell : UIWidget
     {
-        public System.Action<int, int> OnPrepareSkillUse;
-
         [Space]
         [SerializeField] private UIWidget_SpellInfo UIWidgetSpellInfo = null;
+        [SerializeField] private UIWidget_SpellSequence UIWidgetSpellSequence;
 
         private int m_SkillTypeID;
         private int m_SkillID;
@@ -20,6 +18,8 @@ namespace RhytmTD.UI.Widget
 
             UIWidgetSpellInfo.Initialize(TEMP_GetSpellNameByID(m_SkillTypeID));
             UIWidgetSpellInfo.OnButtonInfoPressHandler += SpellInfoPressHandler;
+
+            UIWidgetSpellSequence.Initialize(skillTypeID);
 
             InternalInitialize();
         }
@@ -46,7 +46,7 @@ namespace RhytmTD.UI.Widget
 
         private void SpellInfoPressHandler()
         {
-            OnPrepareSkillUse?.Invoke(m_SkillTypeID, m_SkillID);
+            Debug.Log("Get info for " + m_SkillTypeID + " " + m_SkillID);
         }
     }
 }

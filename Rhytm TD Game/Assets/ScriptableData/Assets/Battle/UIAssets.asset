@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UIWidgetSpellPrefab: {fileID: 9050053722575235768, guid: ddac5507153ca7c42a31777d496adbd3,
     type: 3}
+  UIComponentSpellSequenceItemPrefab: {fileID: 1852288047865192949, guid: 3f031fe9330bf4dbfbf5f1745ba6948f,
+    type: 3}

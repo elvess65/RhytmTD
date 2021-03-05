@@ -14,7 +14,6 @@ namespace RhytmTD.Battle.Entities.Controllers
     {
         private UpdateModel m_UpdateModel;
         private BattleModel m_BattleModel;
-        private SkillsModel m_SkillsModel;
         private PrepareSkilIUseModel m_PrepareSkilIUseModel;
 
         private RhytmController m_RhytmController;
@@ -25,6 +24,11 @@ namespace RhytmTD.Battle.Entities.Controllers
         private LoadoutModule m_PlayerLodoutModule;
         private BattleEntity m_TargetEntity;
         private int m_SkillID;
+
+        private bool m_IsSequenceStrted;
+        private Dictionary<int, bool[]> m_SkillTypeID2Pattern;
+        private Dictionary<int, SkillProgress> m_SkillTypeID2Progress;
+
 
         public PrepareSkillUseController(Dispatcher dispatcher) : base(dispatcher)
         {
@@ -42,11 +46,9 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_BattleModel.OnSpellbookClosed += SpellbookClosedHandler;
             m_BattleModel.OnSpellbookUsed += SpellbookClosedHandler;
 
-            m_SkillsModel = Dispatcher.GetModel<SkillsModel>();
-            m_SkillsModel.OnPrepareSkill += PrepareSkillHandler;
-
             m_PrepareSkilIUseModel = Dispatcher.GetModel<PrepareSkilIUseModel>();
-            m_PrepareSkilIUseModel.OnTouch += TouchHandler;
+            m_PrepareSkilIUseModel.OnCorrectTouch += CorrectTouchHandler;
+            m_PrepareSkilIUseModel.OnWrongTouch += WrongTouchHandler;
 
             m_RhytmController = Dispatcher.GetController<RhytmController>();
             m_SkillsController = Dispatcher.GetController<SkillsController>();
@@ -70,12 +72,31 @@ namespace RhytmTD.Battle.Entities.Controllers
         }
 
 
-        private Dictionary<int, bool[]> m_SkillTypeID2Pattern;
-        private Dictionary<int, SkillProgress> m_SkillTypeID2Progress;
+        private void CorrectTouchHandler()
+        {
+            UnityEngine.Debug.LogError("TOUCH at tick " + m_RhytmController.CurrentTick);
 
-        private bool m_IsSequenceStrted;
+            if (!m_IsSequenceStrted)
+            {
+                HandleStartSequence();
+            }
+            else
+            {
+                HandleContinueSequence();
+            }
+        }
 
-        private void EventProcessingTick(int ticksSinceStart)
+        private void WrongTouchHandler()
+        {
+            foreach (int skillID in m_SkillTypeID2Pattern.Keys)
+            {
+                ResetSkillProgress(skillID);
+            }
+
+            HandleAllSkillsReset();
+        }
+
+        private void EventProcessingTickHandler(int ticksSinceStart)
         {
             foreach (int skillID in m_SkillTypeID2Pattern.Keys)
             {
@@ -85,19 +106,79 @@ namespace RhytmTD.Battle.Entities.Controllers
                     UnityEngine.Debug.Log("Auto reset for " + skillID);
                     ResetSkillProgress(skillID);
                 }
+                else
+                {
+                    m_PrepareSkilIUseModel.OnSpellNextTickAuto(skillID);
+                }
             }
 
-            if (CheckAllSkillsReset())
+            HandleAllSkillsReset();
+        }
+
+
+        private void HandleStartSequence()
+        {
+            m_IsSequenceStrted = true;
+
+            //Set initial value for all skills
+            foreach (int skillID in m_SkillTypeID2Pattern.Keys)
             {
-                UnityEngine.Debug.LogError("All auto reseted");
+                m_SkillTypeID2Progress[skillID].NextTick = m_RhytmController.CurrentTick;
+                CalculateNextTickForSkill(skillID);
+            }
+
+            //Subscribe for processing tick event
+            m_RhytmController.OnEventProcessingTick += EventProcessingTickHandler;
+        }
+
+        private void HandleContinueSequence()
+        {
+            foreach (int skillID in m_SkillTypeID2Pattern.Keys)
+            {
+                //If current tick is correct for the skill
+                if (m_RhytmController.CurrentTick == m_SkillTypeID2Progress[skillID].NextTick)
+                {
+                    CalculateNextTickForSkill(skillID);
+                }
+
+                else
+                {
+                    UnityEngine.Debug.LogError("Wrong for " + skillID);
+                    ResetSkillProgress(skillID);
+                }
+            }
+
+            HandleAllSkillsReset();
+        }
+
+        private void HandleAllSkillsReset()
+        {
+            if (IsAllSkillsReset())
+            {
+                UnityEngine.Debug.LogError("All reseted");
+
+                m_RhytmController.OnEventProcessingTick -= EventProcessingTickHandler;
                 m_IsSequenceStrted = false;
+
+                m_PrepareSkilIUseModel.OnAllSpellsReset?.Invoke();
             }
         }
 
-        private void CalculateNextTickForSkill(int skillID)
+        private void HandleSkillSelection(int skillTypeID)
         {
-            SkillProgress skillProgress = m_SkillTypeID2Progress[skillID];
-            bool[] skillPattern = m_SkillTypeID2Pattern[skillID];
+            UnityEngine.Debug.Log("Cast selected " + skillTypeID);
+
+            m_PrepareSkilIUseModel.OnSpellSelected?.Invoke(skillTypeID);
+            m_BattleModel.OnSpellbookUsed?.Invoke();
+
+            StartUseSkill(skillTypeID, m_PlayerLodoutModule.GetSkillIDByTypeID(skillTypeID));
+        }
+
+
+        private void CalculateNextTickForSkill(int skillTypeID)
+        {
+            SkillProgress skillProgress = m_SkillTypeID2Progress[skillTypeID];
+            bool[] skillPattern = m_SkillTypeID2Pattern[skillTypeID];
 
             for (int i = skillProgress.CurProgressIndex; i < skillPattern.Length; i++)
             {
@@ -110,23 +191,24 @@ namespace RhytmTD.Battle.Entities.Controllers
                 }
             }
 
-            if (m_SkillTypeID2Progress[skillID].CurProgressIndex >= skillPattern.Length)
+            if (m_SkillTypeID2Progress[skillTypeID].CurProgressIndex >= skillPattern.Length)
             {
-                UnityEngine.Debug.Log("Cast selected " + skillID);
-                ResetSkillProgress(skillID);
+                HandleSkillSelection(skillTypeID);
             }
             else
             {
-                UnityEngine.Debug.Log("Next tick at: " + m_SkillTypeID2Progress[skillID].NextTick + " for " + skillID);
+                UnityEngine.Debug.Log("Next tick at: " + m_SkillTypeID2Progress[skillTypeID].NextTick + " for " + skillTypeID);
+                m_PrepareSkilIUseModel.OnSpellNextTickInput(skillTypeID);
             }
         }
 
-        private void ResetSkillProgress(int skillID)
+        private void ResetSkillProgress(int skillTypeID)
         {
-            m_SkillTypeID2Progress[skillID].Reset();
+            m_SkillTypeID2Progress[skillTypeID].Reset();
+            m_PrepareSkilIUseModel.OnSpellReset?.Invoke(skillTypeID);
         }
          
-        private bool CheckAllSkillsReset()
+        private bool IsAllSkillsReset()
         {
             int amountOfResetedSkills = 0;
             foreach (int skillID in m_SkillTypeID2Pattern.Keys)
@@ -137,63 +219,11 @@ namespace RhytmTD.Battle.Entities.Controllers
                 }
             }
 
-            bool result = amountOfResetedSkills == m_SkillTypeID2Pattern.Count;
-            if (result)
-            {
-                m_RhytmController.OnEventProcessingTick -= EventProcessingTick;
-            }
-
-            return result;
-        }
-
-        private void TouchHandler()
-        {
-            UnityEngine.Debug.LogError("TOUCH at tick " + m_RhytmController.CurrentTick);
-
-            if (!m_IsSequenceStrted)
-            {
-                UnityEngine.Debug.LogError("Start sequence");
-
-                m_IsSequenceStrted = true;
-
-                //Set initial value for all skills
-                foreach (int skillID in m_SkillTypeID2Pattern.Keys)
-                {
-                    m_SkillTypeID2Progress[skillID].NextTick = m_RhytmController.CurrentTick;
-                    CalculateNextTickForSkill(skillID);
-                }
-
-                //Subscribe for processing tick event
-                m_RhytmController.OnEventProcessingTick += EventProcessingTick;
-            }
-            else
-            {
-                foreach (int skillID in m_SkillTypeID2Pattern.Keys)
-                {
-                    //If current tick is correct for the skill
-                    if (m_RhytmController.CurrentTick == m_SkillTypeID2Progress[skillID].NextTick)
-                    {
-                        CalculateNextTickForSkill(skillID);
-                    }
-
-                    else
-                    {
-                        UnityEngine.Debug.LogError("Wrong for " + skillID);
-                        ResetSkillProgress(skillID);
-                    }
-                }
-
-                if (CheckAllSkillsReset())
-                {
-                    UnityEngine.Debug.LogError("All reseted");
-
-                    m_IsSequenceStrted = false;
-                }
-            }
+            return amountOfResetedSkills == m_SkillTypeID2Pattern.Count;
         }
 
 
-        private void PrepareSkillHandler(int skillTypeID, int skillID)
+        private void StartUseSkill(int skillTypeID, int skillID)
         {
             m_SkillID = skillID;
             m_TargetEntity = GetTargetBySkillType(skillTypeID);
@@ -220,13 +250,16 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_PlayerAnimationModule = playerEntity.GetModule<AnimationModule>();
             m_PlayerLodoutModule = playerEntity.GetModule<LoadoutModule>();
 
+            InitializePatterns();
+        }
+
+        private void InitializePatterns()
+        {
             m_SkillTypeID2Pattern = new Dictionary<int, bool[]>();
             m_SkillTypeID2Progress = new Dictionary<int, SkillProgress>();
 
             foreach (int skillTypeID in m_PlayerLodoutModule.SelectedSkillTypeIDs)
             {
- 
-                UnityEngine.Debug.Log(skillTypeID);
                 //Fill patterns
                 m_SkillTypeID2Pattern.Add(skillTypeID, tempSkillPatterns[skillTypeID]);
 
@@ -234,13 +267,6 @@ namespace RhytmTD.Battle.Entities.Controllers
                 m_SkillTypeID2Progress.Add(skillTypeID, new SkillProgress());
             }
         }
-
-        private Dictionary<int, bool[]> tempSkillPatterns = new Dictionary<int, bool[]>()
-        {
-            { ConstsCollection.SkillConsts.FIREBALL_ID, new bool[]  { true, true, false, true,  true } },
-            { ConstsCollection.SkillConsts.METEORITE_ID, new bool[] { true, true, false, false, true } },
-            { ConstsCollection.SkillConsts.HEALTH_ID, new bool[]    { true, true, false, true,  false, true } },
-        };
 
         private BattleEntity GetTargetBySkillType(int skillTypeID)
         {
@@ -259,6 +285,7 @@ namespace RhytmTD.Battle.Entities.Controllers
             return target;
         }
 
+
         private class SkillProgress
         {
             public int CurProgressIndex;
@@ -268,5 +295,13 @@ namespace RhytmTD.Battle.Entities.Controllers
 
             public void Reset() => CurProgressIndex = NextTick = 0;
         }
+
+
+        public static Dictionary<int, bool[]> tempSkillPatterns = new Dictionary<int, bool[]>()
+        {
+            { ConstsCollection.SkillConsts.FIREBALL_ID, new bool[]  { true, true, false, true,  true } },
+            { ConstsCollection.SkillConsts.METEORITE_ID, new bool[] { true, true, false, false, true } },
+            { ConstsCollection.SkillConsts.HEALTH_ID, new bool[]    { true, true, false, true,  false, true } },
+        };
     }
 }

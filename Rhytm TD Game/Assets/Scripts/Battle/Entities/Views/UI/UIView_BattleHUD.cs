@@ -12,7 +12,6 @@ namespace RhytmTD.UI.Battle.View.UI
     /// </summary>
     public class UIView_BattleHUD : UIView_Abstract
     {
-        private RhytmController m_RhytmController;
         private HealthModule m_HealthModule;
         private BattleModel m_BattleModel;
 
@@ -21,6 +20,9 @@ namespace RhytmTD.UI.Battle.View.UI
         [SerializeField] private UIWidget_PlayerHealthBar UIWidget_PlayerHealthBar = null;
         [SerializeField] private UIWidget_Button UIWidget_SpellBookButton = null;
 
+        public UIWidget_Metronome ExposedUIWidget_Metronome => UIWidget_Metronome;
+
+
         public override void Initialize()
         {
             m_BattleModel = Dispatcher.GetModel<BattleModel>();
@@ -28,8 +30,6 @@ namespace RhytmTD.UI.Battle.View.UI
                 m_BattleModel.OnPlayerEntityInitialized += PlayerInitialized;
             else
                 PlayerInitialized(m_BattleModel.PlayerEntity);
-
-            m_RhytmController = Dispatcher.GetController<RhytmController>();
 
             UIWidget_Metronome.Initialize();    
             RegisterWidget(UIWidget_Metronome);
