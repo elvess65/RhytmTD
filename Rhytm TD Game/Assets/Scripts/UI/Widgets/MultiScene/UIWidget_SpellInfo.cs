@@ -3,6 +3,9 @@ using UnityEngine.UI;
 
 namespace RhytmTD.UI.Widget
 {
+    /// <summary>
+    /// Brief spell info
+    /// </summary>
     public class UIWidget_SpellInfo : UIWidget
     {
         public System.Action OnButtonInfoPressHandler;

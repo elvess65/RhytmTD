@@ -7,10 +7,29 @@ namespace RhytmTD.Battle.Entities.Models
         public System.Action OnCorrectTouch;
         public System.Action OnWrongTouch;
 
-        public System.Action<int> OnSpellReset;
-        public System.Action OnAllSpellsReset;
-        public System.Action<int> OnSpellNextTickInput;
-        public System.Action<int> OnSpellNextTickAuto;
-        public System.Action<int> OnSpellSelected;
+        /// <summary>
+        /// The skill sequence was reset (missed time or wrong input)
+        /// </summary>
+        public System.Action<int> OnSkillReset;
+
+        /// <summary>
+        /// All skill's sequences were failed. Break sequence
+        /// </summary>
+        public System.Action OnSequenceFailed;
+
+        /// <summary>
+        /// Skill step was reached using input
+        /// </summary>
+        public System.Action<int> OnSkillStepReachedInput;
+
+        /// <summary>
+        /// Skill step was reached using time
+        /// </summary>
+        public System.Action<int> OnSkillStepReachedAuto;
+
+        /// <summary>
+        /// Skill was selected
+        /// </summary>
+        public System.Action<int> OnSkillSelected;
     }
 }

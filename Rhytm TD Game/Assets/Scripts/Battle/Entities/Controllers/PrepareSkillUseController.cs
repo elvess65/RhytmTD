@@ -12,7 +12,6 @@ namespace RhytmTD.Battle.Entities.Controllers
     /// </summary>
     public class PrepareSkillUseController : BaseController
     {
-        private UpdateModel m_UpdateModel;
         private BattleModel m_BattleModel;
         private PrepareSkilIUseModel m_PrepareSkilIUseModel;
 
@@ -38,13 +37,11 @@ namespace RhytmTD.Battle.Entities.Controllers
         {
             base.InitializeComplete();
 
-            m_UpdateModel = Dispatcher.GetModel<UpdateModel>();
-
             m_BattleModel = Dispatcher.GetModel<BattleModel>();
             m_BattleModel.OnPlayerEntityInitialized += PlayerInitializedHandlder;
             m_BattleModel.OnSpellbookOpened += SpellbookOpenedHandler;
-            m_BattleModel.OnSpellbookClosed += SpellbookClosedHandler;
-            m_BattleModel.OnSpellbookUsed += SpellbookClosedHandler;
+            m_BattleModel.OnSpellbookClosed += SpellbookClosedOrUsedHandler;
+            m_BattleModel.OnSpellbookUsed += SpellbookClosedOrUsedHandler;
 
             m_PrepareSkilIUseModel = Dispatcher.GetModel<PrepareSkilIUseModel>();
             m_PrepareSkilIUseModel.OnCorrectTouch += CorrectTouchHandler;
@@ -58,24 +55,26 @@ namespace RhytmTD.Battle.Entities.Controllers
 
         private void SpellbookOpenedHandler()
         {
-            m_UpdateModel.OnUpdate += UpdateHandler;
         }
 
-        private void SpellbookClosedHandler()
+        private void SpellbookClosedOrUsedHandler()
         {
-            m_UpdateModel.OnUpdate -= UpdateHandler;
         }
 
-        private void UpdateHandler(float deltaTime)
+        private void PlayerInitializedHandlder(BattleEntity playerEntity)
         {
-            
+            m_BattleModel.OnPlayerEntityInitialized -= PlayerInitializedHandlder;
+
+            m_PlayerAnimationModule = playerEntity.GetModule<AnimationModule>();
+            m_PlayerLodoutModule = playerEntity.GetModule<LoadoutModule>();
+
+            InitializePatterns();
         }
 
+        #region Sequence
 
         private void CorrectTouchHandler()
         {
-            UnityEngine.Debug.LogError("TOUCH at tick " + m_RhytmController.CurrentTick);
-
             if (!m_IsSequenceStrted)
             {
                 HandleStartSequence();
@@ -93,7 +92,7 @@ namespace RhytmTD.Battle.Entities.Controllers
                 ResetSkillProgress(skillID);
             }
 
-            HandleAllSkillsReset();
+            HandleSequenceFailed();
         }
 
         private void EventProcessingTickHandler(int ticksSinceStart)
@@ -103,19 +102,19 @@ namespace RhytmTD.Battle.Entities.Controllers
                 //If current tick is next tick for the skill - skill is missed
                 if (m_SkillTypeID2Progress[skillID].NextTick == ticksSinceStart)
                 {
-                    UnityEngine.Debug.Log("Auto reset for " + skillID);
+
                     ResetSkillProgress(skillID);
                 }
                 else
                 {
-                    m_PrepareSkilIUseModel.OnSpellNextTickAuto(skillID);
+                    m_PrepareSkilIUseModel.OnSkillStepReachedAuto(skillID);
                 }
             }
 
-            HandleAllSkillsReset();
+            HandleSequenceFailed();
         }
 
-
+        
         private void HandleStartSequence()
         {
             m_IsSequenceStrted = true;
@@ -143,32 +142,27 @@ namespace RhytmTD.Battle.Entities.Controllers
 
                 else
                 {
-                    UnityEngine.Debug.LogError("Wrong for " + skillID);
                     ResetSkillProgress(skillID);
                 }
             }
 
-            HandleAllSkillsReset();
+            HandleSequenceFailed();
         }
 
-        private void HandleAllSkillsReset()
+        private void HandleSequenceFailed()
         {
-            if (IsAllSkillsReset())
+            if (IsAllSkillsReseted())
             {
-                UnityEngine.Debug.LogError("All reseted");
-
                 m_RhytmController.OnEventProcessingTick -= EventProcessingTickHandler;
                 m_IsSequenceStrted = false;
 
-                m_PrepareSkilIUseModel.OnAllSpellsReset?.Invoke();
+                m_PrepareSkilIUseModel.OnSequenceFailed?.Invoke();
             }
         }
 
         private void HandleSkillSelection(int skillTypeID)
         {
-            UnityEngine.Debug.Log("Cast selected " + skillTypeID);
-
-            m_PrepareSkilIUseModel.OnSpellSelected?.Invoke(skillTypeID);
+            m_PrepareSkilIUseModel.OnSkillSelected?.Invoke(skillTypeID);
             m_BattleModel.OnSpellbookUsed?.Invoke();
 
             StartUseSkill(skillTypeID, m_PlayerLodoutModule.GetSkillIDByTypeID(skillTypeID));
@@ -197,18 +191,17 @@ namespace RhytmTD.Battle.Entities.Controllers
             }
             else
             {
-                UnityEngine.Debug.Log("Next tick at: " + m_SkillTypeID2Progress[skillTypeID].NextTick + " for " + skillTypeID);
-                m_PrepareSkilIUseModel.OnSpellNextTickInput(skillTypeID);
+                m_PrepareSkilIUseModel.OnSkillStepReachedInput(skillTypeID);
             }
         }
 
         private void ResetSkillProgress(int skillTypeID)
         {
             m_SkillTypeID2Progress[skillTypeID].Reset();
-            m_PrepareSkilIUseModel.OnSpellReset?.Invoke(skillTypeID);
+            m_PrepareSkilIUseModel.OnSkillReset?.Invoke(skillTypeID);
         }
          
-        private bool IsAllSkillsReset()
+        private bool IsAllSkillsReseted()
         {
             int amountOfResetedSkills = 0;
             foreach (int skillID in m_SkillTypeID2Pattern.Keys)
@@ -222,6 +215,7 @@ namespace RhytmTD.Battle.Entities.Controllers
             return amountOfResetedSkills == m_SkillTypeID2Pattern.Count;
         }
 
+        #endregion
 
         private void StartUseSkill(int skillTypeID, int skillID)
         {
@@ -243,15 +237,6 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_BattleModel.OnSpellbookPostUsed?.Invoke();
         }
 
-        private void PlayerInitializedHandlder(BattleEntity playerEntity)
-        {
-            m_BattleModel.OnPlayerEntityInitialized -= PlayerInitializedHandlder;
-
-            m_PlayerAnimationModule = playerEntity.GetModule<AnimationModule>();
-            m_PlayerLodoutModule = playerEntity.GetModule<LoadoutModule>();
-
-            InitializePatterns();
-        }
 
         private void InitializePatterns()
         {

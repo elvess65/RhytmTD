@@ -14,7 +14,6 @@ namespace RhytmTD.UI.Battle.View.UI
     public class UIView_SpellbookHUD : UIView_Abstract
     {
         private BattleModel m_BattleModel;
-        private SkillsModel m_SkillsModel;
         private WorldDataModel m_WorldDataModel;
 
         [Space]
@@ -23,7 +22,6 @@ namespace RhytmTD.UI.Battle.View.UI
 
         public override void Initialize()
         {
-            m_SkillsModel = Dispatcher.GetModel<SkillsModel>();
             m_WorldDataModel = Dispatcher.GetModel<WorldDataModel>();
 
             m_BattleModel = Dispatcher.GetModel<BattleModel>();

@@ -2,11 +2,14 @@
 
 namespace RhytmTD.UI.Widget
 {
+    /// <summary>
+    /// Widgets that contains spell info and sequence
+    /// </summary>
     public class UIWidget_Spell : UIWidget
     {
         [Space]
         [SerializeField] private UIWidget_SpellInfo UIWidgetSpellInfo = null;
-        [SerializeField] private UIWidget_SpellSequence UIWidgetSpellSequence;
+        [SerializeField] private UIWidget_SpellSequence UIWidgetSpellSequence = null;
 
         private int m_SkillTypeID;
         private int m_SkillID;
@@ -28,6 +31,7 @@ namespace RhytmTD.UI.Widget
         {
             UIWidgetSpellInfo.LockInput(isLocked);
         }
+
 
         private string TEMP_GetSpellNameByID(int skillTypeID)
         {

@@ -5,13 +5,35 @@ namespace RhytmTD.UI.Components
 {
     public class UIComponent_SpellSequenceItem : MonoBehaviour
     {
-        public enum ItemStates { Active, Reseted, Visited }
+        public enum ItemStates
+        {
+            /// <summary>
+            /// Ready for input (initial state)
+            /// </summary>
+            Active,
+            
+            /// <summary>
+            /// Input is missed
+            /// </summary>
+            Reseted,
 
-        [SerializeField] private Image Image_Action;
+            /// <summary>
+            /// Input was correct
+            /// </summary>
+            Visited,
+
+            /// <summary>
+            /// Spell was selected
+            /// </summary>
+            Selected
+        }
+
+        [SerializeField] private Image Image_Action = null;
 
         public void Initialize(bool isAction)
         {
             Image_Action.color = isAction ? Color.green : Color.red;
+
             SetState(ItemStates.Active);
         }
 
@@ -23,8 +45,7 @@ namespace RhytmTD.UI.Components
 
                     SetScale(1);
                     SetAlpha(1);
-                    
-
+     
                     break;
                 case ItemStates.Reseted:
 
@@ -32,6 +53,12 @@ namespace RhytmTD.UI.Components
 
                     break;
                 case ItemStates.Visited:
+
+                    SetScale(1.2f);
+
+                    break;
+
+                case ItemStates.Selected:
 
                     SetScale(1.5f);
 
