@@ -16,7 +16,7 @@ namespace RhytmTD.UI.Widget
 
         private bool m_IsEnabled = true;
         private bool m_IsActive = false;
-        private float m_TotalTime = 1;
+        private float m_TotalTime = 0.5f;
         private float m_CurrentTime;
         private Vector2 m_FromToData = Vector2.zero;
 

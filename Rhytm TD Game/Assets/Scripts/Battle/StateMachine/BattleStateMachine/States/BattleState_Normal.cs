@@ -116,7 +116,7 @@ namespace RhytmTD.Battle.StateMachine
                     continue;
 
                 //Get from module
-                float enemyColliderSize = 1f;
+                float enemyColliderSize = 1.5f;
                 float distance2ShootLine = GetDistanceToLine(m_ShootDirection, fromWorldPos, entity.GetModule<TransformModule>().Position);
 
                 if (distance2ShootLine <= enemyColliderSize)

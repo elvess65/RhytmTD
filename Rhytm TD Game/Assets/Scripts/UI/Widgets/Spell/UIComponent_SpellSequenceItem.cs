@@ -29,10 +29,20 @@ namespace RhytmTD.UI.Components
         }
 
         [SerializeField] private Image Image_Action = null;
+        [SerializeField] private Image Image_Visited = null;
+        [SerializeField] private Sprite m_ActionSprite;
+        [SerializeField] private Sprite m_SkipSprite;
+        [SerializeField] private Color m_ActionColor;
+        [SerializeField] private Color m_SkipColor;
+
+        private bool m_IsAction;
 
         public void Initialize(bool isAction)
         {
-            Image_Action.color = isAction ? Color.green : Color.red;
+            Image_Action.color = isAction ? m_ActionColor : m_SkipColor;
+            Image_Action.sprite = isAction ? m_ActionSprite : m_SkipSprite;
+
+            m_IsAction = isAction;
 
             SetState(ItemStates.Active);
         }
@@ -45,22 +55,39 @@ namespace RhytmTD.UI.Components
 
                     SetScale(1);
                     SetAlpha(1);
-     
+                    SetVisited(false);
+
                     break;
                 case ItemStates.Reseted:
 
+                    SetScale(1);
                     SetAlpha(0.5f);
+                    SetVisited(false);
 
                     break;
                 case ItemStates.Visited:
 
-                    SetScale(1.2f);
+                    if (m_IsAction)
+                    {
+                        SetVisited(true);
+                        SetScale(1.2f);
+                    }
+                    else
+                        SetScale(1.5f);
 
                     break;
 
                 case ItemStates.Selected:
 
                     SetScale(1.5f);
+
+                    if (m_IsAction)
+                    {
+                        SetVisited(true);
+                        SetScale(1.5f);
+                    }
+                    else
+                        SetScale(1.7f);
 
                     break;
             }
@@ -77,6 +104,11 @@ namespace RhytmTD.UI.Components
         private void SetScale(float multiplayer)
         {
             Image_Action.transform.localScale = Vector3.one * multiplayer;
+        }
+
+        private void SetVisited(bool isVisited)
+        {
+            Image_Visited.enabled = isVisited;
         }
     }
 }

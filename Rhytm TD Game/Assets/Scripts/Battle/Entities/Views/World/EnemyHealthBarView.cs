@@ -6,11 +6,14 @@ namespace RhytmTD.Battle.Entities.Views
 {
     public class EnemyHealthBarView : BattleEntityView
     {
+        [SerializeField] private RectTransform m_Root;
         [SerializeField] private Image Foreground = null;
         [SerializeField] private DOTweenSequenceAnimator ShowDoTweenAnimator = null;
         [SerializeField] private DOTweenSequenceAnimator HideDoTweenAnimator = null;
 
         private HealthModule m_HealthModule;
+        private RectTransform m_ForegroundRectTransform;
+        private float m_FilledSize;
 
         public override void Initialize(BattleEntity battleEntity)
         {
@@ -26,6 +29,9 @@ namespace RhytmTD.Battle.Entities.Views
 
             m_HealthModule = battleEntity.GetModule<HealthModule>();
             m_HealthModule.OnHealthRemoved += HealthRemoved;
+
+            m_ForegroundRectTransform = Foreground.rectTransform;
+            m_FilledSize = m_Root.GetComponent<RectTransform>().sizeDelta.x;
 
             gameObject.SetActive(false);
         }
@@ -54,7 +60,12 @@ namespace RhytmTD.Battle.Entities.Views
                 ShowDoTweenAnimator.PlaySequence();
             }
 
-            Foreground.fillAmount = m_HealthModule.CurrentHealth / (float)m_HealthModule.Health;
+            float progress = m_HealthModule.CurrentHealth / (float)m_HealthModule.Health;
+            float damageOffset = m_FilledSize - progress * m_FilledSize;
+            float damageHaldOffset = damageOffset / 2;
+
+            m_ForegroundRectTransform.SetLeft(damageHaldOffset);
+            m_ForegroundRectTransform.SetRight(damageHaldOffset);
         }
 
         private void RotationChanged(Quaternion rotation)
