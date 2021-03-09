@@ -11,7 +11,6 @@ namespace RhytmTD.Battle.Entities.Controllers
     public class ShootController : BaseController
     {
         private static float DISTANCE_TO_HIT_TARGET = 0.1f;
-        private static float DISTANCE_TO_HIT_DIRECTION = 2f;
 
         private BattleModel m_BattleModel;
         private RhytmController m_RhytmController;
@@ -54,8 +53,8 @@ namespace RhytmTD.Battle.Entities.Controllers
 
         public void Shoot(BattleEntity sender, Vector3 targetDir)
         {
-            float existTimeTicks = 5;
-            float speed = existTimeTicks * (float)m_RhytmController.TickDurationSeconds;
+            float flyDistance = 5;
+            float speed = flyDistance / m_RhytmController.GetTimeToNextTick();
 
             BattleEntity bullet = CreateBullet(sender, targetDir, speed);
 
@@ -103,20 +102,19 @@ namespace RhytmTD.Battle.Entities.Controllers
 
         private void Update(float deltaTime)
         {
-#if TARGET_BASED_ATTACK
-            DirectionBasedUpdate(deltaTime);   
-#elif DIRECTION_BASED_ATTACK
-            DirectionBasedUpdate(deltaTime);
-#endif
-
+            HandleTargetBasedHitTrack(deltaTime);   
             HandleBulletRemove();
         }
 
-        private void TargetBasedUpdate(float deltaTime)
+        private void HandleTargetBasedHitTrack(float deltaTime)
         {
             foreach (BattleEntity bullet in m_Bullets.Values)
             {
                 TargetModule targetModule = bullet.GetModule<TargetModule>();
+
+                if (targetModule.Target == null)
+                    continue;
+
                 MoveModule moveModule = bullet.GetModule<MoveModule>();
                 OwnerModule ownerModule = bullet.GetModule<OwnerModule>();
                 TransformModule transformModule = bullet.GetModule<TransformModule>();
@@ -135,43 +133,12 @@ namespace RhytmTD.Battle.Entities.Controllers
                         m_DamageController.DealDamage(ownerModule.Owner.ID, targetModule.Target.ID, damageModule.MaxDamage);
                     }
 
-                    HandleBulletRemove(bullet);
+                    BufferBulletRemove(bullet);
                 }
             }
         }
 
-        private void DirectionBasedUpdate(float deltaTime)
-        {
-            foreach (BattleEntity bullet in m_Bullets.Values)
-            {
-                MoveModule moveModule = bullet.GetModule<MoveModule>();
-                OwnerModule ownerModule = bullet.GetModule<OwnerModule>();
-                TransformModule transformModule = bullet.GetModule<TransformModule>();
-                Vector3 mapped2GroundBulletPos = transformModule.Position;
-                mapped2GroundBulletPos.y = 0;
-
-                foreach(BattleEntity entity in m_BattleModel.BattleEntities)
-                {
-                    if (!entity.HasModule<EnemyBehaviourTag>())
-                        continue;
-
-                    TransformModule enemyTransformModule = entity.GetModule<TransformModule>();
-                    Vector3 mapped2GroundEnemyPos = enemyTransformModule.Position;
-                    mapped2GroundEnemyPos.y = 0;
-
-                    Vector3 dist2Enemy = mapped2GroundBulletPos - mapped2GroundEnemyPos;
-                    if (dist2Enemy.sqrMagnitude <= DISTANCE_TO_HIT_DIRECTION * DISTANCE_TO_HIT_DIRECTION)
-                    {
-                        DamageModule damageModule = bullet.GetModule<DamageModule>();
-                        m_DamageController.DealDamage(ownerModule.Owner.ID, entity.ID, damageModule.MaxDamage);
-
-                        HandleBulletRemove(bullet);
-                    }
-                }
-            }
-        }
-
-        private void HandleBulletRemove(BattleEntity bullet)
+        private void BufferBulletRemove(BattleEntity bullet)
         {
             m_BulletsToRemove.Add(bullet.ID);
 

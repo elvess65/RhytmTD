@@ -1,4 +1,5 @@
-﻿using CoreFramework;
+﻿using System.Collections.Generic;
+using CoreFramework;
 using CoreFramework.Input;
 using CoreFramework.Rhytm;
 using RhytmTD.Battle.Entities;
@@ -18,9 +19,10 @@ namespace RhytmTD.Battle.StateMachine
         private FindTargetController m_FindTargetController;
         
         private AnimationModule m_PlayerAnimationModule;
+        private TransformModule m_PlayerTransformModule;
         private BattleEntity m_TargetEntity;
-        private Vector3 m_TargetDirection;
-
+        private Vector3 m_ShootDirection;
+        private List<BattleEntity> m_PotentialTargets;
 
         public BattleState_Normal() : base()
         {
@@ -29,6 +31,8 @@ namespace RhytmTD.Battle.StateMachine
             m_ShootController = Dispatcher.GetController<ShootController>();
             m_FindTargetController = Dispatcher.GetController<FindTargetController>();
             m_RhytmInputProxy = Dispatcher.GetController<RhytmInputProxy>();
+
+            m_PotentialTargets = new List<BattleEntity>();
 
             m_BattleModel.OnPlayerEntityInitialized += PlayerInitializedHandlder;
         }
@@ -60,45 +64,93 @@ namespace RhytmTD.Battle.StateMachine
 
         #region Direction Based Attack
 
+        //Debug
         private GameObject ob;
 
         private void HandleDirectionBasedTouch(Vector3 mouseScreenPos)
         {
-            Camera camera = Camera.main;
-            Vector3 fromWorldPos = Dispatcher.GetModel<BattleModel>().PlayerEntity.GetModule<SlotModule>().ProjectileSlot.position;
-            fromWorldPos.y = 0;
-
-            Vector3 fromScreenPos = camera.WorldToScreenPoint(fromWorldPos);
-            Vector3 dir2MouseScreen = (mouseScreenPos - fromScreenPos).normalized;
-            dir2MouseScreen.z = 0;
-
-            Debug.Log(fromWorldPos + " " + dir2MouseScreen);
-
-            //Make possible to attack only forward
-            if (dir2MouseScreen.y > 0)
+            if (m_RhytmInputProxy.IsInputAllowed() && m_RhytmInputProxy.IsInputTickValid())
             {
-                m_TargetDirection = new Vector3(dir2MouseScreen.x, 0, dir2MouseScreen.y);
+                //Dispose cache from prev shoot
+                m_TargetEntity = null;
+                if (m_PotentialTargets.Count > 0)
+                    m_PotentialTargets.Clear();
 
-                m_PlayerAnimationModule.OnAnimationMoment += BaseDirectionAttackAnimationMomentHandler;
+                //Temp
+                Camera camera = Camera.main;
+
+                Vector3 fromWorldPos = Dispatcher.GetModel<BattleModel>().PlayerEntity.GetModule<SlotModule>().ProjectileSlot.position;
+                fromWorldPos.y = 0;
+
+                Vector3 fromScreenPos = camera.WorldToScreenPoint(fromWorldPos);
+                Vector3 shootDirScreen = (mouseScreenPos - fromScreenPos).normalized;
+                shootDirScreen.z = 0;
+
+                //Make possible to attack only forward
+                if (shootDirScreen.y <= 0)
+                    return;
+
+                m_ShootDirection = new Vector3(shootDirScreen.x, 0, shootDirScreen.y);
+                m_TargetEntity = GetTargetForDirectionBaseAttack(fromWorldPos);
+
+                m_PlayerAnimationModule.OnAnimationMoment += BaseAttackAnimationMomentHandler;
                 m_PlayerAnimationModule.PlayAnimation(EnumsCollection.AnimationTypes.Attack);
 
                 //Debug 
                 if (ob == null)
                     ob = GameObject.CreatePrimitive(PrimitiveType.Capsule);
-
-                ob.transform.position = fromWorldPos + m_TargetDirection * 10;
-
-                //if (m_RhytmInputProxy.IsInputAllowed() && m_RhytmInputProxy.IsInputTickValid())
-                //m_RhytmInputProxy.RegisterInput();
+                ob.transform.position = fromWorldPos + m_ShootDirection * 10;
             }
+            
+            m_RhytmInputProxy.RegisterInput();
         }
 
-        private void BaseDirectionAttackAnimationMomentHandler()
+        private BattleEntity GetTargetForDirectionBaseAttack(Vector3 fromWorldPos)
         {
-            m_PlayerAnimationModule.OnAnimationMoment -= BaseDirectionAttackAnimationMomentHandler;
+            BattleEntity target = null;
 
-            m_RhytmInputProxy.IsInputTickValid();
-            m_ShootController.Shoot(m_BattleModel.PlayerEntity, m_TargetDirection);
+            //Get pottential targets
+            foreach (BattleEntity entity in m_BattleModel.BattleEntities)
+            {
+                if (!entity.HasModule<EnemyBehaviourTag>())
+                    continue;
+
+                //Get from module
+                float enemyColliderSize = 1f;
+                float distance2ShootLine = GetDistanceToLine(m_ShootDirection, fromWorldPos, entity.GetModule<TransformModule>().Position);
+
+                if (distance2ShootLine <= enemyColliderSize)
+                    m_PotentialTargets.Add(entity);
+            }
+
+            if (m_PotentialTargets.Count > 0)
+            {
+                if (m_PotentialTargets.Count > 1)
+                {
+                    //Filter target by distance if mo than 1
+                    float closestSqrDist2Enemy = float.MaxValue;
+                    foreach (BattleEntity potentialTarget in m_PotentialTargets)
+                    {
+                        TransformModule potentialTargetTransformModule = potentialTarget.GetModule<TransformModule>();
+
+                        float sqrDist = (potentialTargetTransformModule.Position - m_PlayerTransformModule.Position).sqrMagnitude;
+                        if (sqrDist < closestSqrDist2Enemy)
+                        {
+                            closestSqrDist2Enemy = sqrDist;
+                            target = potentialTarget;
+                        }
+                    }
+                }
+                else
+                    target = m_PotentialTargets[0];
+            }
+
+            return target;
+        }
+
+        private float GetDistanceToLine(Vector3 dir, Vector3 origin, Vector3 point)
+        {
+            return Vector3.Cross(dir, point - origin).magnitude;
         }
 
         #endregion
@@ -113,20 +165,12 @@ namespace RhytmTD.Battle.StateMachine
 
                 if (m_TargetEntity != null)
                 {
-                    m_PlayerAnimationModule.OnAnimationMoment += BaseTargetAttackAnimationMomentHandler;
+                    m_PlayerAnimationModule.OnAnimationMoment += BaseAttackAnimationMomentHandler;
                     m_PlayerAnimationModule.PlayAnimation(EnumsCollection.AnimationTypes.Attack);
                 }
             }
 
             m_RhytmInputProxy.RegisterInput();
-        }
-
-        private void BaseTargetAttackAnimationMomentHandler()
-        {
-            m_PlayerAnimationModule.OnAnimationMoment -= BaseTargetAttackAnimationMomentHandler;
-
-            m_RhytmInputProxy.IsInputTickValid();
-            m_ShootController.Shoot(m_BattleModel.PlayerEntity, m_TargetEntity);
         }
 
         private BattleEntity GetTargetForBaseAttack()
@@ -153,6 +197,19 @@ namespace RhytmTD.Battle.StateMachine
 
         #endregion
 
+        private void BaseAttackAnimationMomentHandler()
+        {
+            m_PlayerAnimationModule.OnAnimationMoment -= BaseAttackAnimationMomentHandler;
+
+            m_RhytmInputProxy.IsInputTickValid();
+
+            if (m_TargetEntity != null)
+                m_ShootController.Shoot(m_BattleModel.PlayerEntity, m_TargetEntity);
+            else
+                m_ShootController.Shoot(m_BattleModel.PlayerEntity, m_ShootDirection);
+
+        }
+
         private void HandleKeyDown(KeyCode keyCode)
         {
         }
@@ -162,6 +219,7 @@ namespace RhytmTD.Battle.StateMachine
             m_BattleModel.OnPlayerEntityInitialized -= PlayerInitializedHandlder;
 
             m_PlayerAnimationModule = playerEntity.GetModule<AnimationModule>();
+            m_PlayerTransformModule = playerEntity.GetModule<TransformModule>();
         }
     }
 }
