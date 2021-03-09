@@ -1,4 +1,6 @@
-﻿using CoreFramework;
+﻿//#define DISABLE_MOVE
+
+using CoreFramework;
 using RhytmTD.Battle.Entities.Models;
 using RhytmTD.Data.Models;
 
@@ -33,7 +35,9 @@ namespace RhytmTD.Battle.Entities.Controllers
 
         public void Update(float deltaTime)
         {
+#if !DISABLE_MOVE
             MoveAll(deltaTime);
+#endif
         }
 
         private void MoveAll(float deltaTime)

@@ -1,5 +1,6 @@
 ﻿using CoreFramework.Input;
 using CoreFramework.Rhytm;
+using RhytmTD.Battle.Entities;
 using RhytmTD.Battle.Entities.Models;
 using UnityEngine;
 
@@ -48,7 +49,6 @@ namespace RhytmTD.Battle.StateMachine
             {
                 m_PrepareSkilIUseModel.OnWrongTouch?.Invoke();
             }
-
 
             m_RhytmInputProxy.RegisterInput();
         }

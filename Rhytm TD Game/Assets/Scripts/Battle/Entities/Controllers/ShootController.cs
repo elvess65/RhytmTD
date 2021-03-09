@@ -38,12 +38,27 @@ namespace RhytmTD.Battle.Entities.Controllers
         {
             Vector3 targetDir = GetTargetDir(sender, target);
             float distanceToTarget = targetDir.magnitude;
+            float speed = distanceToTarget / m_RhytmController.GetTimeToNextTick();
             Vector3 targetDirNorm = targetDir / distanceToTarget;
-            
-            BattleEntity bullet = CreateBullet(sender, targetDirNorm, distanceToTarget);
+
+            BattleEntity bullet = CreateBullet(sender, targetDirNorm, speed);
 
             bullet.GetModule<TargetModule>().SetTarget(target);
             bullet.GetModule<MoveModule>().StartMove(targetDirNorm);
+
+            m_Bullets.Add(bullet.ID, bullet);
+
+            m_BattleModel.AddBattleEntity(bullet);
+        }
+
+        public void Shoot(BattleEntity sender, Vector3 targetDir)
+        {
+            float existTimeTicks = 5;
+            float speed = existTimeTicks * (float)m_RhytmController.TickDurationSeconds;
+
+            BattleEntity bullet = CreateBullet(sender, targetDir, speed);
+
+            bullet.GetModule<MoveModule>().StartMove(targetDir);
 
             m_Bullets.Add(bullet.ID, bullet);
 
@@ -59,15 +74,16 @@ namespace RhytmTD.Battle.Entities.Controllers
             return targetSlotModule.HitSlot.position - senderSlotModule.ProjectileSlot.position;
         }
 
-        private BattleEntity CreateBullet(BattleEntity sender, Vector3 vecToTarget, float distanceToTarget)
+        private BattleEntity CreateBullet(BattleEntity sender, Vector3 vecToTarget, float speed)
         {
             SlotModule senderSlot = sender.GetModule<SlotModule>();
             DamageModule senderDamageModule = sender.GetModule<DamageModule>();
 
             Quaternion rotation = Quaternion.LookRotation(vecToTarget);
-            float speed = distanceToTarget / m_RhytmController.GetTimeToNextTick();
 
-            BattleEntity bulletEnity = m_EffectsController.CreateBulletEffect(ConstsCollection.EffectConsts.ProjectileArrow, senderSlot.ProjectileSlot.position, rotation, speed, sender);
+            BattleEntity bulletEnity = m_EffectsController.CreateBulletEffect(ConstsCollection.EffectConsts.ProjectileArrow,
+                                                                              senderSlot.ProjectileSlot.position,
+                                                                              rotation, speed, sender);
 
             DamageModule damageModule = bulletEnity.GetModule<DamageModule>();
             damageModule.MinDamage = damageModule.MaxDamage = senderDamageModule.RandomDamage();
@@ -85,6 +101,17 @@ namespace RhytmTD.Battle.Entities.Controllers
         }
 
         private void Update(float deltaTime)
+        {
+#if TARGET_BASED_ATTACK
+            DirectionBasedUpdate(deltaTime);   
+#elif DIRECTION_BASED_ATTACK
+            DirectionBasedUpdate(deltaTime);
+#endif
+
+            HandleBulletRemove();
+        }
+
+        private void TargetBasedUpdate(float deltaTime)
         {
             foreach (BattleEntity bullet in m_Bullets.Values)
             {
@@ -121,7 +148,18 @@ namespace RhytmTD.Battle.Entities.Controllers
                     effectModule.EffectAction(data);
                 }
             }
+        }
 
+        private void DirectionBasedUpdate(float deltaTime)
+        {
+            foreach (BattleEntity bullet in m_Bullets.Values)
+            {
+
+            }
+        }
+
+        private void HandleBulletRemove()
+        {
             if (m_BulletsToRemove.Count > 0)
             {
                 foreach (int bulletID in m_BulletsToRemove)

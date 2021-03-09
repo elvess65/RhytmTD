@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DefaultAccountBaseParamsData
   m_EditorClassIdentifier: 
   BaseCharacterData:
-    MoveSpeedUnitsPerTick: 2
+    MoveSpeedUnitsPerTick: 0
     FocusSpeed: 3
     MinDamage: 12
     MaxDamage: 17

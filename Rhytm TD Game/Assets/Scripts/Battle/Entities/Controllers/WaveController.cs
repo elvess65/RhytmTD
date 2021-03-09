@@ -1,6 +1,6 @@
 ﻿//#define LOG_SPAWN
 //#define SINGLE_SPAWN
-//#define DEBUG_SPAWN
+#define DISABLE_SPAWN
 
 using System.Collections.Generic;
 using CoreFramework;
@@ -127,7 +127,7 @@ namespace RhytmTD.Battle.Entities.Controllers
 
         private void HandleTick(int ticksSinceStart)
         {
-#if !DEBUG_SPAWN
+#if !DISABLE_SPAWN
             if (m_ActionTargetTick == ticksSinceStart)
             {
                 //Adjust enemy spawn areas before spawn and schedule next chunk
