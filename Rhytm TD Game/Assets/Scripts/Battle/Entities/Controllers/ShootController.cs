@@ -10,7 +10,8 @@ namespace RhytmTD.Battle.Entities.Controllers
 {
     public class ShootController : BaseController
     {
-        private static float DISTANCE_TO_HIT = 0.1f; 
+        private static float DISTANCE_TO_HIT_TARGET = 0.1f;
+        private static float DISTANCE_TO_HIT_DIRECTION = 2f;
 
         private BattleModel m_BattleModel;
         private RhytmController m_RhytmController;
@@ -126,26 +127,15 @@ namespace RhytmTD.Battle.Entities.Controllers
                 Vector3 dir = targetSlotModule.HitSlot.position - transformModule.Position;
                 moveModule.StartMove(dir.normalized);
 
-                if (dir.sqrMagnitude <= DISTANCE_TO_HIT * DISTANCE_TO_HIT)
+                if (dir.sqrMagnitude <= DISTANCE_TO_HIT_TARGET * DISTANCE_TO_HIT_TARGET)
                 {
                     if (m_BattleModel.HasEntity(targetModule.Target.ID))
                     {
                         DamageModule damageModule = bullet.GetModule<DamageModule>();
-
                         m_DamageController.DealDamage(ownerModule.Owner.ID, targetModule.Target.ID, damageModule.MaxDamage);
                     }
 
-                    m_BulletsToRemove.Add(bullet.ID);
-
-                    DestroyModule destroyModule = bullet.GetModule<DestroyModule>();
-                    destroyModule.SetDestroyed();
-
-                    //WARNING - EXTRA ALLOCATION. CAUSE GARBAGE
-                    DataContainer data = new DataContainer();
-                    data.AddObject(ConstsCollection.DataConsts.ACTION, ConstsCollection.DataConsts.EXPLOSION);
-
-                    EffectModule effectModule = bullet.GetModule<EffectModule>();
-                    effectModule.EffectAction(data);
+                    HandleBulletRemove(bullet);
                 }
             }
         }
@@ -154,8 +144,46 @@ namespace RhytmTD.Battle.Entities.Controllers
         {
             foreach (BattleEntity bullet in m_Bullets.Values)
             {
+                MoveModule moveModule = bullet.GetModule<MoveModule>();
+                OwnerModule ownerModule = bullet.GetModule<OwnerModule>();
+                TransformModule transformModule = bullet.GetModule<TransformModule>();
+                Vector3 mapped2GroundBulletPos = transformModule.Position;
+                mapped2GroundBulletPos.y = 0;
 
+                foreach(BattleEntity entity in m_BattleModel.BattleEntities)
+                {
+                    if (!entity.HasModule<EnemyBehaviourTag>())
+                        continue;
+
+                    TransformModule enemyTransformModule = entity.GetModule<TransformModule>();
+                    Vector3 mapped2GroundEnemyPos = enemyTransformModule.Position;
+                    mapped2GroundEnemyPos.y = 0;
+
+                    Vector3 dist2Enemy = mapped2GroundBulletPos - mapped2GroundEnemyPos;
+                    if (dist2Enemy.sqrMagnitude <= DISTANCE_TO_HIT_DIRECTION * DISTANCE_TO_HIT_DIRECTION)
+                    {
+                        DamageModule damageModule = bullet.GetModule<DamageModule>();
+                        m_DamageController.DealDamage(ownerModule.Owner.ID, entity.ID, damageModule.MaxDamage);
+
+                        HandleBulletRemove(bullet);
+                    }
+                }
             }
+        }
+
+        private void HandleBulletRemove(BattleEntity bullet)
+        {
+            m_BulletsToRemove.Add(bullet.ID);
+
+            DestroyModule destroyModule = bullet.GetModule<DestroyModule>();
+            destroyModule.SetDestroyed();
+
+            //WARNING - EXTRA ALLOCATION. CAUSE GARBAGE
+            DataContainer data = new DataContainer();
+            data.AddObject(ConstsCollection.DataConsts.ACTION, ConstsCollection.DataConsts.EXPLOSION);
+
+            EffectModule effectModule = bullet.GetModule<EffectModule>();
+            effectModule.EffectAction(data);
         }
 
         private void HandleBulletRemove()

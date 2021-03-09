@@ -65,10 +65,14 @@ namespace RhytmTD.Battle.StateMachine
         private void HandleDirectionBasedTouch(Vector3 mouseScreenPos)
         {
             Camera camera = Camera.main;
-            Vector3 playerWorldPos = Dispatcher.GetModel<BattleModel>().PlayerEntity.GetModule<TransformModule>().Position;
-            Vector3 playerScreenPos = camera.WorldToScreenPoint(playerWorldPos);
-            Vector3 dir2MouseScreen = (mouseScreenPos - playerScreenPos).normalized;
+            Vector3 fromWorldPos = Dispatcher.GetModel<BattleModel>().PlayerEntity.GetModule<SlotModule>().ProjectileSlot.position;
+            fromWorldPos.y = 0;
+
+            Vector3 fromScreenPos = camera.WorldToScreenPoint(fromWorldPos);
+            Vector3 dir2MouseScreen = (mouseScreenPos - fromScreenPos).normalized;
             dir2MouseScreen.z = 0;
+
+            Debug.Log(fromWorldPos + " " + dir2MouseScreen);
 
             //Make possible to attack only forward
             if (dir2MouseScreen.y > 0)
@@ -82,7 +86,7 @@ namespace RhytmTD.Battle.StateMachine
                 if (ob == null)
                     ob = GameObject.CreatePrimitive(PrimitiveType.Capsule);
 
-                ob.transform.position = playerWorldPos + m_TargetDirection * 10;
+                ob.transform.position = fromWorldPos + m_TargetDirection * 10;
 
                 //if (m_RhytmInputProxy.IsInputAllowed() && m_RhytmInputProxy.IsInputTickValid())
                 //m_RhytmInputProxy.RegisterInput();

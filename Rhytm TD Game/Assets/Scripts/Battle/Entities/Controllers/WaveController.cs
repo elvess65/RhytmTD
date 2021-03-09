@@ -1,6 +1,6 @@
 ﻿//#define LOG_SPAWN
 //#define SINGLE_SPAWN
-#define DISABLE_SPAWN
+//#define DISABLE_SPAWN
 
 using System.Collections.Generic;
 using CoreFramework;
