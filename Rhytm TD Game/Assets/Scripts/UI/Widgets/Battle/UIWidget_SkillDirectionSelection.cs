@@ -1,4 +1,6 @@
-﻿using RhytmTD.Battle.Entities.Models;
+﻿using CoreFramework;
+using RhytmTD.Battle.Entities.Models;
+using RhytmTD.Data.Models.DataTableModels;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,7 +9,10 @@ namespace RhytmTD.UI.Widget
     public class UIWidget_SkillDirectionSelection : UIWidget
     {
         [Space]
-        public Text Text_DirectionHint;
+        [SerializeField] private Text Text_DirectionHint = null;
+
+        private AccountBaseParamsDataModel m_AccountBaseParamsDataModel;
+
 
         public void Initialize()
         {
@@ -15,18 +20,24 @@ namespace RhytmTD.UI.Widget
 
             PrepareSkilIUseModel prepareSkilIUseModel = Dispatcher.GetModel<PrepareSkilIUseModel>();
             prepareSkilIUseModel.OnSkillSelected += SkillSelectedHandler;
+
+            m_AccountBaseParamsDataModel = Dispatcher.GetModel<AccountBaseParamsDataModel>();
         }
 
         private void SkillSelectedHandler(int skillTypeID)
         {
-            Debug.Log("Show data for " + skillTypeID);
+            string message = string.Empty;
+            switch(m_AccountBaseParamsDataModel.GetSkillBaseDataByID(skillTypeID).TargetingType)
+            {
+                case EnumsCollection.SkillTargetingType.Area:
+                    message = "Select spell attack area";
+                    break;
+                case EnumsCollection.SkillTargetingType.Direction:
+                    message = "Select spell direction";
+                    break;
+            }
 
-            //TODO Get from config
-
-            if (skillTypeID == ConstsCollection.SkillConsts.FIREBALL_ID)
-                Text_DirectionHint.text = "Select spell direction";
-            else
-                Text_DirectionHint.text = "Select spell attack area";
+            Text_DirectionHint.text = message;
         }
     }
 }

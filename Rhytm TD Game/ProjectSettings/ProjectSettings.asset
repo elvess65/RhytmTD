@@ -674,7 +674,7 @@ PlayerSettings:
   webGLThreadsSupport: 0
   webGLWasmStreaming: 0
   scriptingDefineSymbols:
-    7: TARGET_BASED_ATTACK
+    7: DIRECTION_BASED_ATTACK
   platformArchitecture: {}
   scriptingBackend:
     Standalone: 1

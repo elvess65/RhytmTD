@@ -30,6 +30,7 @@ namespace RhytmTD.Data.DataBaseLocal
         public abstract class SkillBaseData
         {
             public EnumsCollection.SkillTypeID TypeID;
+            public EnumsCollection.SkillTargetingType TargetingType;
             public float ActivationTime = 1;
             public float UseTime = 1;
             public float FinishingTime = 1;

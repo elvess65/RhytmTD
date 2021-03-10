@@ -21,6 +21,7 @@ MonoBehaviour:
     Mana: 10
   BaseFireballData:
     TypeID: 101
+    TargetingType: 0
     ActivationTime: 0
     UseTime: 1
     FinishingTime: 1
@@ -29,6 +30,7 @@ MonoBehaviour:
     Damage: 20
   BaseMeteoriteData:
     TypeID: 100
+    TargetingType: 1
     ActivationTime: 1
     UseTime: 1
     FinishingTime: 1
@@ -38,6 +40,7 @@ MonoBehaviour:
     EffectOffset: {x: 7.7, y: 7.7}
   BaseHealthData:
     TypeID: 102
+    TargetingType: 2
     ActivationTime: 1
     UseTime: 1
     FinishingTime: 1
