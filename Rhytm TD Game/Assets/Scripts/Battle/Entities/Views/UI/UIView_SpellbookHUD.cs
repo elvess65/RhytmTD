@@ -17,8 +17,13 @@ namespace RhytmTD.UI.Battle.View.UI
         private WorldDataModel m_WorldDataModel;
 
         [Space]
-        [SerializeField] private UIWidget_Button m_UIWidget_ButtonClose = null;
         [SerializeField] private RectTransform m_SpellsRoot = null;
+
+        [Header("Widgets")]
+        [SerializeField] private UIWidget_Button m_UIWidget_ButtonClose = null;
+        [SerializeField] private UIWidget_SkillDirectionSelection m_UIWidget_SkillDirectionSelection = null;
+
+        public UIWidget_SkillDirectionSelection ExposedUIWidget_SkillDirectionSelection => m_UIWidget_SkillDirectionSelection;
 
         public override void Initialize()
         {
@@ -30,6 +35,9 @@ namespace RhytmTD.UI.Battle.View.UI
                 m_BattleModel.OnPlayerEntityInitialized += CreateSpellWidgets;
             else
                 CreateSpellWidgets(m_BattleModel.PlayerEntity);
+
+            m_UIWidget_SkillDirectionSelection.Initialize();
+            RegisterWidget(m_UIWidget_SkillDirectionSelection);
 
             m_UIWidget_ButtonClose.Initialize();
             m_UIWidget_ButtonClose.OnWidgetPress += ButtonCloseWidgetPressHandler;

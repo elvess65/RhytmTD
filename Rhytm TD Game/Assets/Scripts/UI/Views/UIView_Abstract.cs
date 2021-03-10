@@ -30,7 +30,7 @@ namespace RhytmTD.UI.View
         /// </summary>
         /// <param name="isEnabled">Включен/выключен виджет</param>
         /// <param name="isAnimated">Анимация при выполнении</param>
-        public void SetWidgetsActive(bool isEnabled, bool isAnimated, UIWidget[] excludedFromActivatingWidgets = null)
+        public void SetWidgetsActive(bool isEnabled, bool isAnimated, params UIWidget[] excludedFromActivatingWidgets)
         {
             for (int i = 0; i < m_Widgets.Count; i++)
             {

@@ -18,18 +18,27 @@ namespace RhytmTD.Battle.Entities.Models
         public Action<bool> OnBattleFinished;
         public Action OnBattleStarted;
         public Action OnBattleInitialize;
+
         /// <summary>
         /// Spellbook is opened and input mode is changed
         /// </summary>
         public Action OnSpellbookOpened;
+
         /// <summary>
         /// Spellbook closed by close button
         /// </summary>
         public Action OnSpellbookClosed;
+
+        /// <summary>
+        /// Spell was selected as waiting for direction choose
+        /// </summary>
+        public Action OnDirectionalSpellSelected;
+
         /// <summary>
         /// Spell sequence aplied and spell animation started to play
         /// </summary>
         public Action OnSpellbookUsed;
+
         /// <summary>
         /// Spell animation reached moment of creating effect 
         /// </summary>

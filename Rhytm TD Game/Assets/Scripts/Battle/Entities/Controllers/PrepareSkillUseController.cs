@@ -4,6 +4,7 @@ using CoreFramework.Rhytm;
 using RhytmTD.Battle.Entities.Models;
 using RhytmTD.Core;
 using RhytmTD.Data.Models;
+using UnityEngine;
 
 namespace RhytmTD.Battle.Entities.Controllers
 {
@@ -23,6 +24,7 @@ namespace RhytmTD.Battle.Entities.Controllers
         private LoadoutModule m_PlayerLodoutModule;
         private BattleEntity m_TargetEntity;
         private int m_SkillID;
+        private int m_SkillTypeID;
 
         private bool m_IsSequenceStrted;
         private Dictionary<int, bool[]> m_SkillTypeID2Pattern;
@@ -46,6 +48,7 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_PrepareSkilIUseModel = Dispatcher.GetModel<PrepareSkilIUseModel>();
             m_PrepareSkilIUseModel.OnCorrectTouch += CorrectTouchHandler;
             m_PrepareSkilIUseModel.OnWrongTouch += WrongTouchHandler;
+            m_PrepareSkilIUseModel.OnSkilDirectionSelected += SkillDirectionSelectedeHandler;
 
             m_RhytmController = Dispatcher.GetController<RhytmController>();
             m_SkillsController = Dispatcher.GetController<SkillsController>();
@@ -93,6 +96,13 @@ namespace RhytmTD.Battle.Entities.Controllers
             }
 
             HandleSequenceFailed();
+        }
+
+        private void SkillDirectionSelectedeHandler(Vector3 dir)
+        {
+            Debug.Log(dir + " " + m_SkillTypeID);
+
+            StartUseSkill(m_SkillTypeID, m_PlayerLodoutModule.GetSkillIDByTypeID(m_SkillTypeID));
         }
 
         private void EventProcessingTickHandler(int ticksSinceStart)
@@ -162,10 +172,15 @@ namespace RhytmTD.Battle.Entities.Controllers
 
         private void HandleSkillSelection(int skillTypeID)
         {
-            m_PrepareSkilIUseModel.OnSkillSelected?.Invoke(skillTypeID);
-            m_BattleModel.OnSpellbookUsed?.Invoke();
+            m_SkillTypeID = skillTypeID;
 
-            StartUseSkill(skillTypeID, m_PlayerLodoutModule.GetSkillIDByTypeID(skillTypeID));
+            m_PrepareSkilIUseModel.OnSkillSelected?.Invoke(skillTypeID);
+
+            //TODO: Move to config
+            if (m_SkillTypeID != ConstsCollection.SkillConsts.HEALTH_ID)
+                m_BattleModel.OnDirectionalSpellSelected?.Invoke();
+            else
+                StartUseSkill(m_SkillTypeID, m_PlayerLodoutModule.GetSkillIDByTypeID(m_SkillTypeID));
         }
 
 
@@ -219,6 +234,8 @@ namespace RhytmTD.Battle.Entities.Controllers
 
         private void StartUseSkill(int skillTypeID, int skillID)
         {
+            m_BattleModel.OnSpellbookUsed?.Invoke();
+
             m_SkillID = skillID;
             m_TargetEntity = GetTargetBySkillType(skillTypeID);
 

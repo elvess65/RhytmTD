@@ -30,6 +30,7 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_BattleModel.OnBattleFinished += BattleFinishedHandler;
             m_BattleModel.OnSpellbookOpened += SpellBookOpenedHandler;
             m_BattleModel.OnSpellbookClosed += SpellBookClosedAndPostUsedHandler;
+            m_BattleModel.OnDirectionalSpellSelected += SpellBookSelectedHandler;
             m_BattleModel.OnSpellbookUsed += SpellBookUsedHandler;
             m_BattleModel.OnSpellbookPostUsed += SpellBookClosedAndPostUsedHandler;
         }
@@ -46,6 +47,7 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_StateMachine.AddState(new UIBattleState_Normal());
             m_StateMachine.AddState(new UIBattleState_BattleResult());
             m_StateMachine.AddState(new UIBattleState_Spellbook());
+            m_StateMachine.AddState(new UIBattleState_SpellbookDirectionalSelected());
             m_StateMachine.AddState(new UIBattleState_SpellbookUsed());
             m_StateMachine.Initialize<UIBattleState_NoUI>();
         }
@@ -68,6 +70,11 @@ namespace RhytmTD.Battle.Entities.Controllers
         private void SpellBookClosedAndPostUsedHandler()
         {
             m_StateMachine.ChangeState<UIBattleState_Normal>();
+        }
+
+        private void SpellBookSelectedHandler()
+        {
+            m_StateMachine.ChangeState<UIBattleState_SpellbookDirectionalSelected>();
         }
 
         private void SpellBookUsedHandler()
