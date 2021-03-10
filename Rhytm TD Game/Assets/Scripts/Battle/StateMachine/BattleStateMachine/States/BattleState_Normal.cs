@@ -20,6 +20,7 @@ namespace RhytmTD.Battle.StateMachine
         
         private AnimationModule m_PlayerAnimationModule;
         private TransformModule m_PlayerTransformModule;
+        private SlotModule m_PlayerSlotModule;
         private BattleEntity m_TargetEntity;
         private Vector3 m_ShootDirection;
         private List<BattleEntity> m_PotentialTargets;
@@ -62,52 +63,62 @@ namespace RhytmTD.Battle.StateMachine
 #endif
         }
 
-        #region Direction Based Attack
-
-        //Debug
-        private GameObject ob;
+        #region Direction Based Attack      
 
         private void HandleDirectionBasedTouch(Vector3 mouseScreenPos)
         {
             if (m_RhytmInputProxy.IsInputAllowed() && m_RhytmInputProxy.IsInputTickValid())
             {
-                //Dispose cache from prev shoot
-                m_TargetEntity = null;
-                if (m_PotentialTargets.Count > 0)
-                    m_PotentialTargets.Clear();
+                if (RaycastGround(mouseScreenPos, out Vector3 hitPoint))
+                {
+                    hitPoint.y = 0;
+                }
 
-                //Temp
-                Camera camera = Camera.main;
+                Vector3 fromPos = m_PlayerSlotModule.ProjectileSlot.position;
+                fromPos.y = 0;
 
-                Vector3 fromWorldPos = Dispatcher.GetModel<BattleModel>().PlayerEntity.GetModule<SlotModule>().ProjectileSlot.position;
-                fromWorldPos.y = 0;
-
-                Vector3 fromScreenPos = camera.WorldToScreenPoint(fromWorldPos);
-                Vector3 shootDirScreen = (mouseScreenPos - fromScreenPos).normalized;
-                shootDirScreen.z = 0;
+                m_ShootDirection = (hitPoint - fromPos).normalized;
 
                 //Make possible to attack only forward
-                if (shootDirScreen.y <= 0)
+                if (m_ShootDirection.z <= 0)
                     return;
 
-                m_ShootDirection = new Vector3(shootDirScreen.x, 0, shootDirScreen.y);
-                m_TargetEntity = GetTargetForDirectionBaseAttack(fromWorldPos);
+                m_TargetEntity = GetTargetForDirectionBaseAttack(fromPos, m_ShootDirection);
 
                 m_PlayerAnimationModule.OnAnimationMoment += BaseAttackAnimationMomentHandler;
                 m_PlayerAnimationModule.PlayAnimation(EnumsCollection.AnimationTypes.Attack);
-
-                //Debug 
-                if (ob == null)
-                    ob = GameObject.CreatePrimitive(PrimitiveType.Capsule);
-                ob.transform.position = fromWorldPos + m_ShootDirection * 10;
             }
             
             m_RhytmInputProxy.RegisterInput();
         }
 
-        private BattleEntity GetTargetForDirectionBaseAttack(Vector3 fromWorldPos)
+        private bool RaycastGround(Vector3 mouseScreenPos, out Vector3 hitPos)
+        {
+            hitPos = Vector3.zero;
+            Ray ray = Camera.main.ScreenPointToRay(mouseScreenPos);
+
+            if (Physics.Raycast(ray, out RaycastHit hit))
+            {
+                hitPos = hit.point;
+
+                return true;
+            }
+
+            return false;
+        }
+
+        private float GetDistanceToLine(Vector3 dir, Vector3 origin, Vector3 point)
+        {
+            return Vector3.Cross(dir, point - origin).magnitude;
+        }
+
+        private BattleEntity GetTargetForDirectionBaseAttack(Vector3 fromWorldPos, Vector3 shootDir)
         {
             BattleEntity target = null;
+
+            //Dispose container
+            if (m_PotentialTargets.Count > 0)
+                m_PotentialTargets.Clear();
 
             //Get pottential targets
             foreach (BattleEntity entity in m_BattleModel.BattleEntities)
@@ -117,11 +128,12 @@ namespace RhytmTD.Battle.StateMachine
 
                 //Get from module
                 float enemyColliderSize = 1.5f;
-                float distance2ShootLine = GetDistanceToLine(m_ShootDirection, fromWorldPos, entity.GetModule<TransformModule>().Position);
+                float distance2ShootLine = GetDistanceToLine(shootDir, fromWorldPos, entity.GetModule<TransformModule>().Position);
 
                 if (distance2ShootLine <= enemyColliderSize)
                     m_PotentialTargets.Add(entity);
             }
+
 
             if (m_PotentialTargets.Count > 0)
             {
@@ -146,11 +158,6 @@ namespace RhytmTD.Battle.StateMachine
             }
 
             return target;
-        }
-
-        private float GetDistanceToLine(Vector3 dir, Vector3 origin, Vector3 point)
-        {
-            return Vector3.Cross(dir, point - origin).magnitude;
         }
 
         #endregion
@@ -220,6 +227,7 @@ namespace RhytmTD.Battle.StateMachine
 
             m_PlayerAnimationModule = playerEntity.GetModule<AnimationModule>();
             m_PlayerTransformModule = playerEntity.GetModule<TransformModule>();
+            m_PlayerSlotModule = playerEntity.GetModule<SlotModule>();
         }
     }
 }
