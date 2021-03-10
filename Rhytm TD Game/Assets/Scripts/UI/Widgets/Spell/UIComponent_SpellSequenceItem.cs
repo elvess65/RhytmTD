@@ -30,10 +30,10 @@ namespace RhytmTD.UI.Components
 
         [SerializeField] private Image Image_Action = null;
         [SerializeField] private Image Image_Visited = null;
-        [SerializeField] private Sprite m_ActionSprite;
-        [SerializeField] private Sprite m_SkipSprite;
-        [SerializeField] private Color m_ActionColor;
-        [SerializeField] private Color m_SkipColor;
+        [SerializeField] private Sprite m_ActionSprite = null;
+        [SerializeField] private Sprite m_SkipSprite = null;
+        [SerializeField] private Color m_ActionColor = Color.green;
+        [SerializeField] private Color m_SkipColor = Color.red;
 
         private bool m_IsAction;
 

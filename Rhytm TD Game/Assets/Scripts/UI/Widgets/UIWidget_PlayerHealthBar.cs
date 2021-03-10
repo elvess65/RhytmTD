@@ -13,9 +13,9 @@ namespace RhytmTD.UI.Widget
         [SerializeField] private DOTweenSequenceAnimator HealSequenceAnimator = null;
 
         [Header("Visual Change")]
-        [SerializeField] private Sprite m_NormalSprite;
-        [SerializeField] private Sprite m_WarningSprite;
-        [SerializeField] private Sprite m_DangerSprite;
+        [SerializeField] private Sprite m_NormalSprite = null;
+        [SerializeField] private Sprite m_WarningSprite = null;
+        [SerializeField] private Sprite m_DangerSprite = null;
 
         private RectTransform m_ForegroundRectTransform;
         private float m_FilledSize;

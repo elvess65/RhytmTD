@@ -6,7 +6,7 @@ namespace RhytmTD.Battle.Entities.Views
 {
     public class EnemyHealthBarView : BattleEntityView
     {
-        [SerializeField] private RectTransform m_Root;
+        [SerializeField] private RectTransform m_Root = null;
         [SerializeField] private Image Foreground = null;
         [SerializeField] private DOTweenSequenceAnimator ShowDoTweenAnimator = null;
         [SerializeField] private DOTweenSequenceAnimator HideDoTweenAnimator = null;
