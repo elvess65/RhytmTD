@@ -12,6 +12,7 @@ namespace RhytmTD.Data.Models.DataTableModels
         public PlayerCharacterAssets PlayerCharacterAssets;
         public EffectAssets EffectAssets;
         public UIAssets UIAssets;
+        public UISpriteAssets UISpriteAssets;
         public AreaData[] Areas;
 
         public override void Initialize()
@@ -20,6 +21,8 @@ namespace RhytmTD.Data.Models.DataTableModels
 
             PlayerCharacterAssets.Initialize();
             EffectAssets.Initialize();
+            UIAssets.Initialize();
+            UISpriteAssets.Initialize();
         }
 
         /// <summary>

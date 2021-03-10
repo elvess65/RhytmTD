@@ -16,6 +16,7 @@ namespace RhytmTD.Data.DataBaseLocal
         public PlayerCharacterAssets PlayerCharacterAssets;
         public EffectAssets EffectAssets;
         public UIAssets UIAssets;
+        public UISpriteAssets UISpriteAssets;
         public AreaData[] Areas;
 
         [System.Serializable]

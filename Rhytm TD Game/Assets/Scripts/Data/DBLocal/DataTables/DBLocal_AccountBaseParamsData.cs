@@ -29,7 +29,7 @@ namespace RhytmTD.Data.DataBaseLocal
         [System.Serializable]
         public abstract class SkillBaseData
         {
-            public EnumsCollection.SkillID TypeID;
+            public EnumsCollection.SkillTypeID TypeID;
             public float ActivationTime = 1;
             public float UseTime = 1;
             public float FinishingTime = 1;

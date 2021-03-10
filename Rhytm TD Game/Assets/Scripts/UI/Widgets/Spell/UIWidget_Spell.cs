@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using RhytmTD.Data.Models.DataTableModels;
+using UnityEngine;
 
 namespace RhytmTD.UI.Widget
 {
@@ -12,14 +13,16 @@ namespace RhytmTD.UI.Widget
         [SerializeField] private UIWidget_SpellSequence UIWidgetSpellSequence = null;
 
         private int m_SkillTypeID;
-        private int m_SkillID;
 
         public void Initialize(int skillTypeID, int skillID)
         {
             m_SkillTypeID = skillTypeID;
-            m_SkillID = skillID;
 
-            UIWidgetSpellInfo.Initialize(TEMP_GetSpellNameByID(m_SkillTypeID));
+            WorldDataModel worldDataModel = Dispatcher.GetModel<WorldDataModel>();
+            (Sprite sprite, Color color) iconSpriteData = worldDataModel.UISpriteAssets.GetSkillIconSprite(m_SkillTypeID);
+
+            //TODO: Get name from localization
+            UIWidgetSpellInfo.Initialize(TEMP_GetSpellNameByID(m_SkillTypeID), iconSpriteData.sprite, iconSpriteData.color);
             UIWidgetSpellInfo.OnButtonInfoPressHandler += SpellInfoPressHandler;
 
             UIWidgetSpellSequence.Initialize(skillTypeID);
@@ -50,7 +53,7 @@ namespace RhytmTD.UI.Widget
 
         private void SpellInfoPressHandler()
         {
-            Debug.Log("Get info for " + m_SkillTypeID + " " + m_SkillID);
+            Debug.Log("Get info for " + m_SkillTypeID);
         }
     }
 }

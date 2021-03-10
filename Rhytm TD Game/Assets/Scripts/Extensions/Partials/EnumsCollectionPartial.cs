@@ -30,7 +30,7 @@ namespace CoreFramework
             SkillHealth = ConstsCollection.EffectConsts.Health
         }
 
-        public enum SkillID
+        public enum SkillTypeID
         {
             Meteorite = ConstsCollection.SkillConsts.METEORITE_ID,
             Fireball = ConstsCollection.SkillConsts.FIREBALL_ID,
