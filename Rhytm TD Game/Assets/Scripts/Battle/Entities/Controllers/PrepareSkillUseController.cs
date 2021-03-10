@@ -3,7 +3,7 @@ using CoreFramework;
 using CoreFramework.Rhytm;
 using RhytmTD.Battle.Entities.Models;
 using RhytmTD.Core;
-using RhytmTD.Data.Models;
+using RhytmTD.Data.Models.DataTableModels;
 using UnityEngine;
 
 namespace RhytmTD.Battle.Entities.Controllers
@@ -15,6 +15,7 @@ namespace RhytmTD.Battle.Entities.Controllers
     {
         private BattleModel m_BattleModel;
         private PrepareSkilIUseModel m_PrepareSkilIUseModel;
+        private AccountBaseParamsDataModel m_AccountBaseParamsDataModel;
 
         private RhytmController m_RhytmController;
         private SkillsController m_SkillsController;
@@ -49,6 +50,8 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_PrepareSkilIUseModel.OnCorrectTouch += CorrectTouchHandler;
             m_PrepareSkilIUseModel.OnWrongTouch += WrongTouchHandler;
             m_PrepareSkilIUseModel.OnSkilDirectionSelected += SkillDirectionSelectedeHandler;
+
+            m_AccountBaseParamsDataModel = Dispatcher.GetModel<AccountBaseParamsDataModel>();
 
             m_RhytmController = Dispatcher.GetController<RhytmController>();
             m_SkillsController = Dispatcher.GetController<SkillsController>();
@@ -112,7 +115,6 @@ namespace RhytmTD.Battle.Entities.Controllers
                 //If current tick is next tick for the skill - skill is missed
                 if (m_SkillTypeID2Progress[skillID].NextTick == ticksSinceStart)
                 {
-
                     ResetSkillProgress(skillID);
                 }
                 else
@@ -176,11 +178,16 @@ namespace RhytmTD.Battle.Entities.Controllers
 
             m_PrepareSkilIUseModel.OnSkillSelected?.Invoke(skillTypeID);
 
-            //TODO: Move to config
-            if (m_SkillTypeID != ConstsCollection.SkillConsts.HEALTH_ID)
-                m_BattleModel.OnDirectionalSpellSelected?.Invoke();
-            else
-                StartUseSkill(m_SkillTypeID, m_PlayerLodoutModule.GetSkillIDByTypeID(m_SkillTypeID));
+            switch(m_AccountBaseParamsDataModel.GetSkillBaseDataByID(skillTypeID).TargetingType)
+            {
+                case EnumsCollection.SkillTargetingType.Area:
+                case EnumsCollection.SkillTargetingType.Direction:
+                    m_BattleModel.OnDirectionalSpellSelected?.Invoke();
+                    break;
+                case EnumsCollection.SkillTargetingType.Self:
+                    StartUseSkill(m_SkillTypeID, m_PlayerLodoutModule.GetSkillIDByTypeID(m_SkillTypeID));
+                    break;
+            } 
         }
 
 

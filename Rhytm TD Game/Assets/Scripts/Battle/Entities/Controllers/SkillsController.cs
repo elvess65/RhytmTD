@@ -67,7 +67,7 @@ namespace RhytmTD.Battle.Entities.Controllers
 
         public BattleEntity CreateHealthSkillEntity()
         {
-            AccountBaseParamsDataModel.HealthSkillBaseData data = m_AccountBaseParamsDataModel.BaseHealthSkillBaseData;
+            AccountBaseParamsDataModel.HealthSkillBaseData data = m_AccountBaseParamsDataModel.BaseHealthData;
             BattleEntity battleEntity = m_SkillFactory.CreateHealthEntity(ConstsCollection.SkillConsts.HEALTH_ID, data.ActivationTime,
                                                                             data.UseTime, data.FinishingTime,
                                                                             data.CooldownTime,

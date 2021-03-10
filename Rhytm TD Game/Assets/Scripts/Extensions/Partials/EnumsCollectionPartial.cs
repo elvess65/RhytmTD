@@ -30,6 +30,11 @@ namespace CoreFramework
             SkillHealth = ConstsCollection.EffectConsts.Health
         }
 
+        public enum SkillTargetingType
+        {
+            Direction, Area, Self
+        }
+
         public enum SkillTypeID
         {
             Meteorite = ConstsCollection.SkillConsts.METEORITE_ID,
