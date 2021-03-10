@@ -16,6 +16,7 @@ MonoBehaviour:
     type: 2}
   EffectAssets: {fileID: 11400000, guid: f81ebea77171de04194ff00577f94c6a, type: 2}
   UIAssets: {fileID: 11400000, guid: 9a405f8f0aa15c141b4483ad65054393, type: 2}
+  UISpriteAssets: {fileID: 11400000, guid: 9fd6cc6d03ffe6d4bbdc619d05a9157d, type: 2}
   Areas:
   - ID: 12
     LevelsData:
