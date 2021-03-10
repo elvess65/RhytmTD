@@ -55,11 +55,11 @@ namespace RhytmTD.Battle.StateMachine
         }
 
         private void HandleTouch(Vector3 mouseScreenPos)
-        {
-#if TARGET_BASED_ATTACK
-            HandleTargetBasedTouch(mouseScreenPos);
-#elif DIRECTION_BASED_ATTACK
+        {   
+#if DIRECTION_BASED_ATTACK
             HandleDirectionBasedTouch(mouseScreenPos);
+#else 
+            HandleTargetBasedTouch(mouseScreenPos);
 #endif
         }
 
