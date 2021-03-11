@@ -66,7 +66,7 @@ namespace RhytmTD.Battle.StateMachine
         {
             if (m_RhytmInputProxy.IsInputAllowed() && m_RhytmInputProxy.IsInputTickValid())
             {
-                m_ShootDirection = m_TargetingController.GetDirection(mouseScreenPos, m_PlayerSlotModule.ProjectileSlot.position);
+                m_ShootDirection = m_TargetingController.GetDirection(mouseScreenPos, m_PlayerSlotModule.ProjectileSlot.position, out Vector3 hitPoint);
 
                 //Make possible to attack only forward
                 if (m_ShootDirection.z <= 0)

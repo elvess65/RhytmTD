@@ -53,9 +53,7 @@ namespace RhytmTD.Battle.StateMachine
         {
             if (m_RhytmInputProxy.IsInputAllowed() && m_RhytmInputProxy.IsInputTickValid())
             {
-                Debug.Log("Meteorite damage radius: " + m_AccountBaseParamsDataModel.BaseMeteoriteData.DamageRadius);
-
-                Vector3 skillDirection = m_TargetingController.GetDirection(mouseScreenPos, m_PlayerSlotModule.ProjectileSlot.position);
+                Vector3 skillDirection = m_TargetingController.GetDirection(mouseScreenPos, m_PlayerSlotModule.ProjectileSlot.position, out Vector3 hitPos);
 
                 //Make possible to attack only forward
                 if (skillDirection.z <= 0)
@@ -64,7 +62,7 @@ namespace RhytmTD.Battle.StateMachine
                     return;
                 }
 
-                m_PrepareSkilIUseModel.OnSkilDirectionSelected?.Invoke(skillDirection);
+                m_PrepareSkilIUseModel.OnSkilDirectionSelected?.Invoke(skillDirection, hitPos);
             }
 
             m_RhytmInputProxy.RegisterInput();

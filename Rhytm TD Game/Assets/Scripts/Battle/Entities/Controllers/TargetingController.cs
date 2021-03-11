@@ -30,11 +30,11 @@ namespace RhytmTD.Battle.Entities.Controllers
         }
 
 
-        public Vector3 GetDirection(Vector3 mouseScreenPos, Vector3 anchorWorldPos)
+        public Vector3 GetDirection(Vector3 mouseScreenPos, Vector3 anchorWorldPos, out Vector3 hitPos)
         {
             anchorWorldPos.y = 0;
 
-            if (RaycastGround(mouseScreenPos, out Vector3 hitPos))
+            if (RaycastGround(mouseScreenPos, out hitPos))
             {
                 return (hitPos - anchorWorldPos).normalized;
             }

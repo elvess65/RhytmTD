@@ -27,6 +27,7 @@ namespace RhytmTD.Battle.Entities.Controllers
         private TransformModule m_PlayerTransformModule;
         private SlotModule m_PlayerSlotModule;
         private BattleEntity m_TargetEntity;
+        private Vector3 m_TargetVector;
         private int m_SkillID;
         private int m_SkillTypeID;
 
@@ -95,9 +96,9 @@ namespace RhytmTD.Battle.Entities.Controllers
             HandleSequenceFailed();
         }
 
-        private void SkillDirectionSelectedeHandler(Vector3 skillDir)
+        private void SkillDirectionSelectedeHandler(Vector3 skillDir, Vector3 hitPos)
         {
-            StartUseSkill(m_SkillTypeID, skillDir);
+            StartUseSkill(m_SkillTypeID, skillDir, hitPos);
         }
 
         private void EventProcessingTickHandler(int ticksSinceStart)
@@ -178,7 +179,7 @@ namespace RhytmTD.Battle.Entities.Controllers
                     break;
 
                 case EnumsCollection.SkillTargetingType.Self:
-                    StartUseSkill(m_SkillTypeID, Vector3.zero);
+                    StartUseSkill(m_SkillTypeID, Vector3.zero, Vector3.zero);
                     break;
             } 
         }
@@ -232,16 +233,16 @@ namespace RhytmTD.Battle.Entities.Controllers
 
         #endregion
 
-        private void StartUseSkill(int skillTypeID,Vector3 skillDir)
+        private void StartUseSkill(int skillTypeID,Vector3 skillDir, Vector3 hitPos)
         {
             m_BattleModel.OnSpellbookUsed?.Invoke();
 
             m_SkillID = m_PlayerLodoutModule.GetSkillIDByTypeID(m_SkillTypeID);
-            m_TargetEntity = GetTargetBySkillType(skillTypeID, skillDir);
+            m_TargetEntity = GetTargetBySkillType(skillTypeID, skillDir, hitPos, ref m_TargetVector);
 
             m_PlayerAnimationModule.OnAnimationMoment += SkillAnimationMomentHandler;
             m_PlayerAnimationModule.PlayAnimation(ConvertersCollection.ConvertSkillTypeID2AnimationType(skillTypeID));
-    }
+        }
 
         private void SkillAnimationMomentHandler()
         {
@@ -250,7 +251,10 @@ namespace RhytmTD.Battle.Entities.Controllers
             if (m_TargetEntity != null)
                 m_SkillsController.UseSkill(m_SkillID, m_BattleModel.PlayerEntity.ID, m_TargetEntity.ID);
             else
-                Debug.LogError("TARGET WAS NOT FIND");
+            {
+                //m_TargetVector is direction for Fireball and hit point for meteorite
+                Debug.LogError("TARGET WAS NOT FOUND. USE " + m_TargetVector + " VECTOR TO LAUNCH SKILL");
+            }
 
             m_BattleModel.OnSpellbookPostUsed?.Invoke();
         }
@@ -273,7 +277,7 @@ namespace RhytmTD.Battle.Entities.Controllers
             }
         }
 
-        private BattleEntity GetTargetBySkillType(int skillTypeID, Vector3 skillDir)
+        private BattleEntity GetTargetBySkillType(int skillTypeID, Vector3 skillDir, Vector3 hitPos, ref Vector3 targetVector)
         {
             BattleEntity target = null;
 
@@ -281,11 +285,14 @@ namespace RhytmTD.Battle.Entities.Controllers
             {
                 case EnumsCollection.SkillTargetingType.Area:
 
+                    targetVector = hitPos;
                     target = m_TargetingController.GetTargetForDirectionBaseAttack(m_PlayerSlotModule.ProjectileSlot.position, m_PlayerTransformModule.Position, skillDir);
+
                     break;
 
                 case EnumsCollection.SkillTargetingType.Direction:
 
+                    targetVector = skillDir;
                     target = m_TargetingController.GetTargetForDirectionBaseAttack(m_PlayerSlotModule.ProjectileSlot.position, m_PlayerTransformModule.Position, skillDir);
                     break;
 
