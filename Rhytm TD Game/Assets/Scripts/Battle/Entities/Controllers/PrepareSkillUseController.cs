@@ -23,6 +23,8 @@ namespace RhytmTD.Battle.Entities.Controllers
 
         private AnimationModule m_PlayerAnimationModule;
         private LoadoutModule m_PlayerLodoutModule;
+        private TransformModule m_PlayerTransformModule;
+        private SlotModule m_PlayerSlotModule;
         private BattleEntity m_TargetEntity;
         private int m_SkillID;
         private int m_SkillTypeID;
@@ -73,6 +75,8 @@ namespace RhytmTD.Battle.Entities.Controllers
 
             m_PlayerAnimationModule = playerEntity.GetModule<AnimationModule>();
             m_PlayerLodoutModule = playerEntity.GetModule<LoadoutModule>();
+            m_PlayerTransformModule = playerEntity.GetModule<TransformModule>();
+            m_PlayerSlotModule = playerEntity.GetModule<SlotModule>();
 
             InitializePatterns();
         }
@@ -101,11 +105,9 @@ namespace RhytmTD.Battle.Entities.Controllers
             HandleSequenceFailed();
         }
 
-        private void SkillDirectionSelectedeHandler(Vector3 dir)
+        private void SkillDirectionSelectedeHandler(Vector3 skillDir)
         {
-            Debug.Log(dir + " " + m_SkillTypeID);
-
-            StartUseSkill(m_SkillTypeID, m_PlayerLodoutModule.GetSkillIDByTypeID(m_SkillTypeID));
+            StartUseSkill(m_SkillTypeID, skillDir);
         }
 
         private void EventProcessingTickHandler(int ticksSinceStart)
@@ -184,8 +186,9 @@ namespace RhytmTD.Battle.Entities.Controllers
                 case EnumsCollection.SkillTargetingType.Direction:
                     m_BattleModel.OnDirectionalSpellSelected?.Invoke();
                     break;
+
                 case EnumsCollection.SkillTargetingType.Self:
-                    StartUseSkill(m_SkillTypeID, m_PlayerLodoutModule.GetSkillIDByTypeID(m_SkillTypeID));
+                    StartUseSkill(m_SkillTypeID, Vector3.zero);
                     break;
             } 
         }
@@ -239,19 +242,16 @@ namespace RhytmTD.Battle.Entities.Controllers
 
         #endregion
 
-        private void StartUseSkill(int skillTypeID, int skillID)
+        private void StartUseSkill(int skillTypeID,Vector3 skillDir)
         {
             m_BattleModel.OnSpellbookUsed?.Invoke();
 
-            m_SkillID = skillID;
-            m_TargetEntity = GetTargetBySkillType(skillTypeID);
+            m_SkillID = m_PlayerLodoutModule.GetSkillIDByTypeID(m_SkillTypeID);
+            m_TargetEntity = GetTargetBySkillType(skillTypeID, skillDir);
 
-            if (m_TargetEntity != null)
-            {
-                m_PlayerAnimationModule.OnAnimationMoment += SkillAnimationMomentHandler;
-                m_PlayerAnimationModule.PlayAnimation(ConvertersCollection.ConvertSkillTypeID2AnimationType(skillTypeID));
-            }
-        }
+            m_PlayerAnimationModule.OnAnimationMoment += SkillAnimationMomentHandler;
+            m_PlayerAnimationModule.PlayAnimation(ConvertersCollection.ConvertSkillTypeID2AnimationType(skillTypeID));
+    }
 
         private void SkillAnimationMomentHandler()
         {
@@ -277,16 +277,23 @@ namespace RhytmTD.Battle.Entities.Controllers
             }
         }
 
-        private BattleEntity GetTargetBySkillType(int skillTypeID)
+        private BattleEntity GetTargetBySkillType(int skillTypeID, Vector3 skillDir)
         {
             BattleEntity target = null;
-            switch (skillTypeID)
+
+            switch (m_AccountBaseParamsDataModel.GetSkillBaseDataByID(skillTypeID).TargetingType)
             {
-                case ConstsCollection.SkillConsts.FIREBALL_ID:
-                case ConstsCollection.SkillConsts.METEORITE_ID:
-                    target = m_TargetingController.GetNearestEnemy(m_BattleModel.PlayerEntity);
+                case EnumsCollection.SkillTargetingType.Area:
+
+                    target = m_TargetingController.GetTargetForDirectionBaseAttack(m_PlayerSlotModule.ProjectileSlot.position, m_PlayerTransformModule.Position, skillDir);
                     break;
-                case ConstsCollection.SkillConsts.HEALTH_ID:
+
+                case EnumsCollection.SkillTargetingType.Direction:
+
+                    target = m_TargetingController.GetTargetForDirectionBaseAttack(m_PlayerSlotModule.ProjectileSlot.position, m_PlayerTransformModule.Position, skillDir);
+                    break;
+
+                case EnumsCollection.SkillTargetingType.Self:
                     target = m_BattleModel.PlayerEntity;
                     break;
             }

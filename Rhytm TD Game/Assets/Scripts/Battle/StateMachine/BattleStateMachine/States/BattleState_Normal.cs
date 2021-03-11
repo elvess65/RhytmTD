@@ -27,8 +27,8 @@ namespace RhytmTD.Battle.StateMachine
 
         public BattleState_Normal() : base()
         {
-            m_BattleModel = Dispatcher.GetModel<BattleModel>();
             m_InputModel = Dispatcher.GetModel<InputModel>();
+            m_BattleModel = Dispatcher.GetModel<BattleModel>();
             m_ShootController = Dispatcher.GetController<ShootController>();
             m_RhytmInputProxy = Dispatcher.GetController<RhytmInputProxy>();
             m_TargetingController = Dispatcher.GetController<TargetingController>();
@@ -70,7 +70,10 @@ namespace RhytmTD.Battle.StateMachine
 
                 //Make possible to attack only forward
                 if (m_ShootDirection.z <= 0)
+                {
+                    m_RhytmInputProxy.RegisterInput();
                     return;
+                }
 
                 m_TargetEntity = m_TargetingController.GetTargetForDirectionBaseAttack(m_PlayerSlotModule.ProjectileSlot.position, m_PlayerTransformModule.Position, m_ShootDirection);
 
