@@ -32,6 +32,7 @@ namespace RhytmTD.Battle.Entities.Views
             m_CameraModel.Cameras[CameraTypes.Main] = VCamMain;
             m_CameraModel.CurrentCamera = VCDefault;
             m_CameraModel.CMBrain = CMBrain;
+            m_CameraModel.MainCamera = Camera.main;
 
             VCDefault.transform.position = DefaultCameraPos.position;
         }

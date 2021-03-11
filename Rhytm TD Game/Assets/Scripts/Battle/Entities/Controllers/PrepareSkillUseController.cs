@@ -19,7 +19,7 @@ namespace RhytmTD.Battle.Entities.Controllers
 
         private RhytmController m_RhytmController;
         private SkillsController m_SkillsController;
-        private FindTargetController m_FindTargetController;
+        private TargetingController m_TargetingController;
 
         private AnimationModule m_PlayerAnimationModule;
         private LoadoutModule m_PlayerLodoutModule;
@@ -55,7 +55,7 @@ namespace RhytmTD.Battle.Entities.Controllers
 
             m_RhytmController = Dispatcher.GetController<RhytmController>();
             m_SkillsController = Dispatcher.GetController<SkillsController>();
-            m_FindTargetController = Dispatcher.GetController<FindTargetController>();
+            m_TargetingController = Dispatcher.GetController<TargetingController>();
         }
 
 
@@ -284,7 +284,7 @@ namespace RhytmTD.Battle.Entities.Controllers
             {
                 case ConstsCollection.SkillConsts.FIREBALL_ID:
                 case ConstsCollection.SkillConsts.METEORITE_ID:
-                    target = m_FindTargetController.GetNearestTarget(m_BattleModel.PlayerEntity);
+                    target = m_TargetingController.GetNearestEnemy(m_BattleModel.PlayerEntity);
                     break;
                 case ConstsCollection.SkillConsts.HEALTH_ID:
                     target = m_BattleModel.PlayerEntity;
