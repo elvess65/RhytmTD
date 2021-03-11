@@ -16,9 +16,9 @@ namespace RhytmTD.Data.Models.DataTableModels
 
         private Dictionary<EnumsCollection.SkillTypeID, SkillBaseData> m_SkillBaseData;
 
-        public SkillBaseData GetSkillBaseDataByID(int TypeID)
+        public SkillBaseData GetSkillBaseDataByID(int typeID)
         {
-            EnumsCollection.SkillTypeID skillTypeID = (EnumsCollection.SkillTypeID)TypeID;
+            EnumsCollection.SkillTypeID skillTypeID = (EnumsCollection.SkillTypeID)typeID;
             return m_SkillBaseData[skillTypeID];
         }
 
@@ -48,6 +48,7 @@ namespace RhytmTD.Data.Models.DataTableModels
         {
             public EnumsCollection.SkillTypeID TypeID;
             public EnumsCollection.SkillTargetingType TargetingType;
+            public EnumsCollection.SkillSequencePatternID DefaultPatternID;
             public float ActivationTime;
             public float UseTime;
             public float FinishingTime;

@@ -23,7 +23,11 @@
             public const int METEORITE_ID = 100;
             public const int FIREBALL_ID = 101;
             public const int HEALTH_ID = 102;
-        }
+
+            public const int PATTERN_1_ID = 1100;
+            public const int PATTERN_2_ID = 1101;
+            public const int PATTERN_3_ID = 1102;
+        } 
 
         public static class DataConsts
         {

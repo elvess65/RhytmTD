@@ -29,7 +29,7 @@ namespace RhytmTD.Setup
             dispatcher.CreateController<BattleAudioController>();
             dispatcher.CreateController<ShootController>();
             dispatcher.CreateController<PlayerBehavoiurController>();
-            dispatcher.CreateController<FindTargetController>();
+            dispatcher.CreateController<TargetingController>();
             dispatcher.CreateController<BattleController>();
             dispatcher.CreateController<BattleUIController>();
             dispatcher.CreateController<BattleProgressController>();

@@ -35,6 +35,6 @@ namespace RhytmTD.Battle.Entities.Models
         /// <summary>
         /// Skill direction was selected
         /// </summary>
-        public System.Action<UnityEngine.Vector3> OnSkilDirectionSelected;
+        public System.Action<UnityEngine.Vector3, UnityEngine.Vector3> OnSkilDirectionSelected;
     }
 }
