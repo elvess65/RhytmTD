@@ -59,5 +59,12 @@ namespace CoreFramework
             Target,
             AllyTarget
         }
+
+        public enum SkillSequencePatternID
+        {
+            Pattern1 = ConstsCollection.SkillConsts.PATTERN_1_ID,
+            Pattern2 = ConstsCollection.SkillConsts.PATTERN_2_ID,
+            Pattern3 = ConstsCollection.SkillConsts.PATTERN_3_ID
+        }
     }
 }

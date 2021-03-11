@@ -8,18 +8,21 @@ namespace RhytmTD.Network
         public string SerializedLevelingData { get; }
         public string SerializedWorldData { get; }
         public string SerializedAccountBaseParamsData { get; }
+        public string SerializedSkillSequennceData { get; }
 
         public ConnectionSeccessResult(string serializedAccountData,
                                        string serializedEnviromentData,
                                        string serializedLevelingData,
                                        string serializedWorldData,
-                                       string serializedAccountBaseParamsData)
+                                       string serializedAccountBaseParamsData,
+                                       string serializedSkillSequennceData)
         {
             SerializedAccountData = serializedAccountData;
             SerializedEnviromentData = serializedEnviromentData;
             SerializedLevelingData = serializedLevelingData;
             SerializedWorldData = serializedWorldData;
             SerializedAccountBaseParamsData = serializedAccountBaseParamsData;
+            SerializedSkillSequennceData = serializedSkillSequennceData;
         }
     }
 }

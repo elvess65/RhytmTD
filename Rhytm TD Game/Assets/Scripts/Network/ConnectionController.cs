@@ -33,7 +33,8 @@ namespace RhytmTD.Network
                                                                    connectionResult.SerializedEnviromentData, 
                                                                    connectionResult.SerializedLevelingData, 
                                                                    connectionResult.SerializedWorldData,
-                                                                   connectionResult.SerializedAccountBaseParamsData),
+                                                                   connectionResult.SerializedAccountBaseParamsData,
+                                                                   connectionResult.SerializedSkillSequennceData),
                                                  new BattleGameSetup());
             gameSetup.Setup();
 

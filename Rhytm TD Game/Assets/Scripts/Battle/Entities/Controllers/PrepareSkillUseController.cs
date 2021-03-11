@@ -15,6 +15,7 @@ namespace RhytmTD.Battle.Entities.Controllers
     {
         private BattleModel m_BattleModel;
         private PrepareSkilIUseModel m_PrepareSkilIUseModel;
+        private SkillSequenceDataModel m_SkillSequenceDataModel;
         private AccountBaseParamsDataModel m_AccountBaseParamsDataModel;
 
         private RhytmController m_RhytmController;
@@ -30,7 +31,7 @@ namespace RhytmTD.Battle.Entities.Controllers
         private int m_SkillTypeID;
 
         private bool m_IsSequenceStrted;
-        private Dictionary<int, bool[]> m_SkillTypeID2Pattern;
+        private Dictionary<int, List<bool>> m_SkillTypeID2Pattern;
         private Dictionary<int, SkillProgress> m_SkillTypeID2Progress;
 
 
@@ -43,30 +44,19 @@ namespace RhytmTD.Battle.Entities.Controllers
             base.InitializeComplete();
 
             m_BattleModel = Dispatcher.GetModel<BattleModel>();
-            m_BattleModel.OnPlayerEntityInitialized += PlayerInitializedHandlder;
-            m_BattleModel.OnSpellbookOpened += SpellbookOpenedHandler;
-            m_BattleModel.OnSpellbookClosed += SpellbookClosedOrUsedHandler;
-            m_BattleModel.OnSpellbookUsed += SpellbookClosedOrUsedHandler;
-
             m_PrepareSkilIUseModel = Dispatcher.GetModel<PrepareSkilIUseModel>();
-            m_PrepareSkilIUseModel.OnCorrectTouch += CorrectTouchHandler;
-            m_PrepareSkilIUseModel.OnWrongTouch += WrongTouchHandler;
-            m_PrepareSkilIUseModel.OnSkilDirectionSelected += SkillDirectionSelectedeHandler;
-
+            m_SkillSequenceDataModel = Dispatcher.GetModel<SkillSequenceDataModel>();
             m_AccountBaseParamsDataModel = Dispatcher.GetModel<AccountBaseParamsDataModel>();
 
             m_RhytmController = Dispatcher.GetController<RhytmController>();
             m_SkillsController = Dispatcher.GetController<SkillsController>();
             m_TargetingController = Dispatcher.GetController<TargetingController>();
-        }
 
+            m_BattleModel.OnPlayerEntityInitialized += PlayerInitializedHandlder;
 
-        private void SpellbookOpenedHandler()
-        {
-        }
-
-        private void SpellbookClosedOrUsedHandler()
-        {
+            m_PrepareSkilIUseModel.OnCorrectTouch += CorrectTouchHandler;
+            m_PrepareSkilIUseModel.OnWrongTouch += WrongTouchHandler;
+            m_PrepareSkilIUseModel.OnSkilDirectionSelected += SkillDirectionSelectedeHandler;
         }
 
         private void PlayerInitializedHandlder(BattleEntity playerEntity)
@@ -197,20 +187,20 @@ namespace RhytmTD.Battle.Entities.Controllers
         private void CalculateNextTickForSkill(int skillTypeID)
         {
             SkillProgress skillProgress = m_SkillTypeID2Progress[skillTypeID];
-            bool[] skillPattern = m_SkillTypeID2Pattern[skillTypeID];
+            List<bool> skillPattern = m_SkillTypeID2Pattern[skillTypeID];
 
-            for (int i = skillProgress.CurProgressIndex; i < skillPattern.Length; i++)
+            for (int i = skillProgress.CurProgressIndex; i < skillPattern.Count; i++)
             {
                 skillProgress.NextTick++;
                 skillProgress.CurProgressIndex++;
 
-                if (skillProgress.CurProgressIndex < skillPattern.Length && skillPattern[skillProgress.CurProgressIndex])
+                if (skillProgress.CurProgressIndex < skillPattern.Count && skillPattern[skillProgress.CurProgressIndex])
                 {
                     break;
                 }
             }
 
-            if (m_SkillTypeID2Progress[skillTypeID].CurProgressIndex >= skillPattern.Length)
+            if (m_SkillTypeID2Progress[skillTypeID].CurProgressIndex >= skillPattern.Count)
             {
                 HandleSkillSelection(skillTypeID);
             }
@@ -256,7 +246,11 @@ namespace RhytmTD.Battle.Entities.Controllers
         private void SkillAnimationMomentHandler()
         {
             m_PlayerAnimationModule.OnAnimationMoment -= SkillAnimationMomentHandler;
-            m_SkillsController.UseSkill(m_SkillID, m_BattleModel.PlayerEntity.ID, m_TargetEntity.ID);
+
+            if (m_TargetEntity != null)
+                m_SkillsController.UseSkill(m_SkillID, m_BattleModel.PlayerEntity.ID, m_TargetEntity.ID);
+            else
+                Debug.LogError("TARGET WAS NOT FIND");
 
             m_BattleModel.OnSpellbookPostUsed?.Invoke();
         }
@@ -264,13 +258,15 @@ namespace RhytmTD.Battle.Entities.Controllers
 
         private void InitializePatterns()
         {
-            m_SkillTypeID2Pattern = new Dictionary<int, bool[]>();
+            m_SkillTypeID2Pattern = new Dictionary<int, List<bool>>();
             m_SkillTypeID2Progress = new Dictionary<int, SkillProgress>();
 
             foreach (int skillTypeID in m_PlayerLodoutModule.SelectedSkillTypeIDs)
             {
+                EnumsCollection.SkillSequencePatternID patternID = m_AccountBaseParamsDataModel.GetSkillBaseDataByID(skillTypeID).DefaultPatternID;
+
                 //Fill patterns
-                m_SkillTypeID2Pattern.Add(skillTypeID, tempSkillPatterns[skillTypeID]);
+                m_SkillTypeID2Pattern.Add(skillTypeID, m_SkillSequenceDataModel.GetSkillSequencePatternByID(patternID));
 
                 //Fill progress by init values
                 m_SkillTypeID2Progress.Add(skillTypeID, new SkillProgress());
@@ -311,13 +307,5 @@ namespace RhytmTD.Battle.Entities.Controllers
 
             public void Reset() => CurProgressIndex = NextTick = 0;
         }
-
-
-        public static Dictionary<int, bool[]> tempSkillPatterns = new Dictionary<int, bool[]>()
-        {
-            { ConstsCollection.SkillConsts.FIREBALL_ID, new bool[]  { true, true, false, true,  true } },
-            { ConstsCollection.SkillConsts.METEORITE_ID, new bool[] { true, true, false, false, true } },
-            { ConstsCollection.SkillConsts.HEALTH_ID, new bool[]    { true, true, false, true,  false, true } },
-        };
     }
 }

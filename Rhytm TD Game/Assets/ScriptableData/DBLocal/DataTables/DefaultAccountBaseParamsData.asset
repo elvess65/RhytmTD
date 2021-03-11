@@ -22,6 +22,7 @@ MonoBehaviour:
   BaseFireballData:
     TypeID: 101
     TargetingType: 0
+    DefaultPatternID: 1100
     ActivationTime: 0
     UseTime: 1
     FinishingTime: 1
@@ -31,6 +32,7 @@ MonoBehaviour:
   BaseMeteoriteData:
     TypeID: 100
     TargetingType: 1
+    DefaultPatternID: 1101
     ActivationTime: 1
     UseTime: 1
     FinishingTime: 1
@@ -41,6 +43,7 @@ MonoBehaviour:
   BaseHealthData:
     TypeID: 102
     TargetingType: 2
+    DefaultPatternID: 1102
     ActivationTime: 1
     UseTime: 1
     FinishingTime: 1

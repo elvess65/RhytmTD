@@ -58,8 +58,10 @@ namespace RhytmTD.Network
                                                                     JsonUtility.ToJson(m_DataObject.EnvironmentData),
                                                                     JsonUtility.ToJson(m_DataObject.AccountLevelingData),
                                                                     JsonUtility.ToJson(m_DataObject.WorldData),
-                                                                    JsonUtility.ToJson(m_DataObject.AccountBaseParamsData)));
+                                                                    JsonUtility.ToJson(m_DataObject.AccountBaseParamsData),
+                                                                    JsonUtility.ToJson(m_DataObject.SkillSequenceData)));
         }
+        
 
         IEnumerator SimulateErrorConnectionDelay(int errorCode)
         {

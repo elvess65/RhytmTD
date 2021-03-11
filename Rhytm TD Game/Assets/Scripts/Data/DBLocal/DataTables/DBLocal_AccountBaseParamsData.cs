@@ -31,6 +31,7 @@ namespace RhytmTD.Data.DataBaseLocal
         {
             public EnumsCollection.SkillTypeID TypeID;
             public EnumsCollection.SkillTargetingType TargetingType;
+            public EnumsCollection.SkillSequencePatternID DefaultPatternID;
             public float ActivationTime = 1;
             public float UseTime = 1;
             public float FinishingTime = 1;
