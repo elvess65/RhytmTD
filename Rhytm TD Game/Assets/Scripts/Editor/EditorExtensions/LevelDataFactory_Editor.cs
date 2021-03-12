@@ -326,6 +326,7 @@ namespace RhytmTD.Editor.EditorExtensions
 
         void DrawLevelProperies(LevelDataFactory level)
         {
+            level.DamageForMissRhytm = EditorGUILayout.IntField("DamageForMissRhytm", level.DamageForMissRhytm);
             level.DelayBeforeStartLevel = EditorGUILayout.IntField("DelayBeforeStartLevel", level.DelayBeforeStartLevel);
             level.RecomendedAverageDmg = EditorGUILayout.IntField("RecomendedAverageDmg", level.RecomendedAverageDmg);
 

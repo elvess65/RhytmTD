@@ -8,6 +8,7 @@ namespace RhytmTD.Data.Factory
     [CreateAssetMenu(fileName = "New LevelDataFactory", menuName = "DBLocal/Levels/LevelDataFactory", order = 101)]
     public class LevelDataFactory : ScriptableObject
     {
+        public int DamageForMissRhytm = 10;
         public int DelayBeforeStartLevel = 2;
         public int RecomendedAverageDmg = 15;  
         public int DynamicDifficutlyReducePercent = 50;  

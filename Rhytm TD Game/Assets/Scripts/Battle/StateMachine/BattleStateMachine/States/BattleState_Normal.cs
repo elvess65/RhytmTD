@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using CoreFramework;
+﻿using CoreFramework;
 using CoreFramework.Input;
 using CoreFramework.Rhytm;
 using RhytmTD.Battle.Entities;
@@ -17,6 +16,7 @@ namespace RhytmTD.Battle.StateMachine
         private RhytmInputProxy m_RhytmInputProxy;
         private ShootController m_ShootController;
         private TargetingController m_TargetingController;
+        private PlayerRhytmInputHandleController m_PlayerRhytmInputHandleController;
 
         private AnimationModule m_PlayerAnimationModule;
         private TransformModule m_PlayerTransformModule;
@@ -32,6 +32,7 @@ namespace RhytmTD.Battle.StateMachine
             m_ShootController = Dispatcher.GetController<ShootController>();
             m_RhytmInputProxy = Dispatcher.GetController<RhytmInputProxy>();
             m_TargetingController = Dispatcher.GetController<TargetingController>();
+            m_PlayerRhytmInputHandleController = Dispatcher.GetController<PlayerRhytmInputHandleController>();
 
             m_BattleModel.OnPlayerEntityInitialized += PlayerInitializedHandlder;
         }
@@ -64,21 +65,30 @@ namespace RhytmTD.Battle.StateMachine
 
         private void HandleDirectionBasedTouch(Vector3 mouseScreenPos)
         {
-            if (m_RhytmInputProxy.IsInputAllowed() && m_RhytmInputProxy.IsInputTickValid())
+            if (m_RhytmInputProxy.IsInputAllowed()) 
             {
-                m_ShootDirection = m_TargetingController.GetDirection(mouseScreenPos, m_PlayerSlotModule.ProjectileSlot.position, out Vector3 hitPoint);
-
-                //Make possible to attack only forward
-                if (m_ShootDirection.z <= 0)
+                if (m_RhytmInputProxy.IsInputTickValid())
                 {
-                    m_RhytmInputProxy.RegisterInput();
-                    return;
+                    m_ShootDirection = m_TargetingController.GetDirection(mouseScreenPos, m_PlayerSlotModule.ProjectileSlot.position, out Vector3 hitPoint);
+
+                    //Make possible to attack only forward
+                    if (m_ShootDirection.z <= 0)
+                    {
+                        m_RhytmInputProxy.RegisterInput();
+                        return;
+                    }
+
+                    m_TargetEntity = m_TargetingController.GetTargetForDirectionBaseAttack(m_PlayerSlotModule.ProjectileSlot.position, m_PlayerTransformModule.Position, m_ShootDirection);
+
+                    m_PlayerAnimationModule.OnAnimationMoment += BaseAttackAnimationMomentHandler;
+                    m_PlayerAnimationModule.PlayAnimation(EnumsCollection.AnimationTypes.Attack);
+
+                    m_PlayerRhytmInputHandleController.HandleCorrectRhytmInput();
                 }
-
-                m_TargetEntity = m_TargetingController.GetTargetForDirectionBaseAttack(m_PlayerSlotModule.ProjectileSlot.position, m_PlayerTransformModule.Position, m_ShootDirection);
-
-                m_PlayerAnimationModule.OnAnimationMoment += BaseAttackAnimationMomentHandler;
-                m_PlayerAnimationModule.PlayAnimation(EnumsCollection.AnimationTypes.Attack);
+                else
+                {
+                    m_PlayerRhytmInputHandleController.HandleWrongRhytmInput();
+                }
             }
             
             m_RhytmInputProxy.RegisterInput();

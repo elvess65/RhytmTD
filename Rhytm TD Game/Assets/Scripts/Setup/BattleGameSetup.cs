@@ -38,6 +38,7 @@ namespace RhytmTD.Setup
             dispatcher.CreateController<WaveController>();
             dispatcher.CreateController<MarkerController>();
             dispatcher.CreateController<PrepareSkillUseController>();
+            dispatcher.CreateController<PlayerRhytmInputHandleController>();
 
             // Models
             dispatcher.CreateModel<BattleModel>();
