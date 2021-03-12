@@ -112,6 +112,35 @@ namespace RhytmTD.Battle.Entities.Controllers
             return targetEntity;
         }
 
+        public BattleEntity GetNeareastEnemyToPointInRadius(Vector3 pos, float radius)
+        {
+            BattleEntity retValue = null;
+            float radiusSqr = radius * radius;
+            float nearestDistance = float.MaxValue;
+
+            foreach (BattleEntity entity in m_BattleModel.BattleEntities)
+            {
+                if (!entity.HasModule<EnemyBehaviourTag>() || entity.HasModule<PredictedDestroyedTag>())
+                    continue;
+
+                DestroyModule destroyModule = entity.GetModule<DestroyModule>();
+
+                if (destroyModule.IsDestroyed)
+                    continue;
+
+                TransformModule transformModule = entity.GetModule<TransformModule>();
+
+                float distanceSqr = (pos - transformModule.Position).sqrMagnitude;
+                if (distanceSqr <= radiusSqr && distanceSqr <= nearestDistance)
+                {
+                    nearestDistance = distanceSqr;
+                    retValue = entity;
+                }
+            }
+
+            return retValue;
+        }
+
         public BattleEntity GetNearestEnemy(BattleEntity sender)
         {
             TransformModule senderTransform = sender.GetModule<TransformModule>();

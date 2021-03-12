@@ -14,6 +14,7 @@ namespace RhytmTD.Battle.Entities.Controllers
     public class PrepareSkillUseController : BaseController
     {
         private BattleModel m_BattleModel;
+        private SkillsModel m_SkillsModel;
         private PrepareSkilIUseModel m_PrepareSkilIUseModel;
         private SkillSequenceDataModel m_SkillSequenceDataModel;
         private AccountBaseParamsDataModel m_AccountBaseParamsDataModel;
@@ -45,6 +46,7 @@ namespace RhytmTD.Battle.Entities.Controllers
             base.InitializeComplete();
 
             m_BattleModel = Dispatcher.GetModel<BattleModel>();
+            m_SkillsModel = Dispatcher.GetModel<SkillsModel>();
             m_PrepareSkilIUseModel = Dispatcher.GetModel<PrepareSkilIUseModel>();
             m_SkillSequenceDataModel = Dispatcher.GetModel<SkillSequenceDataModel>();
             m_AccountBaseParamsDataModel = Dispatcher.GetModel<AccountBaseParamsDataModel>();
@@ -98,7 +100,7 @@ namespace RhytmTD.Battle.Entities.Controllers
 
         private void SkillDirectionSelectedeHandler(Vector3 skillDir, Vector3 hitPos)
         {
-            StartUseSkill(m_SkillTypeID, skillDir, hitPos);
+            StartUseSkill(skillDir, hitPos);
         }
 
         private void EventProcessingTickHandler(int ticksSinceStart)
@@ -179,7 +181,7 @@ namespace RhytmTD.Battle.Entities.Controllers
                     break;
 
                 case EnumsCollection.SkillTargetingType.Self:
-                    StartUseSkill(m_SkillTypeID, Vector3.zero, Vector3.zero);
+                    StartUseSkill(Vector3.zero, Vector3.zero);
                     break;
             } 
         }
@@ -233,15 +235,15 @@ namespace RhytmTD.Battle.Entities.Controllers
 
         #endregion
 
-        private void StartUseSkill(int skillTypeID,Vector3 skillDir, Vector3 hitPos)
+        private void StartUseSkill(Vector3 skillDir, Vector3 hitPos)
         {
             m_BattleModel.OnSpellbookUsed?.Invoke();
 
             m_SkillID = m_PlayerLodoutModule.GetSkillIDByTypeID(m_SkillTypeID);
-            m_TargetEntity = GetTargetBySkillType(skillTypeID, skillDir, hitPos, ref m_TargetVector);
+            m_TargetEntity = GetTargetBySkillType(skillDir, hitPos, ref m_TargetVector);
 
             m_PlayerAnimationModule.OnAnimationMoment += SkillAnimationMomentHandler;
-            m_PlayerAnimationModule.PlayAnimation(ConvertersCollection.ConvertSkillTypeID2AnimationType(skillTypeID));
+            m_PlayerAnimationModule.PlayAnimation(ConvertersCollection.ConvertSkillTypeID2AnimationType(m_SkillTypeID));
         }
 
         private void SkillAnimationMomentHandler()
@@ -277,16 +279,26 @@ namespace RhytmTD.Battle.Entities.Controllers
             }
         }
 
-        private BattleEntity GetTargetBySkillType(int skillTypeID, Vector3 skillDir, Vector3 hitPos, ref Vector3 targetVector)
+        private BattleEntity GetTargetBySkillType(Vector3 skillDir, Vector3 hitPos, ref Vector3 targetVector)
         {
             BattleEntity target = null;
 
-            switch (m_AccountBaseParamsDataModel.GetSkillBaseDataByID(skillTypeID).TargetingType)
+            switch (m_AccountBaseParamsDataModel.GetSkillBaseDataByID(m_SkillTypeID).TargetingType)
             {
                 case EnumsCollection.SkillTargetingType.Area:
 
+                    float radius = 0;
+                    Skills.BaseSkill skill = m_SkillsModel.GetSkill(m_SkillID);
+
+                    switch(m_SkillTypeID)
+                    {
+                        case ConstsCollection.SkillConsts.METEORITE_ID:
+                            radius = skill.BattleEntity.GetModule<MeteoriteSkillModule>().DamageRadius;
+                            break;
+                    }
+
                     targetVector = hitPos;
-                    target = m_TargetingController.GetTargetForDirectionBaseAttack(m_PlayerSlotModule.ProjectileSlot.position, m_PlayerTransformModule.Position, skillDir);
+                    target = m_TargetingController.GetNeareastEnemyToPointInRadius(hitPos, radius);
 
                     break;
 
