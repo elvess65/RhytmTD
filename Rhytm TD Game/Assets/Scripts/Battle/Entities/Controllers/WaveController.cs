@@ -41,6 +41,7 @@ namespace RhytmTD.Battle.Entities.Controllers
         private int m_WaveIndex;
         private int m_ChunkIndex;
         private int m_NextSpawnDelay;
+        private int m_SpellbookTick;
 
         private AreaData m_CurrentArea => m_WorldDataModel.Areas[m_AreaIndex];
         private LevelDataFactory m_CurrentLevel => m_CurrentArea.LevelsData[m_LevelIndex];
@@ -446,8 +447,7 @@ namespace RhytmTD.Battle.Entities.Controllers
         }
 
 
-        private int m_SpellbookTick;
-
+        
         private void DDRPInputCounterChangedHandler(int curDDRPInputCounter)
         {
             m_CurDynamicDifficultyReduceOffset = (int)Mathf.Lerp(m_CurrentLevel.MinDDRP,
@@ -460,23 +460,21 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_RhytmController.OnTick -= HandleTick;
 
             m_SpellbookTick = m_RhytmController.CurrentTick;
-            Debug.Log("SPELL BOOK OPEN ON TICK: " + m_SpellbookTick);
         }
 
         private void SpellBookClosedHandler()
         {
-            int prevActionTick = m_ActionTargetTick;
             m_RhytmController.OnTick += HandleTick;
-
-            int ticksInSpellBook = m_RhytmController.CurrentTick - m_SpellbookTick;
 
             if (m_ActionTargetTick >= 0)
             {
-                m_ActionTargetTick += ticksInSpellBook;
-            }
+                int ticksInSpellBook = m_RhytmController.CurrentTick - m_SpellbookTick;
 
-            Debug.Log("SPELL BOOK CLOSE ON TICK: " + m_RhytmController.CurrentTick +
-                " OPENED: " + m_SpellbookTick + " PREV ACTION AT: " + prevActionTick + " ACTION AT: " + m_ActionTargetTick);
+                m_ActionTargetTick += ticksInSpellBook;
+
+                if (m_ActionTargetTick == m_RhytmController.CurrentTick)
+                    m_ActionTargetTick++;
+            }
         }
 
 
