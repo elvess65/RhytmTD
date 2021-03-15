@@ -11,14 +11,13 @@ namespace RhytmTD.Battle.Entities.Controllers
         private BattleModel m_BattleModel;
         private WorldDataModel m_WorldDataModel;
         private AccountDataModel m_AccountDataModel;
+        private PlayerRhytmInputHandleModel m_PlayerRhytmInputHandleModel;
 
         private DamageController m_DamageController;
         
         private LevelDataFactory m_CurrentLevel => m_WorldDataModel.Areas[m_AreaIndex].LevelsData[m_LevelIndex];
         private int m_AreaIndex;
         private int m_LevelIndex;
-
-        private int m_CorrectInputsCounter = 0;
 
 
         public PlayerRhytmInputHandleController(Dispatcher dispatcher) : base(dispatcher)
@@ -32,6 +31,7 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_BattleModel = Dispatcher.GetModel<BattleModel>();
             m_WorldDataModel = Dispatcher.GetModel<WorldDataModel>();
             m_AccountDataModel = Dispatcher.GetModel<AccountDataModel>();
+            m_PlayerRhytmInputHandleModel = Dispatcher.GetModel<PlayerRhytmInputHandleModel>();
 
             m_DamageController = Dispatcher.GetController<DamageController>();
 
@@ -41,12 +41,14 @@ namespace RhytmTD.Battle.Entities.Controllers
 
         public void HandleCorrectRhytmInput()
         {
-            m_CorrectInputsCounter++;
+            m_PlayerRhytmInputHandleModel.CorrectInputsCounter += ConstsCollection.DDRP_INPUT_INCREASE;
         }
 
         public void HandleWrongRhytmInput()
         {
-            m_CorrectInputsCounter = 0;
+            m_PlayerRhytmInputHandleModel.CorrectInputsCounter = UnityEngine.Mathf.Clamp(m_PlayerRhytmInputHandleModel.CorrectInputsCounter - ConstsCollection.DDRP_INPUT_DECREASE,
+                                                                                         0, m_PlayerRhytmInputHandleModel.CorrectInputsCounter);
+
             m_DamageController.DealDamage(m_BattleModel.PlayerEntity.ID, m_BattleModel.PlayerEntity.ID, m_CurrentLevel.DamageForMissRhytm);
         }
     }

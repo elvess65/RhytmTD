@@ -10,8 +10,11 @@ namespace RhytmTD.Data.Factory
     {
         public int DamageForMissRhytm = 10;
         public int DelayBeforeStartLevel = 2;
-        public int RecomendedAverageDmg = 15;  
-        public int DynamicDifficutlyReducePercent = 50;  
+        public int RecomendedAverageDmg = 15;
+        public int InitDDRP = 50;
+        public int MinDDRP = 10;
+        public int MaxDDRP = 70;
+        public int StepsToChangeDDRP = 10;
 
         public LevelAssets Assets;
         public List<WaveDataFactory> Waves = new List<WaveDataFactory>();

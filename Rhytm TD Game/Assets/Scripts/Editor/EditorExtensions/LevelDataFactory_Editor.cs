@@ -148,6 +148,14 @@ namespace RhytmTD.Editor.EditorExtensions
                 max = min;
         }
 
+        void ValidateDDRP(LevelDataFactory castedTarget)
+        {
+            ValidateMinMax(ref castedTarget.MinDDRP, ref castedTarget.MaxDDRP);
+
+            if (castedTarget.InitDDRP < castedTarget.MinDDRP || castedTarget.InitDDRP > castedTarget.MaxDDRP)
+                castedTarget.InitDDRP = (castedTarget.MinDDRP + castedTarget.MaxDDRP) / 2;
+        }
+
 
         void DrawLevel()
         {
@@ -326,16 +334,31 @@ namespace RhytmTD.Editor.EditorExtensions
 
         void DrawLevelProperies(LevelDataFactory level)
         {
+            //General
             level.DamageForMissRhytm = EditorGUILayout.IntField("DamageForMissRhytm", level.DamageForMissRhytm);
             level.DelayBeforeStartLevel = EditorGUILayout.IntField("DelayBeforeStartLevel", level.DelayBeforeStartLevel);
             level.RecomendedAverageDmg = EditorGUILayout.IntField("RecomendedAverageDmg", level.RecomendedAverageDmg);
 
+            EditorGUILayout.Space(10);
+
+            //DDR
             using (new EditorGUILayout.HorizontalScope())
             {
-                GUILayout.Label("DynamicDifficutlyReducePercent");
-                level.DynamicDifficutlyReducePercent = EditorGUILayout.IntSlider(level.DynamicDifficutlyReducePercent, 10, 70);
+                GUILayout.Label("Init DDRP");
+                level.InitDDRP = EditorGUILayout.IntSlider(level.InitDDRP, level.MinDDRP, level.MaxDDRP);
+            }
+            
+            using (new EditorGUILayout.HorizontalScope())
+            {
+                level.MinDDRP = EditorGUILayout.IntField("Min DDRP", level.MinDDRP);
+                level.MaxDDRP = EditorGUILayout.IntField("Max DDRP", level.MaxDDRP);
             }
 
+            level.StepsToChangeDDRP = EditorGUILayout.IntField("StepsToChangeDDRP", level.StepsToChangeDDRP);
+
+            EditorGUILayout.Space(10);
+
+            //Assets
             using (new EditorGUILayout.HorizontalScope())
             {
                 GUILayout.Label("Assets");

@@ -12,9 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1b94d50d4fea6540b4117f79ddbf3c8, type: 3}
   m_Name: LevelFactory Level1
   m_EditorClassIdentifier: 
+  DamageForMissRhytm: 5
   DelayBeforeStartLevel: 2
   RecomendedAverageDmg: 12
-  DynamicDifficutlyReducePercent: 40
+  InitDDRP: 50
+  MinDDRP: 30
+  MaxDDRP: 70
+  StepsToChangeDDRP: 10
   Assets: {fileID: 11400000, guid: 80276a13456b79e48944add24b5b2df1, type: 2}
   Waves:
   - DurationRestTicks: 5

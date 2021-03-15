@@ -2,9 +2,11 @@
 //#define SINGLE_SPAWN
 //#define DISABLE_SPAWN
 
+#if DEBUG_SPAWN
+using CoreFramework.Input;
+#endif
 using System.Collections.Generic;
 using CoreFramework;
-using CoreFramework.Input;
 using CoreFramework.Rhytm;
 using RhytmTD.Battle.Entities.Models;
 using RhytmTD.Data.Factory;
@@ -20,11 +22,14 @@ namespace RhytmTD.Battle.Entities.Controllers
     /// </summary>
     public class WaveController : BaseController
     {
+#if DEBUG_SPAWN
         private InputModel m_InputModel;
+#endif
         private SpawnModel m_SpawnModel;
         private BattleModel m_BattleModel;
         private WorldDataModel m_WorldDataModel;
         private AccountDataModel m_AccountDataModel;
+        private PlayerRhytmInputHandleModel m_PlayerRhytmInputHandleModel;
 
         private SolidEntitySpawnController m_SolidEntitySpawnController;
         private RhytmController m_RhytmController;
@@ -85,6 +90,9 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_BattleModel.OnSpellbookOpened += SpellBookOpenedHandler;
             m_BattleModel.OnSpellbookClosed += SpellBookClosedHandler;
             m_BattleModel.OnSpellbookUsed += SpellBookClosedHandler;
+
+            m_PlayerRhytmInputHandleModel = Dispatcher.GetModel<PlayerRhytmInputHandleModel>();
+            m_PlayerRhytmInputHandleModel.OnDDRPInputCounterChanged += DDRPInputCounterChangedHandler;
 
             m_SolidEntitySpawnController = Dispatcher.GetController<SolidEntitySpawnController>();
 
@@ -421,7 +429,7 @@ namespace RhytmTD.Battle.Entities.Controllers
 
         private void SpawnAreasInitializedHandler()
         {
-            m_CurDynamicDifficultyReduceOffset = m_CurrentLevel.DynamicDifficutlyReducePercent;
+            m_CurDynamicDifficultyReduceOffset = m_CurrentLevel.InitDDRP;
             m_EnemySpawnAreasOffsetsTicks = new int[m_SpawnModel.EnemySpawnPosition.Length];
             m_AvailableESPMatrixIndexes = new List<(int, int)>();
         }
@@ -440,19 +448,35 @@ namespace RhytmTD.Battle.Entities.Controllers
 
         private int m_SpellbookTick;
 
+        private void DDRPInputCounterChangedHandler(int curDDRPInputCounter)
+        {
+            m_CurDynamicDifficultyReduceOffset = (int)Mathf.Lerp(m_CurrentLevel.MinDDRP,
+                                                                 m_CurrentLevel.MaxDDRP,
+                                                                 (float)curDDRPInputCounter / m_CurrentLevel.StepsToChangeDDRP);
+        }
+
         private void SpellBookOpenedHandler()
         {
             m_RhytmController.OnTick -= HandleTick;
 
             m_SpellbookTick = m_RhytmController.CurrentTick;
+            Debug.Log("SPELL BOOK OPEN ON TICK: " + m_SpellbookTick);
         }
 
         private void SpellBookClosedHandler()
         {
+            int prevActionTick = m_ActionTargetTick;
             m_RhytmController.OnTick += HandleTick;
 
             int ticksInSpellBook = m_RhytmController.CurrentTick - m_SpellbookTick;
-            m_ActionTargetTick += ticksInSpellBook;
+
+            if (m_ActionTargetTick >= 0)
+            {
+                m_ActionTargetTick += ticksInSpellBook;
+            }
+
+            Debug.Log("SPELL BOOK CLOSE ON TICK: " + m_RhytmController.CurrentTick +
+                " OPENED: " + m_SpellbookTick + " PREV ACTION AT: " + prevActionTick + " ACTION AT: " + m_ActionTargetTick);
         }
 
 

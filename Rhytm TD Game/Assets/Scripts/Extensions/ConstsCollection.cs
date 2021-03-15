@@ -4,6 +4,8 @@
     {
         public const float SPELLBOOK_SPEED_MULTIPLAYER = 0.0f;
         public const float SPELLBOOK_AUDIO_TRANISTION_DURATION = 0.5f;
+        public const int DDRP_INPUT_INCREASE = 1;
+        public const int DDRP_INPUT_DECREASE = 2;
 
         public static class CharacterConsts
         {
