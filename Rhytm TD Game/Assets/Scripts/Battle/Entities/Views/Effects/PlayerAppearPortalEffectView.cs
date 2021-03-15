@@ -22,7 +22,6 @@ namespace RhytmTD.Battle.Entities.Views.Effects
         public ParticleSystem[] SpawnEffects;
         public Transform FromPortalPos;
 
-        private BattleModel m_BattleModel;
         private StartBattleSequenceModel m_StartBattleSequenceModel;
 
         private const string m_PORTAL_RADIUS_PROPERTY_NAME = "_Radius";
@@ -36,8 +35,6 @@ namespace RhytmTD.Battle.Entities.Views.Effects
 
         private void Initialize()
         {
-            m_BattleModel = Dispatcher.GetModel<BattleModel>();
-
             m_StartBattleSequenceModel = Dispatcher.GetModel<StartBattleSequenceModel>();
             m_StartBattleSequenceModel.OnPlayerViewGraphicsInitialized += PlayerViewGraphicsInitializedHandler;
 
@@ -53,8 +50,8 @@ namespace RhytmTD.Battle.Entities.Views.Effects
 
         private void PlayerViewGraphicsInitializedHandler(Transform playerViewGraphics)
         {
-            m_StartBattleSequenceModel.PlayerViewTransform.DOScale(0, 0f);
-            m_StartBattleSequenceModel.PlayerViewTransform.position = FromPortalPos.position;
+            playerViewGraphics.DOScale(0, 0f);
+            playerViewGraphics.position = FromPortalPos.position;
 
             StartAppearSequence();
         }
@@ -102,6 +99,13 @@ namespace RhytmTD.Battle.Entities.Views.Effects
         private void PortalHideSequenceComplete()
         {
             m_StartBattleSequenceModel.OnSequenceFinished?.Invoke();
+
+            Dispose();
+        }
+
+        private void Dispose()
+        {
+            m_StartBattleSequenceModel.OnPlayerViewGraphicsInitialized -= PlayerViewGraphicsInitializedHandler;
 
             PortalRenderer.enabled = false;
             Destroy(gameObject, 1);

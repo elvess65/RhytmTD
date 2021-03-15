@@ -32,11 +32,16 @@ namespace RhytmTD.Battle.Entities.Controllers
         {
             base.InitializeComplete();
 
+            m_SpawnModel = Dispatcher.GetModel<SpawnModel>();
+            m_BattleModel = Dispatcher.GetModel<BattleModel>();
+            m_UpdateModel = Dispatcher.GetModel<UpdateModel>();
+            m_AudioModel = Dispatcher.GetModel<BattleAudioModel>();
+            m_StartBattleSequenceModel = Dispatcher.GetModel<StartBattleSequenceModel>();
+
             m_RhytmController = Dispatcher.GetController<RhytmController>();
             m_RhytmInputProxy = Dispatcher.GetController<RhytmInputProxy>();
             m_SpawnController = Dispatcher.GetController<SolidEntitySpawnController>();
 
-            m_BattleModel = Dispatcher.GetModel<BattleModel>();
             m_BattleModel.OnBattleInitialize += Initialize;
             m_BattleModel.OnBattleStarted += BattleStartedHandler;
             m_BattleModel.OnBattleFinished += BattleFinishedHandler;
@@ -46,15 +51,8 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_BattleModel.OnSpellbookUsed += SpellBookUsedHandler;
             m_BattleModel.OnSpellbookPostUsed += SpellBookClosedAndPostUsedHandler;
             
-
-            m_UpdateModel = Dispatcher.GetModel<UpdateModel>();
             m_UpdateModel.OnUpdate += Update;
-
-            m_SpawnModel = Dispatcher.GetModel<SpawnModel>();
-
-            m_AudioModel = Dispatcher.GetModel<BattleAudioModel>();
-
-            m_StartBattleSequenceModel = Dispatcher.GetModel<StartBattleSequenceModel>();
+            
             m_StartBattleSequenceModel.OnSequenceFinished += StartLoop;
         }
 

@@ -44,7 +44,7 @@ MonoBehaviour:
     TypeID: 102
     TargetingType: 2
     DefaultPatternID: 1102
-    ActivationTime: 1
+    ActivationTime: 0
     UseTime: 1
     FinishingTime: 1
     CooldownTime: 10
