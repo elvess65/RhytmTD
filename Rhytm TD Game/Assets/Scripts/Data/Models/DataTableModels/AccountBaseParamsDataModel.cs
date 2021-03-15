@@ -52,7 +52,7 @@ namespace RhytmTD.Data.Models.DataTableModels
             public float ActivationTime;
             public float UseTime;
             public float FinishingTime;
-            public float CooldownTime;
+            public int CooldownTicks;
         }
 
         [System.Serializable]

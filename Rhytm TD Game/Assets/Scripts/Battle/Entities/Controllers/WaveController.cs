@@ -79,26 +79,24 @@ namespace RhytmTD.Battle.Entities.Controllers
         {
             base.InitializeComplete();
 
+            m_SpawnModel = Dispatcher.GetModel<SpawnModel>();
+            m_BattleModel = Dispatcher.GetModel<BattleModel>();
             m_WorldDataModel = Dispatcher.GetModel<WorldDataModel>();
             m_AccountDataModel = Dispatcher.GetModel<AccountDataModel>();
+            m_PlayerRhytmInputHandleModel = Dispatcher.GetModel<PlayerRhytmInputHandleModel>();
 
-            m_SpawnModel = Dispatcher.GetModel<SpawnModel>();
-            m_SpawnModel.OnSpawnPointsInitialized += SpawnAreasInitializedHandler;
+            m_RhytmController = Dispatcher.GetController<RhytmController>();
+            m_SolidEntitySpawnController = Dispatcher.GetController<SolidEntitySpawnController>();
 
-            m_BattleModel = Dispatcher.GetModel<BattleModel>();
             m_BattleModel.OnBattleStarted += StartSpawnLoop;
             m_BattleModel.OnBattleFinished += BattleFinishedHandler;
             m_BattleModel.OnSpellbookOpened += SpellBookOpenedHandler;
             m_BattleModel.OnSpellbookClosed += SpellBookClosedHandler;
             m_BattleModel.OnSpellbookUsed += SpellBookClosedHandler;
 
-            m_PlayerRhytmInputHandleModel = Dispatcher.GetModel<PlayerRhytmInputHandleModel>();
-            m_PlayerRhytmInputHandleModel.OnDDRPInputCounterChanged += DDRPInputCounterChangedHandler;
-
-            m_SolidEntitySpawnController = Dispatcher.GetController<SolidEntitySpawnController>();
-
-            m_RhytmController = Dispatcher.GetController<RhytmController>();
-            m_RhytmController.OnTick += HandleTick;            
+            m_RhytmController.OnTick += HandleTick;
+            m_SpawnModel.OnSpawnPointsInitialized += SpawnAreasInitializedHandler;            
+            m_PlayerRhytmInputHandleModel.OnDDRPInputCounterChanged += DDRPInputCounterChangedHandler;            
 
 #if DEBUG_SPAWN
             m_InputModel = Dispatcher.GetModel<InputModel>();

@@ -26,7 +26,7 @@ MonoBehaviour:
     ActivationTime: 0
     UseTime: 1
     FinishingTime: 1
-    CooldownTime: 10
+    CooldownTicks: 2
     MoveSpeed: 4
     Damage: 20
   BaseMeteoriteData:
@@ -36,7 +36,7 @@ MonoBehaviour:
     ActivationTime: 1
     UseTime: 1
     FinishingTime: 1
-    CooldownTime: 10
+    CooldownTicks: 3
     DamageRadius: 5
     Damage: 10
     EffectOffset: {x: 7.7, y: 7.7}
@@ -47,5 +47,5 @@ MonoBehaviour:
     ActivationTime: 0
     UseTime: 1
     FinishingTime: 1
-    CooldownTime: 10
+    CooldownTicks: 5
     HealthPercent: 50

@@ -7,7 +7,7 @@ namespace RhytmTD.Battle.Entities
         public float ActivationTime { get; }
         public float UseTime { get; }
         public float FinishingTime { get; }
-        public float CooldownTime { get; }
+        public int CooldownTicks { get; }
 
         public delegate void SkillUseHanlder(int senderID, int targetID);
 
@@ -16,13 +16,13 @@ namespace RhytmTD.Battle.Entities
         public event SkillUseHanlder OnFinishingSkillUseStarted;
         public event SkillUseHanlder OnSkillUseFinished;
 
-        public SkillModule(int typeID, float activationTime, float useTime, float finishingTime, float cooldownTime)
+        public SkillModule(int typeID, float activationTime, float useTime, float finishingTime, int cooldownTicks)
         {
             TypeID = typeID;
             ActivationTime = activationTime;
             UseTime = useTime;
             FinishingTime = finishingTime;
-            CooldownTime = cooldownTime;
+            CooldownTicks = cooldownTicks;
         }
 
         public void SkillPrepareStarted(int senderID, int targetID)

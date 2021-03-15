@@ -1,4 +1,7 @@
-﻿using RhytmTD.Data.Models.DataTableModels;
+﻿using CoreFramework.Rhytm;
+using RhytmTD.Battle.Entities.Controllers;
+using RhytmTD.Battle.Entities.Models;
+using RhytmTD.Data.Models.DataTableModels;
 using UnityEngine;
 
 namespace RhytmTD.UI.Widget
@@ -12,10 +15,15 @@ namespace RhytmTD.UI.Widget
         [SerializeField] private UIWidget_SpellInfo UIWidgetSpellInfo = null;
         [SerializeField] private UIWidget_SpellSequence UIWidgetSpellSequence = null;
 
+        private SkillsController m_SkillsController;
+
         private int m_SkillTypeID;
+        
 
         public void Initialize(int skillTypeID, int skillID)
         {
+            m_SkillsController = Dispatcher.GetController<SkillsController>();
+
             m_SkillTypeID = skillTypeID;
 
             WorldDataModel worldDataModel = Dispatcher.GetModel<WorldDataModel>();
@@ -25,7 +33,15 @@ namespace RhytmTD.UI.Widget
             UIWidgetSpellInfo.Initialize(TEMP_GetSpellNameByID(m_SkillTypeID), iconSpriteData.sprite, iconSpriteData.color);
             UIWidgetSpellInfo.OnButtonInfoPressHandler += SpellInfoPressHandler;
 
-            UIWidgetSpellSequence.Initialize(skillTypeID);
+            bool isInCooldown = false;
+            if (m_SkillsController.IsSkillInCooldown(skillID, out float remainsCooldownSeconds))
+            {
+                isInCooldown = true;
+                Debug.Log("SKILL " + skillTypeID + " is in cooldown and will be there for " + remainsCooldownSeconds + " sec");
+            }
+
+
+            UIWidgetSpellSequence.Initialize(skillTypeID, isInCooldown);
 
             InternalInitialize();
         }
