@@ -19,38 +19,38 @@ namespace RhytmTD.Battle.Entities.Skills
             m_SkillModule = battleEntity.GetModule<SkillModule>();
         }
 
-        public async virtual void UseSkill(int senderID, int targetID)
+        public async virtual void UseSkill(int senderID)
         {
-            SkillPrepareStarted(senderID, targetID);
+            SkillPrepareStarted(senderID);
             await new WaitForSeconds(m_SkillModule.ActivationTime);
 
-            SkilUseStarted(senderID, targetID);
+            SkilUseStarted(senderID);
             await new WaitForSeconds(m_SkillModule.UseTime);
 
-            FinishingSkillUseStarted(senderID, targetID);
+            FinishingSkillUseStarted(senderID);
             await new WaitForSeconds(m_SkillModule.FinishingTime);
 
-            SkillUseFinished(senderID, targetID);
+            SkillUseFinished(senderID);
         }
 
-        protected virtual void SkillPrepareStarted(int senderID, int targetID)
+        protected virtual void SkillPrepareStarted(int senderID)
         {
-            m_SkillModule.SkillPrepareStarted(senderID, targetID);
+            m_SkillModule.SkillPrepareStarted(senderID);
         }
 
-        protected virtual void SkilUseStarted(int senderID, int targetID)
+        protected virtual void SkilUseStarted(int senderID)
         {
-            m_SkillModule.SkillUseStarted(senderID, targetID);
+            m_SkillModule.SkillUseStarted(senderID);
         }
 
-        protected virtual void FinishingSkillUseStarted(int senderID, int targetID)
+        protected virtual void FinishingSkillUseStarted(int senderID)
         {
-            m_SkillModule.FinishingSkillUseStarted(senderID, targetID);
+            m_SkillModule.FinishingSkillUseStarted(senderID);
         }
 
-        protected virtual void SkillUseFinished(int senderID, int targetID)
+        protected virtual void SkillUseFinished(int senderID)
         {
-            m_SkillModule.SkillUseFinished(senderID, targetID);
+            m_SkillModule.SkillUseFinished(senderID);
         }
     }
 }

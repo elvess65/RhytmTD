@@ -59,6 +59,9 @@ namespace RhytmTD.Battle.Entities.Controllers
 
         public void HideMarker(int markerID)
         {
+            if (!m_MarkerTypeById.ContainsKey(markerID))
+                return;
+
             MarkerTypes markerType = m_MarkerTypeById[markerID];
 
             m_MarkerModel.MarkerHide(markerID);

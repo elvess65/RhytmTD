@@ -251,12 +251,12 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_PlayerAnimationModule.OnAnimationMoment -= SkillAnimationMomentHandler;
 
             if (m_TargetEntity != null)
-                m_SkillsController.UseSkill(m_SkillID, m_BattleModel.PlayerEntity.ID, m_TargetEntity.ID);
-            else
             {
-                //m_TargetVector is direction for Fireball and hit point for meteorite
-                Debug.LogError("TARGET WAS NOT FOUND. USE " + m_TargetVector + " VECTOR TO LAUNCH SKILL");
+                TargetModule targetModule = m_TargetEntity.GetModule<TargetModule>();
+                targetModule.SetTarget(m_TargetEntity);
             }
+
+            m_SkillsController.UseSkill(m_SkillID, m_BattleModel.PlayerEntity.ID);
 
             m_BattleModel.OnSpellbookPostUsed?.Invoke();
         }

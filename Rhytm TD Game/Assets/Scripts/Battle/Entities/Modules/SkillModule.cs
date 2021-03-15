@@ -9,7 +9,7 @@ namespace RhytmTD.Battle.Entities
         public float FinishingTime { get; }
         public int CooldownTicks { get; }
 
-        public delegate void SkillUseHanlder(int senderID, int targetID);
+        public delegate void SkillUseHanlder(int senderID);
 
         public event SkillUseHanlder OnSkillPrepareStarted;
         public event SkillUseHanlder OnSkillUseStarted;
@@ -25,24 +25,24 @@ namespace RhytmTD.Battle.Entities
             CooldownTicks = cooldownTicks;
         }
 
-        public void SkillPrepareStarted(int senderID, int targetID)
+        public void SkillPrepareStarted(int senderID)
         {
-            OnSkillPrepareStarted?.Invoke(senderID, targetID);
+            OnSkillPrepareStarted?.Invoke(senderID);
         }
 
-        public void SkillUseStarted(int senderID, int targetID)
+        public void SkillUseStarted(int senderID)
         {
-            OnSkillUseStarted?.Invoke(senderID, targetID);
+            OnSkillUseStarted?.Invoke(senderID);
         }
 
-        public void FinishingSkillUseStarted(int senderID, int targetID)
+        public void FinishingSkillUseStarted(int senderID)
         {
-            OnFinishingSkillUseStarted?.Invoke(senderID, targetID);
+            OnFinishingSkillUseStarted?.Invoke(senderID);
         }
 
-        public void SkillUseFinished(int senderID, int targetID)
+        public void SkillUseFinished(int senderID)
         {
-            OnSkillUseFinished?.Invoke(senderID, targetID);
+            OnSkillUseFinished?.Invoke(senderID);
         }
     }
 }

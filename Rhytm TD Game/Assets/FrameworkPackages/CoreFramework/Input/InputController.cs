@@ -1,4 +1,5 @@
-﻿using RhytmTD.Data.Models;
+﻿using RhytmTD.Battle.Entities.Models;
+using RhytmTD.Data.Models;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -10,6 +11,7 @@ namespace CoreFramework.Input
     public class InputController : BaseController
     {
         private InputModel m_InputModel;
+        private CameraModel m_CameraModel;
 
         public InputController(Dispatcher dispatcher) : base(dispatcher)
         {
@@ -18,6 +20,7 @@ namespace CoreFramework.Input
         public override void InitializeComplete()
         {
             m_InputModel = Dispatcher.GetModel<InputModel>();
+            m_CameraModel = Dispatcher.GetModel<CameraModel>();
 
             UpdateModel updateModel = Dispatcher.GetModel<UpdateModel>();
             updateModel.OnUpdate += Update;
@@ -28,6 +31,12 @@ namespace CoreFramework.Input
             if (InputDetected() && !IsPointerOverUI())
             {
                 m_InputModel.Touch(UnityEngine.Input.mousePosition);
+
+                Ray ray = m_CameraModel.MainCamera.ScreenPointToRay(UnityEngine.Input.mousePosition);
+                if (Physics.Raycast(ray, out RaycastHit hit))
+                {
+                    m_InputModel.LastTouchHitPoint = hit.point;
+                }
             }
 
             if (UnityEngine.Input.GetKeyDown(KeyCode.Space))

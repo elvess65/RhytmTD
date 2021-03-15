@@ -102,6 +102,8 @@ namespace RhytmTD.Battle.StateMachine
 
                 if (m_TargetEntity != null)
                 {
+
+
                     m_PlayerAnimationModule.OnAnimationMoment += BaseAttackAnimationMomentHandler;
                     m_PlayerAnimationModule.PlayAnimation(EnumsCollection.AnimationTypes.Attack);
                 }

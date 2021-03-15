@@ -1,5 +1,6 @@
 ﻿
 using CoreFramework;
+using CoreFramework.Input;
 using CoreFramework.Rhytm;
 using RhytmTD.Battle.Entities.Controllers;
 using RhytmTD.Battle.Entities.Models;
@@ -10,7 +11,11 @@ namespace RhytmTD.Battle.Entities.Skills
 {
     public class SkillFireball : BaseSkill
     {
+        private const float m_DEFAULT_FIREBALL_MOVE_TIME = 10;
+        private const float m_DEFAULT_FIREBALL_SPEED = 5;
+
         private BattleModel m_BattleModel;
+        private InputModel m_InputModel;
         private DamageController m_DamageController;
         private EffectsController m_EffectController;
         private RhytmController m_RhytmController;
@@ -24,35 +29,51 @@ namespace RhytmTD.Battle.Entities.Skills
             m_FireballModule = battleEntity.GetModule<FireballSkillModule>();
 
             m_BattleModel = Dispatcher.GetModel<BattleModel>();
+            m_InputModel = Dispatcher.GetModel<InputModel>();
+
             m_DamageController = Dispatcher.GetController<DamageController>();
             m_EffectController = Dispatcher.GetController<EffectsController>();
             m_RhytmController = Dispatcher.GetController<RhytmController>();
         }
 
-        protected async override void SkilUseStarted(int senderID, int targetID)
+        protected async override void SkilUseStarted(int senderID)
         {
-            base.SkilUseStarted(senderID, targetID);
+            base.SkilUseStarted(senderID);
 
             BattleEntity sender = m_BattleModel.GetEntity(senderID);
-            BattleEntity target = m_BattleModel.GetEntity(targetID);
 
-            TransformModule targetTransform = target.GetModule<TransformModule>();
-
+            TargetModule targetModule = sender.GetModule<TargetModule>();
             SlotModule senderSlot = sender.GetModule<SlotModule>();
+
             Vector3 shootPosition = senderSlot.ProjectileSlot.transform.position;
 
-            Vector3 targetDirection = targetTransform.Position - shootPosition;
-            float targetDistance = targetDirection.magnitude;
-            Vector3 targetDirectionNormalized = targetDirection / targetDistance;
+            Vector3 targetDirectionNormalized;
+            float moveTime = m_DEFAULT_FIREBALL_MOVE_TIME;
+            float fireballSpeed = m_DEFAULT_FIREBALL_SPEED;
+
+            if (targetModule.HasTarget)
+            {
+                TransformModule targetTransform = targetModule.Target.GetModule<TransformModule>();
+                Vector3 targetDirection = targetTransform.Position - shootPosition;
+
+                float targetDistance = targetDirection.magnitude;
+                targetDirectionNormalized = targetDirection / targetDistance;
+
+                moveTime = m_RhytmController.GetTimeToNextTick();
+                fireballSpeed = targetDistance / moveTime;
+            }
+            else
+            {
+                targetDirectionNormalized = (m_InputModel.LastTouchHitPoint - shootPosition).normalized;
+                targetDirectionNormalized.y = 0;
+            }
 
             Quaternion fireballRotation = Quaternion.LookRotation(targetDirectionNormalized);
-            float moveTime = m_RhytmController.GetTimeToNextTick();
-            float fireballSpeed = targetDistance / moveTime;
 
             BattleEntity battleEntitiy = m_EffectController.CreateFireballEffect(senderSlot.ProjectileSlot.position, fireballRotation, fireballSpeed);
             EffectModule effectModule = battleEntitiy.GetModule<EffectModule>();
             
-            if (sender.HasModule<DamagePredictionModule>())
+            if (targetModule.HasTarget && sender.HasModule<DamagePredictionModule>())
             {
                 DamagePredictionModule damagePredictionModule = sender.GetModule<DamagePredictionModule>();
                 damagePredictionModule.PotentialDamage += m_FireballModule.Damage;
@@ -67,7 +88,10 @@ namespace RhytmTD.Battle.Entities.Skills
 
             fireballMoveModule.Stop();
 
-            m_DamageController.DealDamage(senderID, targetID, m_FireballModule.Damage);
+            if (targetModule.HasTarget)
+            {
+                m_DamageController.DealDamage(senderID, targetModule.Target.ID, m_FireballModule.Damage);
+            }
 
             BlowFireball(effectModule);
 

@@ -1,5 +1,6 @@
 ﻿
 using CoreFramework;
+using CoreFramework.Input;
 using CoreFramework.Rhytm;
 using RhytmTD.Battle.Entities.Controllers;
 using RhytmTD.Battle.Entities.Models;
@@ -12,6 +13,7 @@ namespace RhytmTD.Battle.Entities.Skills
     public class SkillMeteorite : BaseSkill
     {
         private BattleModel m_BattleModel;
+        private InputModel m_InputModel;
         private DamageController m_DamageController;
         private EffectsController m_EffectController;
         private MarkerController m_MarkerController;
@@ -27,33 +29,48 @@ namespace RhytmTD.Battle.Entities.Skills
             m_MeteoriteModule = battleEntity.GetModule<MeteoriteSkillModule>();
 
             m_BattleModel = Dispatcher.GetModel<BattleModel>();
+            m_InputModel = Dispatcher.GetModel<InputModel>();
             m_DamageController = Dispatcher.GetController<DamageController>();
             m_EffectController = Dispatcher.GetController<EffectsController>();
             m_MarkerController = Dispatcher.GetController<MarkerController>();
             m_RhytmController = Dispatcher.GetController<RhytmController>();
         }
 
-        public override void UseSkill(int senderID, int targetID)
+        public override void UseSkill(int senderID)
         {
-            base.UseSkill(senderID, targetID);
-
-            BattleEntity target = m_BattleModel.GetEntity(targetID);
-
-            m_MarkerID = m_MarkerController.ShowAttackRadiusMarker(MarkerTypes.AttackRadius, target, m_MeteoriteModule.DamageRadius);
-        }
-
-        protected async override void SkilUseStarted(int senderID, int targetID)
-        {
-            base.SkilUseStarted(senderID, targetID);
+            base.UseSkill(senderID);
 
             BattleEntity sender = m_BattleModel.GetEntity(senderID);
-            BattleEntity target = m_BattleModel.GetEntity(targetID);
+            TargetModule targetModule = sender.GetModule<TargetModule>();
+
+            if (targetModule.HasTarget)
+            {
+                m_MarkerID = m_MarkerController.ShowAttackRadiusMarker(MarkerTypes.AttackRadius, targetModule.Target, m_MeteoriteModule.DamageRadius);
+            }
+        }
+
+        protected async override void SkilUseStarted(int senderID)
+        {
+            base.SkilUseStarted(senderID);
+
+            BattleEntity sender = m_BattleModel.GetEntity(senderID);
 
             TransformModule senderTransform = sender.GetModule<TransformModule>();
-            TransformModule targetTransform = target.GetModule<TransformModule>();
+            TargetModule targetModule = sender.GetModule<TargetModule>();
+
+            Vector3 destinationPoint;
+            if (targetModule.HasTarget)
+            {
+                TransformModule targetTransform = targetModule.Target.GetModule<TransformModule>();
+                destinationPoint = targetTransform.Position;
+            }
+            else
+            {
+                destinationPoint = m_InputModel.LastTouchHitPoint;
+            }
 
             Vector3 effectPosition = senderTransform.Position + m_MeteoriteModule.EffectOffset;
-            Vector3 targetDirection = targetTransform.Position - effectPosition;
+            Vector3 targetDirection = destinationPoint - effectPosition;
             float targetDistance = targetDirection.magnitude;
 
             float moveTime = m_RhytmController.GetTimeToNextTick();
@@ -84,7 +101,7 @@ namespace RhytmTD.Battle.Entities.Skills
                 if (!destroyModule.IsDestroyed)
                 {
                     TransformModule transformModule = battleEntity.GetModule<TransformModule>();
-                    float disntanceSqr = (targetTransform.Position - transformModule.Position).sqrMagnitude;
+                    float disntanceSqr = (destinationPoint - transformModule.Position).sqrMagnitude;
 
                     if (disntanceSqr <= m_MeteoriteModule.DamageRadius * m_MeteoriteModule.DamageRadius)
                     {

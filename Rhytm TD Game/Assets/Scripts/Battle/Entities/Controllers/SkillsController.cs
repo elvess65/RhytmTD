@@ -27,15 +27,13 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_AccountBaseParamsDataModel = Dispatcher.GetModel<AccountBaseParamsDataModel>();
         }
 
-
-        public void UseSkill(int skillID, int senderID, int targetID)
+        public void UseSkill(int skillID, int senderID)
         {
             BaseSkill skill = m_SkillsModel.GetSkill(skillID);
-            skill.UseSkill(senderID, targetID);
+            skill.UseSkill(senderID);
 
             m_SkillsModel.OnSkillUsed?.Invoke(skillID);
         }
-
 
         public BattleEntity CreateMeteoriteSkillEntity()
         {

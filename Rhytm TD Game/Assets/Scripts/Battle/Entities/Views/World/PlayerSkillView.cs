@@ -28,7 +28,7 @@ namespace RhytmTD.Battle.Entities.Views
             }
         }
 
-        private void SkillModule_OnSkillUseStarted(int senderID, int targetID)
+        private void SkillModule_OnSkillUseStarted(int senderID)
         {
             //m_AnimationModule.PlayAnimation(AnimationTypes.UseSkill);
         }

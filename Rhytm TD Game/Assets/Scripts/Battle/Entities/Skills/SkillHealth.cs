@@ -26,30 +26,38 @@ namespace RhytmTD.Battle.Entities.Skills
             m_MarkerController = Dispatcher.GetController<MarkerController>();
         }
 
-        public override void UseSkill(int senderID, int targetID)
+        public override void UseSkill(int senderID)
         {
-            base.UseSkill(senderID, targetID);
+            base.UseSkill(senderID);
 
-            BattleEntity target = m_BattleModel.GetEntity(targetID);
+            BattleEntity sender = m_BattleModel.GetEntity(senderID);
+            TargetModule targetModule = sender.GetModule<TargetModule>();
 
-            m_MarkerID = m_MarkerController.ShowTargetMarker(MarkerTypes.AllyTarget, target);
+            if (targetModule.HasTarget)
+            {
+                m_MarkerID = m_MarkerController.ShowTargetMarker(MarkerTypes.AllyTarget, targetModule.Target);
+            }
         }
 
-        protected override void SkilUseStarted(int senderID, int targetID)
+        protected override void SkilUseStarted(int senderID)
         {
-            base.SkilUseStarted(senderID, targetID);
+            base.SkilUseStarted(senderID);
 
-            BattleEntity target = m_BattleModel.GetEntity(targetID);
-            TransformModule targerTransform = target.GetModule<TransformModule>();
+            BattleEntity sender = m_BattleModel.GetEntity(senderID);
+            TargetModule targetModule = sender.GetModule<TargetModule>();
 
-            HealthModule healthModule = target.GetModule<HealthModule>();
+            if (targetModule.HasTarget)
+            {
+                TransformModule targerTransform = targetModule.Target.GetModule<TransformModule>();
+                HealthModule healthModule = targetModule.Target.GetModule<HealthModule>();
 
-            int healthToRestore = Mathf.Min(Mathf.RoundToInt(healthModule.Health * m_HealthSkillModule.HealthPercent), healthModule.Health - healthModule.CurrentHealth);
-            healthModule.AddHealth(healthToRestore);
+                int healthToRestore = Mathf.Min(Mathf.RoundToInt(healthModule.Health * m_HealthSkillModule.HealthPercent), healthModule.Health - healthModule.CurrentHealth);
+                healthModule.AddHealth(healthToRestore);
 
-            m_EffectController.CreateHealthEffect(targerTransform.Position, targerTransform.Rotation);
+                m_EffectController.CreateHealthEffect(targerTransform.Position, targerTransform.Rotation);
 
-            m_MarkerController.HideMarker(m_MarkerID);
+                m_MarkerController.HideMarker(m_MarkerID);
+            }
         }
     }
 }
