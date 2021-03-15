@@ -1,6 +1,6 @@
 ﻿using UnityEditor;
 
-namespace RhytmTD.Editor.EditorExtensions
+namespace RhytmTD.Editor
 {
     public static class ScriptDefinceSymbolsSelector
     {
