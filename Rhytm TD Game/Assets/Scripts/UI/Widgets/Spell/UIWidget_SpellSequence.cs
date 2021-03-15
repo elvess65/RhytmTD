@@ -27,7 +27,7 @@ namespace RhytmTD.UI.Widget
         private UIComponent_SpellSequenceItem[] m_SequenceItems;
 
 
-        public void Initialize(int skillTypeID, bool isInCooldown)
+        public void Initialize(int skillTypeID)
         {
             m_BattleModel = Dispatcher.GetModel<BattleModel>();
             m_WorldDataModel = Dispatcher.GetModel<WorldDataModel>();
@@ -35,14 +35,11 @@ namespace RhytmTD.UI.Widget
             m_SkillSequenceDataModel = Dispatcher.GetModel<SkillSequenceDataModel>();
             m_AccountBaseParamsDataModel = Dispatcher.GetModel<AccountBaseParamsDataModel>();
 
-            if (!isInCooldown)
-            {
-                m_PrepareSkilIUseModel.OnSkillReset += SkillResetHandler;
-                m_PrepareSkilIUseModel.OnSkillStepReachedInput += OnSkillStepReachedInputHandler;
-                m_PrepareSkilIUseModel.OnSkillStepReachedAuto += OnSkillStepReachedAutoHandler;
-                m_PrepareSkilIUseModel.OnSequenceFailed += SequenceFailedHandler;
-                m_PrepareSkilIUseModel.OnSkillSelected += SkillSelectedHandler;
-            }
+            m_PrepareSkilIUseModel.OnSkillReset += SkillResetHandler;
+            m_PrepareSkilIUseModel.OnSkillStepReachedInput += OnSkillStepReachedInputHandler;
+            m_PrepareSkilIUseModel.OnSkillStepReachedAuto += OnSkillStepReachedAutoHandler;
+            m_PrepareSkilIUseModel.OnSequenceFailed += SequenceFailedHandler;
+            m_PrepareSkilIUseModel.OnSkillSelected += SkillSelectedHandler;
             
             m_BattleModel.OnSpellbookOpened += SpellbookOpenedHandler;
 

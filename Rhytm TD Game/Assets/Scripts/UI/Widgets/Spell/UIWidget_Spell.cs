@@ -1,5 +1,4 @@
-﻿using CoreFramework.Rhytm;
-using RhytmTD.Battle.Entities.Controllers;
+﻿using RhytmTD.Battle.Entities.Controllers;
 using RhytmTD.Battle.Entities.Models;
 using RhytmTD.Data.Models.DataTableModels;
 using UnityEngine;
@@ -15,16 +14,22 @@ namespace RhytmTD.UI.Widget
         [SerializeField] private UIWidget_SpellInfo UIWidgetSpellInfo = null;
         [SerializeField] private UIWidget_SpellSequence UIWidgetSpellSequence = null;
 
-        private SkillsController m_SkillsController;
+        private BattleModel m_BattleModel;
+        private SkillsCooldownController m_SkillsCooldownController;
 
         private int m_SkillTypeID;
+        private int m_SkillID;
         
 
         public void Initialize(int skillTypeID, int skillID)
         {
-            m_SkillsController = Dispatcher.GetController<SkillsController>();
+            m_BattleModel = Dispatcher.GetModel<BattleModel>();
+            m_SkillsCooldownController = Dispatcher.GetController<SkillsCooldownController>();
+
+            m_BattleModel.OnSpellbookOpened += SpellbookOpenedHandler;
 
             m_SkillTypeID = skillTypeID;
+            m_SkillID = skillID;
 
             WorldDataModel worldDataModel = Dispatcher.GetModel<WorldDataModel>();
             (Sprite sprite, Color color) iconSpriteData = worldDataModel.UISpriteAssets.GetSkillIconSprite(m_SkillTypeID);
@@ -33,15 +38,7 @@ namespace RhytmTD.UI.Widget
             UIWidgetSpellInfo.Initialize(TEMP_GetSpellNameByID(m_SkillTypeID), iconSpriteData.sprite, iconSpriteData.color);
             UIWidgetSpellInfo.OnButtonInfoPressHandler += SpellInfoPressHandler;
 
-            bool isInCooldown = false;
-            if (m_SkillsController.IsSkillInCooldown(skillID, out float remainsCooldownSeconds))
-            {
-                isInCooldown = true;
-                Debug.Log("SKILL " + skillTypeID + " is in cooldown and will be there for " + remainsCooldownSeconds + " sec");
-            }
-
-
-            UIWidgetSpellSequence.Initialize(skillTypeID, isInCooldown);
+            UIWidgetSpellSequence.Initialize(skillTypeID);
 
             InternalInitialize();
         }
@@ -51,6 +48,19 @@ namespace RhytmTD.UI.Widget
             UIWidgetSpellInfo.LockInput(isLocked);
         }
 
+
+        private void SpellbookOpenedHandler()
+        {
+            if (m_SkillsCooldownController.IsSkillInCooldown(m_SkillID, out float remainsCooldownSeconds))
+            {
+                Debug.Log("SKILL " + m_SkillID + " is in cooldown and will be there for " + remainsCooldownSeconds + " sec");
+            }
+        }
+
+        private void SpellInfoPressHandler()
+        {
+            Debug.Log("Get info for " + m_SkillTypeID);
+        }
 
         private string TEMP_GetSpellNameByID(int skillTypeID)
         {
@@ -67,9 +77,5 @@ namespace RhytmTD.UI.Widget
             return string.Empty;
         }
 
-        private void SpellInfoPressHandler()
-        {
-            Debug.Log("Get info for " + m_SkillTypeID);
-        }
     }
 }
