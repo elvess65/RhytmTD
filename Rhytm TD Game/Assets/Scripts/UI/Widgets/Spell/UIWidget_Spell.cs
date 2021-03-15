@@ -51,9 +51,10 @@ namespace RhytmTD.UI.Widget
 
         private void SpellbookOpenedHandler()
         {
-            if (m_SkillsCooldownController.IsSkillInCooldown(m_SkillID, out float remainsCooldownSeconds))
+            float skillCooldownRemainTime = m_SkillsCooldownController.GetSkillInCooldownRemainTime(m_SkillID);
+            if (skillCooldownRemainTime > 0)
             {
-                Debug.Log("SKILL " + m_SkillID + " is in cooldown and will be there for " + remainsCooldownSeconds + " sec");
+                Debug.Log("SKILL " + m_SkillID + " is in cooldown and will be there for " + skillCooldownRemainTime + " sec");
             }
         }
 

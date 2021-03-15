@@ -5,19 +5,40 @@ namespace RhytmTD.Battle.Entities.Models
 {
     public class SkillsCooldownModel : BaseModel
     {
-        private Dictionary<int, int> m_SkillUsageTicks = new Dictionary<int, int>();
+        public ICollection<int> SkillsInCooldownIDs => m_SkillsInCooldown.Keys;
 
-        public void UpdateSkillUsageRecord(int skillID, int usageTick)
+        private Dictionary<int, float> m_SkillsInCooldown = new Dictionary<int, float>();
+
+
+        public void AddSkillToCooldown(int skillID, float cooldownSeconds)
         {
-            m_SkillUsageTicks[skillID] = usageTick;
+            m_SkillsInCooldown[skillID] = cooldownSeconds;
         }
 
-        public (int skillID, int usageTick) GetSkillUsageRecord(int skillID)
+        public bool UpdateSkillCooldownTime(int skillID, float deltaTime)
         {
-            if (m_SkillUsageTicks.ContainsKey(skillID))
-                return (skillID, m_SkillUsageTicks[skillID]);
+            if (m_SkillsInCooldown.ContainsKey(skillID))
+            {
+                m_SkillsInCooldown[skillID] -= deltaTime;
 
-            return (-1, -1);
+                return m_SkillsInCooldown[skillID] <= 0;
+            }
+
+            return false;
+        }
+
+        public void RemoveSkillFromCooldown(int skillID)
+        {
+            if (m_SkillsInCooldown.ContainsKey(skillID))
+                m_SkillsInCooldown.Remove(skillID);
+        }
+
+        public float GetSkillCooldownTime(int skillID)
+        {
+            if (m_SkillsInCooldown.ContainsKey(skillID))
+                return m_SkillsInCooldown[skillID];
+
+            return 0;
         }
     }
 }
