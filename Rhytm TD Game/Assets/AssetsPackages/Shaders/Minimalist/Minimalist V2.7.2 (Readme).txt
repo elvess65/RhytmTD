@@ -1,0 +1,21 @@
+Minimalist v2.7.2 - ChangeLog
+
+Bug Fixes
+- BRP shaders' top gradient rotation not working properly
+
+Minimalist v2.7.0 - ChangeLog 
+
+Improvements
+- SRP Batcher Support for Unity 2019.3 and above [Experimental]
+
+
+Minimalist V2.5.0 - ChangeLog
+
+Bug Fixes
+- Rim Light does not work on oddly oriented meshes in Build-In Render Pipeline
+- Height Fog and Unity Fog can not be used simultaneously  
+- Gradient Editor's Scene View Gizmo throws warning
+
+Improvements
+- Uses shader_feature_local instead of shader_feature
+- Improvements in realtime shadow quality
