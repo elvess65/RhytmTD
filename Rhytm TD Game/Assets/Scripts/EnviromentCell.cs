@@ -8,5 +8,6 @@ public class EnviromentCell : MonoBehaviour
         All, Ground, Tiles, Rocks, Logs, Trees, Vegetation, Props, GroundProps, Max
     }
 
+    [SerializeField]
     public Dictionary<EnviromentTypes, List<MeshRenderer>> Renderers = new Dictionary<EnviromentTypes, List<MeshRenderer>>();
 }

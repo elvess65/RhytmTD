@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: TestMinimalist
+  m_Name: Dev Minimalist
   m_Shader: {fileID: 4800000, guid: f276502ebf8b1431192125b7316d5d67, type: 3}
   m_ShaderKeywords: AO_ON BACKSOLID FRONTSOLID HEIGHT_FOG RIGHTSOLID SHADOW_ON TOPSOLID
     UNITY_FOG

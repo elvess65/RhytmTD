@@ -4,17 +4,18 @@
 // Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
 // Upgrade NOTE: replaced '_World2Object' with 'unity_WorldToObject'
 
-Shader "Custom/CurvedWorld" {
-    Properties {
-        // Diffuse texture
+Shader "Custom/CurvedWorldGround"
+{
+    Properties
+    {
         _MainTex ("Base (RGB)", 2D) = "white" {}
-        // Degree of curvature
+        
         _Curvature ("Curvature", Float) = 0.001
-        _CameraOffset ("Offset", Float) = 0.0
+        _CameraOffset ("Camera Offset", Float) = 0.0
 
-        _LineCenter ("LineCenter", Float) = 0.0
-        _LineWidth ("LineWidth", Float) = 0.0
-        _LineColor ("Line Color", Color) = (1.0, 0.0, 1.0)
+        _RoadCenter ("Road Center", Float) = 0.0
+        _RoadWidth ("Road Width", Float) = 0.0
+        _RoadColor ("Road Color", Color) = (1.0, 0.0, 1.0)
     }
     SubShader {
         Tags { "RenderType"="Opaque" }
@@ -30,14 +31,15 @@ Shader "Custom/CurvedWorld" {
         uniform sampler2D _MainTex;
         uniform float _Curvature;
         uniform float _CameraOffset;
-        uniform float _LineCenter;
-        uniform float _LineWidth;
-        uniform float4 _LineColor;
+        uniform float _RoadCenter;
+        uniform float _RoadWidth;
+        uniform float4 _RoadColor;
  
         // Basic input structure to the shader function
         // requires only a single set of UV texture mapping coordinates
 
-        struct Input {
+        struct Input
+        {
             float2 uv_MainTex;
         };
 
@@ -47,6 +49,7 @@ Shader "Custom/CurvedWorld" {
             float4 vv = mul( unity_ObjectToWorld, v );
  
             // Now adjust the coordinates to be relative to the camera position
+
             vv.xyz -= _WorldSpaceCameraPos.xyz - _CameraOffset;
  
             // Reduce the y coordinate (i.e. lower the "height") of each vertex based
@@ -66,11 +69,12 @@ Shader "Custom/CurvedWorld" {
 
         float3 PlotRoad(float uvX)
         {
-            float3 lineBGColor = float3(0.0, 0.0, 0.0);
-            float lineCenter = _LineCenter / 10.0;
+            float3 roadBGColor = float3(0.0, 0.0, 0.0);
+            float roadCenter = _RoadCenter / 10.0;
+            float roadWidth = _RoadWidth / 10;
 
-            float y = smoothstep(lineCenter - _LineWidth, lineCenter, uvX) - smoothstep(lineCenter, lineCenter + _LineWidth, uvX);
-            return (1.0 - y) * lineBGColor + y * _LineColor;
+            float y = smoothstep(roadCenter - roadWidth, roadCenter, uvX) - smoothstep(roadCenter, roadCenter + roadWidth, uvX);
+            return (1.0 - y) * roadBGColor + y * _RoadColor;
         }
 
         void vert( inout appdata_full v)
@@ -83,9 +87,9 @@ Shader "Custom/CurvedWorld" {
 {
             half4 c = tex2D (_MainTex, IN.uv_MainTex);
 
-            float3 resultLineColor = PlotRoad(IN.uv_MainTex.x);
+            float3 roadColor = PlotRoad(IN.uv_MainTex.x);
 
-            o.Albedo = c.rgb + resultLineColor;
+            o.Albedo = c.rgb + roadColor;
             o.Alpha = c.a;
         }
         ENDCG

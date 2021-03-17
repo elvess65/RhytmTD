@@ -6,64 +6,202 @@ using static EnviromentCell;
 [CustomEditor(typeof(EnviromentCell))]
 public class EnviromentCell_Editor : Editor
 {
-    private Material mat;
-    private EnviromentTypes m_SelectedType = EnviromentTypes.All;
+    private bool m_CollidersEnable = false;
+    private Material m_SubstituteMaterial;
+    private EnviromentTypes m_SelectedEnviromentType = EnviromentTypes.All;
+    private Dictionary<EnviromentTypes, bool> m_FoldedOuts = new Dictionary<EnviromentTypes, bool>();
+
 
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
 
-        m_SelectedType = (EnviromentTypes)EditorGUILayout.EnumPopup("SelectedEnviromentType:", m_SelectedType);
-
         EnviromentCell castedTarget = (EnviromentCell)target;
 
-        if (GUILayout.Button("Cache renderers"))
-        {
-            CacheRenderersForType(m_SelectedType, castedTarget);
-        }
+        DrawEnviromentTypeSelection();
+        DrawCachedRenderers(castedTarget);
+        DrawMaterialSubstitute(castedTarget);
+        DrawUpdateColliders(castedTarget);
+    }
 
-        foreach(EnviromentTypes type in castedTarget.Renderers.Keys)
-        {
+    private void OnEnable()
+    {
+        EnviromentCell castedTarget = (EnviromentCell)target;
 
+        CacheRenderersForType(EnviromentTypes.All, castedTarget);
+    }
+
+
+    private void DrawEnviromentTypeSelection()
+    {
+        m_SelectedEnviromentType = (EnviromentTypes)EditorGUILayout.EnumPopup("Enviroment Type:", m_SelectedEnviromentType);
+    }
+
+    private void DrawCachedRenderers(EnviromentCell castedTarget)
+    {
+        EditorGUILayout.Space(10);
+
+        using (new EditorGUILayout.VerticalScope("box"))
+        {
+            if (castedTarget.Renderers.Count == 0)
+            {
+                EditorGUILayout.LabelField("No renderers");
+                return;
+            }
+
+            if (!m_FoldedOuts.ContainsKey(EnviromentTypes.All))
+                m_FoldedOuts[EnviromentTypes.All] = false;
+
+            m_FoldedOuts[EnviromentTypes.All] = EditorGUILayout.Foldout(m_FoldedOuts[EnviromentTypes.All], $"Enviroment Groups: {castedTarget.Renderers.Count}", true);
+            if (m_FoldedOuts[EnviromentTypes.All])
+            {
+                using (new EditorGUI.DisabledScope(true))
+                {
+                    foreach (EnviromentTypes type in castedTarget.Renderers.Keys)
+                    {
+                        using (new EditorGUILayout.VerticalScope("box"))
+                        {
+                            EnviromentTypes localType = (EnviromentTypes)EditorGUILayout.EnumPopup(string.Empty, type);
+                            List<MeshRenderer> renderers = castedTarget.Renderers[type];
+
+                            if (!m_FoldedOuts.ContainsKey(localType))
+                                continue;
+
+                            m_FoldedOuts[localType] = EditorGUILayout.Foldout(m_FoldedOuts[localType], $"Renderers {renderers.Count}", true);
+                            if (m_FoldedOuts[localType])
+                            {
+                                for (int i = 0; i < renderers.Count; i++)
+                                {
+                                    renderers[i] = (MeshRenderer)EditorGUILayout.ObjectField(renderers[i], typeof(MeshRenderer), false);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
+
+    private void DrawMaterialSubstitute(EnviromentCell castedTarget)
+    {
+        if (castedTarget.Renderers.Count == 0)
+            return;
+
+        EditorGUILayout.Space(10);
+
+        using (new EditorGUILayout.VerticalScope("box"))
+        {
+
+            m_SubstituteMaterial = (Material)EditorGUILayout.ObjectField(m_SubstituteMaterial, typeof(Material), false);
+
+            using (new EditorGUI.DisabledScope(m_SubstituteMaterial == null))
+            {
+                if (GUILayout.Button("Substitute Material"))
+                {
+                    switch (m_SelectedEnviromentType)
+                    {
+                        case EnviromentTypes.All:
+                        {
+                            ForeachGroup(SubstituteMaterial, castedTarget);
+
+                            break;
+                        }
+                        default:
+                        {
+                            SubstituteMaterial(m_SelectedEnviromentType, castedTarget);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void DrawUpdateColliders(EnviromentCell castedTarget)
+    {
+        EditorGUILayout.Space(10);
+
+        using (new EditorGUILayout.VerticalScope("box"))
+        {
+            m_CollidersEnable = EditorGUILayout.Toggle("Enable Colliders:", m_CollidersEnable);
+
+            if (GUILayout.Button("Update colliders"))
+            {
+                UpdateColliders(castedTarget);
+            }
+        }
+    }
+
 
     private void CacheRenderersForType(EnviromentTypes type, EnviromentCell castedTarget)
     {
         switch(type)
         {
             case EnviromentTypes.All:
-                int from = (int)EnviromentTypes.All + 1;
-                int to = (int)EnviromentTypes.Max;
-
-                for (int i = from; i < to; i++)
-                    CacheRenderersForType((EnviromentTypes)i, castedTarget);
+            {
+                ForeachGroup(CacheRenderersForType, castedTarget);
 
                 break;
+            }
             default:
+            {
+                m_FoldedOuts[EnviromentTypes.All] = false;
+
+                if (FindChildWithName(type.ToString(), castedTarget.transform, out Transform parent))
                 {
-                    if (FindChildWithName(type.ToString(), castedTarget.transform, out Transform parent))
-                    {
-                        castedTarget.Renderers[type] = new List<MeshRenderer>(parent.GetComponentsInChildren<MeshRenderer>());
-                    }
-                    break;
+                    castedTarget.Renderers[type] = new List<MeshRenderer>(parent.GetComponentsInChildren<MeshRenderer>());
+                    m_FoldedOuts[type] = false;
                 }
+                break;
+            }
         }
     }
 
     private bool FindChildWithName(string name, Transform source, out Transform result)
     {
         result = null;
-        for (int i = 0; i < source.childCount; i++)
+
+        Transform[] children = source.GetComponentsInChildren<Transform>();
+
+        for (int i = 0; i < children.Length; i++)
         {
-            Transform child = source.GetChild(i);
-            if (child.name.Equals(name))
+            if (children[i].name.Equals(name))
             {
-                result = child;
+                result = children[i];
                 return true;
             }
         }
 
         return false;
+    }
+
+
+    private void SubstituteMaterial(EnviromentTypes type, EnviromentCell castedTarget)
+    {
+        Debug.Log(type);
+        List<MeshRenderer> renderers = castedTarget.Renderers[type];
+        for (int i = 0; i < renderers.Count; i++)
+        {
+            renderers[i].sharedMaterial = m_SubstituteMaterial;
+        }
+    }
+
+    private void UpdateColliders(EnviromentCell castedTarget)
+    {
+        Collider[] colliders = castedTarget.transform.GetComponentsInChildren<Collider>(true);
+        for (int i = 0; i < colliders.Length; i++)
+            colliders[i].enabled = m_CollidersEnable;
+
+        Debug.Log($"Successfully updated {colliders.Length} colliders");
+    }
+
+
+    private void ForeachGroup(System.Action<EnviromentTypes, EnviromentCell> action, EnviromentCell castedTarget)
+    {
+        int from = (int)EnviromentTypes.All + 1;
+        int to = (int)EnviromentTypes.Max;
+
+        for (int i = from; i < to; i++)
+            action((EnviromentTypes)i, castedTarget);
     }
 }
