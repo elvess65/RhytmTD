@@ -7,10 +7,10 @@ using static EnviromentCell;
 public class EnviromentCell_Editor : Editor
 {
     private bool m_CollidersEnable = false;
-    private Material m_SubstituteMaterial;
-    private EnviromentTypes m_SelectedEnviromentType = EnviromentTypes.All;
+    private bool m_CheckedOutsFolded = false;
     private Dictionary<EnviromentTypes, bool> m_FoldedOuts = new Dictionary<EnviromentTypes, bool>();
-
+    private List<(EnviromentTypes, Material)> m_EnviromentTypesMaterialsSubstitute = new List<(EnviromentTypes, Material)>();
+   
 
     public override void OnInspectorGUI()
     {
@@ -18,10 +18,12 @@ public class EnviromentCell_Editor : Editor
 
         EnviromentCell castedTarget = (EnviromentCell)target;
 
-        DrawEnviromentTypeSelection();
         DrawCachedRenderers(castedTarget);
         DrawMaterialSubstitute(castedTarget);
         DrawUpdateColliders(castedTarget);
+
+        if (GUI.changed)
+            Validate();
     }
 
     private void OnEnable()
@@ -29,13 +31,9 @@ public class EnviromentCell_Editor : Editor
         EnviromentCell castedTarget = (EnviromentCell)target;
 
         CacheRenderersForType(EnviromentTypes.All, castedTarget);
+        ConvertEnviromentTypesToList();
     }
 
-
-    private void DrawEnviromentTypeSelection()
-    {
-        m_SelectedEnviromentType = (EnviromentTypes)EditorGUILayout.EnumPopup("Enviroment Type:", m_SelectedEnviromentType);
-    }
 
     private void DrawCachedRenderers(EnviromentCell castedTarget)
     {
@@ -91,31 +89,40 @@ public class EnviromentCell_Editor : Editor
 
         using (new EditorGUILayout.VerticalScope("box"))
         {
-
-            m_SubstituteMaterial = (Material)EditorGUILayout.ObjectField(m_SubstituteMaterial, typeof(Material), false);
-
-            using (new EditorGUI.DisabledScope(m_SubstituteMaterial == null))
+            m_CheckedOutsFolded = EditorGUILayout.Foldout(m_CheckedOutsFolded, "Enviroment Types:", true);
+            if (m_CheckedOutsFolded)
             {
-                if (GUILayout.Button("Substitute Material"))
+                for (int i = 0; i < m_EnviromentTypesMaterialsSubstitute.Count; i++)
                 {
-                    switch (m_SelectedEnviromentType)
-                    {
-                        case EnviromentTypes.All:
-                        {
-                            ForeachGroup(SubstituteMaterial, castedTarget);
+                    (EnviromentTypes, Material) item = m_EnviromentTypesMaterialsSubstitute[i];
 
-                            break;
-                        }
-                        default:
-                        {
-                            SubstituteMaterial(m_SelectedEnviromentType, castedTarget);
-                            break;
-                        }
-                    }
+                    item.Item2 = (Material)EditorGUILayout.ObjectField(item.Item1.ToString(), item.Item2, typeof(Material), false);
+                    m_EnviromentTypesMaterialsSubstitute[i] = item;
+                }
+            }
+
+            if (GUILayout.Button("Substitute Materials"))
+            {
+                for (int i = 0; i < m_EnviromentTypesMaterialsSubstitute.Count; i++)
+                {
+                    SubstituteMaterial(m_EnviromentTypesMaterialsSubstitute[i].Item1,
+                                       m_EnviromentTypesMaterialsSubstitute[i].Item2,
+                                       castedTarget);
+                }
+            }
+
+            if (GUILayout.Button("Clear Materials"))
+            {
+                for (int i = 0; i < m_EnviromentTypesMaterialsSubstitute.Count; i++)
+                {
+                    (EnviromentTypes, Material) item = m_EnviromentTypesMaterialsSubstitute[i];
+                    item.Item2 = null;
+                    m_EnviromentTypesMaterialsSubstitute[i] = item;
                 }
             }
         }
     }
+
 
     private void DrawUpdateColliders(EnviromentCell castedTarget)
     {
@@ -129,6 +136,25 @@ public class EnviromentCell_Editor : Editor
             {
                 UpdateColliders(castedTarget);
             }
+        }
+    }
+
+
+    private void Validate()
+    {
+        if (IsAllTypeInitialized())
+        {
+            for (int i = 1; i < m_EnviromentTypesMaterialsSubstitute.Count; i++)
+            {
+                (EnviromentTypes, Material) item = m_EnviromentTypesMaterialsSubstitute[i];
+
+                item.Item2 = m_EnviromentTypesMaterialsSubstitute[0].Item2;
+                m_EnviromentTypesMaterialsSubstitute[i] = item;
+            }
+
+            (EnviromentTypes, Material) allItem = m_EnviromentTypesMaterialsSubstitute[0];
+            allItem.Item2 = null;
+            m_EnviromentTypesMaterialsSubstitute[0] = allItem;
         }
     }
 
@@ -176,13 +202,14 @@ public class EnviromentCell_Editor : Editor
     }
 
 
-    private void SubstituteMaterial(EnviromentTypes type, EnviromentCell castedTarget)
+    private void SubstituteMaterial(EnviromentTypes type, Material material, EnviromentCell castedTarget)
     {
-        Debug.Log(type);
-        List<MeshRenderer> renderers = castedTarget.Renderers[type];
-        for (int i = 0; i < renderers.Count; i++)
+        if (material != null && castedTarget.Renderers.TryGetValue(type, out List<MeshRenderer> renderers))
         {
-            renderers[i].sharedMaterial = m_SubstituteMaterial;
+            for (int i = 0; i < renderers.Count; i++)
+            {
+                renderers[i].sharedMaterial = material;
+            }
         }
     }
 
@@ -203,5 +230,25 @@ public class EnviromentCell_Editor : Editor
 
         for (int i = from; i < to; i++)
             action((EnviromentTypes)i, castedTarget);
+    }
+
+    private void ConvertEnviromentTypesToList()
+    {
+        for (int i = 0; i < (int)EnviromentTypes.Max; i++)
+        {
+            m_EnviromentTypesMaterialsSubstitute.Add(((EnviromentTypes)i, null));
+        }
+    }
+
+    private bool IsAllTypeInitialized()
+    {
+        for (int i = 0; i < m_EnviromentTypesMaterialsSubstitute.Count; i++)
+        {
+            if (m_EnviromentTypesMaterialsSubstitute[i].Item1 == EnviromentTypes.All &&
+                m_EnviromentTypesMaterialsSubstitute[i].Item2 != null)
+                return true;
+        }
+
+        return false;
     }
 }
