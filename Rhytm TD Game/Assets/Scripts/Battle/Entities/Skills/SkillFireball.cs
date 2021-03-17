@@ -50,6 +50,7 @@ namespace RhytmTD.Battle.Entities.Skills
             Vector3 targetDirectionNormalized;
             float moveTime = m_DEFAULT_FIREBALL_MOVE_TIME;
             float fireballSpeed = m_DEFAULT_FIREBALL_SPEED;
+            BattleEntity target = targetModule.Target;
 
             if (targetModule.HasTarget)
             {
@@ -88,9 +89,9 @@ namespace RhytmTD.Battle.Entities.Skills
 
             fireballMoveModule.Stop();
 
-            if (targetModule.HasTarget)
+            if (target != null)
             {
-                m_DamageController.DealDamage(senderID, targetModule.Target.ID, m_FireballModule.Damage);
+                m_DamageController.DealDamage(senderID, target.ID, m_FireballModule.Damage);
             }
 
             BlowFireball(effectModule);

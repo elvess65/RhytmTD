@@ -252,7 +252,7 @@ namespace RhytmTD.Battle.Entities.Controllers
 
             if (m_TargetEntity != null)
             {
-                TargetModule targetModule = m_TargetEntity.GetModule<TargetModule>();
+                TargetModule targetModule = m_BattleModel.PlayerEntity.GetModule<TargetModule>();
                 targetModule.SetTarget(m_TargetEntity);
             }
 
