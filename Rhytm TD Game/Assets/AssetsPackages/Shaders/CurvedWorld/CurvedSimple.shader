@@ -3,6 +3,7 @@
 		_MainTex("Base (RGB)", 2D) = "white" {}
 		_QOffset("Offset", Vector) = (0,0,0,0)
 		_Dist("Distance", Float) = 100.0
+		_AllowDist("Allow Distance", Float) = 10.0	
 	}
 		SubShader{
 			Tags { "RenderType" = "Opaque" }
@@ -13,9 +14,10 @@
 				#pragma fragment frag
 				#include "UnityCG.cginc"
 
-							sampler2D _MainTex;
+				sampler2D _MainTex;
 				float4 _QOffset;
 				float _Dist;
+				float _AllowDist;
 
 				struct v2f {
 					float4 pos : SV_POSITION;
@@ -27,7 +29,7 @@
 					v2f o;
 					float4 vPos = mul(UNITY_MATRIX_MV, v.vertex);
 					float zOff = vPos.z / _Dist;
-					vPos += _QOffset * zOff*zOff;
+					vPos += _QOffset * zOff;
 					o.pos = mul(UNITY_MATRIX_P, vPos);
 					o.uv = v.texcoord;
 					return o;
