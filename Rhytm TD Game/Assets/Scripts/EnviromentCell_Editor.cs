@@ -1,47 +1,69 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using static EnviromentCell;
 
 [CustomEditor(typeof(EnviromentCell))]
 public class EnviromentCell_Editor : Editor
 {
     private Material mat;
+    private EnviromentTypes m_SelectedType = EnviromentTypes.All;
 
     public override void OnInspectorGUI()
     {
+        base.OnInspectorGUI();
+
+        m_SelectedType = (EnviromentTypes)EditorGUILayout.EnumPopup("SelectedEnviromentType:", m_SelectedType);
+
         EnviromentCell castedTarget = (EnviromentCell)target;
 
         if (GUILayout.Button("Cache renderers"))
         {
-            if (castedTarget.InitialMaterials == null)
-                castedTarget.InitialMaterials = new Dictionary<int, Material>();
-
-            castedTarget.GetComponentsInChildren(castedTarget.Renderers);
-            foreach(MeshRenderer renderer in castedTarget.Renderers)
-            {
-                castedTarget.InitialMaterials[renderer.GetInstanceID()] = renderer.sharedMaterial;
-            }
+            CacheRenderersForType(m_SelectedType, castedTarget);
         }
 
-        if (GUILayout.Button("Restore materials"))
+        foreach(EnviromentTypes type in castedTarget.Renderers.Keys)
         {
-            foreach (MeshRenderer renderer in castedTarget.Renderers)
-            {
-                renderer.sharedMaterial = castedTarget.InitialMaterials[renderer.GetInstanceID()];
-            }
-        }
 
-        if (GUILayout.Button("Set material"))
+        }
+    }
+
+    private void CacheRenderersForType(EnviromentTypes type, EnviromentCell castedTarget)
+    {
+        switch(type)
         {
-            foreach (MeshRenderer renderer in castedTarget.Renderers)
+            case EnviromentTypes.All:
+                int from = (int)EnviromentTypes.All + 1;
+                int to = (int)EnviromentTypes.Max;
+
+                for (int i = from; i < to; i++)
+                    CacheRenderersForType((EnviromentTypes)i, castedTarget);
+
+                break;
+            default:
+                {
+                    if (FindChildWithName(type.ToString(), castedTarget.transform, out Transform parent))
+                    {
+                        castedTarget.Renderers[type] = new List<MeshRenderer>(parent.GetComponentsInChildren<MeshRenderer>());
+                    }
+                    break;
+                }
+        }
+    }
+
+    private bool FindChildWithName(string name, Transform source, out Transform result)
+    {
+        result = null;
+        for (int i = 0; i < source.childCount; i++)
+        {
+            Transform child = source.GetChild(i);
+            if (child.name.Equals(name))
             {
-                renderer.sharedMaterial = mat;
+                result = child;
+                return true;
             }
         }
 
-        mat = (Material)EditorGUILayout.ObjectField(mat, typeof(Material), false);
-
-        base.OnInspectorGUI();
+        return false;
     }
 }
