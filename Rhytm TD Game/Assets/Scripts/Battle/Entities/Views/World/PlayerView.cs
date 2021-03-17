@@ -80,7 +80,9 @@ namespace RhytmTD.Battle.Entities.Views
         {
             if (target != null)
             {
-                m_TargetMarkerID = m_MarkerController.ShowTargetMarker(MarkerTypes.Target, target);
+                TransformModule transformModule = target.GetModule<TransformModule>();
+
+                m_TargetMarkerID = m_MarkerController.ShowMarkerAtPosition(MarkerTypes.Target, transformModule.Position);
                 m_MarkerShowed = true;
             }
             else if (m_MarkerShowed)

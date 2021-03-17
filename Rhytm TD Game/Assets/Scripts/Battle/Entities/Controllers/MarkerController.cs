@@ -1,6 +1,7 @@
 ﻿using CoreFramework;
 using RhytmTD.Battle.Entities.Models;
 using System.Collections.Generic;
+using UnityEngine;
 using static CoreFramework.EnumsCollection;
 
 namespace RhytmTD.Battle.Entities.Controllers
@@ -8,10 +9,10 @@ namespace RhytmTD.Battle.Entities.Controllers
     public class MarkerController : BaseController
     {
         private MarkerModel m_MarkerModel;
+        private BattleModel m_BattleModel;
 
         // change to pool in the future
-        private Dictionary<MarkerTypes, int> m_MarkerIdByType = new Dictionary<MarkerTypes, int>();
-        private Dictionary<int, MarkerTypes> m_MarkerTypeById = new Dictionary<int, MarkerTypes>();
+        private Dictionary<int, BattleEntity> m_MarkerById = new Dictionary<int, BattleEntity>();
 
         public MarkerController(Dispatcher dispatcher) : base(dispatcher)
         {
@@ -20,54 +21,64 @@ namespace RhytmTD.Battle.Entities.Controllers
         public override void InitializeComplete()
         {
             m_MarkerModel = Dispatcher.GetModel<MarkerModel>();
+            m_BattleModel = Dispatcher.GetModel<BattleModel>();
         }
 
-        public int ShowTargetMarker(MarkerTypes markerType, BattleEntity battleEntity)
+        private BattleEntity CreateMarkerAtPosition(Vector3 postion)
         {
-            int markerID = GetOrCreateMarker(markerType, battleEntity);
-            m_MarkerModel.ShowTargetMarker(markerID, battleEntity);
+            BattleEntity markerEntity = new BattleEntity(IDGenerator.GenerateID());
+            markerEntity.AddModule(new TransformModule(postion, Quaternion.identity));
 
-            return markerID;
+            m_MarkerById.Add(markerEntity.ID, markerEntity);
+
+            return markerEntity;
+        } 
+
+        public int ShowMarkerAtPosition(MarkerTypes markerType, Vector3 postion)
+        {
+            BattleEntity markerEntity = CreateMarkerAtPosition(postion);
+
+            m_MarkerModel.MarkerShowed(markerType, markerEntity);
+
+            return markerEntity.ID;
         }
 
-        public int ShowAttackRadiusMarker(MarkerTypes markerType, BattleEntity battleEntity, float radius)
+        public int ShowRadiusMarkerAtPosition(MarkerTypes markerType, Vector3 postion, float radius)
         {
-            int markerID = GetOrCreateMarker(markerType, battleEntity);
-            m_MarkerModel.ShowRadiusAttackMarker(markerID, battleEntity, radius);
+            BattleEntity markerEntity = CreateMarkerAtPosition(postion);
 
-            return markerID;
+            m_MarkerModel.RadiusMarkerShowed(markerType, markerEntity, radius);
+
+            return markerEntity.ID;
         }
 
-        private int GetOrCreateMarker(MarkerTypes markerType, BattleEntity battleEntity)
+        public int ShowTargetFollowingMarker(MarkerTypes markerType, BattleEntity target)
         {
-            if (m_MarkerIdByType.ContainsKey(markerType))
-            {
-                return m_MarkerIdByType[markerType];
-            }
-            else
-            {
-                int markerID = IDGenerator.GenerateID();
+            TransformModule targetTransformModule = target.GetModule<TransformModule>();
 
-                m_MarkerModel.MarkerCreated(markerID, markerType, battleEntity);
+            BattleEntity markerEntity = CreateMarkerAtPosition(targetTransformModule.Position);
+            markerEntity.AddModule(new SyncPositionModule(target));
 
-                m_MarkerIdByType.Add(markerType, markerID);
-                m_MarkerTypeById.Add(markerID, markerType);
+            m_MarkerModel.MarkerShowed(markerType, markerEntity);
 
-                return markerID;
-            }
+            m_BattleModel.AddBattleEntity(markerEntity);
+
+            return markerEntity.ID;
         }
 
         public void HideMarker(int markerID)
         {
-            if (!m_MarkerTypeById.ContainsKey(markerID))
+            if (!m_MarkerById.ContainsKey(markerID))
                 return;
 
-            MarkerTypes markerType = m_MarkerTypeById[markerID];
+            m_MarkerModel.MarkerHided(markerID);
 
-            m_MarkerModel.MarkerHide(markerID);
+            m_MarkerById.Remove(markerID);
 
-            m_MarkerIdByType.Remove(markerType);
-            m_MarkerTypeById.Remove(markerID);
+            if (m_BattleModel.HasEntity(markerID))
+            {
+                m_BattleModel.RemoveBattleEntity(markerID);
+            }
         }
     }
 }

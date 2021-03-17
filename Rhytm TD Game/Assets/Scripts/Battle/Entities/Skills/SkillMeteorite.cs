@@ -20,6 +20,7 @@ namespace RhytmTD.Battle.Entities.Skills
         private RhytmController m_RhytmController;
 
         private MeteoriteSkillModule m_MeteoriteModule;
+        private Vector3 m_DestinationPosition;
         private int m_MarkerID;
 
         public override void Initialize(BattleEntity battleEntity)
@@ -45,8 +46,15 @@ namespace RhytmTD.Battle.Entities.Skills
 
             if (targetModule.HasTarget)
             {
-                m_MarkerID = m_MarkerController.ShowAttackRadiusMarker(MarkerTypes.AttackRadius, targetModule.Target, m_MeteoriteModule.DamageRadius);
+                TransformModule targetTransform = targetModule.Target.GetModule<TransformModule>();
+                m_DestinationPosition = targetTransform.Position;
             }
+            else
+            {
+                m_DestinationPosition = m_InputModel.LastTouchHitPoint;
+            }
+
+            m_MarkerID = m_MarkerController.ShowRadiusMarkerAtPosition(MarkerTypes.AttackRadius, m_DestinationPosition, m_MeteoriteModule.DamageRadius);
         }
 
         protected async override void SkilUseStarted(int senderID)
@@ -56,21 +64,9 @@ namespace RhytmTD.Battle.Entities.Skills
             BattleEntity sender = m_BattleModel.GetEntity(senderID);
 
             TransformModule senderTransform = sender.GetModule<TransformModule>();
-            TargetModule targetModule = sender.GetModule<TargetModule>();
-
-            Vector3 destinationPoint;
-            if (targetModule.HasTarget)
-            {
-                TransformModule targetTransform = targetModule.Target.GetModule<TransformModule>();
-                destinationPoint = targetTransform.Position;
-            }
-            else
-            {
-                destinationPoint = m_InputModel.LastTouchHitPoint;
-            }
 
             Vector3 effectPosition = senderTransform.Position + m_MeteoriteModule.EffectOffset;
-            Vector3 targetDirection = destinationPoint - effectPosition;
+            Vector3 targetDirection = m_DestinationPosition - effectPosition;
             float targetDistance = targetDirection.magnitude;
 
             float moveTime = m_RhytmController.GetTimeToNextTick();
@@ -101,7 +97,7 @@ namespace RhytmTD.Battle.Entities.Skills
                 if (!destroyModule.IsDestroyed)
                 {
                     TransformModule transformModule = battleEntity.GetModule<TransformModule>();
-                    float disntanceSqr = (destinationPoint - transformModule.Position).sqrMagnitude;
+                    float disntanceSqr = (m_DestinationPosition - transformModule.Position).sqrMagnitude;
 
                     if (disntanceSqr <= m_MeteoriteModule.DamageRadius * m_MeteoriteModule.DamageRadius)
                     {

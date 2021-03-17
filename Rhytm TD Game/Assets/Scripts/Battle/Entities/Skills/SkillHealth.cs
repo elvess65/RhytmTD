@@ -35,7 +35,7 @@ namespace RhytmTD.Battle.Entities.Skills
 
             if (targetModule.HasTarget)
             {
-                m_MarkerID = m_MarkerController.ShowTargetMarker(MarkerTypes.AllyTarget, targetModule.Target);
+                m_MarkerID = m_MarkerController.ShowTargetFollowingMarker(MarkerTypes.AllyTarget, targetModule.Target);
             }
         }
 
@@ -55,9 +55,14 @@ namespace RhytmTD.Battle.Entities.Skills
                 healthModule.AddHealth(healthToRestore);
 
                 m_EffectController.CreateHealthEffect(targerTransform.Position, targerTransform.Rotation);
-
-                m_MarkerController.HideMarker(m_MarkerID);
             }
+        }
+
+        protected override void SkillUseFinished(int senderID)
+        {
+            base.SkillUseFinished(senderID);
+
+            m_MarkerController.HideMarker(m_MarkerID);
         }
     }
 }

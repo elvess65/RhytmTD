@@ -6,30 +6,30 @@ namespace RhytmTD.Battle.Entities.Models
 {
     public class MarkerModel : BaseModel
     {
-        public delegate void RadiusMarkerHandler(int markerID, BattleEntity battleEntity, float radius);
-        public delegate void TargetMarkerHandler(int markerID, BattleEntity battleEntity);
+        public delegate void RadiusMarkerHandler(MarkerTypes markerType, BattleEntity battleEntity, float radius);
+        public delegate void TargetMarkerHandler(MarkerTypes markerType, BattleEntity battleEntity);
 
-        public event Action<int, MarkerTypes, BattleEntity> OnMarkerCreated;
+        public event TargetMarkerHandler OnMarkerShow;
         public event RadiusMarkerHandler OnRadiusMarkerShow;
-        public event TargetMarkerHandler OnTargetMarkerShow;
+        public event TargetMarkerHandler OnFollowingMarkerShow;
         public event Action<int> OnMarkerHide;
 
-        public void MarkerCreated(int markerID, MarkerTypes markerType, BattleEntity battleEntity)
+        public void MarkerShowed(MarkerTypes markerType, BattleEntity battleEntity)
         {
-            OnMarkerCreated?.Invoke(markerID, markerType, battleEntity);
+            OnMarkerShow?.Invoke(markerType, battleEntity);
         }
 
-        public void ShowRadiusAttackMarker(int markerID, BattleEntity battleEntity, float radius)
+        public void RadiusMarkerShowed(MarkerTypes markerType, BattleEntity battleEntity, float radius)
         {
-            OnRadiusMarkerShow?.Invoke(markerID, battleEntity, radius);
+            OnRadiusMarkerShow?.Invoke(markerType, battleEntity, radius);
         }
 
-        public void ShowTargetMarker(int markerID, BattleEntity battleEntity)
+        public void FollowingMarkerShowed(MarkerTypes markerType, BattleEntity battleEntity, BattleEntity target)
         {
-            OnTargetMarkerShow?.Invoke(markerID, battleEntity);
+            OnFollowingMarkerShow?.Invoke(markerType, battleEntity);
         }
 
-        public void MarkerHide(int markerID)
+        public void MarkerHided(int markerID)
         {
             OnMarkerHide?.Invoke(markerID);
         }

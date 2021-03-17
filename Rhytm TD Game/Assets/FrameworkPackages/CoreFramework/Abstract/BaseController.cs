@@ -1,4 +1,6 @@
 ﻿
+using System;
+
 namespace CoreFramework
 {
     public abstract class BaseController : DispatcherProvider
@@ -10,6 +12,10 @@ namespace CoreFramework
         public virtual void InitializeComplete()
         {
 
+        }
+
+        public virtual void Dispose()
+        {
         }
     }
 }

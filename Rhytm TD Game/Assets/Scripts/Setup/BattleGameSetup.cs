@@ -40,6 +40,7 @@ namespace RhytmTD.Setup
             dispatcher.CreateController<PrepareSkillUseController>();
             dispatcher.CreateController<PlayerRhytmInputHandleController>();
             dispatcher.CreateController<SkillsCooldownController>();
+            dispatcher.CreateController<SyncPositionController>();
 
             // Models
             dispatcher.CreateModel<BattleModel>();
