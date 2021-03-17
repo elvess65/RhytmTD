@@ -3,6 +3,10 @@ using UnityEngine;
 
 public class EnviromentCell : MonoBehaviour
 {
-    public Dictionary<int, Material> InitialMaterials;
-    public List<MeshRenderer> Renderers;
+    public enum EnviromentTypes
+    {
+        All, Ground, Tiles, Rocks, Logs, Trees, Vegetation, Props, GroundProps, Max
+    }
+
+    public Dictionary<EnviromentTypes, List<MeshRenderer>> Renderers = new Dictionary<EnviromentTypes, List<MeshRenderer>>();
 }
