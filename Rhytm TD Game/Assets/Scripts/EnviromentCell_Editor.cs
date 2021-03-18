@@ -10,7 +10,7 @@ public class EnviromentCell_Editor : Editor
     private bool m_CheckedOutsFolded = false;
     private Dictionary<EnviromentTypes, bool> m_FoldedOuts = new Dictionary<EnviromentTypes, bool>();
     private List<(EnviromentTypes, Material)> m_EnviromentTypesMaterialsSubstitute = new List<(EnviromentTypes, Material)>();
-   
+
 
     public override void OnInspectorGUI()
     {
@@ -24,6 +24,11 @@ public class EnviromentCell_Editor : Editor
 
         if (GUI.changed)
             Validate();
+
+        if (GUILayout.Button("Test"))
+        {
+            Debug.Log(castedTarget.NearEdge.position);
+        }
     }
 
     private void OnEnable()
