@@ -1,4 +1,7 @@
-﻿using RhytmTD.Battle.Entities.Views;
+﻿#define LOG
+
+using System.Collections.Generic;
+using RhytmTD.Battle.Entities.Views;
 using UnityEngine;
 
 public class DynamicEnviromentDevelopement : MonoBehaviour
@@ -7,41 +10,88 @@ public class DynamicEnviromentDevelopement : MonoBehaviour
     public Transform Parent;  
     public EnviromentCellView CellPrefab;
 
-    private EnviromentCellView m_LastCell;
-    private float m_SqrDistanceToSpawn = 0;
+    private List<EnviromentCellView> m_CellViews = new List<EnviromentCellView>();
 
-    private const float m_SQR_DIST_TO_SPAWN_MULTIPLAYER = 1;
+    private EnviromentCellView m_LastCell => m_CellViews[m_CellViews.Count - 1];
+    private EnviromentCellView m_FirstCell => m_CellViews[0];
+
+    private float m_SqrDistanceToSpawn = 0;
+    private float m_SqrDistanceToRemove = 0;
+
+    private const float m_SQR_DIST_TO_SPAWN_MLTP = 2;
+    private const float m_SQR_DIST_TO_REMOVE_MLTP = 2f;
+    private const int m_DEFAULT_AMOUNT_OF_CELLS = 2;
 
     void Start()
     {
-        m_LastCell = FindObjectOfType<EnviromentCellView>();
+        Initialize();
+    }
 
-        m_SqrDistanceToSpawn = (m_LastCell.FarEdge.position - m_LastCell.NearEdge.position).sqrMagnitude * m_SQR_DIST_TO_SPAWN_MULTIPLAYER;
+    void Initialize()
+    {
+        m_CellViews.Add(FindObjectOfType<EnviromentCellView>());
 
-        SpawnCell();
+        RecalculateActionDistances();
+
+        for (int i = 0; i < m_DEFAULT_AMOUNT_OF_CELLS - 1; i++)
+        {
+            AddCell();
+        }
+    }
+
+    private void RecalculateActionDistances()
+    {
+        m_SqrDistanceToSpawn = m_LastCell.SQRLength * m_SQR_DIST_TO_SPAWN_MLTP;
+        m_SqrDistanceToRemove = m_LastCell.SQRLength * m_SQR_DIST_TO_REMOVE_MLTP;
     }
 
     void Update()
     {
-        float sqrDistToFarEdge = (m_LastCell.FarEdge.position - Target.position).sqrMagnitude;
-        Debug.Log(sqrDistToFarEdge + " " + m_SqrDistanceToSpawn);
+        float sqrDistToLastEdge = (m_LastCell.FarEdge.position - Target.position).sqrMagnitude;
+        float sqrDistToFirstEdge = (m_FirstCell.NearEdge.position - Target.position).sqrMagnitude;
 
-        if (sqrDistToFarEdge <= m_SqrDistanceToSpawn)
+#if UNITY_EDITOR
+        Vector3 offset = Vector3.up * 2;
+        Debug.DrawLine(Target.position + offset, m_LastCell.FarEdge.position + offset, Color.green);
+        Debug.DrawLine(Target.position + offset, m_FirstCell.NearEdge.position + offset, Color.red);
+#endif
+
+#if LOG
+
+        Debug.Log("Create: (" + sqrDistToLastEdge + " : " + m_SqrDistanceToSpawn +
+                ") Remove: (" + (sqrDistToFirstEdge + " : " + m_SqrDistanceToRemove));
+#endif
+
+        if (sqrDistToLastEdge <= m_SqrDistanceToSpawn)
         {
-            SpawnCell();
+            AddCell();
+        }
+
+        if (sqrDistToFirstEdge >= m_SqrDistanceToRemove)
+        {
+            RemoveCell();
         }
     }
 
-    void SpawnCell()
+    private void AddCell()
     {
-        float spawnOffset = m_LastCell != null ? Vector3.Distance(m_LastCell.FarEdge.position, m_LastCell.NearEdge.position) : 0;
-        Vector3 spawnPos = m_LastCell != null ? m_LastCell.transform.position : Vector3.zero;
-
         EnviromentCellView cell = Instantiate(CellPrefab);
         cell.transform.SetParent(Parent);
         cell.transform.localScale = Vector3.one;
-        cell.transform.position = spawnPos - Vector3.forward * spawnOffset;
+        cell.transform.position = m_LastCell.transform.position - Vector3.forward * m_LastCell.Length;
 
-        m_LastCell = cell;
+        m_CellViews.Add(cell);
+
+        RecalculateActionDistances();
+    }
+
+    private void RemoveCell()
+    {
+        EnviromentCellView cell = m_CellViews[0];
+        Destroy(cell.gameObject);
+
+        m_CellViews.RemoveAt(0);
+
+        RecalculateActionDistances();
     }
 }
