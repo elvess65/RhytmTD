@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: DissolveCutoutDevelopement
+  m_Name: PlayerAppearPortal
   m_Shader: {fileID: 4800000, guid: 5cb79633f11db4354a13fb953b8e0e9e, type: 3}
   m_ShaderKeywords: _INVERT_ON
   m_LightmapFlags: 4

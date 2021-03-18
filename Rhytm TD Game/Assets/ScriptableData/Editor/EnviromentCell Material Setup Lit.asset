@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0015668c932c418d81a814d35871fe1, type: 3}
+  m_Name: EnviromentCell Material Setup Lit
+  m_EditorClassIdentifier: 
+  EnviromentCellMaterials:
+  - Type: 0
+    Material: {fileID: 0}
+  - Type: 1
+    Material: {fileID: 2100000, guid: 7626ac2740b55419a9eda73dcbc5640c, type: 2}
+  - Type: 2
+    Material: {fileID: 2100000, guid: c2cba747414284337a04188b244c972c, type: 2}
+  - Type: 3
+    Material: {fileID: 2100000, guid: c2cba747414284337a04188b244c972c, type: 2}
+  - Type: 4
+    Material: {fileID: 2100000, guid: 30660fcd7a7f043a49ff72b7247e7ac8, type: 2}
+  - Type: 5
+    Material: {fileID: 2100000, guid: 30660fcd7a7f043a49ff72b7247e7ac8, type: 2}
+  - Type: 6
+    Material: {fileID: 2100000, guid: d36aa4b83ea104a50ada039353a29946, type: 2}
+  - Type: 7
+    Material: {fileID: 2100000, guid: dcc4222d788294925b72f415eca7ffe8, type: 2}
+  - Type: 8
+    Material: {fileID: 2100000, guid: db22c62112954495498c948e5c7d25c4, type: 2}
