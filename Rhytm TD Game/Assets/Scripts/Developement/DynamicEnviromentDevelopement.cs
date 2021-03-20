@@ -9,6 +9,7 @@ public class DynamicEnviromentDevelopement : MonoBehaviour
     public Transform Target;
     public Transform Parent;  
     public EnviromentCellView CellPrefab;
+    public int DefaultAmountOfCells = 0;
 
     private List<EnviromentCellView> m_CellViews = new List<EnviromentCellView>();
 
@@ -20,7 +21,6 @@ public class DynamicEnviromentDevelopement : MonoBehaviour
 
     private const float m_SQR_DIST_TO_SPAWN_MLTP = 2;
     private const float m_SQR_DIST_TO_REMOVE_MLTP = 2f;
-    private const int m_DEFAULT_AMOUNT_OF_CELLS = 2;
 
     void Start()
     {
@@ -33,7 +33,7 @@ public class DynamicEnviromentDevelopement : MonoBehaviour
 
         RecalculateActionDistances();
 
-        for (int i = 0; i < m_DEFAULT_AMOUNT_OF_CELLS - 1; i++)
+        for (int i = 0; i < DefaultAmountOfCells; i++)
         {
             AddCell();
         }
