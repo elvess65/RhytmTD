@@ -1,4 +1,4 @@
-﻿#define LOG
+﻿//#define LOG
 
 using System.Collections.Generic;
 using RhytmTD.Battle.Entities.Views;
