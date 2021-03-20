@@ -3,7 +3,7 @@ using UnityEditor;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 
-namespace RhytmTD.Editor
+namespace FrameworkPackages.PrefabLightmap
 {
     [ExecuteAlways]
     public class PrefabLightmapData : MonoBehaviour

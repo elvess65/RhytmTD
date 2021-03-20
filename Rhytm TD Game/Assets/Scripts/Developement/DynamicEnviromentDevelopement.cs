@@ -39,12 +39,7 @@ public class DynamicEnviromentDevelopement : MonoBehaviour
         }
     }
 
-    private void RecalculateActionDistances()
-    {
-        m_SqrDistanceToSpawn = m_LastCell.SQRLength * m_SQR_DIST_TO_SPAWN_MLTP;
-        m_SqrDistanceToRemove = m_LastCell.SQRLength * m_SQR_DIST_TO_REMOVE_MLTP;
-    }
-
+    
     void Update()
     {
         float sqrDistToLastEdge = (m_LastCell.FarEdge.position - Target.position).sqrMagnitude;
@@ -73,12 +68,14 @@ public class DynamicEnviromentDevelopement : MonoBehaviour
         }
     }
 
+
+
     private void AddCell()
     {
         EnviromentCellView cell = Instantiate(CellPrefab);
         cell.transform.SetParent(Parent);
         cell.transform.localScale = Vector3.one;
-        cell.transform.position = m_LastCell.transform.position - Vector3.forward * m_LastCell.Length;
+        cell.transform.position = m_LastCell.transform.position + Vector3.forward * m_LastCell.Length;
 
         m_CellViews.Add(cell);
 
@@ -94,4 +91,12 @@ public class DynamicEnviromentDevelopement : MonoBehaviour
 
         RecalculateActionDistances();
     }
+
+
+    private void RecalculateActionDistances()
+    {
+        m_SqrDistanceToSpawn = m_LastCell.SQRLength * m_SQR_DIST_TO_SPAWN_MLTP;
+        m_SqrDistanceToRemove = m_LastCell.SQRLength * m_SQR_DIST_TO_REMOVE_MLTP;
+    }
+
 }

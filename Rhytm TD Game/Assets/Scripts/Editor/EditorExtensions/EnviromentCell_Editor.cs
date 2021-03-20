@@ -180,7 +180,10 @@ namespace RhytmTD.Editor.EditorExtensions
         {
             Collider[] colliders = castedTarget.transform.GetComponentsInChildren<Collider>(true);
             for (int i = 0; i < colliders.Length; i++)
-                colliders[i].enabled = m_CollidersEnable;
+            {
+                if (!colliders[i].transform.parent.name.Equals(EnviromentTypes.Ground.ToString()))
+                    colliders[i].enabled = m_CollidersEnable;
+            }
 
             Debug.Log($"Successfully updated {colliders.Length} colliders");
         }
