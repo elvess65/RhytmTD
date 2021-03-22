@@ -9,8 +9,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: Dev Minimalist
   m_Shader: {fileID: 4800000, guid: f276502ebf8b1431192125b7316d5d67, type: 3}
-  m_ShaderKeywords: AO_ON BACKSOLID FRONTSOLID HEIGHT_FOG RIGHTSOLID SHADOW_ON TOPSOLID
-    UNITY_FOG
+  m_ShaderKeywords: AO_ON BACKSOLID FRONTSOLID HEIGHT_FOG RIGHTSOLID TOPSOLID UNITY_FOG
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
@@ -108,7 +107,7 @@ Material:
     - _OcclusionStrength: 1
     - _OtherSettings: 1
     - _Parallax: 0.02
-    - _RealtimeShadow: 1
+    - _RealtimeShadow: 0
     - _RimEnable: 0
     - _RimPower: 1.04
     - _Rotation_B: 0
@@ -129,18 +128,18 @@ Material:
     - _ShadowInfluence: 0.31
     - _ShowAO: 0
     - _ShowAmbientSettings: 1
-    - _ShowBack: 1
+    - _ShowBack: 0
     - _ShowBottom: 0
     - _ShowColorCorrection: 0
-    - _ShowCustomShading: 1
-    - _ShowFog: 1
-    - _ShowFront: 1
+    - _ShowCustomShading: 0
+    - _ShowFog: 0
+    - _ShowFront: 0
     - _ShowGlobalGradientSettings: 0
-    - _ShowLMap: 1
+    - _ShowLMap: 0
     - _ShowLeft: 0
-    - _ShowRight: 1
+    - _ShowRight: 0
     - _ShowTexture: 1
-    - _ShowTop: 1
+    - _ShowTop: 0
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1

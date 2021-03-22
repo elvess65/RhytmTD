@@ -5,40 +5,69 @@ namespace RhytmTD.Battle.Entities.Models
 {
     public class SkillsCooldownModel : BaseModel
     {
-        public ICollection<int> SkillsInCooldownIDs => m_SkillsInCooldown.Keys;
-
-        private Dictionary<int, float> m_SkillsInCooldown = new Dictionary<int, float>();
+        private List<SkillCooldownData> m_SkillsInCooldownList = new List<SkillCooldownData>();
 
 
         public void AddSkillToCooldown(int skillID, float cooldownSeconds)
         {
-            m_SkillsInCooldown[skillID] = cooldownSeconds;
+            if (!IsSkillInCooldown(skillID, out SkillCooldownData data))
+            {
+                m_SkillsInCooldownList.Add(new SkillCooldownData(skillID, cooldownSeconds));
+            }
         }
 
-        public bool UpdateSkillCooldownTime(int skillID, float deltaTime)
+        public void UpdateSkillsCooldownTime(float deltaTime)
         {
-            if (m_SkillsInCooldown.ContainsKey(skillID))
+            for (int i = 0; i < m_SkillsInCooldownList.Count; i++)
             {
-                m_SkillsInCooldown[skillID] -= deltaTime;
+                m_SkillsInCooldownList[i].CooldownRemainTime -= deltaTime;
 
-                return m_SkillsInCooldown[skillID] <= 0;
+                if (m_SkillsInCooldownList[i].CooldownRemainTime <= 0)
+                {
+                    m_SkillsInCooldownList.RemoveAt(i);
+                    i--;
+                }
+            }
+        }
+
+        public (float remainTime, float totalTime) GetSkillCooldownTime(int skillID)
+        {
+            if (IsSkillInCooldown(skillID, out SkillCooldownData data))
+                return (data.CooldownRemainTime, data.CooldownTotalTime);
+
+            return (0, 0);
+        }
+
+
+        private bool IsSkillInCooldown(int skillID, out SkillCooldownData data)
+        {
+            data = null;
+            foreach (SkillCooldownData skillCooldownData in m_SkillsInCooldownList)
+            {
+                if (skillCooldownData.SkillID == skillID)
+                {
+                    data = skillCooldownData;
+                    return true;
+                }
             }
 
             return false;
         }
 
-        public void RemoveSkillFromCooldown(int skillID)
+
+        private class SkillCooldownData
         {
-            if (m_SkillsInCooldown.ContainsKey(skillID))
-                m_SkillsInCooldown.Remove(skillID);
+            public int SkillID { get; private set; }
+            public float CooldownTotalTime { get; private set; }
+            public float CooldownRemainTime { get; set; }
+
+            public SkillCooldownData(int skillID, float cooldownTotalTime)
+            {
+                SkillID = skillID;
+                CooldownTotalTime = cooldownTotalTime;
+                CooldownRemainTime = CooldownTotalTime;
+            }
         }
 
-        public float GetSkillCooldownTime(int skillID)
-        {
-            if (m_SkillsInCooldown.ContainsKey(skillID))
-                return m_SkillsInCooldown[skillID];
-
-            return 0;
-        }
     }
 }
