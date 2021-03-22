@@ -60,15 +60,16 @@ namespace RhytmTD.Battle.Entities.Controllers
                                                        moveSpeed,
                                                        m_AccountBaseParamsDataModel.BaseCharacterData.Health,
                                                        m_AccountBaseParamsDataModel.BaseCharacterData.MinDamage,
-                                                       m_AccountBaseParamsDataModel.BaseCharacterData.MaxDamage);
+                                                       m_AccountBaseParamsDataModel.BaseCharacterData.MaxDamage,
+                                                       m_AccountBaseParamsDataModel.BaseCharacterData.Mana);
 
             m_BattleModel.AddBattleEntity(entity);
             m_BattleModel.PlayerEntity = entity;
         }
 
-        private BattleEntity CreatePlayer(int typeID, Vector3 position, Quaternion rotation, float moveSpeed, int health, int minDamage, int maxDamage)
+        private BattleEntity CreatePlayer(int typeID, Vector3 position, Quaternion rotation, float moveSpeed, int health, int minDamage, int maxDamage, int mana)
         {
-            BattleEntity entity = m_BattleEntityFactory.CreatePlayer(typeID, position, rotation, moveSpeed, health, minDamage, maxDamage);
+            BattleEntity entity = m_BattleEntityFactory.CreatePlayer(typeID, position, rotation, moveSpeed, health, minDamage, maxDamage, mana);
 
             BattleEntity meteoriteSkill = m_SkillController.CreateMeteoriteSkillEntity();
             BattleEntity fireballSkill = m_SkillController.CreateFireballSkillEntity();

@@ -35,7 +35,8 @@ namespace RhytmTD.Data.DataBaseLocal
             public float ActivationTime = 1;
             public float UseTime = 1;
             public float FinishingTime = 1;
-            public float CooldownTicks = 10;
+            public int CooldownTicks = 10;
+            public int ManaCost = 2;
         }
 
         [System.Serializable]

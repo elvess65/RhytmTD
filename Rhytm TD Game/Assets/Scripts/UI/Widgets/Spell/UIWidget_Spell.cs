@@ -13,6 +13,7 @@ namespace RhytmTD.UI.Widget
         [Space]
         [SerializeField] private UIWidget_SpellInfo UIWidgetSpellInfo = null;
         [SerializeField] private UIWidget_SpellSequence UIWidgetSpellSequence = null;
+        [SerializeField] private UIWidget_ProgressIndicator UIWidget_ProgressIndicator = null;
 
         private SpellBookModel m_SpellBookModel;
         private SkillsCooldownController m_SkillsCooldownController;
@@ -51,16 +52,33 @@ namespace RhytmTD.UI.Widget
 
         private void SpellbookOpenedHandler()
         {
-            float skillCooldownRemainTime = m_SkillsCooldownController.GetSkillInCooldownRemainTime(m_SkillID);
-            if (skillCooldownRemainTime > 0)
+            (float remainTime, float totalTime) cooldownData = m_SkillsCooldownController.GetSkillCooldownTime(m_SkillID);
+            SetCooldownState(cooldownData.remainTime > 0);
+
+            if (cooldownData.remainTime > 0)
             {
-                Debug.Log("SKILL " + m_SkillID + " is in cooldown and will be there for " + skillCooldownRemainTime + " sec");
+                UIWidget_ProgressIndicator.SetProgress(cooldownData.remainTime / cooldownData.totalTime);
             }
         }
 
         private void SpellInfoPressHandler()
         {
             Debug.Log("Get info for " + m_SkillTypeID);
+        }
+
+        private void SetCooldownState(bool isInCooldown)
+        {
+            //SpellInfo Widget
+            Color color = UIWidgetSpellInfo.ExposedImageSpellIcon.color;
+            color.a = isInCooldown ? 0.5f : 1;
+
+            UIWidgetSpellInfo.ExposedImageSpellIcon.color = color;
+
+            //SpellSequence Widget
+            UIWidgetSpellSequence.SetCooldown(isInCooldown);
+
+            //Progress Widget
+            UIWidget_ProgressIndicator.SetWidgetActive(isInCooldown, false);
         }
 
         private string TEMP_GetSpellNameByID(int skillTypeID)

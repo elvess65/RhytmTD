@@ -1,5 +1,4 @@
 ﻿using RhytmTD.Assets.Battle;
-using RhytmTD.Battle.Entities.Views;
 using UnityEditor;
 using UnityEngine;
 using static CoreFramework.EnumsCollection;

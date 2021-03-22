@@ -9,8 +9,8 @@ namespace RhytmTD.UI.Widget
         [Space]
 
         [SerializeField] private Image Foreground = null;
-        [SerializeField] private DOTweenSequenceAnimator DamageSequenceAnimator = null;
-        [SerializeField] private DOTweenSequenceAnimator HealSequenceAnimator = null;
+        [SerializeField] private DOTweenSequenceAnimator AddSequenceAnimator = null;
+        [SerializeField] private DOTweenSequenceAnimator RemoveSequenceAnimator = null;
 
         [Header("Visual Change")]
         [SerializeField] private Sprite m_NormalSprite = null;
@@ -46,12 +46,12 @@ namespace RhytmTD.UI.Widget
 
         public void PlayDamageAnimation()
         {
-            DamageSequenceAnimator.PlaySequence();
+            RemoveSequenceAnimator.PlaySequence();
         }
 
         public void PlayHealAnimation()
         {
-            HealSequenceAnimator.PlaySequence();
+            AddSequenceAnimator.PlaySequence();
         }
 
 

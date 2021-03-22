@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1241794669}
   - component: {fileID: 1241794667}
   m_Layer: 0
-  m_Name: 'Damage DoTweenSequenceController '
+  m_Name: 'Remove DoTweenSequenceController '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -78,7 +78,7 @@ GameObject:
   - component: {fileID: 1999011023}
   - component: {fileID: 1999011022}
   m_Layer: 0
-  m_Name: 'Heal DoTweenSequenceController '
+  m_Name: 'Add DoTweenSequenceController '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -184,12 +184,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Root: {fileID: 1675037251655775578}
-  m_WarningSprite: {fileID: 21300000, guid: edf711441da8c428bae528686532e5e4, type: 3}
-  m_DangerSprite: {fileID: 21300000, guid: 01e584fc9ff6d4a969400e68b97befc4, type: 3}
-  m_NormalSprite: {fileID: 21300000, guid: 17ef8c2e6bda845ca82eb3e56635a961, type: 3}
   Foreground: {fileID: 7273950047231595036}
   DamageSequenceAnimator: {fileID: 1241794669}
   HealSequenceAnimator: {fileID: 1999011023}
+  m_NormalSprite: {fileID: 21300000, guid: 17ef8c2e6bda845ca82eb3e56635a961, type: 3}
+  m_WarningSprite: {fileID: 21300000, guid: edf711441da8c428bae528686532e5e4, type: 3}
+  m_DangerSprite: {fileID: 21300000, guid: 01e584fc9ff6d4a969400e68b97befc4, type: 3}
 --- !u!1 &924405612165002676
 GameObject:
   m_ObjectHideFlags: 0
@@ -298,8 +298,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 300, y: 58.7}
+  m_AnchoredPosition: {x: 0, y: 10}
+  m_SizeDelta: {x: 350, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &5271100164728531259
 GameObject:

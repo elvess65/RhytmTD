@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using CoreFramework;
+﻿using CoreFramework;
 using CoreFramework.Rhytm;
 using RhytmTD.Battle.Entities.Models;
 using RhytmTD.Data.Models;
@@ -16,12 +15,10 @@ namespace RhytmTD.Battle.Entities.Controllers
         private RhytmController m_RhytmController;
 
         private bool m_IsActive = false;
-        private List<int> m_SkillsToRemove;
 
 
         public SkillsCooldownController(Dispatcher dispatcher) : base(dispatcher)
         {
-            m_SkillsToRemove = new List<int>();
         }
 
         public override void InitializeComplete()
@@ -47,39 +44,16 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_SkillsModel.OnSkillUsed += SkillUsedHandler;
         }
 
-        public float GetSkillInCooldownRemainTime(int skillID)
+        public (float remainTime, float totalTime) GetSkillCooldownTime(int skillID)
         {
             return m_SkillsCooldownModel.GetSkillCooldownTime(skillID);
-        }
-
-
-        private void UpdateSkillCooldown(float deltaTime)
-        {
-            if (m_SkillsCooldownModel.SkillsInCooldownIDs.Count == 0)
-                return;
-
-            foreach (int skillID in m_SkillsCooldownModel.SkillsInCooldownIDs)
-            {
-                //m_SkillsCooldownModel.UpdateSkillCooldownTime(skillID, deltaTime);
-                //    m_SkillsToRemove.Add(skillID);
-
-                //UnityEngine.Debug.Log(m_SkillsCooldownModel.GetSkillCooldownTime(skillID));
-            }
-
-            /*if (m_SkillsToRemove.Count > 0)
-            {
-                for (int i = 0; i < m_SkillsToRemove.Count; i++)
-                    m_SkillsCooldownModel.RemoveSkillFromCooldown(m_SkillsToRemove[i]);
-
-                m_SkillsToRemove.Clear();
-            }*/
         }
 
 
         private void UpdateHandler(float deltaTime)
         {
             if (m_IsActive)
-                UpdateSkillCooldown(deltaTime);
+                m_SkillsCooldownModel.UpdateSkillsCooldownTime(deltaTime);
         }
 
         private void BattleStartedHandler()
