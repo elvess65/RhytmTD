@@ -14,6 +14,9 @@ namespace RhytmTD.UI.Widget
         [SerializeField] private Text Text_SpellName = null;
         [SerializeField] private UIWidget_Button UIWidget_ButtonInfo = null;
 
+        public Image ExposedImageSpellIcon => Image_SpellIcon;
+
+
         public void Initialize(string spellName, Sprite sprite, Color color)
         {
             Text_SpellName.text = spellName;
@@ -30,6 +33,7 @@ namespace RhytmTD.UI.Widget
         {
             UIWidget_ButtonInfo.LockInput(isLocked);
         }
+
 
         private void UIWidgetButtonInfoPressHandler()
         {

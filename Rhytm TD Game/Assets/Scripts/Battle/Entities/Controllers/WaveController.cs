@@ -1,6 +1,6 @@
 ﻿//#define LOG_SPAWN
 //#define SINGLE_SPAWN
-//#define DISABLE_SPAWN
+#define DISABLE_SPAWN
 
 #if DEBUG_SPAWN
 using CoreFramework.Input;

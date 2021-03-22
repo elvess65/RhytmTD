@@ -1044,6 +1044,7 @@ MonoBehaviour:
   Target: {fileID: 1095535859}
   Parent: {fileID: 1332376548}
   CellPrefab: {fileID: 658831610, guid: e2f5d5129d89f274db1a7a002f8380ce, type: 3}
+  DefaultAmountOfCells: -1
 --- !u!4 &1624035947
 Transform:
   m_ObjectHideFlags: 0
