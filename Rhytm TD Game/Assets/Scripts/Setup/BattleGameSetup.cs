@@ -41,6 +41,8 @@ namespace RhytmTD.Setup
             dispatcher.CreateController<PlayerRhytmInputHandleController>();
             dispatcher.CreateController<SkillsCooldownController>();
             dispatcher.CreateController<SyncPositionController>();
+            dispatcher.CreateController<SpellBookController>();
+            dispatcher.CreateController<ApplicationController>();
 
             // Models
             dispatcher.CreateModel<BattleModel>();
@@ -56,6 +58,8 @@ namespace RhytmTD.Setup
             dispatcher.CreateModel<PrepareSkilIUseModel>();
             dispatcher.CreateModel<PlayerRhytmInputHandleModel>();
             dispatcher.CreateModel<SkillsCooldownModel>();
+            dispatcher.CreateModel<SpellBookModel>();
+            dispatcher.CreateModel<ApplicationModel>();
         }
     }
 }

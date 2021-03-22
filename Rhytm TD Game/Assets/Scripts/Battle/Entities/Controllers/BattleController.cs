@@ -21,8 +21,8 @@ namespace RhytmTD.Battle.Entities.Controllers
         private BattleModel m_BattleModel;
         private UpdateModel m_UpdateModel;
         private BattleAudioModel m_AudioModel;
+        private SpellBookModel m_SpellBookModel;
         private StartBattleSequenceModel m_StartBattleSequenceModel;
-
 
         public BattleController(Dispatcher dispatcher) : base(dispatcher)
         {
@@ -36,6 +36,7 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_BattleModel = Dispatcher.GetModel<BattleModel>();
             m_UpdateModel = Dispatcher.GetModel<UpdateModel>();
             m_AudioModel = Dispatcher.GetModel<BattleAudioModel>();
+            m_SpellBookModel = Dispatcher.GetModel<SpellBookModel>();
             m_StartBattleSequenceModel = Dispatcher.GetModel<StartBattleSequenceModel>();
 
             m_RhytmController = Dispatcher.GetController<RhytmController>();
@@ -45,17 +46,17 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_BattleModel.OnBattleInitialize += Initialize;
             m_BattleModel.OnBattleStarted += BattleStartedHandler;
             m_BattleModel.OnBattleFinished += BattleFinishedHandler;
-            m_BattleModel.OnSpellbookOpened += SpellBookOpenedHandler;
-            m_BattleModel.OnSpellbookClosed += SpellBookClosedAndPostUsedHandler;
-            m_BattleModel.OnDirectionalSpellSelected += SpellBookSelectedHandler;
-            m_BattleModel.OnSpellbookUsed += SpellBookUsedHandler;
-            m_BattleModel.OnSpellbookPostUsed += SpellBookClosedAndPostUsedHandler;
+
+            m_SpellBookModel.OnSpellbookOpened += SpellBookOpenedHandler;
+            m_SpellBookModel.OnSpellbookClosed += SpellBookClosedAndPostUsedHandler;
+            m_SpellBookModel.OnDirectionalSpellSelected += SpellBookSelectedHandler;
+            m_SpellBookModel.OnSpellbookUsed += SpellBookUsedHandler;
+            m_SpellBookModel.OnSpellbookPostUsed += SpellBookClosedAndPostUsedHandler;
             
             m_UpdateModel.OnUpdate += Update;
             
             m_StartBattleSequenceModel.OnSequenceFinished += StartLoop;
         }
-
         
         private void Initialize()
         {

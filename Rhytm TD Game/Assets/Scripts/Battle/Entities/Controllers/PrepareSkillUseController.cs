@@ -22,6 +22,7 @@ namespace RhytmTD.Battle.Entities.Controllers
         private RhytmController m_RhytmController;
         private SkillsController m_SkillsController;
         private TargetingController m_TargetingController;
+        private SpellBookController m_SpellBookController;
 
         private AnimationModule m_PlayerAnimationModule;
         private LoadoutModule m_PlayerLodoutModule;
@@ -35,7 +36,6 @@ namespace RhytmTD.Battle.Entities.Controllers
         private bool m_IsSequenceStrted;
         private Dictionary<int, List<bool>> m_SkillTypeID2Pattern;
         private Dictionary<int, SkillProgress> m_SkillTypeID2Progress;
-
 
         public PrepareSkillUseController(Dispatcher dispatcher) : base(dispatcher)
         {
@@ -54,6 +54,7 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_RhytmController = Dispatcher.GetController<RhytmController>();
             m_SkillsController = Dispatcher.GetController<SkillsController>();
             m_TargetingController = Dispatcher.GetController<TargetingController>();
+            m_SpellBookController = Dispatcher.GetController<SpellBookController>();
 
             m_BattleModel.OnPlayerEntityInitialized += PlayerInitializedHandlder;
 
@@ -177,7 +178,7 @@ namespace RhytmTD.Battle.Entities.Controllers
             {
                 case EnumsCollection.SkillTargetingType.Area:
                 case EnumsCollection.SkillTargetingType.Direction:
-                    m_BattleModel.OnDirectionalSpellSelected?.Invoke();
+                    m_SpellBookController.SelectDirectionalSpell();
                     break;
 
                 case EnumsCollection.SkillTargetingType.Self:
@@ -237,7 +238,8 @@ namespace RhytmTD.Battle.Entities.Controllers
 
         private void StartUseSkill(Vector3 skillDir, Vector3 hitPos)
         {
-            m_BattleModel.OnSpellbookUsed?.Invoke();
+            m_SpellBookController.UseSpellBook();
+            m_SpellBookController.CloseSpellBook();
 
             m_SkillID = m_PlayerLodoutModule.GetSkillIDByTypeID(m_SkillTypeID);
             m_TargetEntity = GetTargetBySkillType(skillDir, hitPos, ref m_TargetVector);
@@ -258,7 +260,7 @@ namespace RhytmTD.Battle.Entities.Controllers
 
             m_SkillsController.UseSkill(m_SkillID, m_BattleModel.PlayerEntity.ID);
 
-            m_BattleModel.OnSpellbookPostUsed?.Invoke();
+            m_SpellBookController.SpellbookPostUsed();
         }
 
 

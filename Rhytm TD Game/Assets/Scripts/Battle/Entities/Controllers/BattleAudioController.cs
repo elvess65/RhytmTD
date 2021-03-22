@@ -8,7 +8,8 @@ namespace RhytmTD.Battle.Entities.Controllers
     {
         private RhytmController m_RhytmController;
         private BattleAudioModel m_AudioModel;
-        private BattleModel m_BattleModel;
+        private SpellBookModel m_SpellBookModel;
+        private ApplicationModel m_ApplicationModel;
 
         public BattleAudioController(Dispatcher dispatcher) : base(dispatcher)
         {
@@ -19,18 +20,31 @@ namespace RhytmTD.Battle.Entities.Controllers
             base.InitializeComplete();
 
             m_RhytmController = Dispatcher.GetController<RhytmController>();
-            m_AudioModel = Dispatcher.GetModel<BattleAudioModel>();
 
+            m_AudioModel = Dispatcher.GetModel<BattleAudioModel>();
             m_AudioModel.OnPlayMetronome += PlayMetronomeHandler;
             m_AudioModel.OnPlayMusic += PlayMusicHandler;
             m_AudioModel.OnBPMChanged += BPMChangedHandler;
 
-            m_BattleModel = Dispatcher.GetModel<BattleModel>();
-            m_BattleModel.OnSpellbookOpened += SpellBookOpenedHandler;
-            m_BattleModel.OnSpellbookClosed += SpellBookClosedHandler;
-            m_BattleModel.OnSpellbookUsed += SpellBookClosedHandler;
+            m_SpellBookModel = Dispatcher.GetModel<SpellBookModel>();
+            m_SpellBookModel.OnSpellbookOpened += SpellBookOpenedHandler;
+            m_SpellBookModel.OnSpellbookClosed += SpellBookClosedHandler;
+            m_SpellBookModel.OnSpellbookUsed += SpellBookClosedHandler;
+
+            m_ApplicationModel = Dispatcher.GetModel<ApplicationModel>();
+            m_ApplicationModel.OnPause += ApplicationModel_OnPause;
+            m_ApplicationModel.OnResume += ApplicationModel_OnResume;
         }
 
+        private void ApplicationModel_OnPause()
+        {
+            m_AudioModel.Music.Pause();
+        }
+
+        private void ApplicationModel_OnResume()
+        {
+            m_AudioModel.Music.UnPause();
+        }
 
         private void PlayMetronomeHandler(bool startPlaying)
         {

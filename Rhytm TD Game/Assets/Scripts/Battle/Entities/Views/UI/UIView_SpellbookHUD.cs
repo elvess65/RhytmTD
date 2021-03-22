@@ -1,5 +1,5 @@
-﻿using CoreFramework.Rhytm;
-using RhytmTD.Battle.Entities;
+﻿using RhytmTD.Battle.Entities;
+using RhytmTD.Battle.Entities.Controllers;
 using RhytmTD.Battle.Entities.Models;
 using RhytmTD.Data.Models.DataTableModels;
 using RhytmTD.UI.View;
@@ -13,9 +13,6 @@ namespace RhytmTD.UI.Battle.View.UI
     /// </summary>
     public class UIView_SpellbookHUD : UIView_Abstract
     {
-        private BattleModel m_BattleModel;
-        private WorldDataModel m_WorldDataModel;
-
         [Space]
         [SerializeField] private RectTransform m_SpellsRoot = null;
 
@@ -25,11 +22,15 @@ namespace RhytmTD.UI.Battle.View.UI
 
         public UIWidget_SkillDirectionSelection ExposedUIWidget_SkillDirectionSelection => m_UIWidget_SkillDirectionSelection;
 
+        private BattleModel m_BattleModel;
+        private WorldDataModel m_WorldDataModel;
+        private SpellBookController m_SpellBookController;
+
         public override void Initialize()
         {
             m_WorldDataModel = Dispatcher.GetModel<WorldDataModel>();
-
             m_BattleModel = Dispatcher.GetModel<BattleModel>();
+            m_SpellBookController = Dispatcher.GetController<SpellBookController>();
 
             if (m_BattleModel.PlayerEntity == null)
                 m_BattleModel.OnPlayerEntityInitialized += CreateSpellWidgets;
@@ -60,7 +61,7 @@ namespace RhytmTD.UI.Battle.View.UI
 
         private void ButtonCloseWidgetPressHandler()
         {
-            m_BattleModel.OnSpellbookClosed?.Invoke();
+            m_SpellBookController.CloseSpellBook();
         }
     }
 }

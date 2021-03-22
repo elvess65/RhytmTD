@@ -12,7 +12,7 @@ namespace RhytmTD.UI.Widget
         [Space]
         [SerializeField] private RectTransform m_ItemsRoot = null;
 
-        private BattleModel m_BattleModel;
+        private SpellBookModel m_SpellBookModel;
         private WorldDataModel m_WorldDataModel;
         private PrepareSkilIUseModel m_PrepareSkilIUseModel;
         private SkillSequenceDataModel m_SkillSequenceDataModel;
@@ -29,7 +29,7 @@ namespace RhytmTD.UI.Widget
 
         public void Initialize(int skillTypeID)
         {
-            m_BattleModel = Dispatcher.GetModel<BattleModel>();
+            m_SpellBookModel = Dispatcher.GetModel<SpellBookModel>();
             m_WorldDataModel = Dispatcher.GetModel<WorldDataModel>();
             m_PrepareSkilIUseModel = Dispatcher.GetModel<PrepareSkilIUseModel>();
             m_SkillSequenceDataModel = Dispatcher.GetModel<SkillSequenceDataModel>();
@@ -40,8 +40,8 @@ namespace RhytmTD.UI.Widget
             m_PrepareSkilIUseModel.OnSkillStepReachedAuto += OnSkillStepReachedAutoHandler;
             m_PrepareSkilIUseModel.OnSequenceFailed += SequenceFailedHandler;
             m_PrepareSkilIUseModel.OnSkillSelected += SkillSelectedHandler;
-            
-            m_BattleModel.OnSpellbookOpened += SpellbookOpenedHandler;
+
+            m_SpellBookModel.OnSpellbookOpened += SpellbookOpenedHandler;
 
             m_SkillTypeID = skillTypeID;
 

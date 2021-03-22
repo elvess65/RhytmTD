@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using static CoreFramework.EnumsCollection;
 using RhytmTD.Battle.Entities.Views;
 using RhytmTD.Battle.Entities;
+using RhytmTD.Battle.Entities.Models;
 
 namespace RhytmTD.Animation
 {
@@ -15,6 +16,7 @@ namespace RhytmTD.Animation
         protected AnimationEventListener m_EventListener;
 
         private AnimationModule m_AnimationModule;
+        private SpellBookModel m_SpellBookModel;
 
         private Dictionary<AnimationTypes, string> m_AnimationKeys;
         private Dictionary<string, float> m_AnimationActionEventsExecuteTime;
@@ -30,7 +32,8 @@ namespace RhytmTD.Animation
 
             m_AnimationModule = entity.GetModule<AnimationModule>();
             m_AnimationModule.OnPlayAnimation += PlayAnimation;
-            m_AnimationModule.OnChangeSpeedMultiplayer += SetSpeedMultiplayer;
+
+            
 
             Initialize();
         }
@@ -38,6 +41,11 @@ namespace RhytmTD.Animation
         public virtual void Initialize()
         {
             m_EventListener = Controller.GetComponent<AnimationEventListener>();
+            m_SpellBookModel = Dispatcher.GetModel<SpellBookModel>();
+
+            m_SpellBookModel.OnSpellbookOpened += SpellBookOpenedHandler;
+            m_SpellBookModel.OnSpellbookClosed += SpellBookClosedHandler;
+
             if (m_EventListener != null && m_AnimationModule != null)
                 m_EventListener.OnAnimationMoment += m_AnimationModule.AnimationMomentHandler;
 
@@ -110,9 +118,14 @@ namespace RhytmTD.Animation
             return string.Empty;
         }
 
-        private void SetSpeedMultiplayer(float speedMultiplayer)
+        private void SpellBookOpenedHandler()
         {
-            Controller.speed = 1f * speedMultiplayer;
+            Controller.speed = m_SpellBookModel.SpeedMultiplayer;
+        }
+
+        private void SpellBookClosedHandler()
+        {
+            Controller.speed = m_SpellBookModel.SpeedMultiplayer;
         }
 
         private void OnDestroy()

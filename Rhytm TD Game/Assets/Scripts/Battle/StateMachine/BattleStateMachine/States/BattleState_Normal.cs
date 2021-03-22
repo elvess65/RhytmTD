@@ -12,11 +12,13 @@ namespace RhytmTD.Battle.StateMachine
     {
         private InputModel m_InputModel;
         private BattleModel m_BattleModel;
+        private ApplicationModel m_ApplicationModel;
 
         private RhytmInputProxy m_RhytmInputProxy;
         private ShootController m_ShootController;
         private TargetingController m_TargetingController;
         private PlayerRhytmInputHandleController m_PlayerRhytmInputHandleController;
+        private ApplicationController m_ApplicationController;
 
         private AnimationModule m_PlayerAnimationModule;
         private TransformModule m_PlayerTransformModule;
@@ -29,10 +31,13 @@ namespace RhytmTD.Battle.StateMachine
         {
             m_InputModel = Dispatcher.GetModel<InputModel>();
             m_BattleModel = Dispatcher.GetModel<BattleModel>();
+            m_ApplicationModel = Dispatcher.GetModel<ApplicationModel>();
+
             m_ShootController = Dispatcher.GetController<ShootController>();
             m_RhytmInputProxy = Dispatcher.GetController<RhytmInputProxy>();
             m_TargetingController = Dispatcher.GetController<TargetingController>();
             m_PlayerRhytmInputHandleController = Dispatcher.GetController<PlayerRhytmInputHandleController>();
+            m_ApplicationController = Dispatcher.GetController<ApplicationController>();
 
             m_BattleModel.OnPlayerEntityInitialized += PlayerInitializedHandlder;
         }
@@ -137,6 +142,17 @@ namespace RhytmTD.Battle.StateMachine
 
         private void HandleKeyDown(KeyCode keyCode)
         {
+            if (keyCode == KeyCode.P)
+            {
+                if (m_ApplicationModel.IsPaused)
+                {
+                    m_ApplicationController.UpPause();
+                }
+                else
+                {
+                    m_ApplicationController.Pause();
+                }
+            }
         }
     }
 }

@@ -8,6 +8,7 @@ namespace RhytmTD.Battle.Entities.Controllers
     public class RotateController : BaseController
     {
         private BattleModel m_BattleModel;
+        private SpellBookModel m_SpellBookModel;
 
         public RotateController(Dispatcher dispatcher) : base(dispatcher)
         {
@@ -16,6 +17,7 @@ namespace RhytmTD.Battle.Entities.Controllers
         public override void InitializeComplete()
         {
             m_BattleModel = Dispatcher.GetModel<BattleModel>();
+            m_SpellBookModel = Dispatcher.GetModel<SpellBookModel>();
 
             UpdateModel updateModel = Dispatcher.GetModel<UpdateModel>();
             updateModel.OnUpdate += Update;
@@ -37,7 +39,8 @@ namespace RhytmTD.Battle.Entities.Controllers
                     if (rotateModule.IsRotating)
                     {
                         TransformModule transformModule = entity.GetModule<TransformModule>();
-                        transformModule.Rotation = Quaternion.Slerp(transformModule.Rotation, rotateModule.Destination, deltaTime * rotateModule.CurrentSpeed);
+                        transformModule.Rotation = Quaternion.Slerp(transformModule.Rotation, rotateModule.Destination, 
+                                                                    deltaTime * rotateModule.CurrentSpeed * m_SpellBookModel.SpeedMultiplayer);
                     }
                 }
             }

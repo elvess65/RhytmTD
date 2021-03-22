@@ -1,9 +1,10 @@
-﻿using UnityEngine;
+﻿using RhytmTD.Battle.Entities.Models;
+using UnityEngine;
 
 namespace CoreFramework.Utils
 {
     [RequireComponent(typeof(AudioSource))]
-    public class Metronome : MonoBehaviour
+    public class Metronome : BaseView
     {
         public double bpm = 140.0F;
         public float gain = 0.5F;
@@ -16,6 +17,25 @@ namespace CoreFramework.Utils
         private double sampleRate = 0.0F;
         private int accent;
         private bool running = false;
+
+        private ApplicationModel m_ApplicationModel;
+
+        private void Awake()
+        {
+            m_ApplicationModel = Dispatcher.GetModel<ApplicationModel>();
+            m_ApplicationModel.OnPause += ApplicationModel_OnPause;
+            m_ApplicationModel.OnResume += ApplicationModel_OnResume;
+        }
+
+        private void ApplicationModel_OnPause()
+        {
+            StopMetronome();
+        }
+
+        private void ApplicationModel_OnResume()
+        {
+            StartMetronome();
+        }
 
         public void StartMetronome()
         {

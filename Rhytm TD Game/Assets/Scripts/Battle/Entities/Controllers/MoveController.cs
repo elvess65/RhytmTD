@@ -12,7 +12,7 @@ namespace RhytmTD.Battle.Entities.Controllers
     public class MoveController : BaseController
     {
         private BattleModel m_BattleModel;
-        private float m_CurSpeedMultiplayer = 1;
+        private SpellBookModel m_SpellBookModel;
 
         public MoveController(Dispatcher dispatcher) : base(dispatcher)
         {
@@ -23,11 +23,10 @@ namespace RhytmTD.Battle.Entities.Controllers
             base.InitializeComplete();
 
             m_BattleModel = Dispatcher.GetModel<BattleModel>();
+            m_SpellBookModel = Dispatcher.GetModel<SpellBookModel>();
+
             m_BattleModel.OnBattleStarted += BattleStartedHandler;
             m_BattleModel.OnBattleFinished += BattleFinishedHandler;
-            m_BattleModel.OnSpellbookOpened += SpellBookOpenedHandler;
-            m_BattleModel.OnSpellbookClosed += SpellBookClosedAndUsedHandler;
-            m_BattleModel.OnSpellbookUsed += SpellBookClosedAndUsedHandler;
 
             UpdateModel updateModel = Dispatcher.GetModel<UpdateModel>();
             updateModel.OnUpdate += Update;
@@ -51,7 +50,7 @@ namespace RhytmTD.Battle.Entities.Controllers
                     if (moveModule.IsMoving)
                     {
                         TransformModule transformModule = entity.GetModule<TransformModule>();
-                        transformModule.Position += moveModule.MoveDirection * moveModule.CurrentSpeed * deltaTime * m_CurSpeedMultiplayer;
+                        transformModule.Position += moveModule.MoveDirection * moveModule.CurrentSpeed * deltaTime * m_SpellBookModel.SpeedMultiplayer;
                     }
                 }
             }
@@ -65,16 +64,6 @@ namespace RhytmTD.Battle.Entities.Controllers
         private void BattleFinishedHandler(bool isSuccess)
         {
             m_BattleModel.PlayerEntity?.GetModule<MoveModule>().Stop();
-        }
-
-        private void SpellBookOpenedHandler()
-        {
-            m_CurSpeedMultiplayer = ConstsCollection.SPELLBOOK_SPEED_MULTIPLAYER;
-        }
-
-        private void SpellBookClosedAndUsedHandler()
-        {
-            m_CurSpeedMultiplayer = 1f;
         }
     }
 }

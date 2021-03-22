@@ -1,5 +1,5 @@
-﻿using CoreFramework.Rhytm;
-using RhytmTD.Battle.Entities;
+﻿using RhytmTD.Battle.Entities;
+using RhytmTD.Battle.Entities.Controllers;
 using RhytmTD.Battle.Entities.Models;
 using RhytmTD.UI.View;
 using RhytmTD.UI.Widget;
@@ -14,6 +14,7 @@ namespace RhytmTD.UI.Battle.View.UI
     {
         private HealthModule m_HealthModule;
         private BattleModel m_BattleModel;
+        private SpellBookController m_SpellBookController;
 
         [Space]
         [SerializeField] private UIWidget_Metronome UIWidget_Metronome = null;
@@ -26,6 +27,8 @@ namespace RhytmTD.UI.Battle.View.UI
         public override void Initialize()
         {
             m_BattleModel = Dispatcher.GetModel<BattleModel>();
+            m_SpellBookController = Dispatcher.GetController<SpellBookController>();
+
             if (m_BattleModel.PlayerEntity == null)
                 m_BattleModel.OnPlayerEntityInitialized += PlayerInitialized;
             else
@@ -63,7 +66,7 @@ namespace RhytmTD.UI.Battle.View.UI
 
         private void SpellBookWidgetPressHandler()
         {
-            m_BattleModel?.OnSpellbookOpened();
+            m_SpellBookController.OpenSpellBook();
         }
     }
 }

@@ -11,6 +11,7 @@ namespace RhytmTD.Battle.Entities.Controllers
         private UpdateModel m_UpdateModel;
         private BattleModel m_BattleModel;
         private SkillsModel m_SkillsModel;
+        private SpellBookModel m_SpellBookModel;
         private SkillsCooldownModel m_SkillsCooldownModel;
         private RhytmController m_RhytmController;
 
@@ -30,15 +31,18 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_UpdateModel = Dispatcher.GetModel<UpdateModel>();
             m_BattleModel = Dispatcher.GetModel<BattleModel>();
             m_SkillsModel = Dispatcher.GetModel<SkillsModel>();
+            m_SpellBookModel = Dispatcher.GetModel<SpellBookModel>();
+
             m_SkillsCooldownModel = Dispatcher.GetModel<SkillsCooldownModel>();
 
             m_RhytmController = Dispatcher.GetController<RhytmController>();
 
             m_BattleModel.OnBattleStarted += BattleStartedHandler;
             m_BattleModel.OnBattleFinished += OnBattleFinishedHandler;
-            m_BattleModel.OnSpellbookOpened += SpellBookOpenedHandler;
-            m_BattleModel.OnSpellbookPostUsed += SpellBookClosedAndPostUsedHandler;
-            m_BattleModel.OnSpellbookClosed += SpellBookClosedAndPostUsedHandler;
+
+            m_SpellBookModel.OnSpellbookOpened += SpellBookOpenedHandler;
+            m_SpellBookModel.OnSpellbookPostUsed += SpellBookClosedAndPostUsedHandler;
+            m_SpellBookModel.OnSpellbookClosed += SpellBookClosedAndPostUsedHandler;
 
             m_SkillsModel.OnSkillUsed += SkillUsedHandler;
         }

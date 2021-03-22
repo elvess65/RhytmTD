@@ -11,6 +11,10 @@ namespace CoreFramework.SceneLoading
         private string m_CurrentLoadingLevel = string.Empty;
         private string m_CurrentUnloadingLevel = string.Empty;
 
+        private void Awake()
+        {
+            
+        }
 
         public SceneLoader()
         {

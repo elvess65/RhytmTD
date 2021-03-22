@@ -35,16 +35,11 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_SpawnModel.OnShouldCreatePlayer += SpawnPlayer;
 
             m_BattleModel = Dispatcher.GetModel<BattleModel>();
-            m_BattleModel.OnSpellbookOpened += SpellBookOpenedHandler;
-            m_BattleModel.OnSpellbookClosed += SpellBookClosedHandler;
-            m_BattleModel.OnSpellbookUsed += SpellBookClosedHandler;
-
             m_AccountBaseParamsDataModel = Dispatcher.GetModel<AccountBaseParamsDataModel>();
 
             m_RhytmController = Dispatcher.GetController<RhytmController>();
             m_SkillController = Dispatcher.GetController<SkillsController>();
         }
-
       
         public BattleEntity SpawnEnemy(int typeID, Vector3 position, Quaternion rotation, float rotateSpeed, int health, int minDamage, int maxDamage)
         {
@@ -87,24 +82,6 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_SpawnModel.OnPlayerEntityCreated?.Invoke(typeID, entity);
 
             return entity;
-        }
-
-        private void SpellBookOpenedHandler()
-        {
-            foreach(BattleEntity entity in m_BattleModel.BattleEntities)
-            {
-                if (entity.HasModule<AnimationModule>())
-                    entity.GetModule<AnimationModule>().ChangeSpeedMultiplayer(ConstsCollection.SPELLBOOK_SPEED_MULTIPLAYER);
-            }
-        }
-
-        private void SpellBookClosedHandler()
-        {
-            foreach (BattleEntity entity in m_BattleModel.BattleEntities)
-            {
-                if (entity.HasModule<AnimationModule>())
-                    entity.GetModule<AnimationModule>().ChangeSpeedMultiplayer(1f);
-            }
         }
     }
 }

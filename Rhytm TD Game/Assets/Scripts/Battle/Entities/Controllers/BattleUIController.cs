@@ -13,6 +13,7 @@ namespace RhytmTD.Battle.Entities.Controllers
 
         private BattleUIModel m_UIModel;
         private BattleModel m_BattleModel;
+        private SpellBookModel m_SpellBookModel;
 
         public BattleUIController(Dispatcher dispatcher) : base(dispatcher)
         {
@@ -23,18 +24,19 @@ namespace RhytmTD.Battle.Entities.Controllers
             base.InitializeComplete();
 
             m_UIModel = Dispatcher.GetModel<BattleUIModel>();
-
             m_BattleModel = Dispatcher.GetModel<BattleModel>();
+            m_SpellBookModel = Dispatcher.GetModel<SpellBookModel>();
+
             m_BattleModel.OnBattleInitialize += Initialize;
             m_BattleModel.OnBattleStarted += BattleStartedHandler;
             m_BattleModel.OnBattleFinished += BattleFinishedHandler;
-            m_BattleModel.OnSpellbookOpened += SpellBookOpenedHandler;
-            m_BattleModel.OnSpellbookClosed += SpellBookClosedAndPostUsedHandler;
-            m_BattleModel.OnDirectionalSpellSelected += SpellBookSelectedHandler;
-            m_BattleModel.OnSpellbookUsed += SpellBookUsedHandler;
-            m_BattleModel.OnSpellbookPostUsed += SpellBookClosedAndPostUsedHandler;
-        }
 
+            m_SpellBookModel.OnSpellbookOpened += SpellBookOpenedHandler;
+            m_SpellBookModel.OnSpellbookClosed += SpellBookClosedAndPostUsedHandler;
+            m_SpellBookModel.OnDirectionalSpellSelected += SpellBookSelectedHandler;
+            m_SpellBookModel.OnSpellbookUsed += SpellBookUsedHandler;
+            m_SpellBookModel.OnSpellbookPostUsed += SpellBookClosedAndPostUsedHandler;
+        }
 
         private void Initialize()
         {

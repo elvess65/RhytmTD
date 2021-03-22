@@ -11,7 +11,6 @@ namespace RhytmTD.Battle.Entities
         public float AttackAnimationTime { get; set; }
 
         public event Action<AnimationTypes> OnPlayAnimation;
-        public event Action<float> OnChangeSpeedMultiplayer;
         public event Action OnAnimationMoment;
 
         /// <summary>
@@ -24,11 +23,6 @@ namespace RhytmTD.Battle.Entities
         public void PlayAnimation(AnimationTypes animationType)
         {
             OnPlayAnimation?.Invoke(animationType);
-        }
-
-        public void ChangeSpeedMultiplayer(float speedMultiplayer)
-        {
-            OnChangeSpeedMultiplayer?.Invoke(speedMultiplayer);
         }
 
         public void AnimationMomentHandler()

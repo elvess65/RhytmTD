@@ -27,6 +27,7 @@ namespace RhytmTD.Battle.Entities.Controllers
 #endif
         private SpawnModel m_SpawnModel;
         private BattleModel m_BattleModel;
+        private SpellBookModel m_SpellBookModel;
         private WorldDataModel m_WorldDataModel;
         private AccountDataModel m_AccountDataModel;
         private PlayerRhytmInputHandleModel m_PlayerRhytmInputHandleModel;
@@ -81,6 +82,8 @@ namespace RhytmTD.Battle.Entities.Controllers
 
             m_SpawnModel = Dispatcher.GetModel<SpawnModel>();
             m_BattleModel = Dispatcher.GetModel<BattleModel>();
+            m_SpellBookModel = Dispatcher.GetModel<SpellBookModel>();
+
             m_WorldDataModel = Dispatcher.GetModel<WorldDataModel>();
             m_AccountDataModel = Dispatcher.GetModel<AccountDataModel>();
             m_PlayerRhytmInputHandleModel = Dispatcher.GetModel<PlayerRhytmInputHandleModel>();
@@ -90,9 +93,10 @@ namespace RhytmTD.Battle.Entities.Controllers
 
             m_BattleModel.OnBattleStarted += StartSpawnLoop;
             m_BattleModel.OnBattleFinished += BattleFinishedHandler;
-            m_BattleModel.OnSpellbookOpened += SpellBookOpenedHandler;
-            m_BattleModel.OnSpellbookClosed += SpellBookClosedHandler;
-            m_BattleModel.OnSpellbookUsed += SpellBookClosedHandler;
+
+            m_SpellBookModel.OnSpellbookOpened += SpellBookOpenedHandler;
+            m_SpellBookModel.OnSpellbookClosed += SpellBookClosedHandler;
+            m_SpellBookModel.OnSpellbookUsed += SpellBookClosedHandler;
 
             m_RhytmController.OnTick += HandleTick;
             m_SpawnModel.OnSpawnPointsInitialized += SpawnAreasInitializedHandler;            
