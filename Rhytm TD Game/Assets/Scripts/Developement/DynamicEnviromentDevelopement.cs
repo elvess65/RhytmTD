@@ -80,6 +80,8 @@ public class DynamicEnviromentDevelopement : MonoBehaviour
         m_CellViews.Add(cell);
 
         RecalculateActionDistances();
+
+        StaticBatchingUtility.Combine(Parent.gameObject);
     }
 
     private void RemoveCell()
