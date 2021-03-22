@@ -13,33 +13,25 @@ namespace RhytmTD.UI.Widget
         [Space]
         [SerializeField] private UIWidget_SpellInfo UIWidgetSpellInfo = null;
         [SerializeField] private UIWidget_SpellSequence UIWidgetSpellSequence = null;
-<<<<<<< HEAD
-
-        private SpellBookModel m_SpellBookModel;
-=======
         [SerializeField] private UIWidget_ProgressIndicator UIWidget_ProgressIndicator = null;
 
         private BattleModel m_BattleModel;
->>>>>>> 05e698d0bf3fecb3f0edbac0150089ec544e1d8d
+        private SpellBookModel m_SpellBookModel;
+
         private SkillsCooldownController m_SkillsCooldownController;
 
         private int m_SkillTypeID;
         private int m_SkillID;
         
-
         public void Initialize(int skillTypeID, int skillID)
         {
-<<<<<<< HEAD
-            m_SpellBookModel = Dispatcher.GetModel<SpellBookModel>();
             m_SkillsCooldownController = Dispatcher.GetController<SkillsCooldownController>();
 
+            m_SpellBookModel = Dispatcher.GetModel<SpellBookModel>();
             m_SpellBookModel.OnSpellbookOpened += SpellbookOpenedHandler;
-=======
+
             m_BattleModel = Dispatcher.GetModel<BattleModel>();
             m_SkillsCooldownController = Dispatcher.GetController<SkillsCooldownController>();
-
-            m_BattleModel.OnSpellbookOpened += SpellbookOpenedHandler;
->>>>>>> 05e698d0bf3fecb3f0edbac0150089ec544e1d8d
 
             m_SkillTypeID = skillTypeID;
             m_SkillID = skillID;
@@ -64,19 +56,12 @@ namespace RhytmTD.UI.Widget
 
         private void SpellbookOpenedHandler()
         {
-<<<<<<< HEAD
-            float skillCooldownRemainTime = m_SkillsCooldownController.GetSkillInCooldownRemainTime(m_SkillID);
-            if (skillCooldownRemainTime > 0)
-            {
-                Debug.Log("SKILL " + m_SkillID + " is in cooldown and will be there for " + skillCooldownRemainTime + " sec");
-=======
             (float remainTime, float totalTime) cooldownData = m_SkillsCooldownController.GetSkillCooldownTime(m_SkillID);
             SetCooldownState(cooldownData.remainTime > 0);
 
             if (cooldownData.remainTime > 0)
             {
                 UIWidget_ProgressIndicator.SetProgress(cooldownData.remainTime / cooldownData.totalTime);
->>>>>>> 05e698d0bf3fecb3f0edbac0150089ec544e1d8d
             }
         }
 
@@ -85,8 +70,6 @@ namespace RhytmTD.UI.Widget
             Debug.Log("Get info for " + m_SkillTypeID);
         }
 
-<<<<<<< HEAD
-=======
         private void SetCooldownState(bool isInCooldown)
         {
             //SpellInfo Widget
@@ -102,7 +85,6 @@ namespace RhytmTD.UI.Widget
             UIWidget_ProgressIndicator.SetWidgetActive(isInCooldown, false);
         }
 
->>>>>>> 05e698d0bf3fecb3f0edbac0150089ec544e1d8d
         private string TEMP_GetSpellNameByID(int skillTypeID)
         {
             switch (skillTypeID)
