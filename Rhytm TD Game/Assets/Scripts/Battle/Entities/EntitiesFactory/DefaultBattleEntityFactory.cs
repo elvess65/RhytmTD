@@ -5,7 +5,7 @@ namespace RhytmTD.Battle.Entities.EntitiesFactory
 {
     public class DefaultBattleEntityFactory : IBattleEntityFactory
     {
-        public BattleEntity CreatePlayer(int typeID, Vector3 position, Quaternion rotation, float moveSpeed, int health, int minDamage, int maxDamage)
+        public BattleEntity CreatePlayer(int typeID, Vector3 position, Quaternion rotation, float moveSpeed, int health, int minDamage, int maxDamage, int mana)
         {
             int entityID = IDGenerator.GenerateID();
 
@@ -20,6 +20,7 @@ namespace RhytmTD.Battle.Entities.EntitiesFactory
             battleEntity.AddModule(new SlotModule());
             battleEntity.AddModule(new AnimationModule());
             battleEntity.AddModule(new LoadoutModule());
+            battleEntity.AddModule(new ManaModule(mana));
 
             return battleEntity;
         }

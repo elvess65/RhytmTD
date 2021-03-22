@@ -46,7 +46,7 @@ namespace RhytmTD.UI.Battle.View.UI
         {
             m_HealthModule = battleEntity.GetModule<HealthModule>();
             m_HealthModule.OnHealthRemoved += HealthRemovedHandler;
-            m_HealthModule.OnHealthRestored += HealthRestoredHandler;
+            m_HealthModule.OnHealthAdded += HealthRestoredHandler;
         }
 
         private void HealthRemovedHandler(int health, int senderID)

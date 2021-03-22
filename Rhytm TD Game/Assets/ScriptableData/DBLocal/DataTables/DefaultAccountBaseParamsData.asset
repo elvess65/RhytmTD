@@ -27,6 +27,7 @@ MonoBehaviour:
     UseTime: 1
     FinishingTime: 1
     CooldownTicks: 2
+    ManaCost: 2
     MoveSpeed: 4
     Damage: 20
   BaseMeteoriteData:
@@ -37,6 +38,7 @@ MonoBehaviour:
     UseTime: 1
     FinishingTime: 1
     CooldownTicks: 3
+    ManaCost: 5
     DamageRadius: 5
     Damage: 10
     EffectOffset: {x: 7.7, y: 7.7}
@@ -48,4 +50,5 @@ MonoBehaviour:
     UseTime: 1
     FinishingTime: 1
     CooldownTicks: 5
+    ManaCost: 3
     HealthPercent: 50
