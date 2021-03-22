@@ -7,7 +7,8 @@ namespace RhytmTD.Battle.Entities.Views
 {
     public class EnemyEntityAnimationView : AbstractAnimationView
     {
-        [SerializeField] private DOTweenSequenceAnimator DOTweenController = null;
+        [SerializeField] private DOTweenSequenceAnimator ShowEffectsDOTweenController = null;
+        [SerializeField] private DOTweenSequenceAnimator ShowTransformDOTweenController = null;
 
         public override void PlayAnimation(AnimationTypes animationType)
         {
@@ -31,7 +32,9 @@ namespace RhytmTD.Battle.Entities.Views
 
                 case AnimationTypes.Show:
                     //SetTrigger(key);
-                    DOTweenController.PlaySequence();
+                    ShowEffectsDOTweenController.PlaySequence();
+                    ShowTransformDOTweenController.PlaySequence();
+                    
                     break;
 
                 case AnimationTypes.Victory:
