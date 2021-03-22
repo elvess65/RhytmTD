@@ -15,7 +15,6 @@ namespace RhytmTD.UI.Widget
         [SerializeField] private UIWidget_SpellSequence UIWidgetSpellSequence = null;
         [SerializeField] private UIWidget_ProgressIndicator UIWidget_ProgressIndicator = null;
 
-        private BattleModel m_BattleModel;
         private SpellBookModel m_SpellBookModel;
 
         private SkillsCooldownController m_SkillsCooldownController;
@@ -30,7 +29,6 @@ namespace RhytmTD.UI.Widget
             m_SpellBookModel = Dispatcher.GetModel<SpellBookModel>();
             m_SpellBookModel.OnSpellbookOpened += SpellbookOpenedHandler;
 
-            m_BattleModel = Dispatcher.GetModel<BattleModel>();
             m_SkillsCooldownController = Dispatcher.GetController<SkillsCooldownController>();
 
             m_SkillTypeID = skillTypeID;
