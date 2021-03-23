@@ -36,6 +36,7 @@ namespace RhytmTD.Battle.Entities.Controllers
         private Vector3 m_TargetVector;
         private int m_SkillID;
         private int m_SkillTypeID;
+        private SkillBaseData m_SkillBaseData;
 
         private bool m_IsSequenceStrted;
         private Dictionary<int, List<bool>> m_SkillTypeID2Pattern;
@@ -45,7 +46,7 @@ namespace RhytmTD.Battle.Entities.Controllers
         public PrepareSkillUseController(Dispatcher dispatcher) : base(dispatcher)
         {
         }
-        
+    
         public override void InitializeComplete()
         {
             base.InitializeComplete();
@@ -67,12 +68,6 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_PrepareSkilIUseModel.OnWrongTouch += WrongTouchHandler;
             m_PrepareSkilIUseModel.OnSkilDirectionSelected += SkillDirectionSelectedeHandler;
         }
-
-        public bool IsEnoughManaForSkill(int skillTypeID)
-        {
-            return true;
-        }
-
 
         #region Sequence
 
@@ -233,7 +228,23 @@ namespace RhytmTD.Battle.Entities.Controllers
             return amountOfResetedSkills == m_SkillTypeID2Pattern.Count;
         }
 
+
+        private void StartUseSkill(Vector3 skillDir, Vector3 hitPos)
+        {
+            m_SpellBookController.UseSpellBook();
+            m_SpellBookController.CloseSpellBook();
+
+            m_SkillID = m_PlayerLodoutModule.GetSkillIDByTypeID(m_SkillTypeID);
+            m_SkillBaseData = m_AccountBaseParamsDataModel.GetSkillBaseDataByID(m_SkillTypeID);
+            m_TargetEntity = GetTargetBySkillType(skillDir, hitPos, m_SkillBaseData.TargetingType, ref m_TargetVector);
+
+            m_PlayerAnimationModule.OnAnimationMoment += SkillAnimationMomentHandler;
+            m_PlayerAnimationModule.PlayAnimation(ConvertersCollection.ConvertSkillTypeID2AnimationType(m_SkillTypeID));
+        }
+
         #endregion
+
+        #region Handlers
 
         private void PlayerInitializedHandlder(BattleEntity playerEntity)
         {
@@ -246,22 +257,6 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_ManaModule = playerEntity.GetModule<ManaModule>();
 
             InitializePatterns();
-        }
-
-        private void StartUseSkill(Vector3 skillDir, Vector3 hitPos)
-        {
-            m_SpellBookController.UseSpellBook();
-            m_SpellBookController.CloseSpellBook();
-
-            m_SkillID = m_PlayerLodoutModule.GetSkillIDByTypeID(m_SkillTypeID);
-
-            SkillBaseData skillBaseData = m_AccountBaseParamsDataModel.GetSkillBaseDataByID(m_SkillTypeID);
-
-            m_TargetEntity = GetTargetBySkillType(skillDir, hitPos, skillBaseData.TargetingType, ref m_TargetVector);
-            m_ManaModule.RemoveMana(skillBaseData.ManaCost);
-
-            m_PlayerAnimationModule.OnAnimationMoment += SkillAnimationMomentHandler;
-            m_PlayerAnimationModule.PlayAnimation(ConvertersCollection.ConvertSkillTypeID2AnimationType(m_SkillTypeID));
         }
 
         private void SkillAnimationMomentHandler()
@@ -277,8 +272,18 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_SkillsController.UseSkill(m_SkillID, m_BattleModel.PlayerEntity.ID);
 
             m_SpellBookController.SpellbookPostUsed();
+
+            m_ManaModule.RemoveMana(m_SkillBaseData.ManaCost);
         }
 
+        #endregion
+
+        #region Tools
+
+        public bool IsEnoughManaForSkill(int skillTypeID)
+        {
+            return m_ManaModule.CurrentMana >= m_AccountBaseParamsDataModel.GetSkillBaseDataByID(skillTypeID).ManaCost;
+        }
 
         private void InitializePatterns()
         {
@@ -344,5 +349,7 @@ namespace RhytmTD.Battle.Entities.Controllers
 
             public void Reset() => CurProgressIndex = NextTick = 0;
         }
+
+        #endregion
     }
 }

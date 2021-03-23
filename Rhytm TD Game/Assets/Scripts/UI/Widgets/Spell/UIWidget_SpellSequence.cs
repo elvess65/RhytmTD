@@ -23,9 +23,12 @@ namespace RhytmTD.UI.Widget
         private bool m_IsSelected;
         private bool m_PrevTickWasInput;
         private bool m_IsInCooldown = false;
+        private bool m_HasEnoughMana = true;
 
         private List<bool> m_Pattern;
         private UIComponent_SpellSequenceItem[] m_SequenceItems;
+
+        private bool m_IsActive => !m_IsInCooldown && m_HasEnoughMana;
 
 
         public void Initialize(int skillTypeID)
@@ -55,6 +58,11 @@ namespace RhytmTD.UI.Widget
             m_IsInCooldown = isInCooldown;
         }
 
+        public void SetEnoughMana(bool hasEnoughMana)
+        {
+            m_HasEnoughMana = hasEnoughMana;
+        }
+
 
         private void CreateSequenceItems()
         {
@@ -78,7 +86,7 @@ namespace RhytmTD.UI.Widget
        
         private void SkillSelectedHandler(int skillID)
         {
-            if (skillID != m_SkillTypeID || m_IsInCooldown)
+            if (skillID != m_SkillTypeID || !m_IsActive)
                 return;
 
             m_IsSelected = true;
@@ -91,7 +99,7 @@ namespace RhytmTD.UI.Widget
 
         private void OnSkillStepReachedInputHandler(int skillTypeID)
         {
-            if (skillTypeID != m_SkillTypeID || m_IsInCooldown)
+            if (skillTypeID != m_SkillTypeID || !m_IsActive)
                 return;
 
             m_SequenceItems[m_CurStepIndex].SetState(UIComponent_SpellSequenceItem.ItemStates.Visited);
@@ -102,7 +110,7 @@ namespace RhytmTD.UI.Widget
 
         private void OnSkillStepReachedAutoHandler(int skillTypeID)
         {
-            if (skillTypeID != m_SkillTypeID || m_IsInCooldown)
+            if (skillTypeID != m_SkillTypeID || !m_IsActive)
                 return;
 
             if (!m_Pattern[m_CurStepIndex] && !m_PrevTickWasInput)
@@ -116,7 +124,7 @@ namespace RhytmTD.UI.Widget
 
         private void SkillResetHandler(int skillTypeID)
         {
-            if (skillTypeID != m_SkillTypeID || m_IsInCooldown)
+            if (skillTypeID != m_SkillTypeID || !m_IsActive)
                 return;
 
             m_CurStepIndex = 0;
@@ -132,7 +140,7 @@ namespace RhytmTD.UI.Widget
 
         private void SequenceFailedHandler()
         {
-            if (m_IsSelected || m_IsInCooldown)
+            if (m_IsSelected || !m_IsActive)
                 return;
 
             for (int i = 0; i < m_SequenceItems.Length; i++)
@@ -148,7 +156,13 @@ namespace RhytmTD.UI.Widget
 
             for (int i = 0; i < m_SequenceItems.Length; i++)
             {
-                m_SequenceItems[i].SetState(m_IsInCooldown ? UIComponent_SpellSequenceItem.ItemStates.Reseted : UIComponent_SpellSequenceItem.ItemStates.Active);
+                UIComponent_SpellSequenceItem.ItemStates state = UIComponent_SpellSequenceItem.ItemStates.Active;
+                if (m_IsInCooldown)
+                    state = UIComponent_SpellSequenceItem.ItemStates.Reseted;
+                else if (!m_HasEnoughMana)
+                    state = UIComponent_SpellSequenceItem.ItemStates.Reseted;
+
+                m_SequenceItems[i].SetState(state);
             }
         }
     }
