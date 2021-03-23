@@ -24,6 +24,8 @@ namespace RhytmTD.Data.DataBaseLocal
             public int MaxDamage = 17;
             public int Health = 50;
             public int Mana = 10;
+            public int ManaInputRestore = 3;
+            public int ManaAutoRestore = 1;
         }
 
         [System.Serializable]

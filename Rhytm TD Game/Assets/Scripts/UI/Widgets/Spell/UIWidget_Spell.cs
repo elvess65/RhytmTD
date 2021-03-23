@@ -2,6 +2,7 @@
 using RhytmTD.Battle.Entities.Models;
 using RhytmTD.Data.Models.DataTableModels;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace RhytmTD.UI.Widget
 {
@@ -56,12 +57,17 @@ namespace RhytmTD.UI.Widget
 
         private void SpellbookOpenedHandler()
         {
-            UIWidgetSpellSequence.SetEnoughMana(m_PrepareSkillUseController.IsEnoughManaForSkill(m_SkillTypeID));
-
             (float remainTime, float totalTime) cooldownData = m_SkillsCooldownController.GetSkillCooldownTime(m_SkillID);
-            SetCooldownState(cooldownData.remainTime > 0);
 
-            if (cooldownData.remainTime > 0)
+            bool hasEnoughMana = m_PrepareSkillUseController.IsEnoughManaForSkill(m_SkillTypeID);
+            bool isInCooldown = cooldownData.remainTime > 0;
+
+            SetAlpha(isInCooldown || !hasEnoughMana, UIWidgetSpellInfo.ExposedImageSpellIcon);
+            UIWidgetSpellSequence.SetEnoughMana(hasEnoughMana);
+            UIWidgetSpellSequence.SetCooldown(isInCooldown);
+            UIWidget_ProgressIndicator.SetWidgetActive(isInCooldown, false);
+
+            if (isInCooldown)
             {
                 UIWidget_ProgressIndicator.SetProgress(cooldownData.remainTime / cooldownData.totalTime);
             }
@@ -72,19 +78,12 @@ namespace RhytmTD.UI.Widget
             Debug.Log("Get info for " + m_SkillTypeID);
         }
 
-        private void SetCooldownState(bool isInCooldown)
+        private void SetAlpha(bool isHalfAlpha, Image image)
         {
-            //SpellInfo Widget
-            Color color = UIWidgetSpellInfo.ExposedImageSpellIcon.color;
-            color.a = isInCooldown ? 0.5f : 1;
+            Color color = image.color;
+            color.a = isHalfAlpha ? 0.5f : 1;
 
-            UIWidgetSpellInfo.ExposedImageSpellIcon.color = color;
-
-            //SpellSequence Widget
-            UIWidgetSpellSequence.SetCooldown(isInCooldown);
-
-            //Progress Widget
-            UIWidget_ProgressIndicator.SetWidgetActive(isInCooldown, false);
+            image.color = color;
         }
 
         private string TEMP_GetSpellNameByID(int skillTypeID)
@@ -101,6 +100,5 @@ namespace RhytmTD.UI.Widget
 
             return string.Empty;
         }
-
     }
 }

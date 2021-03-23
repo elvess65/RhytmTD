@@ -4,6 +4,7 @@ using RhytmTD.Battle.Entities.Models;
 using RhytmTD.Data.Models.DataTableModels;
 using RhytmTD.UI.Components;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace RhytmTD.UI.Widget
 {
@@ -11,6 +12,7 @@ namespace RhytmTD.UI.Widget
     {
         [Space]
         [SerializeField] private RectTransform m_ItemsRoot = null;
+        [SerializeField] private Text m_TextManaRequiredInfo = null;
 
         private SpellBookModel m_SpellBookModel;
         private WorldDataModel m_WorldDataModel;
@@ -48,6 +50,8 @@ namespace RhytmTD.UI.Widget
             m_SpellBookModel.OnSpellbookOpened += SpellbookOpenedHandler;
 
             m_SkillTypeID = skillTypeID;
+
+            m_TextManaRequiredInfo.text = "Not enough mana";
 
             CreateSequenceItems();
             InternalInitialize();
@@ -154,12 +158,17 @@ namespace RhytmTD.UI.Widget
         {
             m_IsSelected = false;
 
+            m_TextManaRequiredInfo.gameObject.SetActive(!m_HasEnoughMana);
+
             for (int i = 0; i < m_SequenceItems.Length; i++)
             {
+                m_SequenceItems[i].gameObject.SetActive(m_HasEnoughMana);
+
+                if (!m_HasEnoughMana)
+                    continue;
+
                 UIComponent_SpellSequenceItem.ItemStates state = UIComponent_SpellSequenceItem.ItemStates.Active;
                 if (m_IsInCooldown)
-                    state = UIComponent_SpellSequenceItem.ItemStates.Reseted;
-                else if (!m_HasEnoughMana)
                     state = UIComponent_SpellSequenceItem.ItemStates.Reseted;
 
                 m_SequenceItems[i].SetState(state);

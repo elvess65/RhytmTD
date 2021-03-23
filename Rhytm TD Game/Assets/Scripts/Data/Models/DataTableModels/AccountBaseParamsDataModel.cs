@@ -41,6 +41,8 @@ namespace RhytmTD.Data.Models.DataTableModels
             public int MaxDamage;
             public int Health;
             public int Mana;
+            public int ManaInputRestore = 3;
+            public int ManaAutoRestore = 1;
         }
 
         [System.Serializable]
