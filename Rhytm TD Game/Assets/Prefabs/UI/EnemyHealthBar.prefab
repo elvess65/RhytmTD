@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1593559905037507520}
   - component: {fileID: 1621173636193336852}
+  - component: {fileID: 495839018993552014}
   - component: {fileID: 2477212830451726997}
   - component: {fileID: 6447689917950098331}
   m_Layer: 0
@@ -54,9 +55,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Root: {fileID: 1675037251655775578}
-  Foreground: {fileID: 7273950047231595036}
+  m_UIComponent_CenteredBar: {fileID: 495839018993552014}
   ShowDoTweenAnimator: {fileID: 7328707482106286017}
   HideDoTweenAnimator: {fileID: 526913369487503653}
+--- !u!114 &495839018993552014
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 637390392011132168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc9b1dba0967c40f3b35a131fb5816f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Foreground: {fileID: 7273950047231595036}
 --- !u!223 &2477212830451726997
 Canvas:
   m_ObjectHideFlags: 0

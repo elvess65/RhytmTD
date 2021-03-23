@@ -141,7 +141,7 @@ Transform:
   m_LocalScale: {x: 1.5690757, y: 1.5690753, z: 1.5690757}
   m_Children: []
   m_Father: {fileID: 8319264823702694366}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7308921140505164403
 MonoBehaviour:
@@ -207,7 +207,7 @@ Transform:
   m_LocalScale: {x: 1.5690757, y: 1.5690753, z: 1.5690757}
   m_Children: []
   m_Father: {fileID: 8319264823702694366}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7308921141090127569
 MonoBehaviour:
@@ -327,6 +327,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8319264823702694366}
   - component: {fileID: 5971518178381009604}
+  - component: {fileID: 7611248122088203226}
   m_Layer: 0
   m_Name: UIWidget - PlayerManaBar
   m_TagString: Untagged
@@ -346,8 +347,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8237203070088267588}
-  - {fileID: 7308921140505164404}
   - {fileID: 7308921141090127571}
+  - {fileID: 7308921140505164404}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -369,6 +370,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Root: {fileID: 8237203070088267588}
-  Foreground: {fileID: 116181041329184770}
-  RemoveSequenceAnimator: {fileID: 7308921140505164403}
-  AddSequenceAnimator: {fileID: 7308921141090127569}
+  m_UIComponent_CenteredBar: {fileID: 7611248122088203226}
+  m_AddSequenceAnimator: {fileID: 7308921141090127569}
+  m_RemoveSequenceAnimator: {fileID: 7308921140505164403}
+--- !u!114 &7611248122088203226
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7905776826049462038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc9b1dba0967c40f3b35a131fb5816f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Foreground: {fileID: 116181041329184770}

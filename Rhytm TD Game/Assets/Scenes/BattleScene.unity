@@ -714,6 +714,7 @@ MonoBehaviour:
   Root: {fileID: 782814927}
   UIWidget_Metronome: {fileID: 107328195}
   UIWidget_PlayerHealthBar: {fileID: 1741432353}
+  UIWidget_PlayerManaBar: {fileID: 2683462974873362093}
   UIWidget_SpellBookButton: {fileID: 1096663840}
 --- !u!114 &782814929
 MonoBehaviour:
@@ -2309,7 +2310,7 @@ PrefabInstance:
     - target: {fileID: 7905776826049462038, guid: caa26989fc915de4287f51ac060cb4b1,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8319264823702694366, guid: caa26989fc915de4287f51ac060cb4b1,
         type: 3}
@@ -2418,6 +2419,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: caa26989fc915de4287f51ac060cb4b1, type: 3}
+--- !u!114 &2683462974873362093 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5971518178381009604, guid: caa26989fc915de4287f51ac060cb4b1,
+    type: 3}
+  m_PrefabInstance: {fileID: 2683462974873362092}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32be6c59f86e4ca478b72cfbf152489a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2981855197348012095
 PrefabInstance:
   m_ObjectHideFlags: 0

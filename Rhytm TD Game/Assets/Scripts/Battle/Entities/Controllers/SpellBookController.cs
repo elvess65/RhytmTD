@@ -20,7 +20,7 @@ namespace RhytmTD.Battle.Entities.Controllers
 
         public void OpenSpellBook()
         {
-            m_SpellBookModel.SpeedMultiplayer = 0.1f;
+            m_SpellBookModel.SpeedMultiplayer = ConstsCollection.SPELLBOOK_SPEED_MULTIPLAYER;
             m_SpellBookModel.SpellBookOpened();
         }
 

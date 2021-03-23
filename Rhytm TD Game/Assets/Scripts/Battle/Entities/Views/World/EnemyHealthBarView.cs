@@ -1,19 +1,19 @@
 ﻿using RhytmTD.Animation.DOTween;
+using RhytmTD.UI.Components;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace RhytmTD.Battle.Entities.Views
 {
     public class EnemyHealthBarView : BattleEntityView
     {
         [SerializeField] private RectTransform m_Root = null;
-        [SerializeField] private Image Foreground = null;
+        [SerializeField] private UIComponent_CenteredBar m_UIComponent_CenteredBar = null;
+        
         [SerializeField] private DOTweenSequenceAnimator ShowDoTweenAnimator = null;
         [SerializeField] private DOTweenSequenceAnimator HideDoTweenAnimator = null;
 
         private HealthModule m_HealthModule;
-        private RectTransform m_ForegroundRectTransform;
-        private float m_FilledSize;
+
 
         public override void Initialize(BattleEntity battleEntity)
         {
@@ -30,11 +30,11 @@ namespace RhytmTD.Battle.Entities.Views
             m_HealthModule = battleEntity.GetModule<HealthModule>();
             m_HealthModule.OnHealthRemoved += HealthRemoved;
 
-            m_ForegroundRectTransform = Foreground.rectTransform;
-            m_FilledSize = m_Root.GetComponent<RectTransform>().sizeDelta.x;
+            m_UIComponent_CenteredBar.Initialize(m_Root);
 
             gameObject.SetActive(false);
         }
+
 
         private void OnDestroyed(BattleEntity entity)
         {
@@ -60,12 +60,7 @@ namespace RhytmTD.Battle.Entities.Views
                 ShowDoTweenAnimator.PlaySequence();
             }
 
-            float progress = m_HealthModule.CurrentHealth / (float)m_HealthModule.Health;
-            float damageOffset = m_FilledSize - progress * m_FilledSize;
-            float damageHaldOffset = damageOffset / 2;
-
-            m_ForegroundRectTransform.SetLeft(damageHaldOffset);
-            m_ForegroundRectTransform.SetRight(damageHaldOffset);
+            m_UIComponent_CenteredBar.UpdateBar(m_HealthModule.CurrentHealth / (float)m_HealthModule.Health);
         }
 
         private void RotationChanged(Quaternion rotation)
