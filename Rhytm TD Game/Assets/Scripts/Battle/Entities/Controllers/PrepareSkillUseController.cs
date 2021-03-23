@@ -5,6 +5,8 @@ using RhytmTD.Battle.Entities.Models;
 using RhytmTD.Core;
 using RhytmTD.Data.Models.DataTableModels;
 using UnityEngine;
+using static CoreFramework.EnumsCollection;
+using static RhytmTD.Data.Models.DataTableModels.AccountBaseParamsDataModel;
 
 namespace RhytmTD.Battle.Entities.Controllers
 {
@@ -24,10 +26,12 @@ namespace RhytmTD.Battle.Entities.Controllers
         private TargetingController m_TargetingController;
         private SpellBookController m_SpellBookController;
 
+        private TransformModule m_PlayerTransformModule;
         private AnimationModule m_PlayerAnimationModule;
         private LoadoutModule m_PlayerLodoutModule;
-        private TransformModule m_PlayerTransformModule;
         private SlotModule m_PlayerSlotModule;
+        private ManaModule m_ManaModule;
+
         private BattleEntity m_TargetEntity;
         private Vector3 m_TargetVector;
         private int m_SkillID;
@@ -36,6 +40,7 @@ namespace RhytmTD.Battle.Entities.Controllers
         private bool m_IsSequenceStrted;
         private Dictionary<int, List<bool>> m_SkillTypeID2Pattern;
         private Dictionary<int, SkillProgress> m_SkillTypeID2Progress;
+
 
         public PrepareSkillUseController(Dispatcher dispatcher) : base(dispatcher)
         {
@@ -63,17 +68,11 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_PrepareSkilIUseModel.OnSkilDirectionSelected += SkillDirectionSelectedeHandler;
         }
 
-        private void PlayerInitializedHandlder(BattleEntity playerEntity)
+        public bool IsEnoughManaForSkill(int skillTypeID)
         {
-            m_BattleModel.OnPlayerEntityInitialized -= PlayerInitializedHandlder;
-
-            m_PlayerAnimationModule = playerEntity.GetModule<AnimationModule>();
-            m_PlayerLodoutModule = playerEntity.GetModule<LoadoutModule>();
-            m_PlayerTransformModule = playerEntity.GetModule<TransformModule>();
-            m_PlayerSlotModule = playerEntity.GetModule<SlotModule>();
-
-            InitializePatterns();
+            return true;
         }
+
 
         #region Sequence
 
@@ -236,13 +235,30 @@ namespace RhytmTD.Battle.Entities.Controllers
 
         #endregion
 
+        private void PlayerInitializedHandlder(BattleEntity playerEntity)
+        {
+            m_BattleModel.OnPlayerEntityInitialized -= PlayerInitializedHandlder;
+
+            m_PlayerAnimationModule = playerEntity.GetModule<AnimationModule>();
+            m_PlayerTransformModule = playerEntity.GetModule<TransformModule>();
+            m_PlayerLodoutModule = playerEntity.GetModule<LoadoutModule>();
+            m_PlayerSlotModule = playerEntity.GetModule<SlotModule>();
+            m_ManaModule = playerEntity.GetModule<ManaModule>();
+
+            InitializePatterns();
+        }
+
         private void StartUseSkill(Vector3 skillDir, Vector3 hitPos)
         {
             m_SpellBookController.UseSpellBook();
             m_SpellBookController.CloseSpellBook();
 
             m_SkillID = m_PlayerLodoutModule.GetSkillIDByTypeID(m_SkillTypeID);
-            m_TargetEntity = GetTargetBySkillType(skillDir, hitPos, ref m_TargetVector);
+
+            SkillBaseData skillBaseData = m_AccountBaseParamsDataModel.GetSkillBaseDataByID(m_SkillTypeID);
+
+            m_TargetEntity = GetTargetBySkillType(skillDir, hitPos, skillBaseData.TargetingType, ref m_TargetVector);
+            m_ManaModule.RemoveMana(skillBaseData.ManaCost);
 
             m_PlayerAnimationModule.OnAnimationMoment += SkillAnimationMomentHandler;
             m_PlayerAnimationModule.PlayAnimation(ConvertersCollection.ConvertSkillTypeID2AnimationType(m_SkillTypeID));
@@ -281,11 +297,11 @@ namespace RhytmTD.Battle.Entities.Controllers
             }
         }
 
-        private BattleEntity GetTargetBySkillType(Vector3 skillDir, Vector3 hitPos, ref Vector3 targetVector)
+        private BattleEntity GetTargetBySkillType(Vector3 skillDir, Vector3 hitPos, SkillTargetingType targetingType, ref Vector3 targetVector)
         {
             BattleEntity target = null;
 
-            switch (m_AccountBaseParamsDataModel.GetSkillBaseDataByID(m_SkillTypeID).TargetingType)
+            switch (targetingType)
             {
                 case EnumsCollection.SkillTargetingType.Area:
 

@@ -51,7 +51,7 @@ namespace RhytmTD.Battle.Entities.Views
 
         private void HealthRemoved(int health, int senderID)
         {
-            if (m_HealthModule.CurrentHealth >= m_HealthModule.Health)
+            if (m_HealthModule.CurrentHealth >= m_HealthModule.TotalHealth)
                 return;
 
             if (m_HealthModule.CurrentHealth > 0 && !gameObject.activeSelf)
@@ -60,7 +60,7 @@ namespace RhytmTD.Battle.Entities.Views
                 ShowDoTweenAnimator.PlaySequence();
             }
 
-            m_UIComponent_CenteredBar.UpdateBar(m_HealthModule.CurrentHealth / (float)m_HealthModule.Health);
+            m_UIComponent_CenteredBar.UpdateBar(m_HealthModule.CurrentHealth / (float)m_HealthModule.TotalHealth);
         }
 
         private void RotationChanged(Quaternion rotation)

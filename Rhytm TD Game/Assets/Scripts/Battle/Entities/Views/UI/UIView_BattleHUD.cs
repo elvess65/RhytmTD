@@ -56,36 +56,34 @@ namespace RhytmTD.UI.Battle.View.UI
         {
             m_HealthModule = battleEntity.GetModule<HealthModule>();
             m_HealthModule.OnHealthRemoved += HealthRemovedHandler;
-            m_HealthModule.OnHealthAdded += HealthRestoredHandler;
+            m_HealthModule.OnHealthAdded += HealthAddedHandler;
 
             m_ManaModule = battleEntity.GetModule<ManaModule>();
             m_ManaModule.OnManaAdded += ManaAddedHandler;
             m_ManaModule.OnManaRemoved += ManaRemovedHandler;
         }
 
-
-        private void HealthRemovedHandler(int health, int senderID)
+        private void HealthAddedHandler(int addedAmount)
         {
-            UIWidget_PlayerHealthBar.UpdateBar(m_HealthModule.CurrentHealth, m_HealthModule.Health);
-            UIWidget_PlayerHealthBar.PlayRemoveAnimation();
-        }
-
-        private void HealthRestoredHandler(int health)
-        {
-            UIWidget_PlayerHealthBar.UpdateBar(m_HealthModule.CurrentHealth, m_HealthModule.Health);
+            UIWidget_PlayerHealthBar.UpdateBar(m_HealthModule.CurrentHealth, m_HealthModule.TotalHealth);
             UIWidget_PlayerHealthBar.PlayAddAnimation();
         }
 
-        private void ManaAddedHandler(int mana)
+        private void HealthRemovedHandler(int removedAmount, int senderID)
         {
-            Debug.Log("Mana added: " + mana);
+            UIWidget_PlayerHealthBar.UpdateBar(m_HealthModule.CurrentHealth, m_HealthModule.TotalHealth);
+            UIWidget_PlayerHealthBar.PlayRemoveAnimation();
+        }        
+
+        private void ManaAddedHandler(int addedAmount)
+        {
+            UIWidget_PlayerManaBar.UpdateBar(m_ManaModule.CurrentMana, m_ManaModule.TotalMana);
         }
 
-        private void ManaRemovedHandler(int mana)
+        private void ManaRemovedHandler(int removedAmount)
         {
-            Debug.Log("Mana removed: " + mana);
+            UIWidget_PlayerManaBar.UpdateBar(m_ManaModule.CurrentMana, m_ManaModule.TotalMana);
         }
-
 
 
         private void SpellBookWidgetPressHandler()

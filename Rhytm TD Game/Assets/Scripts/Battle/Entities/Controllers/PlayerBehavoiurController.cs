@@ -41,7 +41,7 @@ namespace RhytmTD.Battle.Entities.Controllers
             if (!m_TargetModule.HasTarget)
                 return;
 
-            if (potentialDamage >= m_TargetHealthModule.Health)
+            if (potentialDamage >= m_TargetHealthModule.TotalHealth)
             {
                 m_TargetModule.Target.AddModule(new PredictedDestroyedTag());
                 m_TargetModule.ClearTarget();

@@ -8,7 +8,7 @@ namespace RhytmTD.Battle.Entities
     /// </summary>
     public class HealthModule : IBattleModule
     {
-        public int Health { get; private set; }
+        public int TotalHealth { get; private set; }
         public int CurrentHealth { get; private set; }
         public bool IsAlive => CurrentHealth > 0;
 
@@ -23,12 +23,12 @@ namespace RhytmTD.Battle.Entities
         public HealthModule(BattleEntity battleEntity, int health)
         {
             m_BattleEntity = battleEntity;
-            Health = CurrentHealth = health;
+            TotalHealth = CurrentHealth = health;
         }
 
         public void AddHealth(int health)
         {
-            CurrentHealth = Mathf.Min(CurrentHealth + health, Health);
+            CurrentHealth = Mathf.Min(CurrentHealth + health, TotalHealth);
             OnHealthAdded?.Invoke(CurrentHealth);
         }
 

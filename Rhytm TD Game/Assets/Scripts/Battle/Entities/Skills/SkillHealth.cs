@@ -51,7 +51,7 @@ namespace RhytmTD.Battle.Entities.Skills
                 TransformModule targerTransform = targetModule.Target.GetModule<TransformModule>();
                 HealthModule healthModule = targetModule.Target.GetModule<HealthModule>();
 
-                int healthToRestore = Mathf.Min(Mathf.RoundToInt(healthModule.Health * m_HealthSkillModule.HealthPercent), healthModule.Health - healthModule.CurrentHealth);
+                int healthToRestore = Mathf.Min(Mathf.RoundToInt(healthModule.TotalHealth * m_HealthSkillModule.HealthPercent), healthModule.TotalHealth - healthModule.CurrentHealth);
                 healthModule.AddHealth(healthToRestore);
 
                 m_EffectController.CreateHealthEffect(targerTransform.Position, targerTransform.Rotation);
