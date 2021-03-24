@@ -9,9 +9,15 @@ namespace RhytmTD.Battle.Entities.Views
     {
         [SerializeField] private BattleEntityView[] ViewsToInit = null;
 
-        private AnimationModule m_AnimationModule;
         private MarkerController m_MarkerController;
         private CameraController m_CameraController;
+
+        private AnimationModule m_AnimationModule;
+        private MoveModule m_MoveModule;
+        private TransformModule m_TransformModule;
+        private HealthModule m_HealthModule;
+        private DestroyModule m_DestroyModule;
+        private TargetModule m_TargetModule;
 
         private int m_TargetMarkerID;
         private bool m_MarkerShowed = false;
@@ -29,21 +35,21 @@ namespace RhytmTD.Battle.Entities.Views
 
             m_AnimationModule = entity.GetModule<AnimationModule>();
 
-            MoveModule moveModule = entity.GetModule<MoveModule>();
-            moveModule.OnMoveStarted += OnMoveStarted;
-            moveModule.OnMoveStopped += OnMoveStopped;
+            m_MoveModule = entity.GetModule<MoveModule>();
+            m_MoveModule.OnMoveStarted += OnMoveStarted;
+            m_MoveModule.OnMoveStopped += OnMoveStopped;
 
-            TransformModule transformModule = entity.GetModule<TransformModule>();
-            transformModule.OnPositionChanged += OnPositionChanged;
+            m_TransformModule = entity.GetModule<TransformModule>();
+            m_TransformModule.OnPositionChanged += OnPositionChanged;
 
-            HealthModule healthModule = entity.GetModule<HealthModule>();
-            healthModule.OnHealthRemoved += OnHealthRemoved;
+            m_HealthModule = entity.GetModule<HealthModule>();
+            m_HealthModule.OnHealthRemoved += OnHealthRemoved;
 
-            DestroyModule destroyModule = entity.GetModule<DestroyModule>();
-            destroyModule.OnDestroyed += OnDestroyed;
+            m_DestroyModule = entity.GetModule<DestroyModule>();
+            m_DestroyModule.OnDestroyed += OnDestroyed;
 
-            TargetModule targetModule = entity.GetModule<TargetModule>();
-            targetModule.OnTargetChanged += TargetChanged;
+            m_TargetModule = entity.GetModule<TargetModule>();
+            m_TargetModule.OnTargetChanged += TargetChanged;
 
             foreach (BattleEntityView view in ViewsToInit)
             {
@@ -96,6 +102,20 @@ namespace RhytmTD.Battle.Entities.Views
         {
             Gizmos.color = Color.green;
             Gizmos.DrawWireSphere(transform.position + new Vector3(0, 1.5f, 0), 2);
+        }
+
+        private void OnDestroy()
+        {
+            m_MoveModule.OnMoveStarted -= OnMoveStarted;
+            m_MoveModule.OnMoveStopped -= OnMoveStopped;
+
+            m_TransformModule.OnPositionChanged -= OnPositionChanged;
+
+            m_HealthModule.OnHealthRemoved -= OnHealthRemoved;
+
+            m_DestroyModule.OnDestroyed -= OnDestroyed;
+
+            m_TargetModule.OnTargetChanged -= TargetChanged;
         }
     }
 }

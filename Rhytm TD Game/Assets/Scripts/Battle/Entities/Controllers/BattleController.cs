@@ -44,8 +44,6 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_SpawnController = Dispatcher.GetController<SolidEntitySpawnController>();
 
             m_BattleModel.OnBattleInitialize += Initialize;
-            m_BattleModel.OnBattleStarted += BattleStartedHandler;
-            m_BattleModel.OnBattleFinished += BattleFinishedHandler;
 
             m_SpellBookModel.OnSpellbookOpened += SpellBookOpenedHandler;
             m_SpellBookModel.OnDirectionalSpellSelected += SpellBookSelectedHandler;
@@ -76,35 +74,36 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_SpawnModel.OnShouldCreatePlayer?.Invoke();
         }
 
-        private void Update(float deltaTime)
-        {
-            m_BattleModel.CheckEntitiesToDelete();
-        }
-
-      
-        private void StartLoop()
-        {
-            m_RhytmController.StartTicking();
-           
-            m_BattleModel.OnBattleStarted?.Invoke();
-        }
-
-        private void BattleStartedHandler()
-        {
-            m_AudioModel.OnPlayMetronome(true);
-            m_AudioModel.OnPlayMusic(true);
-
-            m_StateMachine.ChangeState<BattleState_Normal>();
-        }
-
-        private void BattleFinishedHandler(bool isSuccess)
+        public void FinishBattle(bool isSuccess)
         {
             m_RhytmController.StopTicking();
 
             m_AudioModel.OnPlayMetronome(false);
             m_AudioModel.OnPlayMusic(false);
 
+            TargetModule targetModule = m_BattleModel.PlayerEntity.GetModule<TargetModule>();
+            targetModule.ClearTarget();
+
             m_StateMachine.ChangeState<BattleState_LockInput>();
+
+            m_BattleModel.OnBattleFinished?.Invoke(isSuccess);
+        }
+
+        private void Update(float deltaTime)
+        {
+            m_BattleModel.CheckEntitiesToDelete();
+        }
+      
+        private void StartLoop()
+        {
+            m_AudioModel.OnPlayMetronome(true);
+            m_AudioModel.OnPlayMusic(true);
+
+            m_StateMachine.ChangeState<BattleState_Normal>();
+
+            m_RhytmController.StartTicking();
+           
+            m_BattleModel.OnBattleStarted?.Invoke();
         }
 
         private void SpellBookOpenedHandler()

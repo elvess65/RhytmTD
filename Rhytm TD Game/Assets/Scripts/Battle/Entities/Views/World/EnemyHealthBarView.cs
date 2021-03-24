@@ -12,20 +12,21 @@ namespace RhytmTD.Battle.Entities.Views
         [SerializeField] private DOTweenSequenceAnimator ShowDoTweenAnimator = null;
         [SerializeField] private DOTweenSequenceAnimator HideDoTweenAnimator = null;
 
+        private TransformModule m_TransformModule;
+        private DestroyModule m_DestroyModule;
         private HealthModule m_HealthModule;
-
 
         public override void Initialize(BattleEntity battleEntity)
         {
             base.Initialize(battleEntity);
 
-            TransformModule transformModule = battleEntity.GetModule<TransformModule>();
-            transformModule.OnRotationChanged += RotationChanged;
+            m_TransformModule = battleEntity.GetModule<TransformModule>();
+            m_TransformModule.OnRotationChanged += RotationChanged;
 
             transform.rotation = Quaternion.LookRotation(Vector3.forward);
 
-            DestroyModule destroyModule = battleEntity.GetModule<DestroyModule>();
-            destroyModule.OnDestroyed += OnDestroyed;
+            m_DestroyModule = battleEntity.GetModule<DestroyModule>();
+            m_DestroyModule.OnDestroyed += OnDestroyed;
 
             m_HealthModule = battleEntity.GetModule<HealthModule>();
             m_HealthModule.OnHealthRemoved += HealthRemoved;
@@ -34,7 +35,6 @@ namespace RhytmTD.Battle.Entities.Views
 
             gameObject.SetActive(false);
         }
-
 
         private void OnDestroyed(BattleEntity entity)
         {
@@ -66,6 +66,15 @@ namespace RhytmTD.Battle.Entities.Views
         private void RotationChanged(Quaternion rotation)
         {
             transform.rotation = Quaternion.LookRotation(Vector3.forward);
+        }
+
+        private void OnDestroy()
+        {
+            m_TransformModule.OnRotationChanged -= RotationChanged;
+
+            m_DestroyModule.OnDestroyed -= OnDestroyed;
+
+            m_HealthModule.OnHealthRemoved -= HealthRemoved;
         }
     }
 }

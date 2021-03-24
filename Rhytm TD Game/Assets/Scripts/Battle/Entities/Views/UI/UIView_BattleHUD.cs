@@ -90,5 +90,20 @@ namespace RhytmTD.UI.Battle.View.UI
         {
             m_SpellBookController.OpenSpellBook();
         }
+
+        private void OnDestroy()
+        {
+            if (m_HealthModule != null)
+            {
+                m_HealthModule.OnHealthRemoved -= HealthRemovedHandler;
+                m_HealthModule.OnHealthAdded -= HealthAddedHandler;
+            }
+
+            if (m_ManaModule != null)
+            {
+                m_ManaModule.OnManaAdded -= ManaAddedHandler;
+                m_ManaModule.OnManaRemoved -= ManaRemovedHandler;
+            }
+        }
     }
 }

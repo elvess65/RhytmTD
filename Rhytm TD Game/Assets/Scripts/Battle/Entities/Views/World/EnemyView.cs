@@ -7,6 +7,8 @@ namespace RhytmTD.Battle.Entities.Views
         [SerializeField] private BattleEntityView[] ViewsToInit = null;
 
         private AnimationModule m_AnimationModule;
+        private TransformModule m_TransfromModule;
+        private DestroyModule m_DestroyModule;
         private HealthModule m_HealthModule;
 
         public override void Initialize(BattleEntity entity)
@@ -15,12 +17,12 @@ namespace RhytmTD.Battle.Entities.Views
 
             m_AnimationModule = entity.GetModule<AnimationModule>();
 
-            TransformModule transformModule = entity.GetModule<TransformModule>();
-            transformModule.OnPositionChanged += PositionChanged;
-            transformModule.OnRotationChanged += RotationChanged;
+            m_TransfromModule = entity.GetModule<TransformModule>();
+            m_TransfromModule.OnPositionChanged += PositionChanged;
+            m_TransfromModule.OnRotationChanged += RotationChanged;
 
-            DestroyModule destroyModule = entity.GetModule<DestroyModule>();
-            destroyModule.OnDestroyed += OnDestroyed;
+            m_DestroyModule = entity.GetModule<DestroyModule>();
+            m_DestroyModule.OnDestroyed += OnDestroyed;
 
             m_HealthModule = entity.GetModule<HealthModule>();
             m_HealthModule.OnHealthRemoved += OnHealthRemoved;
@@ -60,6 +62,14 @@ namespace RhytmTD.Battle.Entities.Views
         {
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(transform.position + new Vector3(0, 1, 0), 1);
+        }
+
+        private void OnDestroy()
+        {
+            m_TransfromModule.OnPositionChanged -= PositionChanged;
+            m_TransfromModule.OnRotationChanged -= RotationChanged;
+            m_DestroyModule.OnDestroyed -= OnDestroyed;
+            m_HealthModule.OnHealthRemoved -= OnHealthRemoved;
         }
     }
 }
