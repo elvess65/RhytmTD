@@ -54,8 +54,8 @@ namespace RhytmTD.Battle.Entities.Skills
 
             if (targetModule.HasTarget)
             {
-                TransformModule targetTransform = targetModule.Target.GetModule<TransformModule>();
-                Vector3 targetDirection = targetTransform.Position - shootPosition;
+                SlotModule targetSlotModule = targetModule.Target.GetModule<SlotModule>();
+                Vector3 targetDirection = targetSlotModule.HitSlot.position - shootPosition;
 
                 float targetDistance = targetDirection.magnitude;
                 targetDirectionNormalized = targetDirection / targetDistance;
