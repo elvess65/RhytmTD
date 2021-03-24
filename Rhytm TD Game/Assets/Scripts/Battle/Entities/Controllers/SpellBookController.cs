@@ -37,6 +37,7 @@ namespace RhytmTD.Battle.Entities.Controllers
 
         public void UseSpellBook()
         {
+            m_SpellBookModel.SpeedMultiplayer = 1f;
             m_SpellBookModel.SpellbookUsed();
         }
 

@@ -28,8 +28,8 @@ namespace RhytmTD.Battle.Entities.Controllers
 
             m_SpellBookModel = Dispatcher.GetModel<SpellBookModel>();
             m_SpellBookModel.OnSpellbookOpened += SpellBookOpenedHandler;
-            m_SpellBookModel.OnSpellbookClosed += SpellBookClosedHandler;
-            m_SpellBookModel.OnSpellbookUsed += SpellBookClosedHandler;
+            m_SpellBookModel.OnSpellbookUsed += SpellBookClosedAndUsedHandler;
+            m_SpellBookModel.OnSpellbookClosed += SpellBookClosedAndUsedHandler;
 
             m_ApplicationModel = Dispatcher.GetModel<ApplicationModel>();
             m_ApplicationModel.OnPause += ApplicationModel_OnPause;
@@ -73,7 +73,7 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_AudioModel.SpellbookSnapshot.TransitionTo(ConstsCollection.SPELLBOOK_AUDIO_TRANISTION_DURATION);
         }
 
-        private void SpellBookClosedHandler()
+        private void SpellBookClosedAndUsedHandler()
         {
             m_AudioModel.BattleSnapshot.TransitionTo(ConstsCollection.SPELLBOOK_AUDIO_TRANISTION_DURATION);
         }

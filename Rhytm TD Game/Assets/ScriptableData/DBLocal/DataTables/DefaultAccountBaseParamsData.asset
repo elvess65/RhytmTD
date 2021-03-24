@@ -18,7 +18,9 @@ MonoBehaviour:
     MinDamage: 12
     MaxDamage: 17
     Health: 50
-    Mana: 10
+    Mana: 50
+    ManaInputRestore: 5
+    ManaAutoRestore: 1
   BaseFireballData:
     TypeID: 101
     TargetingType: 0
@@ -27,7 +29,7 @@ MonoBehaviour:
     UseTime: 1
     FinishingTime: 1
     CooldownTicks: 2
-    ManaCost: 2
+    ManaCost: 20
     MoveSpeed: 4
     Damage: 20
   BaseMeteoriteData:
@@ -38,7 +40,7 @@ MonoBehaviour:
     UseTime: 1
     FinishingTime: 1
     CooldownTicks: 3
-    ManaCost: 5
+    ManaCost: 30
     DamageRadius: 5
     Damage: 10
     EffectOffset: {x: 7.7, y: 7.7}
@@ -50,5 +52,5 @@ MonoBehaviour:
     UseTime: 1
     FinishingTime: 1
     CooldownTicks: 5
-    ManaCost: 3
+    ManaCost: 25
     HealthPercent: 50

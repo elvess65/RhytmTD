@@ -230,7 +230,6 @@ namespace RhytmTD.Battle.Entities.Controllers
         private void StartUseSkill(Vector3 skillDir, Vector3 hitPos)
         {
             m_SpellBookController.UseSpellBook();
-            m_SpellBookController.CloseSpellBook();
 
             m_SkillID = m_PlayerLodoutModule.GetSkillIDByTypeID(m_SkillTypeID);
             SkillBaseData skillBaseData = m_AccountBaseParamsDataModel.GetSkillBaseDataByID(m_SkillTypeID);

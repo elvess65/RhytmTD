@@ -38,8 +38,8 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_BattleModel.OnBattleFinished += OnBattleFinishedHandler;
 
             m_SpellBookModel.OnSpellbookOpened += SpellBookOpenedHandler;
-            m_SpellBookModel.OnSpellbookPostUsed += SpellBookClosedAndPostUsedHandler;
             m_SpellBookModel.OnSpellbookClosed += SpellBookClosedAndPostUsedHandler;
+            m_SpellBookModel.OnSpellbookPostUsed += SpellBookClosedAndPostUsedHandler;
 
             m_SkillsModel.OnSkillUsed += SkillUsedHandler;
         }

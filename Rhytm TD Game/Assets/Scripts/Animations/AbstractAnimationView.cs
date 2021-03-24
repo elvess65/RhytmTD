@@ -44,7 +44,8 @@ namespace RhytmTD.Animation
             m_SpellBookModel = Dispatcher.GetModel<SpellBookModel>();
 
             m_SpellBookModel.OnSpellbookOpened += SpellBookOpenedHandler;
-            m_SpellBookModel.OnSpellbookClosed += SpellBookClosedHandler;
+            m_SpellBookModel.OnSpellbookUsed += SpellBookClosedAndUsedHandler;
+            m_SpellBookModel.OnSpellbookClosed += SpellBookClosedAndUsedHandler;
 
             if (m_EventListener != null && m_AnimationModule != null)
                 m_EventListener.OnAnimationMoment += m_AnimationModule.AnimationMomentHandler;
@@ -123,7 +124,7 @@ namespace RhytmTD.Animation
             Controller.speed = m_SpellBookModel.SpeedMultiplayer;
         }
 
-        private void SpellBookClosedHandler()
+        private void SpellBookClosedAndUsedHandler()
         {
             Controller.speed = m_SpellBookModel.SpeedMultiplayer;
         }

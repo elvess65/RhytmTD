@@ -1,6 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using CoreFramework;
+﻿using CoreFramework;
+using CoreFramework.Rhytm;
 using RhytmTD.Battle.Entities.Models;
 using RhytmTD.Data.Models;
 using RhytmTD.Data.Models.DataTableModels;
@@ -12,9 +11,10 @@ namespace RhytmTD.Battle.Entities.Controllers
     {
         private BattleModel m_BattleModel;
         private SkillsModel m_SkillsModel;
-        private UpdateModel m_UpdateModel;
         private SpellBookModel m_SpellBookModel;
         private AccountBaseParamsDataModel m_AccountBaseParamsDataModel;
+
+        private RhytmController m_RhytmController;
 
         private ManaModule m_ManaModule;
 
@@ -30,9 +30,10 @@ namespace RhytmTD.Battle.Entities.Controllers
 
             m_BattleModel = Dispatcher.GetModel<BattleModel>();
             m_SkillsModel = Dispatcher.GetModel<SkillsModel>();
-            m_UpdateModel = Dispatcher.GetModel<UpdateModel>();
             m_SpellBookModel = Dispatcher.GetModel<SpellBookModel>();
             m_AccountBaseParamsDataModel = Dispatcher.GetModel<AccountBaseParamsDataModel>();
+
+            m_RhytmController = Dispatcher.GetController<RhytmController>();
 
             m_BattleModel.OnPlayerEntityInitialized += PlayerInitializedHandlder;
             m_BattleModel.OnBattleStarted += BattleStartedHandler;
@@ -58,17 +59,15 @@ namespace RhytmTD.Battle.Entities.Controllers
 
         private void AddMana(int amount)
         {
-            Debug.Log("Add mana: " + amount);
+            if (m_ManaModule.CurrentMana < m_ManaModule.TotalMana)
+            {
+                m_ManaModule.AddMana(amount);
+            }
         }
 
         private void RemoveMana(int skillTypeID)
         {
             m_ManaModule.RemoveMana(m_AccountBaseParamsDataModel.GetSkillBaseDataByID(skillTypeID).ManaCost);
-        }
-
-        private void ProcessManaIncrease(float deltaTime)
-        {
-            //AddMana(m_AccountBaseParamsDataModel.BaseCharacterData.ManaAutoRestore);
         }
 
         #region Handlers
@@ -87,28 +86,27 @@ namespace RhytmTD.Battle.Entities.Controllers
 
         private void BattleStartedHandler()
         {
-            m_UpdateModel.OnUpdate += UpdateHandler;
+            m_RhytmController.OnTick += TickHandler;
         }
 
         private void BattleFinishedHandler(bool isSuccess)
         {
-            m_UpdateModel.OnUpdate -= UpdateHandler;
+            m_RhytmController.OnTick -= TickHandler;
         }
 
         private void SpellBookOpenedHandler()
         {
-            m_UpdateModel.OnUpdate -= UpdateHandler;
+            m_RhytmController.OnTick -= TickHandler;
         }
 
         private void SpellBookClosedAndPostUsedHandler()
         {
-            m_UpdateModel.OnUpdate += UpdateHandler;
+            m_RhytmController.OnTick += TickHandler;
         }
 
-        private void UpdateHandler(float deltaTime)
+        private void TickHandler(int ticksSinceStart)
         {
-            if (m_ManaModule != null)
-                ProcessManaIncrease(deltaTime);
+            AddMana(m_AccountBaseParamsDataModel.BaseCharacterData.ManaAutoRestore);
         }
 
         #endregion

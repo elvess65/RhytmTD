@@ -32,8 +32,8 @@ namespace RhytmTD.Battle.Entities.Controllers
         private AccountDataModel m_AccountDataModel;
         private PlayerRhytmInputHandleModel m_PlayerRhytmInputHandleModel;
 
-        private SolidEntitySpawnController m_SolidEntitySpawnController;
         private RhytmController m_RhytmController;
+        private SolidEntitySpawnController m_SolidEntitySpawnController;
 
         private int m_CurDynamicDifficultyReduceOffset;
         private int m_ActionTargetTick = -1;
@@ -95,8 +95,8 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_BattleModel.OnBattleFinished += BattleFinishedHandler;
 
             m_SpellBookModel.OnSpellbookOpened += SpellBookOpenedHandler;
-            m_SpellBookModel.OnSpellbookClosed += SpellBookClosedHandler;
-            m_SpellBookModel.OnSpellbookUsed += SpellBookClosedHandler;
+            m_SpellBookModel.OnSpellbookClosed += SpellBookClosedAndPostUsedHandler;
+            m_SpellBookModel.OnSpellbookPostUsed += SpellBookClosedAndPostUsedHandler;
 
             m_RhytmController.OnTick += HandleTick;
             m_SpawnModel.OnSpawnPointsInitialized += SpawnAreasInitializedHandler;            
@@ -464,7 +464,7 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_SpellbookTick = m_RhytmController.CurrentTick;
         }
 
-        private void SpellBookClosedHandler()
+        private void SpellBookClosedAndPostUsedHandler()
         {
             m_RhytmController.OnTick += HandleTick;
 
