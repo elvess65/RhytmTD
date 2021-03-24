@@ -19,7 +19,7 @@ namespace RhytmTD.UI.Widget
         private SpellBookModel m_SpellBookModel;
 
         private SkillsCooldownController m_SkillsCooldownController;
-        private PrepareSkillUseController m_PrepareSkillUseController;
+        private PlayerManaController m_PlayerManaController;
 
         private int m_SkillTypeID;
         private int m_SkillID;
@@ -27,7 +27,7 @@ namespace RhytmTD.UI.Widget
         public void Initialize(int skillTypeID, int skillID)
         {
             m_SkillsCooldownController = Dispatcher.GetController<SkillsCooldownController>();
-            m_PrepareSkillUseController = Dispatcher.GetController<PrepareSkillUseController>();
+            m_PlayerManaController = Dispatcher.GetController<PlayerManaController>();
 
             m_SpellBookModel = Dispatcher.GetModel<SpellBookModel>();
             m_SpellBookModel.OnSpellbookOpened += SpellbookOpenedHandler;
@@ -59,7 +59,7 @@ namespace RhytmTD.UI.Widget
         {
             (float remainTime, float totalTime) cooldownData = m_SkillsCooldownController.GetSkillCooldownTime(m_SkillID);
 
-            bool hasEnoughMana = m_PrepareSkillUseController.IsEnoughManaForSkill(m_SkillTypeID);
+            bool hasEnoughMana = m_PlayerManaController.IsEnoughManaForSkill(m_SkillTypeID);
             bool isInCooldown = cooldownData.remainTime > 0;
 
             SetAlpha(isInCooldown || !hasEnoughMana, UIWidgetSpellInfo.ExposedImageSpellIcon);

@@ -30,13 +30,11 @@ namespace RhytmTD.Battle.Entities.Controllers
         private AnimationModule m_PlayerAnimationModule;
         private LoadoutModule m_PlayerLodoutModule;
         private SlotModule m_PlayerSlotModule;
-        private ManaModule m_ManaModule;
 
         private BattleEntity m_TargetEntity;
         private Vector3 m_TargetVector;
         private int m_SkillID;
         private int m_SkillTypeID;
-        private SkillBaseData m_SkillBaseData;
 
         private bool m_IsSequenceStrted;
         private Dictionary<int, List<bool>> m_SkillTypeID2Pattern;
@@ -235,8 +233,8 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_SpellBookController.CloseSpellBook();
 
             m_SkillID = m_PlayerLodoutModule.GetSkillIDByTypeID(m_SkillTypeID);
-            m_SkillBaseData = m_AccountBaseParamsDataModel.GetSkillBaseDataByID(m_SkillTypeID);
-            m_TargetEntity = GetTargetBySkillType(skillDir, hitPos, m_SkillBaseData.TargetingType, ref m_TargetVector);
+            SkillBaseData skillBaseData = m_AccountBaseParamsDataModel.GetSkillBaseDataByID(m_SkillTypeID);
+            m_TargetEntity = GetTargetBySkillType(skillDir, hitPos, skillBaseData.TargetingType, ref m_TargetVector);
 
             m_PlayerAnimationModule.OnAnimationMoment += SkillAnimationMomentHandler;
             m_PlayerAnimationModule.PlayAnimation(ConvertersCollection.ConvertSkillTypeID2AnimationType(m_SkillTypeID));
@@ -254,7 +252,6 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_PlayerTransformModule = playerEntity.GetModule<TransformModule>();
             m_PlayerLodoutModule = playerEntity.GetModule<LoadoutModule>();
             m_PlayerSlotModule = playerEntity.GetModule<SlotModule>();
-            m_ManaModule = playerEntity.GetModule<ManaModule>();
 
             InitializePatterns();
         }
@@ -272,18 +269,11 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_SkillsController.UseSkill(m_SkillID, m_BattleModel.PlayerEntity.ID);
 
             m_SpellBookController.SpellbookPostUsed();
-
-            m_ManaModule.RemoveMana(m_SkillBaseData.ManaCost);
         }
 
         #endregion
 
         #region Tools
-
-        public bool IsEnoughManaForSkill(int skillTypeID)
-        {
-            return m_ManaModule.CurrentMana >= m_AccountBaseParamsDataModel.GetSkillBaseDataByID(skillTypeID).ManaCost;
-        }
 
         private void InitializePatterns()
         {

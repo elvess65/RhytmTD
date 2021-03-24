@@ -44,6 +44,7 @@ namespace RhytmTD.Setup
             dispatcher.CreateController<EnviromentController>();
             dispatcher.CreateController<SpellBookController>();
             dispatcher.CreateController<ApplicationController>();
+            dispatcher.CreateController<PlayerManaController>();
 
             // Models
             dispatcher.CreateModel<BattleModel>();

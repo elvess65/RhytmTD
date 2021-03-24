@@ -1,5 +1,4 @@
 ﻿using CoreFramework;
-using CoreFramework.Rhytm;
 using RhytmTD.Battle.Entities.Models;
 using RhytmTD.Battle.Entities.Skills;
 using RhytmTD.Data.Models.DataTableModels;
@@ -32,7 +31,7 @@ namespace RhytmTD.Battle.Entities.Controllers
             BaseSkill skill = m_SkillsModel.GetSkill(skillID);
             skill.UseSkill(senderID);
 
-            m_SkillsModel.OnSkillUsed?.Invoke(skillID);
+            m_SkillsModel.OnSkillUsed?.Invoke(skillID, skill.BattleEntity.GetModule<SkillModule>().TypeID);
         }
 
         public BattleEntity CreateMeteoriteSkillEntity()

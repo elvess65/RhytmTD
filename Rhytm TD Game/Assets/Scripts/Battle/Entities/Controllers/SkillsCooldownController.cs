@@ -76,7 +76,7 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_IsActive = true;
         }
 
-        private void SkillUsedHandler(int skillID)
+        private void SkillUsedHandler(int skillID, int skillTypeID)
         {
             int cooldownTicks = m_SkillsModel.GetSkill(skillID).BattleEntity.GetModule<SkillModule>().CooldownTicks;
             float cooldownSeconds = (float)(cooldownTicks * m_RhytmController.TickDurationSeconds);
