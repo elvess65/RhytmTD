@@ -15,7 +15,6 @@ namespace RhytmTD.Battle.Entities.Controllers
 
         private RhytmInputProxy m_RhytmInputProxy;
         private RhytmController m_RhytmController;
-        private SolidEntitySpawnController m_SpawnController;
 
         private SpawnModel m_SpawnModel;
         private BattleModel m_BattleModel;
@@ -23,6 +22,7 @@ namespace RhytmTD.Battle.Entities.Controllers
         private BattleAudioModel m_AudioModel;
         private SpellBookModel m_SpellBookModel;
         private StartBattleSequenceModel m_StartBattleSequenceModel;
+
 
         public BattleController(Dispatcher dispatcher) : base(dispatcher)
         {
@@ -41,7 +41,6 @@ namespace RhytmTD.Battle.Entities.Controllers
 
             m_RhytmController = Dispatcher.GetController<RhytmController>();
             m_RhytmInputProxy = Dispatcher.GetController<RhytmInputProxy>();
-            m_SpawnController = Dispatcher.GetController<SolidEntitySpawnController>();
 
             m_BattleModel.OnBattleInitialize += Initialize;
 
@@ -55,7 +54,23 @@ namespace RhytmTD.Battle.Entities.Controllers
             
             m_StartBattleSequenceModel.OnSequenceFinished += StartLoop;
         }
-        
+
+        public void FinishBattle(bool isSuccess)
+        {
+            m_RhytmController.StopTicking();
+
+            m_AudioModel.OnPlayMetronome(false);
+            m_AudioModel.OnPlayMusic(false);
+
+            TargetModule targetModule = m_BattleModel.PlayerEntity.GetModule<TargetModule>();
+            targetModule.ClearTarget();
+
+            m_StateMachine.ChangeState<BattleState_LockInput>();
+
+            m_BattleModel.OnBattleFinished?.Invoke(isSuccess);
+        }
+
+
         private void Initialize()
         {
             //Initialize StateMachine
@@ -74,26 +89,6 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_SpawnModel.OnShouldCreatePlayer?.Invoke();
         }
 
-        public void FinishBattle(bool isSuccess)
-        {
-            m_RhytmController.StopTicking();
-
-            m_AudioModel.OnPlayMetronome(false);
-            m_AudioModel.OnPlayMusic(false);
-
-            TargetModule targetModule = m_BattleModel.PlayerEntity.GetModule<TargetModule>();
-            targetModule.ClearTarget();
-
-            m_StateMachine.ChangeState<BattleState_LockInput>();
-
-            m_BattleModel.OnBattleFinished?.Invoke(isSuccess);
-        }
-
-        private void Update(float deltaTime)
-        {
-            m_BattleModel.CheckEntitiesToDelete();
-        }
-      
         private void StartLoop()
         {
             m_AudioModel.OnPlayMetronome(true);
@@ -102,9 +97,16 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_StateMachine.ChangeState<BattleState_Normal>();
 
             m_RhytmController.StartTicking();
-           
+
             m_BattleModel.OnBattleStarted?.Invoke();
         }
+
+        private void Update(float deltaTime)
+        {
+            m_BattleModel.CheckEntitiesToDelete();
+        }
+
+        #region Handlers
 
         private void SpellBookOpenedHandler()
         {
@@ -125,5 +127,7 @@ namespace RhytmTD.Battle.Entities.Controllers
         {
             m_StateMachine.ChangeState<BattleState_Normal>();
         }
+
+        #endregion
     }
 }
