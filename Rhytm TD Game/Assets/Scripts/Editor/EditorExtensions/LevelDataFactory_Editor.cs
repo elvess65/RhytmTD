@@ -338,6 +338,7 @@ namespace RhytmTD.Editor.EditorExtensions
             level.DamageForMissRhytm = EditorGUILayout.IntField("DamageForMissRhytm", level.DamageForMissRhytm);
             level.DelayBeforeStartLevel = EditorGUILayout.IntField("DelayBeforeStartLevel", level.DelayBeforeStartLevel);
             level.RecomendedAverageDmg = EditorGUILayout.IntField("RecomendedAverageDmg", level.RecomendedAverageDmg);
+            level.MinSpawnTicksOffset = EditorGUILayout.IntField("MinSpawnTicksOffset", level.MinSpawnTicksOffset);
 
             EditorGUILayout.Space(10);
 

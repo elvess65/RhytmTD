@@ -344,6 +344,9 @@ namespace RhytmTD.Battle.Entities.Controllers
             //Approx ticks to destroy all enemies
             int totalTicks = ticks2DestroyExistingEnemies + ticks2DestroyNextChunk;
 
+            if (totalTicks < m_CurrentLevel.MinSpawnTicksOffset)
+                totalTicks = m_CurrentLevel.MinSpawnTicksOffset;
+
             //Debug.Log($"rD: {m_CurrentLevel.RecomendedAverageDmg} tD: {targetDmg} " +
             //    $"t2DExisting: {ticks2DestroyExistingEnemies} t2DNext: {ticks2DestroyNextChunk} Total: {totalTicks}");
 

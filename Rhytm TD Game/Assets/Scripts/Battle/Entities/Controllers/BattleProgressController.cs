@@ -58,7 +58,8 @@ namespace RhytmTD.Battle.Entities.Controllers
 
             foreach (BattleEntity entity in m_BattleModel.BattleEntities)
             {
-                if (entity.ID == m_BattleModel.ID || !entity.HasModule<EnemyBehaviourTag>() || entity.HasModule<PredictedDestroyedTag>())
+                if (entity.ID == m_BattleModel.ID || !entity.HasModule<EnemyBehaviourTag>() || entity.HasModule<PredictedDestroyedTag>() ||
+                   (entity.HasModule<DestroyModule>() && entity.GetModule<DestroyModule>().IsDestroyed))
                     continue;
 
                 enemiesAmount++;

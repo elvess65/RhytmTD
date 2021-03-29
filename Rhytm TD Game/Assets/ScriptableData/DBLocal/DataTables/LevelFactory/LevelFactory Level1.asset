@@ -15,6 +15,7 @@ MonoBehaviour:
   DamageForMissRhytm: 5
   DelayBeforeStartLevel: 2
   RecomendedAverageDmg: 12
+  MinSpawnTicksOffset: 5
   InitDDRP: 50
   MinDDRP: 30
   MaxDDRP: 70
@@ -22,64 +23,56 @@ MonoBehaviour:
   Assets: {fileID: 11400000, guid: 80276a13456b79e48944add24b5b2df1, type: 2}
   Waves:
   - DurationRestTicks: 5
-    EnemiesAmount: 2
+    EnemiesAmount: 1
     MinDamage: 1
     MaxDamage: 5
     MinHP: 10
+    MaxHP: 12
+    Chunks:
+    - OverrideAmount: 0
+      OverrideHP: 0
+      OverrideDamage: 0
+      EnemiesAmount: 1
+      MinDamage: 1
+      MaxDamage: 5
+      MinHP: 10
+      MaxHP: 12
+    - OverrideAmount: 0
+      OverrideHP: 0
+      OverrideDamage: 0
+      EnemiesAmount: 1
+      MinDamage: 1
+      MaxDamage: 5
+      MinHP: 10
+      MaxHP: 12
+    - OverrideAmount: 0
+      OverrideHP: 0
+      OverrideDamage: 0
+      EnemiesAmount: 1
+      MinDamage: 1
+      MaxDamage: 5
+      MinHP: 10
+      MaxHP: 12
+  - DurationRestTicks: 3
+    EnemiesAmount: 2
+    MinDamage: 2
+    MaxDamage: 7
+    MinHP: 12
     MaxHP: 15
     Chunks:
     - OverrideAmount: 0
       OverrideHP: 0
       OverrideDamage: 0
       EnemiesAmount: 2
-      MinDamage: 1
-      MaxDamage: 5
-      MinHP: 10
+      MinDamage: 2
+      MaxDamage: 7
+      MinHP: 12
       MaxHP: 15
     - OverrideAmount: 0
       OverrideHP: 0
       OverrideDamage: 0
       EnemiesAmount: 2
-      MinDamage: 1
-      MaxDamage: 5
-      MinHP: 10
+      MinDamage: 2
+      MaxDamage: 7
+      MinHP: 12
       MaxHP: 15
-    - OverrideAmount: 0
-      OverrideHP: 0
-      OverrideDamage: 0
-      EnemiesAmount: 2
-      MinDamage: 1
-      MaxDamage: 5
-      MinHP: 10
-      MaxHP: 15
-  - DurationRestTicks: 3
-    EnemiesAmount: 4
-    MinDamage: 2
-    MaxDamage: 7
-    MinHP: 12
-    MaxHP: 17
-    Chunks:
-    - OverrideAmount: 0
-      OverrideHP: 0
-      OverrideDamage: 0
-      EnemiesAmount: 4
-      MinDamage: 2
-      MaxDamage: 7
-      MinHP: 12
-      MaxHP: 17
-    - OverrideAmount: 0
-      OverrideHP: 0
-      OverrideDamage: 0
-      EnemiesAmount: 4
-      MinDamage: 2
-      MaxDamage: 7
-      MinHP: 12
-      MaxHP: 17
-    - OverrideAmount: 0
-      OverrideHP: 0
-      OverrideDamage: 0
-      EnemiesAmount: 4
-      MinDamage: 2
-      MaxDamage: 7
-      MinHP: 12
-      MaxHP: 17
