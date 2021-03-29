@@ -66,5 +66,10 @@ namespace CoreFramework
             Pattern2 = ConstsCollection.SkillConsts.PATTERN_2_ID,
             Pattern3 = ConstsCollection.SkillConsts.PATTERN_3_ID
         }
+
+        public enum RhytmDynamic
+        {
+            x1, x2
+        }
     }
 }

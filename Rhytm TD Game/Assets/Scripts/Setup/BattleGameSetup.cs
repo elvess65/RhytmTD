@@ -45,6 +45,7 @@ namespace RhytmTD.Setup
             dispatcher.CreateController<SpellBookController>();
             dispatcher.CreateController<ApplicationController>();
             dispatcher.CreateController<PlayerManaController>();
+            dispatcher.CreateController<RhytmDynamicController>();
 
             // Models
             dispatcher.CreateModel<BattleModel>();
@@ -63,6 +64,7 @@ namespace RhytmTD.Setup
             dispatcher.CreateModel<EnviromentModel>();
             dispatcher.CreateModel<SpellBookModel>();
             dispatcher.CreateModel<ApplicationModel>();
+            dispatcher.CreateModel<RhytmDynamicModel>();
         }
     }
 }
