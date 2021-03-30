@@ -5,7 +5,7 @@
     /// </summary>
     public class ConnectionProxy
     {
-        public System.Action<ConnectionSeccessResult> OnConnectionSuccess;
+        public System.Action<ConnectionSuccessResult> OnConnectionSuccess;
         public System.Action<int> OnConnectionError;
 
         private iDataProvider m_DataProvider;
@@ -31,8 +31,9 @@
         }
 
 
-        private void ConnectionSuccessHandler(ConnectionSeccessResult connectionResult)
+        private void ConnectionSuccessHandler(ConnectionSuccessResult connectionResult)
         {
+            UnityEngine.Debug.Log("1");
             OnConnectionSuccess?.Invoke(connectionResult);
         }
 

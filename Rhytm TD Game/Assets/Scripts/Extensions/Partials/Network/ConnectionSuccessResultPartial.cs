@@ -1,6 +1,6 @@
 ﻿namespace CoreFramework.Network
 {
-    public class ConnectionSeccessResult
+    public partial class ConnectionSuccessResult
     {
         public string SerializedAccountData { get; }
         public string SerializedEnviromentData { get; }
@@ -9,7 +9,7 @@
         public string SerializedAccountBaseParamsData { get; }
         public string SerializedSkillSequennceData { get; }
 
-        public ConnectionSeccessResult(string serializedAccountData,
+        public ConnectionSuccessResult(string serializedAccountData,
                                        string serializedEnviromentData,
                                        string serializedLevelingData,
                                        string serializedWorldData,

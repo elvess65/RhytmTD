@@ -1,11 +1,9 @@
-﻿using RhytmTD.Setup;
-
-namespace CoreFramework.Network
+﻿namespace CoreFramework.Network
 {
     /// <summary>
     /// Контроллер подключения и получения данных
     /// </summary>
-    public class ConnectionController
+    public partial class ConnectionController
     {
         public System.Action OnConnectionSuccess;
         public System.Action<int> OnConnectionError;
@@ -26,21 +24,11 @@ namespace CoreFramework.Network
         }
 
 
-        protected virtual IGameSetup CreateSetup()
-        {
-            return null;
-        }
+        partial void Setup(ConnectionSuccessResult connectionResult);
 
-        private void ConnectionResultSuccess(ConnectionSeccessResult connectionResult)
+        private void ConnectionResultSuccess(ConnectionSuccessResult connectionResult)
         {
-            IGameSetup gameSetup = new GameSetup(new DataGameSetup(connectionResult.SerializedAccountData, 
-                                                                   connectionResult.SerializedEnviromentData, 
-                                                                   connectionResult.SerializedLevelingData, 
-                                                                   connectionResult.SerializedWorldData,
-                                                                   connectionResult.SerializedAccountBaseParamsData,
-                                                                   connectionResult.SerializedSkillSequennceData),
-                                                 new BattleGameSetup());
-            gameSetup.Setup();
+            Setup(connectionResult);
 
             OnConnectionSuccess?.Invoke();
         }

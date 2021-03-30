@@ -1,4 +1,5 @@
-﻿using CoreFramework.Abstract;
+﻿using System.Collections;
+using CoreFramework.Abstract;
 using CoreFramework.Network;
 using CoreFramework.SceneLoading;
 using UnityEngine;
@@ -26,12 +27,19 @@ namespace RhytmTD.Core
  
         private void ConnectionResultSuccess()
         {
-            SceneLoader.LoadLevel(SceneLoader.MENU_SCENE_NAME);
+            StartCoroutine(StartDelay());
         }
 
         private void ConnectionResultError(int errorCode)
         {
             Debug.LogError($"Connection error {errorCode}");
+        }
+
+        IEnumerator StartDelay()
+        {
+            yield return null;
+
+            SceneLoader.LoadLevel(SceneLoader.MENU_SCENE_NAME);
         }
     }
 }
