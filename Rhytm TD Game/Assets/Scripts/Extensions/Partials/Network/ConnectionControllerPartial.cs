@@ -6,7 +6,6 @@ namespace CoreFramework.Network
     {
         partial void Setup(ConnectionSuccessResult connectionResult)
         {
-            UnityEngine.Debug.Log("Setup");
             IGameSetup gameSetup = new GameSetup(new DataGameSetup(connectionResult.SerializedAccountData,
                                                                    connectionResult.SerializedEnviromentData,
                                                                    connectionResult.SerializedLevelingData,

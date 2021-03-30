@@ -1,7 +1,6 @@
-﻿using CoreFramework;
-using System;
+﻿using System;
 
-namespace RhytmTD.Battle.Entities.Models
+namespace CoreFramework
 {
     public class ApplicationModel : BaseModel
     {

@@ -1,8 +1,6 @@
-﻿using CoreFramework;
-using RhytmTD.Battle.Entities.Models;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace RhytmTD.Battle.Entities.Controllers
+namespace CoreFramework
 {
     public class ApplicationController : BaseController
     {
