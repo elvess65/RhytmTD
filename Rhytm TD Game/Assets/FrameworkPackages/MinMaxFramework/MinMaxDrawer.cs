@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEditor;
 
-namespace FrameworkPackage.MinMax
+namespace FrameworkPackages.MinMax
 {
     [CustomPropertyDrawer(typeof(MinMax))]
     [CustomPropertyDrawer(typeof(MinMaxSliderAttribute))]

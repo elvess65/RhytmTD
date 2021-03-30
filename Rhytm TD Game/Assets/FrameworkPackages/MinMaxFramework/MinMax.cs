@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace FrameworkPackage.MinMax
+namespace FrameworkPackages.MinMax
 {
     [Serializable]
     public struct MinMax

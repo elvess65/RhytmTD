@@ -1,5 +1,5 @@
 ﻿using RhytmTD.Animation;
-using RhytmTD.Animation.DOTween;
+using FrameworkPackages.DOTween;
 using UnityEngine;
 using static CoreFramework.EnumsCollection;
 

@@ -1,6 +1,6 @@
 ﻿using CoreFramework;
 using DG.Tweening;
-using RhytmTD.Animation.DOTween;
+using FrameworkPackages.DOTween;
 using RhytmTD.Battle.Entities.Models;
 using UnityEngine;
 

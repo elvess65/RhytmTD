@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using DG.Tweening;
-using RhytmTD.Animation.DOTween;
+using FrameworkPackages.DOTween;
 
 namespace RhytmTD.Developement
 {

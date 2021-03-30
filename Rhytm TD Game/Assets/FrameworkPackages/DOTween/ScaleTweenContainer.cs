@@ -1,7 +1,7 @@
 ﻿using DG.Tweening;
 using UnityEngine;
 
-namespace RhytmTD.Animation.DOTween
+namespace FrameworkPackages.DOTween
 {
     public class ScaleTweenContainer : TweenContainer
     {

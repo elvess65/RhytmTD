@@ -1,7 +1,7 @@
 ﻿using PathCreation;
 using UnityEngine;
 
-namespace FrameworkPackage.PathCreation
+namespace FrameworkPackages.PathCreation
 {
     /// <summary>
     /// Перемещение по указанному пути
@@ -29,7 +29,7 @@ namespace FrameworkPackage.PathCreation
         {
             if (ControlledTransform == null)
             {
-                Debug.LogError("FrameworkPackage -> MovePathController: ERROR: Controlled Transform is not set");
+                Debug.LogError("FrameworkPackages -> MovePathController: ERROR: Controlled Transform is not set");
                 return;
             }
 

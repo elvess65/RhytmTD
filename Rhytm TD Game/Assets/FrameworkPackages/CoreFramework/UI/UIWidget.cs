@@ -1,4 +1,5 @@
 ﻿using CoreFramework;
+using FrameworkPackages.DOTween;
 using System;
 using UnityEngine;
 
@@ -10,6 +11,11 @@ namespace RhytmTD.UI.Widget
     public abstract class UIWidget : BaseView, IDisposable
     {
         public Transform Root;
+
+        [SerializeField] private DOTweenSequenceAnimator m_ShowSequence = null;
+        [SerializeField] private DOTweenSequenceAnimator m_HideSequence = null;
+
+        private DOTweenSequenceAnimator m_CurSequence = null;
 
         protected UpdateModel m_UpdateModel;
 
@@ -28,10 +34,10 @@ namespace RhytmTD.UI.Widget
 
             if (isAnimated)
             {
-                m_FromToData.x = Root.localScale.x;
-                m_FromToData.y = isEnabled ? 1 : 0;
-                m_CurrentTime = 0;
-                m_IsActive = true;
+                if (m_ShowSequence != null && m_HideSequence != null)
+                    PrepareToPlaySequence(isEnabled);
+                else
+                    PrepareToPlayActivationAnimation(isEnabled);
             }
             else 
                 Root.localScale = isEnabled ? Vector3.one : Vector3.zero;
@@ -39,6 +45,15 @@ namespace RhytmTD.UI.Widget
 
         public virtual void LockInput(bool isLocked)
         { }
+
+        public virtual void Dispose()
+        {
+            if (m_UpdateModel != null)
+                m_UpdateModel.OnUpdate -= WidgetUpdate;
+
+            Dispatcher.RemoveDisposable(this);
+        }
+
 
         protected virtual void InternalInitialize()
         {
@@ -51,6 +66,21 @@ namespace RhytmTD.UI.Widget
         protected virtual void WidgetUpdate(float deltaTime)
         {
             PlayActivationAnimation();
+        }
+
+
+        private void PrepareToPlaySequence(bool isEnabled)
+        {
+            m_CurSequence = isEnabled ? m_ShowSequence : m_HideSequence;
+            m_CurSequence.PlaySequence();
+        }
+
+        private void PrepareToPlayActivationAnimation(bool isEnabled)
+        {
+            m_FromToData.x = Root.localScale.x;
+            m_FromToData.y = isEnabled ? 1 : 0;
+            m_CurrentTime = 0;
+            m_IsActive = true;
         }
 
         private void PlayActivationAnimation()
@@ -68,14 +98,6 @@ namespace RhytmTD.UI.Widget
                     Root.localScale = new Vector3(m_FromToData.y, m_FromToData.y, Root.localScale.z);
                 }
             }
-        }
-
-        public virtual void Dispose()
-        {
-            if (m_UpdateModel != null)
-                m_UpdateModel.OnUpdate -= WidgetUpdate;
-
-            Dispatcher.RemoveDisposable(this);
         }
     }
 }
