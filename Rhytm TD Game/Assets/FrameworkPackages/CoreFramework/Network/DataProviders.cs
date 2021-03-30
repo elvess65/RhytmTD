@@ -1,10 +1,9 @@
 ﻿using RhytmTD.Core;
-using RhytmTD.Data.DataBaseLocal;
 using System;
 using System.Collections;
 using UnityEngine;
 
-namespace RhytmTD.Network
+namespace CoreFramework.Network
 {
     /// <summary>
     /// Data base provider (simulation, GPServices, server)

@@ -2,7 +2,6 @@
 using CoreFramework.Rhytm;
 using RhytmTD.Battle.Entities.Models;
 using RhytmTD.Battle.StateMachine;
-using RhytmTD.Data.Models;
 
 namespace RhytmTD.Battle.Entities.Controllers
 {

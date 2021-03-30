@@ -1,7 +1,6 @@
-﻿using CoreFramework;
-using RhytmTD.Setup;
+﻿using RhytmTD.Setup;
 
-namespace RhytmTD.Network
+namespace CoreFramework.Network
 {
     /// <summary>
     /// Контроллер подключения и получения данных
@@ -26,6 +25,11 @@ namespace RhytmTD.Network
             m_ConnectionProxy.Connect();
         }
 
+
+        protected virtual IGameSetup CreateSetup()
+        {
+            return null;
+        }
 
         private void ConnectionResultSuccess(ConnectionSeccessResult connectionResult)
         {

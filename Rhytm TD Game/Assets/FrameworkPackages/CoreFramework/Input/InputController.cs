@@ -1,6 +1,4 @@
-﻿using RhytmTD.Battle.Entities.Models;
-using RhytmTD.Data.Models;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace CoreFramework.Input
@@ -8,7 +6,7 @@ namespace CoreFramework.Input
     /// <summary>
     /// Tracking low level input
     /// </summary>
-    public class InputController : BaseController
+    public partial class InputController : BaseController
     {
         private InputModel m_InputModel;
         private CameraModel m_CameraModel;
@@ -39,31 +37,10 @@ namespace CoreFramework.Input
                 }
             }
 
-            if (UnityEngine.Input.GetKeyDown(KeyCode.Space))
-            {
-                m_InputModel.KeyDown(KeyCode.Space);
-            }
-
-            if (UnityEngine.Input.GetKeyDown(KeyCode.V))
-            {
-                m_InputModel.KeyDown(KeyCode.V);
-            }
-
-            if (UnityEngine.Input.GetKeyDown(KeyCode.Z))
-            {
-                m_InputModel.KeyDown(KeyCode.Z);
-            }
-
-            if (UnityEngine.Input.GetKeyDown(KeyCode.D))
-            {
-                m_InputModel.KeyDown(KeyCode.D);
-            }
-
-            if (UnityEngine.Input.GetKeyDown(KeyCode.P))
-            {
-                m_InputModel.KeyDown(KeyCode.P);
-            }
+            HandleSpecialInput();
         }
+
+        partial void HandleSpecialInput();
 
         private bool InputDetected()
         {

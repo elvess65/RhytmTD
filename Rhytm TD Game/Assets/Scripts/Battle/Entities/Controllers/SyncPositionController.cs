@@ -1,6 +1,5 @@
 ﻿using CoreFramework;
 using RhytmTD.Battle.Entities.Models;
-using RhytmTD.Data.Models;
 
 namespace RhytmTD.Battle.Entities.Controllers
 {

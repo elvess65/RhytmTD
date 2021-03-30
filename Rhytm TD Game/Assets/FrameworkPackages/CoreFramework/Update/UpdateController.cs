@@ -1,8 +1,6 @@
-﻿using CoreFramework;
-using RhytmTD.Data.Models;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace RhytmTD.Data.Controllers
+namespace CoreFramework
 {
     public class UpdateController : BaseController
     {

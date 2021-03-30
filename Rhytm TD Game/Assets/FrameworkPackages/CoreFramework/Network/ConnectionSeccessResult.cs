@@ -1,5 +1,4 @@
-﻿
-namespace RhytmTD.Network
+﻿namespace CoreFramework.Network
 {
     public class ConnectionSeccessResult
     {

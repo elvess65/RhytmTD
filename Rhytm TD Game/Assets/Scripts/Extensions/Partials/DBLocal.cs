@@ -1,12 +1,11 @@
-﻿using UnityEngine;
+﻿using RhytmTD.Data.DataBaseLocal;
 
-namespace RhytmTD.Data.DataBaseLocal
+namespace CoreFramework.Network
 {
     /// <summary>
     /// Local data base 
     /// </summary>
-    [System.Serializable]
-    public class DBLocal : MonoBehaviour
+    public partial class DBLocal
     {
         public DBLocal_AccountData AccountData;
         public DBLocal_AccountLevelingData AccountLevelingData;

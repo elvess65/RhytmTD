@@ -1,7 +1,6 @@
 ﻿using System;
-using CoreFramework;
 
-namespace RhytmTD.Data.Models
+namespace CoreFramework
 {
     public class UpdateModel : BaseModel
     {

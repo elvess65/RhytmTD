@@ -1,6 +1,4 @@
 ﻿using CoreFramework;
-using RhytmTD.Data.Controllers;
-using RhytmTD.Data.Models;
 
 namespace RhytmTD.Setup
 {

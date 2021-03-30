@@ -1,7 +1,6 @@
-﻿
-using CoreFramework.Abstract;
+﻿using CoreFramework.Abstract;
+using CoreFramework.Network;
 using CoreFramework.SceneLoading;
-using RhytmTD.Network;
 using UnityEngine;
 
 namespace RhytmTD.Core

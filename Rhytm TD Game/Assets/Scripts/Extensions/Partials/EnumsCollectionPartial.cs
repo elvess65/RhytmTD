@@ -4,6 +4,20 @@ namespace CoreFramework
 {
     public static partial class EnumsCollection
     {
+        public enum EnviromentTypes
+        {
+            All,
+            Ground,
+            Tiles,
+            Rocks,
+            Logs,
+            Trees,
+            Vegetation,
+            Props,
+            GroundProps,
+            Max
+        }
+
         public enum AnimationTypes
         {
             Attack,

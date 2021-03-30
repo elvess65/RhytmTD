@@ -1,6 +1,4 @@
-﻿
-
-namespace RhytmTD.Network
+﻿namespace CoreFramework.Network
 {
     /// <summary>
     /// Data base connection proxy
