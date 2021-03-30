@@ -15,8 +15,10 @@ namespace CoreFramework.SceneLoading
 
         [UnityEngine.SerializeField] private SceneTransitionFadeController m_TransitionController = null;
 
-        private void Start()
+        protected override void Awake()
         {
+            base.Awake();
+
             DontDestroyOnLoad(gameObject);
 
             m_TransitionController.OnFadeIn += FadeInHandler;
