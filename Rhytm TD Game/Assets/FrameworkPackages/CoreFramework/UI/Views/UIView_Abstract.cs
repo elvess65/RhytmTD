@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
-using CoreFramework;
 using CoreFramework.UI.Widget;
 using UnityEngine;
 
-namespace RhytmTD.UI.View
+namespace CoreFramework.UI.View
 {
     /// <summary>
     /// Базовый класс для UI View

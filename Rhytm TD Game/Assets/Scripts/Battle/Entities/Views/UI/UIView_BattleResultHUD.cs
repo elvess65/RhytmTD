@@ -1,7 +1,7 @@
 ﻿using CoreFramework.SceneLoading;
+using CoreFramework.UI.View;
 using RhytmTD.Battle.Entities.Models;
 using RhytmTD.Core;
-using RhytmTD.UI.View;
 using RhytmTD.UI.Widget;
 using UnityEngine;
 

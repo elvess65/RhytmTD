@@ -1,9 +1,9 @@
-﻿using CoreFramework.UI.Widget;
+﻿using CoreFramework.UI.View;
+using CoreFramework.UI.Widget;
 using RhytmTD.Battle.Entities;
 using RhytmTD.Battle.Entities.Controllers;
 using RhytmTD.Battle.Entities.Models;
 using RhytmTD.Data.Models.DataTableModels;
-using RhytmTD.UI.View;
 using RhytmTD.UI.Widget;
 using UnityEngine;
 
