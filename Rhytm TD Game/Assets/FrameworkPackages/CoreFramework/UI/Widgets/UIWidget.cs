@@ -3,7 +3,7 @@ using FrameworkPackages.DOTween;
 using System;
 using UnityEngine;
 
-namespace RhytmTD.UI.Widget
+namespace CoreFramework.UI.Widget
 {
     /// <summary>
     /// Базовый класс виджета

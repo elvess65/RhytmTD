@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using CoreFramework;
-using RhytmTD.UI.Widget;
+using CoreFramework.UI.Widget;
 using UnityEngine;
 
 namespace RhytmTD.UI.View

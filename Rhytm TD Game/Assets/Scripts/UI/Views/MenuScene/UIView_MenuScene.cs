@@ -1,4 +1,5 @@
-﻿using RhytmTD.UI.Widget;
+﻿using CoreFramework.UI.Widget;
+using RhytmTD.UI.Widget;
 using UnityEngine;
 
 namespace RhytmTD.UI.View

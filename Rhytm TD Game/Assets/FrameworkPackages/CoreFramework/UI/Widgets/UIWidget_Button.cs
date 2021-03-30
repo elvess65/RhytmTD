@@ -1,4 +1,4 @@
-﻿namespace RhytmTD.UI.Widget
+﻿namespace CoreFramework.UI.Widget
 {
     public class UIWidget_Button : UIWidget_Clickable
     {

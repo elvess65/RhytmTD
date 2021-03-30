@@ -1,4 +1,5 @@
-﻿using FrameworkPackages.DOTween;
+﻿using CoreFramework.UI.Widget;
+using FrameworkPackages.DOTween;
 using RhytmTD.UI.Components;
 using UnityEngine;
 

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace RhytmTD.UI.Widget
+namespace CoreFramework.UI.Widget
 {
     /// <summary>
     /// Базовый класс виджета, на который можно нажимать

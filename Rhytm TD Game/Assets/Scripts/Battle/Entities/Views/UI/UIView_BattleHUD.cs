@@ -1,4 +1,5 @@
-﻿using RhytmTD.Battle.Entities;
+﻿using CoreFramework.UI.Widget;
+using RhytmTD.Battle.Entities;
 using RhytmTD.Battle.Entities.Controllers;
 using RhytmTD.Battle.Entities.Models;
 using RhytmTD.UI.View;

@@ -33,7 +33,6 @@
 
         private void ConnectionSuccessHandler(ConnectionSuccessResult connectionResult)
         {
-            UnityEngine.Debug.Log("1");
             OnConnectionSuccess?.Invoke(connectionResult);
         }
 
