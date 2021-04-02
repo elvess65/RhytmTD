@@ -1,6 +1,7 @@
 ﻿using CoreFramework;
 using CoreFramework.Rhytm;
 using RhytmTD.Battle.Entities.Models;
+using System.Collections;
 using UnityEngine;
 
 namespace RhytmTD.Battle.Entities.Controllers
@@ -18,9 +19,8 @@ namespace RhytmTD.Battle.Entities.Controllers
         private RhytmController m_RhytmController;
 
         private const float m_ENEMY_FOCUS_Z_DISTANCE = 10;
-        private const float m_ENEMY_MOVE_Z_DISTANCE = 2f;
+        private const float m_ENEMY_MOVE_Z_DISTANCE = 4f;
         private const float m_ENEMY_ATTACK_DISTANCE = 2f;
-        private const float m_MOVE_TO_ENEMY_MIN_TIME = 0.1f;
 
         public EnemyBehavoiurController(Dispatcher dispatcher) : base(dispatcher)
         {
@@ -75,38 +75,35 @@ namespace RhytmTD.Battle.Entities.Controllers
                 }
                 else if (zDist <= m_ENEMY_MOVE_Z_DISTANCE && !moveModule.IsMoving)
                 {
-                    Vector3 enemyDirection = playerTransform.Position - entityTransformModule.Position;
-                    StartMoveToEnemy(enemyDirection, moveModule, animationModule);
+                    MoveModule playerMoveModule = m_BattleModel.PlayerEntity.GetModule<MoveModule>();
+
+                    StartMoveToPlayer(playerTransform.Position, playerMoveModule, entityTransformModule.Position, moveModule, animationModule);
                 }
                 else if (moveModule.IsMoving)
                 {
-                    Vector3 enemyDirection = playerTransform.Position - entityTransformModule.Position;
-
-                    if (enemyDirection.sqrMagnitude <= m_ENEMY_ATTACK_DISTANCE * m_ENEMY_ATTACK_DISTANCE)
+                    Vector3 playerDirection = playerTransform.Position - entityTransformModule.Position;
+                    if (playerDirection.sqrMagnitude <= m_ENEMY_ATTACK_DISTANCE * m_ENEMY_ATTACK_DISTANCE)
                     {
                         AttackEnemy(entity, moveModule, focusModule, animationModule);
-                    }
-                    else
-                    {
-                        moveModule.StartMove(enemyDirection.normalized);
                     }
                 }
             }
         }
 
-        private void StartMoveToEnemy(Vector3 enemyDirection, MoveModule moveModule, AnimationModule animationModule)
+        private void StartMoveToPlayer(Vector3 playerPos, MoveModule playerMoveModule, Vector3 targetPos, MoveModule targetMoveModule, AnimationModule animationModule)
         {
-            float moveTime = m_RhytmController.GetTimeToNextTick() - animationModule.AttackAnimationTime;
+            float moveTime = m_RhytmController.GetTimeToNextTick();
 
-            if (moveTime <= m_MOVE_TO_ENEMY_MIN_TIME)
-            {
-                moveTime += (float)m_RhytmController.TickDurationSeconds;
-            }
+            Vector3 playerPredictPos = playerPos + playerMoveModule.MoveDirection * playerMoveModule.CurrentSpeed * moveTime;
 
-            float distanceToTarget = enemyDirection.magnitude;
+            Vector3 predictPosOffset = playerPredictPos - targetPos;
+            float predictDistance = predictPosOffset.magnitude;
+            Vector3 predictDirection = predictPosOffset / predictDistance;
 
-            moveModule.SetSpeed(distanceToTarget / moveTime);
-            moveModule.StartMove(enemyDirection / distanceToTarget);
+            float targetSpeed = (predictDistance - m_ENEMY_ATTACK_DISTANCE) / (moveTime - animationModule.AttackAnimationTime);
+
+            targetMoveModule.SetSpeed(targetSpeed);
+            targetMoveModule.StartMove(predictDirection);
         }
 
         private void AttackEnemy(BattleEntity sender, MoveModule moveModule, FocusModule focusModule, AnimationModule animationModule)
