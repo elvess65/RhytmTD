@@ -12,8 +12,8 @@ namespace CoreFramework.Rhytm
         /// <summary>
         /// Находиться ли текущее состояние времени в окне ввода
         /// </summary>
-        public bool IsInUseRange => 1 - m_RhytmController.ProgressToNextTickAnalog < InputPrecious01 ||
-                                        m_RhytmController.ProgressToNextTickAnalog < InputPrecious01;
+        public bool IsInUseRange => 1 - m_RhytmController.ProgressToNextTick01 < InputPrecious01 ||
+                                        m_RhytmController.ProgressToNextTick01 < InputPrecious01;
 
 
         public RhytmInputProxy(Dispatcher dispatcher) : base(dispatcher)
@@ -83,7 +83,7 @@ namespace CoreFramework.Rhytm
             return result;
         }
 
-        public bool IsInputTickValid() => IsInputTickValid(m_RhytmController.ProgressToNextTickAnalog);
+        public bool IsInputTickValid() => IsInputTickValid(m_RhytmController.ProgressToNextTick01);
 
         private void Log(string message)
         {

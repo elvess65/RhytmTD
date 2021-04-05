@@ -38,6 +38,10 @@ namespace CoreFramework.SceneLoading
                 case FadeStates.FadedIn:
                     FadeInHandler();
                     break;
+                case FadeStates.FadingOut:
+                    FadeOutHandler();
+                    FadeIn();
+                    break;
             }
         }
 

@@ -138,8 +138,6 @@ namespace RhytmTD.Battle.Entities.Controllers
 
         private void HandleTick(int ticksSinceStart)
         {
-            Debug.Log(ticksSinceStart);
-
 #if !DISABLE_SPAWN
             if (m_ActionTargetTick == ticksSinceStart)
             {
@@ -467,8 +465,6 @@ namespace RhytmTD.Battle.Entities.Controllers
             m_RhytmController.OnTick -= HandleTick;
 
             m_SpellbookTick = m_RhytmController.CurrentTick;
-
-            Debug.Log(m_ActionTargetTick);
         }
 
         private void SpellBookClosedAndPostUsedHandler()
@@ -481,7 +477,7 @@ namespace RhytmTD.Battle.Entities.Controllers
 
                 m_ActionTargetTick += ticksInSpellBook;
 
-                Debug.Log("CLOSE: In spellbook: " + ticksInSpellBook + " Tick at: " + m_ActionTargetTick + " Current tick: " + m_RhytmController.CurrentTick);
+                //Debug.Log("CLOSE: In spellbook: " + ticksInSpellBook + " Tick at: " + m_ActionTargetTick + " Current tick: " + m_RhytmController.CurrentTick);
 
                 if (m_ActionTargetTick == m_RhytmController.CurrentTick)
                     m_ActionTargetTick++;
