@@ -12,9 +12,9 @@ namespace RhytmTD.Assets.Battle
 
         [Header("Enviroment")]
         [SerializeField] public GameObject FarObjectPrefab = null;
-        [SerializeField] public EnviromentCellView StartEnviromentCelViewlPrefab = null;
+        [SerializeField] public EnviromentCellView StartEnviromentCelViewPrefab = null;
 
-        [SerializeField] private EnviromentCellView[] m_EnviromentCelViewlPrefabs = null;
+        [SerializeField] private EnviromentCellView[] m_EnviromentCelViewPrefabs = null;
 
 
         public override void Initialize()
@@ -24,7 +24,7 @@ namespace RhytmTD.Assets.Battle
 
         public EnemyView GetRandomEnemyViewPrefab() => GetRandomPrefab(m_EnemyPrefabs);
 
-        public EnviromentCellView GetRandomEnviromentCellViewPrefab() => GetRandomPrefab(m_EnviromentCelViewlPrefabs);
+        public EnviromentCellView GetRandomEnviromentCellViewPrefab() => GetRandomPrefab(m_EnviromentCelViewPrefabs);
 
 
         private T GetRandomPrefab<T>(T[] views) where T : BaseView

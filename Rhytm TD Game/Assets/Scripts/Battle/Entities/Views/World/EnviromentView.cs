@@ -35,7 +35,7 @@ namespace RhytmTD.Battle.Entities.Views
 
         private void InitializeEnviromentHandler()
         {
-            CreateCell(m_Assets.StartEnviromentCelViewlPrefab);
+            CreateCell(m_Assets.StartEnviromentCelViewPrefab);
             CreateFarEnviroment();
         }
 

@@ -17,7 +17,9 @@ Shader "Custom/CurvedWorldGround"
         _RoadWidth ("Road Width", Float) = 0.0
         _RoadColor ("Road Color", Color) = (1.0, 0.0, 1.0)
     }
-    SubShader {
+
+    SubShader 
+	{
         Tags { "RenderType"="Opaque" }
         LOD 200
  

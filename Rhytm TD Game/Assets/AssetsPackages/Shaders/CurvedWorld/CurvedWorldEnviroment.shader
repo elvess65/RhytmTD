@@ -13,7 +13,8 @@ Shader "Custom/CurvedWorldEnviroment"
         _Curvature ("Curvature", Float) = 0.001
         _CameraOffset ("Camera Offset", Float) = 0.0
     }
-    SubShader {
+    SubShader 
+	{
         Tags { "RenderType"="Opaque" }
         LOD 200
  

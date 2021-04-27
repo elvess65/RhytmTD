@@ -15,8 +15,8 @@ MonoBehaviour:
   m_EnemyPrefabs:
   - {fileID: 8333050106166543772, guid: 1ec3aa70a5438ea4eade22f93d47c282, type: 3}
   - {fileID: 5888651600598257811, guid: 4e2eeeff8e30bb3459315988821d081a, type: 3}
-  FarObjectPrefab: {fileID: 178716, guid: f0fe32fd05db0914193c901a6a40aa9f, type: 3}
-  StartEnviromentCelViewlPrefab: {fileID: 658831610, guid: d2fd3d6d5a9a54c638ac0b2a2c06a258,
+  FarObjectPrefab: {fileID: 178716, guid: 34b5d498e4fb957449a64c9ee5579782, type: 3}
+  StartEnviromentCelViewPrefab: {fileID: 658831610, guid: d2fd3d6d5a9a54c638ac0b2a2c06a258,
     type: 3}
-  m_EnviromentCelViewlPrefabs:
+  m_EnviromentCelViewPrefabs:
   - {fileID: 658831610, guid: e2f5d5129d89f274db1a7a002f8380ce, type: 3}
